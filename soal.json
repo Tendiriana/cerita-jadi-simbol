@@ -3,6 +3,7 @@
   "soal": [
     {
       "id": "energi-apel",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Apel jatuh",
       "cerita": "Pohon apel di kebun Pak Budi berumur 8 tahun. Sebuah apel bermassa 200 g jatuh dari dahan setinggi 5 m. Percepatan gravitasi 10 m/s². Berapa energi kinetik apel sesaat sebelum menyentuh tanah?",
@@ -79,6 +80,7 @@
     },
     {
       "id": "listrik-lampu",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Lampu menyala",
       "cerita": "Ibu membeli lampu LED seharga Rp25.000. Lampu bertuliskan 20 W dipasang pada sumber 220 V dan menyala 5 jam setiap malam. Berapa energi listrik yang dipakai lampu dalam satu malam (dalam kWh)?",
@@ -155,6 +157,7 @@
     },
     {
       "id": "magnet-trafo",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Trafo charger",
       "cerita": "Charger HP memakai trafo untuk mengubah tegangan listrik PLN 220 V menjadi 11 V. Kumparan primer trafo itu punya 1.000 lilitan. Charger itu dibeli Rina seharga Rp80.000. Berapa jumlah lilitan kumparan sekunder?",
@@ -231,6 +234,7 @@
     },
     {
       "id": "energi-buku",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Buku di atas lemari",
       "cerita": "Sebuah buku bermassa 500 g diletakkan di atas lemari setinggi 2 m dari lantai. Percepatan gravitasi 10 m/s². Buku itu dibeli seharga Rp40.000. Berapa energi potensial buku tersebut?",
@@ -307,6 +311,7 @@
     },
     {
       "id": "energi-sepeda",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Pesepeda melaju",
       "cerita": "Seorang pesepeda bersama sepedanya bermassa 60 kg melaju dengan kecepatan 5 m/s selama 10 menit. Berapa energi kinetik pesepeda dan sepedanya?",
@@ -378,6 +383,7 @@
     },
     {
       "id": "energi-dorong",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Mendorong lemari",
       "cerita": "Seorang kuli mendorong lemari bermassa 40 kg dengan gaya 150 N sehingga lemari berpindah sejauh 4 m. Berapa usaha yang dilakukan kuli tersebut?",
@@ -445,6 +451,7 @@
     },
     {
       "id": "energi-daya-mesin",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Daya mesin pengangkat",
       "cerita": "Sebuah mesin pengangkat melakukan usaha sebesar 3.000 J dalam waktu 20 s. Mesin itu dibeli seharga Rp2.000.000. Berapa daya mesin tersebut?",
@@ -512,6 +519,7 @@
     },
     {
       "id": "energi-efisiensi",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Efisiensi motor listrik",
       "cerita": "Sebuah motor listrik menerima energi listrik 500 J. Dari energi itu, motor menghasilkan energi gerak 400 J selama 2 menit bekerja. Berapa efisiensi motor tersebut?",
@@ -583,6 +591,7 @@
     },
     {
       "id": "energi-kelapa",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Kelapa jatuh",
       "cerita": "Sebuah kelapa bermassa 2 kg jatuh dari pohon setinggi 12 m. Percepatan gravitasi 10 m/s². Kelapa itu dijual seharga Rp15.000. Berapa energi kinetik kelapa sesaat sebelum menyentuh tanah?",
@@ -659,6 +668,7 @@
     },
     {
       "id": "energi-angkat-tas",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Mengangkat tas",
       "cerita": "Ani mengangkat tas bermassa 3 kg dari lantai sampai setinggi 1,5 m. Percepatan gravitasi 10 m/s². Ani melakukannya dalam 4 detik. Berapa usaha yang dilakukan Ani?",
@@ -735,6 +745,7 @@
     },
     {
       "id": "energi-daya-menit",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Daya anak menaikkan beban",
       "cerita": "Seorang anak menaikkan beban 12 kg dengan usaha sebesar 1.200 J selama 2 menit. Berapa daya yang dikeluarkan anak tersebut?",
@@ -802,6 +813,7 @@
     },
     {
       "id": "energi-mobil-mainan",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Mobil mainan",
       "cerita": "Sebuah mobil mainan bermassa 400 g bergerak dengan kecepatan 3 m/s di atas lantai. Mobil itu dibeli seharga Rp75.000. Berapa energi kinetik mobil mainan tersebut?",
@@ -869,6 +881,7 @@
     },
     {
       "id": "energi-kalor-air",
+      "kelas": "9",
       "topik": "Energi",
       "judul": "Memanaskan air",
       "cerita": "Air bermassa 2 kg dipanaskan sehingga suhunya naik sebesar 30°C. Kalor jenis air 4.200 J/kg°C. Pemanasan berlangsung selama 5 menit. Berapa kalor yang diterima air?",
@@ -945,6 +958,7 @@
     },
     {
       "id": "listrik-biaya-lampu",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Biaya listrik lampu Rian",
       "cerita": "Rian menggunakan lampu selama 8 jam setiap hari dengan daya lampu sebesar 50 watt. Satu bulan dianggap 30 hari. Berapa biaya listrik per bulan untuk lampu tersebut jika 1 kWh = Rp1.500?",
@@ -1033,6 +1047,7 @@
     },
     {
       "id": "magnet-stepup",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Trafo penaik tegangan",
       "cerita": "Sebuah trafo memiliki kumparan primer 100 lilitan dan kumparan sekunder 500 lilitan. Trafo dihubungkan ke sumber tegangan 12 V. Trafo itu dibeli seharga Rp50.000. Berapa tegangan pada kumparan sekunder?",
@@ -1109,6 +1124,7 @@
     },
     {
       "id": "magnet-adaptor-mainan",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Adaptor lampu mainan",
       "cerita": "Trafo pada adaptor lampu mainan memiliki 1.100 lilitan primer dan 100 lilitan sekunder. Adaptor dihubungkan ke listrik PLN 220 V. Adaptor itu dipakai selama 3 jam. Berapa tegangan keluaran adaptor?",
@@ -1185,6 +1201,7 @@
     },
     {
       "id": "magnet-cari-np",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Mencari lilitan primer",
       "cerita": "Sebuah trafo mengubah tegangan listrik PLN 220 V menjadi 22 V. Kumparan sekunder trafo itu memiliki 100 lilitan. Trafo itu sudah dipakai 5 tahun. Berapa jumlah lilitan kumparan primer?",
@@ -1261,6 +1278,7 @@
     },
     {
       "id": "magnet-arus-primer",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Arus pada kumparan primer",
       "cerita": "Sebuah trafo ideal mengubah tegangan 220 V menjadi 22 V. Arus pada kumparan sekunder 5 A. Trafo itu bekerja selama 2 jam. Berapa kuat arus pada kumparan primer?",
@@ -1337,6 +1355,7 @@
     },
     {
       "id": "magnet-daya-sekunder",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Daya trafo ideal",
       "cerita": "Sebuah trafo ideal dihubungkan ke tegangan primer 200 V dan arus primernya 2 A. Trafo itu dibeli seharga Rp90.000. Berapa daya pada kumparan sekunder?",
@@ -1404,6 +1423,7 @@
     },
     {
       "id": "magnet-efisiensi",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Efisiensi trafo",
       "cerita": "Sebuah trafo menerima daya 80 W pada kumparan primer dan menghasilkan daya 60 W pada kumparan sekunder. Trafo itu bekerja selama 4 jam. Berapa efisiensi trafo tersebut?",
@@ -1475,6 +1495,7 @@
     },
     {
       "id": "magnet-gaya-lorentz",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Gaya pada kawat berarus",
       "cerita": "Sebuah kawat sepanjang 50 cm dialiri arus listrik 4 A di dalam medan magnet 0,2 T. Arah arus tegak lurus medan magnet. Kawat itu terbuat dari tembaga dengan massa 20 g. Berapa gaya Lorentz yang bekerja pada kawat?",
@@ -1551,6 +1572,7 @@
     },
     {
       "id": "magnet-adaptor-laptop",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Adaptor laptop",
       "cerita": "Adaptor laptop memakai trafo yang dihubungkan ke listrik PLN 220 V dan menghasilkan tegangan 19 V. Kumparan primer trafo itu memiliki 2.200 lilitan. Adaptor itu dibeli seharga Rp250.000. Berapa jumlah lilitan kumparan sekunder?",
@@ -1627,6 +1649,7 @@
     },
     {
       "id": "magnet-pembangkit",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Trafo di pembangkit listrik",
       "cerita": "Di sebuah pembangkit listrik, trafo menaikkan tegangan dari 10 kV menjadi 150 kV. Kumparan primer trafo itu memiliki 2.000 lilitan. Trafo itu dipasang pada tahun 2015. Berapa jumlah lilitan kumparan sekunder?",
@@ -1703,6 +1726,7 @@
     },
     {
       "id": "magnet-arus-sekunder",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Arus pada kumparan sekunder",
       "cerita": "Sebuah trafo ideal memiliki 1.000 lilitan primer dan 200 lilitan sekunder. Arus pada kumparan primer 0,4 A. Trafo itu dipakai selama 6 jam. Berapa kuat arus pada kumparan sekunder?",
@@ -1779,6 +1803,7 @@
     },
     {
       "id": "ohm-setrika",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Arus pada setrika",
       "cerita": "Setrika listrik memiliki hambatan 40 Ω dan dihubungkan ke sumber tegangan 220 V. Setrika itu dipakai 30 menit setiap hari. Berapa kuat arus yang mengalir pada setrika?",
@@ -1846,6 +1871,7 @@
     },
     {
       "id": "ohm-lampu",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Tegangan pada lampu pijar",
       "cerita": "Sebuah lampu pijar memiliki hambatan 200 Ω. Ketika menyala, arus sebesar 0,3 A mengalir melalui lampu. Lampu itu dibeli seharga Rp12.000. Berapa tegangan pada lampu?",
@@ -1913,6 +1939,7 @@
     },
     {
       "id": "arus-muatan",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Arus dari muatan yang mengalir",
       "cerita": "Sebuah penghantar dialiri muatan listrik sebesar 120 C selama 60 s. Penghantar itu terbuat dari tembaga. Berapa kuat arus listrik pada penghantar?",
@@ -1984,6 +2011,7 @@
     },
     {
       "id": "seri-hambatan",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Hambatan pengganti seri",
       "cerita": "Dua hambatan, 4 Ω dan 6 Ω, disusun seri pada sebuah papan rangkaian. Tegangan baterai 20 V tidak dipakai untuk mencari hambatan pengganti. Berapa hambatan pengganti rangkaian?",
@@ -2055,6 +2083,7 @@
     },
     {
       "id": "seri-arus",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Arus pada rangkaian seri",
       "cerita": "Dua hambatan, 4 Ω dan 6 Ω, disusun seri dan dihubungkan ke sumber tegangan 20 V. Rangkaian ini dipasang di ruang kelas. Berapa kuat arus yang mengalir pada rangkaian?",
@@ -2135,6 +2164,7 @@
     },
     {
       "id": "paralel-hambatan",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Hambatan pengganti paralel",
       "cerita": "Dua hambatan, 6 Ω dan 3 Ω, disusun paralel. Susunan ini dibuat untuk praktikum di laboratorium sekolah. Berapa hambatan pengganti rangkaian paralel?",
@@ -2206,6 +2236,7 @@
     },
     {
       "id": "paralel-arus-cabang",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Arus pada cabang paralel",
       "cerita": "Hambatan 3 Ω dan hambatan lain 6 Ω disusun paralel, lalu dihubungkan ke sumber tegangan 12 V. Berapa kuat arus yang melalui hambatan 3 Ω?",
@@ -2277,6 +2308,7 @@
     },
     {
       "id": "coulomb-gaya",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Gaya antara dua muatan",
       "cerita": "Muatan q1 = 2 C dan q2 = 3 C terpisah sejauh 3 m. Konstanta k = 9 × 10⁹ Nm²/C². Percobaan ini dilakukan di ruang laboratorium. Berapa gaya Coulomb antara kedua muatan?",
@@ -2362,6 +2394,7 @@
     },
     {
       "id": "coulomb-jarak",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Jarak diubah, gaya berubah",
       "cerita": "Gaya Coulomb antara dua muatan sebesar 6 × 10⁹ N ketika jaraknya 3 m. Jarak kemudian diubah menjadi 6 m. Muatan tidak diubah. Berapa gaya Coulomb setelah jaraknya diubah?",
@@ -2433,6 +2466,7 @@
     },
     {
       "id": "medan-listrik",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Kuat medan di sekitar muatan",
       "cerita": "Sebuah muatan titik Q = 4 C berada di udara. Titik P berjarak 2 m dari muatan itu. Konstanta k = 9 × 10⁹ Nm²/C². Berapa kuat medan listrik di titik P?",
@@ -2504,6 +2538,7 @@
     },
     {
       "id": "potensial-listrik",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Beda potensial dari usaha",
       "cerita": "Untuk memindahkan muatan 2 C dari titik A ke titik B, diperlukan energi listrik sebesar 60 J. Perpindahan itu melalui lintasan lurus dan pendek. Berapa beda potensial antara titik A dan B?",
@@ -2571,6 +2606,7 @@
     },
     {
       "id": "hambatan-jenis",
+      "kelas": "9",
       "topik": "Listrik",
       "judul": "Hambatan kawat tembaga",
       "cerita": "Kawat tembaga dengan hambatan jenis 1,72 × 10⁻⁸ Ωm memiliki panjang 100 m dan luas penampang 2 × 10⁻⁶ m². Harga kabel itu Rp50.000. Berapa hambatan kawat tersebut?",
@@ -2647,6 +2683,7 @@
     },
     {
       "id": "induksi-ggl",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "GGL dari perubahan fluks",
       "cerita": "Sebuah kumparan memiliki 200 lilitan. Fluks magnetik yang melalui kumparan berubah sebesar 0,5 Wb dalam waktu 0,1 s. Kumparan itu dibeli seharga Rp15.000. Berapa besar GGL induksi yang timbul?",
@@ -2723,6 +2760,7 @@
     },
     {
       "id": "induksi-fluks-berubah",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Fluks berubah dari dua nilai",
       "cerita": "Sebuah kumparan 100 lilitan dilalui fluks magnetik yang berubah dari 0,8 Wb menjadi 0,2 Wb dalam waktu 0,4 s. Pada saat percobaan, lampu di ruangan menyala terang. Berapa besar GGL induksi yang timbul?",
@@ -2808,6 +2846,7 @@
     },
     {
       "id": "lorentz-sudut",
+      "kelas": "9",
       "topik": "Magnet",
       "judul": "Gaya Lorentz dengan sudut",
       "cerita": "Kawat sepanjang 0,5 m dialiri arus 2 A di dalam medan magnet 0,4 T. Arah arus membentuk sudut 30° terhadap arah medan magnet. Sebuah kawat dicat hitam. Berapa gaya Lorentz pada kawat?",
