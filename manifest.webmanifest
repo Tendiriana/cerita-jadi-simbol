@@ -1,0 +1,16 @@
+{
+  "name": "Cerita Jadi Simbol",
+  "short_name": "Cerita Simbol",
+  "description": "Latihan soal cerita IPA SMP: ubah kalimat soal menjadi besaran, pilih rumus, lalu hitung.",
+  "lang": "id",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#13243B",
+  "theme_color": "#13243B",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
