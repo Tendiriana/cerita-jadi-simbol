@@ -1,6 +1,19 @@
 # Cerita Jadi Simbol
 
-Latihan soal cerita IPA SMP. Siswa mengubah kalimat soal menjadi besaran, memilih rumus, lalu menghitung. Guru mengelola soal lewat tombol **Admin**.
+Latihan soal cerita IPA SMP. Siswa mengubah kalimat soal menjadi besaran, mengenali materinya, memilih rumus, lalu menghitung. Guru mengelola soal lewat **Pengaturan → Masuk mode guru**.
+
+## Isi soal
+
+82 soal kelas 9 yang mengikuti Buku IPA SMP/MTs Kelas IX (Edisi Revisi), Kurikulum Merdeka:
+
+| Materi | Jumlah | Isi |
+|---|---|---|
+| Listrik | 22 | Coulomb, medan dan beda potensial, I = q/t, hukum Ohm, seri, paralel, hambatan jenis, daya dan energi |
+| Magnet | 20 | Gaya Lorentz F = I·L·B sin θ, GGL induksi ε = N·ΔΦ/Δt |
+| Energi alternatif | 20 | Sel surya, panel surya, PLTB, PLTA, PLTN, mobil listrik (P = V×I, P = E/t) |
+| Pewarisan sifat | 20 | Monohibrid 3:1 dan 1:2:1, dihibrid 9:3:3:1 |
+
+60 soal memakai angka acak, jadi angkanya berubah setiap kali dibuka.
 
 ## Isi paket
 
@@ -25,14 +38,14 @@ Alamat web harus diawali `https://` supaya bisa dipasang sebagai aplikasi. Kedua
 
 ## Mengelola soal (mode admin)
 
-1. Ketuk **Admin** di pojok kanan atas. PIN awal: `1234`. Ganti di Pengaturan.
+1. Buka **Pengaturan** (ikon roda gigi di beranda), lalu **Masuk mode guru**, dan masukkan PIN guru. PIN bisa diganti di menu Pengaturan mode guru. Setelah diganti, upload soal.json (lewat Ekspor) supaya PIN baru berlaku di semua HP.
 2. Tambah, ubah, gandakan, urutkan, atau hapus soal. Tombol **Coba soal ini** di formulir menampilkan soal seperti yang dilihat siswa sebelum disimpan.
 3. Perubahan tersimpan di peramban perangkat guru. Supaya semua siswa memakai soal terbaru:
-   - Buka **Ekspor**, lalu unduh atau salin isinya sebagai `soal.json`.
-   - Ganti berkas `soal.json` di hosting dengan berkas baru itu (di Netlify: seret folder lagi).
+   - Buka **Ekspor**, lalu ketuk **Unduh soal.json** (atau **Bagikan berkas** di HP).
+   - Di GitHub: **Add file → Upload files**, pilih berkas itu, lalu **Commit changes**. Pastikan namanya tepat `soal.json`, bukan `soal (1).json`.
 4. Siswa mendapat soal baru saat membuka aplikasi lagi dengan internet.
 
-PIN hanya mencegah ubahan tak sengaja. PIN bukan pengaman data, karena aplikasi berjalan sepenuhnya di peramban.
+PIN disimpan tersandi di soal.json, bukan angka aslinya. PIN adalah kunci ringan untuk mode guru, bukan pengaman data, karena aplikasi berjalan sepenuhnya di peramban.
 
 ## Tingkat bantuan (untuk siswa)
 
@@ -60,6 +73,11 @@ Di halaman utama ada kotak **Alat belajar**:
 - **Mode ujian**: 5 atau 10 soal acak dari kelas yang dipilih, dengan pengatur waktu. Siswa bisa melewati soal, dan ringkasan hasil tampil di akhir.
 - **Bacakan soal**: tombol suara yang membacakan cerita soal, memakai suara bawaan HP.
 - **Latihan konversi**: 10 soal cepat seperti g→kg, mA→A, menit→s, W→kW, dan cm²→m².
+- **Kuis simbol dan satuan**: 10 pertanyaan cepat tentang simbol dan satuan dari Bab 5.
+- **Ulangi soal yang pernah salah**: daftar soal yang masih ada salahnya. Soal hilang dari daftar setelah diselesaikan tanpa salah.
+- **Ringkasan soal**: setelah soal selesai, tampil ringkasan besaran, materi, rumus, dan hasil.
+- **Pengenalan**: tiga layar singkat untuk siswa baru. Bisa dibuka lagi dari Pengaturan.
+- **Pengaturan**: nama dan kelas, tema (ikuti HP, terang, gelap), ukuran teks, hapus data, dan pintu masuk mode guru.
 
 ## Soal variasi (angka acak)
 
