@@ -1,5 +1,9 @@
 {
   "versi": 1,
+  "rev": 1792230557398,
+  "kunci": [
+    "Pewarisan sifat"
+  ],
   "soal": [
     {
       "id": "ohm-setrika",
@@ -879,95 +883,6 @@
         ],
         "petunjuk": "Kalikan hambatan jenis dengan panjang, lalu bagi dengan luas penampang.",
         "penjelasan": "R = ρ × L ÷ A = 1,72 × 10⁻⁸ × 100 ÷ 2 × 10⁻⁶ = 0,86 Ω."
-      }
-    },
-    {
-      "id": "listrik-biaya-lampu",
-      "kelas": "9",
-      "topik": "Listrik",
-      "judul": "Biaya listrik lampu Rian",
-      "cerita": "Rian menggunakan lampu selama 8 jam setiap hari dengan daya lampu sebesar 50 watt. Satu bulan dianggap 30 hari. Berapa biaya listrik per bulan untuk lampu tersebut jika 1 kWh = Rp1.500?",
-      "besaran": [
-        {
-          "teks": "50 watt",
-          "sym": "P",
-          "nama": "daya",
-          "satuan": "kW",
-          "ket": "daya lampu, satuannya watt",
-          "konv": "= 0,05 kW",
-          "catatan": "Tarif dihitung per kWh, jadi daya diubah ke kW: 50 W = 0,05 kW."
-        },
-        {
-          "teks": "8 jam",
-          "sym": "t",
-          "nama": "waktu per hari",
-          "satuan": "jam",
-          "ket": "lama lampu menyala setiap hari, satuannya jam",
-          "konv": "",
-          "catatan": ""
-        },
-        {
-          "teks": "30 hari",
-          "sym": "hari",
-          "nama": "jumlah hari",
-          "satuan": "hari",
-          "ket": "jumlah hari dalam satu bulan",
-          "konv": "",
-          "catatan": ""
-        },
-        {
-          "teks": "Rp1.500",
-          "sym": "tarif",
-          "nama": "tarif",
-          "satuan": "Rp/kWh",
-          "ket": "tarif listrik untuk setiap 1 kWh",
-          "konv": "",
-          "catatan": ""
-        }
-      ],
-      "pengecoh": [],
-      "tanya": {
-        "teks": "biaya listrik per bulan"
-      },
-      "rumus": [
-        {
-          "f": "Biaya = P × t × hari × tarif",
-          "benar": true,
-          "alasan": "Hitung dulu energi sebulan (daya × waktu per hari × jumlah hari) dalam kWh, lalu kalikan dengan tarif per kWh."
-        },
-        {
-          "f": "Biaya = P × t × tarif",
-          "benar": false,
-          "alasan": "Rumus ini baru menghasilkan biaya untuk 1 hari. Soal meminta biaya satu bulan, jadi harus dikali jumlah hari."
-        },
-        {
-          "f": "Biaya = V × I × t",
-          "benar": false,
-          "alasan": "Ini bukan rumus biaya. Di soal tidak ada tegangan V atau kuat arus I."
-        }
-      ],
-      "hitung": {
-        "diketahui": "P = 0,05 kW · t = 8 jam/hari · 30 hari · tarif = Rp1.500/kWh",
-        "lhs": "Biaya",
-        "ekspresi": "0,05 × 8 × 30 × 1.500",
-        "satuan": "rupiah",
-        "jawaban": 18000,
-        "salah": [
-          {
-            "nilai": 600,
-            "pesan": "600 itu biaya untuk satu hari. Kalikan 30 hari untuk satu bulan."
-          },
-          {
-            "nilai": 18000000,
-            "pesan": "18.000.000 muncul kalau daya masih 50 W. Ubah dulu ke kW: 50 W = 0,05 kW."
-          },
-          {
-            "nilai": 12,
-            "pesan": "12 itu energi sebulan dalam kWh. Kalikan dengan tarif Rp1.500 untuk mendapat biaya."
-          }
-        ],
-        "petunjuk": "Hitung dulu energi sebulan dalam kWh, lalu kalikan dengan tarif.",
-        "penjelasan": "Energi sebulan = 0,05 kW × 8 jam × 30 hari = 12 kWh. Biaya = 12 × Rp1.500 = Rp18.000."
       }
     },
     {

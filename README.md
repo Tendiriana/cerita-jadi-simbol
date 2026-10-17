@@ -4,14 +4,14 @@ Latihan soal cerita IPA SMP. Siswa mengubah kalimat soal menjadi besaran, mengen
 
 ## Isi soal
 
-82 soal kelas 9 yang mengikuti Buku IPA SMP/MTs Kelas IX (Edisi Revisi), Kurikulum Merdeka:
+81 soal kelas 9 yang mengikuti Buku IPA SMP/MTs Kelas IX (Edisi Revisi), Kurikulum Merdeka:
 
 | Materi | Jumlah | Isi |
 |---|---|---|
-| Listrik | 22 | Coulomb, medan dan beda potensial, I = q/t, hukum Ohm, seri, paralel, hambatan jenis, daya dan energi |
+| Listrik | 21 | Coulomb, medan dan beda potensial, I = q/t, hukum Ohm, seri, paralel, hambatan jenis, daya dan energi |
 | Magnet | 20 | Gaya Lorentz F = I·L·B sin θ, GGL induksi ε = N·ΔΦ/Δt |
 | Energi alternatif | 20 | Sel surya, panel surya, PLTB, PLTA, PLTN, mobil listrik (P = V×I, P = E/t) |
-| Pewarisan sifat | 20 | Monohibrid 3:1 dan 1:2:1, dihibrid 9:3:3:1 |
+| Pewarisan sifat | 20 | Monohibrid 3:1 dan 1:2:1, dihibrid 9:3:3:1 (saat ini dikunci) |
 
 60 soal memakai angka acak, jadi angkanya berubah setiap kali dibuka.
 
@@ -43,7 +43,11 @@ Alamat web harus diawali `https://` supaya bisa dipasang sebagai aplikasi. Kedua
 3. Perubahan tersimpan di peramban perangkat guru. Supaya semua siswa memakai soal terbaru:
    - Buka **Ekspor**, lalu ketuk **Unduh soal.json** (atau **Bagikan berkas** di HP).
    - Di GitHub: **Add file → Upload files**, pilih berkas itu, lalu **Commit changes**. Pastikan namanya tepat `soal.json`, bukan `soal (1).json`.
-4. Siswa mendapat soal baru saat membuka aplikasi lagi dengan internet.
+4. Siswa mendapat soal baru saat membuka aplikasi lagi dengan internet. Salinan lama di HP siswa otomatis diganti kalau soal.json di internet lebih baru.
+
+**Kunci materi:** di Pengaturan mode guru, ketuk nama materi untuk mengunci atau membukanya. Materi yang dikunci tetap tampil di beranda, tetapi saat diketuk muncul pesan "Soal ini belum bisa dibuka." Upload soal.json lewat Ekspor supaya berlaku di HP siswa.
+
+**Tampil di kelas:** tab di mode guru untuk proyektor atau TV. Pilih materi, lalu **Mulai tampil**. Langkah dibuka satu per satu: baca cerita, pilah besaran, tebak materi (A–D), tebak rumus (A–D), hitung, jawaban. Ada tombol angka baru, pengatur waktu 30 detik, dan soal berikutnya. Dari laptop: → atau spasi lanjut, ← mundur, N angka baru, T waktu, F layar penuh, Esc keluar.
 
 PIN disimpan tersandi di soal.json, bukan angka aslinya. PIN adalah kunci ringan untuk mode guru, bukan pengaman data, karena aplikasi berjalan sepenuhnya di peramban.
 
@@ -58,7 +62,7 @@ Di halaman utama, siswa memilih tingkat:
 ## Langkah latihan
 
 1. **Pilah cerita**: siswa menaruh angka ke kotak besaran dan mencoret info pengecoh.
-2. **Kenali materi**: siswa menentukan apakah soal termasuk Energi, Listrik, atau Magnet. Di tingkat Mudah dan Menengah, setiap pilihan disertai penjelasan singkat. Nama materi di bawah judul dan kartu rumus baru muncul setelah langkah ini benar.
+2. **Kenali materi**: siswa menentukan apakah soal termasuk materi yang mana (Listrik, Magnet, Energi alternatif, dan materi lain yang terbuka). Di tingkat Mudah dan Menengah, setiap pilihan disertai penjelasan singkat. Nama materi di bawah judul dan kartu rumus baru muncul setelah langkah ini benar.
 3. **Pilih rumus**.
 4. **Hitung**.
 
@@ -69,12 +73,13 @@ Di halaman utama ada kotak **Alat belajar**:
 - **Catatanku**: kesalahan yang sering muncul (tertukar besaran, memakai pengecoh, lupa konversi, salah rumus) beserta tipsnya. Catatan hanya tersimpan di HP siswa.
 - **Laporan ke guru**: siswa mengisi nama dan kelas, lalu menekan **Kirim lewat WhatsApp** atau **Salin teks**. Laporan berisi soal yang selesai, kesalahan teratas, dan hasil ujian terakhir.
 - **Naik tingkat otomatis**: setelah 3 soal lancar berturut-turut (paling banyak 1 kesalahan), aplikasi menyarankan naik tingkat.
-- **Kartu rumus**: rumus dan satuan Listrik, Magnet, dan Energi, ditambah daftar konversi. Saat latihan, kartu ini bisa dibuka di bawah langkah 1. Kartu disembunyikan di tingkat Sulit dan saat ujian.
+- **Kartu rumus**: rumus dan satuan setiap materi yang terbuka, ditambah daftar konversi. Saat latihan, kartu ini bisa dibuka di bawah langkah 1. Kartu disembunyikan di tingkat Sulit dan saat ujian.
 - **Mode ujian**: 5 atau 10 soal acak dari kelas yang dipilih, dengan pengatur waktu. Siswa bisa melewati soal, dan ringkasan hasil tampil di akhir.
 - **Bacakan soal**: tombol suara yang membacakan cerita soal, memakai suara bawaan HP.
 - **Latihan konversi**: 10 soal cepat seperti g→kg, mA→A, menit→s, W→kW, dan cm²→m².
 - **Kuis simbol dan satuan**: 10 pertanyaan cepat tentang simbol dan satuan dari Bab 5.
 - **Ulangi soal yang pernah salah**: daftar soal yang masih ada salahnya. Soal hilang dari daftar setelah diselesaikan tanpa salah.
+- **Buat soal sendiri**: siswa diberi rumus, angka, dan yang ditanya, lalu menulis cerita soalnya sendiri. Aplikasi memeriksa apakah semua angka dipakai dan ada kalimat tanya, lalu siswa menjawab soal buatannya. Cerita yang lengkap bisa disimpan di Ceritaku dan dikirim ke guru lewat WhatsApp.
 - **Ringkasan soal**: setelah soal selesai, tampil ringkasan besaran, materi, rumus, dan hasil.
 - **Pengenalan**: tiga layar singkat untuk siswa baru. Bisa dibuka lagi dari Pengaturan.
 - **Pengaturan**: nama dan kelas, tema (ikuti HP, terang, gelap), ukuran teks, hapus data, dan pintu masuk mode guru.
