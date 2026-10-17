@@ -1,5 +1,5 @@
 // Service worker: jaringan dulu, cadangan dari cache supaya aplikasi tetap terbuka saat offline.
-const C = 'cjs-v4';
+const C = 'cjs-v6';
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(C).then(c => c.addAll(['./', 'index.html', 'soal.json', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'])).then(() => self.skipWaiting()));
 });
