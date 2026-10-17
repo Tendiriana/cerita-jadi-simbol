@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cerita Jadi Simbol</title>
+<meta name="theme-color" content="#13243B">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: buku latihan berkotak, satu kolom lebar 720px. Halaman siswa (daftar soal, latihan) dan mode admin (daftar, formulir) memakai kartu yang sama. */
+:root{
+  --bg:#EDF2F7; --grid:#D9E3EE; --ink:#13243B; --ink2:#4A5D75; --surface:#FFFFFF; --line:#C3D1E0; --line2:#8FA3BA;
+  --hl:#FFD84A; --hl-ink:#13243B;
+  --q1:#2F6FED; --q2:#168A5C; --q3:#C85A0C; --q4:#7A4FD0; --ask:#C9285F;
+  --ok:#14804F; --okbg:#DDF3E8; --bad:#B4331F; --badbg:#FCE4DF; --info:#1D5FD1; --infobg:#E3EDFC;
+  --f-display:'Bricolage Grotesque','Trebuchet MS',system-ui,sans-serif;
+  --f-body:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1A28; --grid:#182739; --ink:#E7EEF6; --ink2:#A3B4C8; --surface:#16263A; --line:#2B3E57; --line2:#5B7391;
+  --hl:#E8C23A; --hl-ink:#101C2C;
+  --q1:#7CABFF; --q2:#3FCB93; --q3:#FF9A52; --q4:#B79BFF; --ask:#FF7AA6;
+  --ok:#4CC38A; --okbg:#143826; --bad:#FF8A75; --badbg:#41201B; --info:#7CABFF; --infobg:#17294A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1A28; --grid:#182739; --ink:#E7EEF6; --ink2:#A3B4C8; --surface:#16263A; --line:#2B3E57; --line2:#5B7391;
+  --hl:#E8C23A; --hl-ink:#101C2C;
+  --q1:#7CABFF; --q2:#3FCB93; --q3:#FF9A52; --q4:#B79BFF; --ask:#FF7AA6;
+  --ok:#4CC38A; --okbg:#143826; --bad:#FF8A75; --badbg:#41201B; --info:#7CABFF; --infobg:#17294A; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background-color:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;min-height:100vh;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;
+  padding-block:calc(20px + env(safe-area-inset-top,0px)) calc(56px + env(safe-area-inset-bottom,0px));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:720px;margin:0 auto}
+.bar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.eyebrow{font-family:var(--f-mono);font-weight:600;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:0}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(1.9rem,8vw,2.8rem);line-height:1.02;margin:6px 0 8px;letter-spacing:-.015em;text-wrap:balance}
+.lede{margin:0 0 6px;max-width:60ch;color:var(--ink2)}
+:focus-visible{outline:3px solid var(--info);outline-offset:2px}
+h2.t{font-family:var(--f-display);font-weight:700;font-size:1.5rem;line-height:1.15;margin:14px 0 4px;text-wrap:balance}
+
+.btn{font:inherit;font-weight:700;background:var(--ink);color:var(--bg);border:0;border-radius:8px;padding:11px 18px;min-height:46px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.sm{padding:6px 12px;min-height:38px;font-size:.9rem}
+.btn.danger{background:var(--bad);color:var(--surface)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:16px;min-width:0;margin-top:14px}
+.card.locked{background:transparent;border-style:dashed}
+.card.locked > *:not(.sh){opacity:.65}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);font-family:var(--f-mono);font-weight:600;font-size:.9rem;display:grid;place-items:center}
+.sh h2{font-family:var(--f-display);font-weight:700;font-size:1.2rem;margin:0;line-height:1.2}
+.stt{margin-left:auto;font-family:var(--f-mono);font-size:.74rem;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em}
+.stt.done{color:var(--ok)}
+.mut{color:var(--ink2);font-size:.95rem;margin:0 0 10px}
+
+/* daftar soal siswa */
+.grp h2{font-family:var(--f-mono);font-weight:600;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin:22px 0 8px}
+.list{display:grid;gap:8px}
+.item{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line2);border-radius:8px;padding:12px 14px;min-height:58px;cursor:pointer}
+.item b{font-family:var(--f-display);font-weight:700;font-size:1.08rem}
+.item small{display:block;color:var(--ink2);font-size:.82rem}
+.item .ck{font-family:var(--f-mono);font-weight:600;font-size:.78rem;color:var(--ok);white-space:nowrap}
+.sum{font-family:var(--f-mono);font-size:.85rem;color:var(--ink2);margin:14px 0 0}
+
+/* latihan */
+.story{font-size:1.1rem;line-height:2.3;margin:4px 0 14px}
+.tok{font:inherit;color:inherit;background:transparent;border:0;border-bottom:3px dashed var(--ink2);padding:1px 4px;margin:0 1px;border-radius:3px 3px 0 0;cursor:pointer;line-height:1.5}
+.tok.sel{background:var(--hl);color:var(--hl-ink);border-bottom:3px solid var(--hl-ink)}
+.tok.on{border-bottom:3px solid var(--c);background:color-mix(in srgb,var(--c) 16%,transparent);font-weight:700}
+.tok.cut{text-decoration:line-through;opacity:.6;border-bottom-style:dotted}
+.tok:disabled{cursor:default;color:inherit}
+.slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.slot{font:inherit;color:inherit;text-align:left;border:2px dashed var(--line2);background:transparent;border-radius:8px;padding:10px;min-height:96px;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-content:start;align-items:center}
+.slot:disabled{cursor:default;color:inherit}
+.slot .sym{font-family:var(--f-display);font-weight:800;font-size:1.7rem;line-height:1;color:var(--c);overflow-wrap:anywhere}
+.slot .nm{font-size:.88rem;line-height:1.25;min-width:0}
+.slot .nm small{display:block;color:var(--ink2);font-size:.78rem}
+.slot .val{grid-column:1 / -1;font-family:var(--f-mono);font-weight:600;font-size:.95rem;line-height:1.35;min-width:0;overflow-wrap:anywhere}
+.slot .val em{font-style:normal;color:var(--c)}
+.slot .ph{color:var(--ink2);font-weight:500}
+.slot.filled{border-style:solid;border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,var(--surface))}
+.slot.armed{border-color:var(--c);animation:pulse 1.3s ease-in-out infinite}
+.slot.coret{grid-column:1 / -1;min-height:0;--c:var(--ink2)}
+.slot.coret .sym{font-size:1.4rem}
+@keyframes pulse{50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 30%,transparent)}}
+.fb{margin-top:12px;padding:10px 12px;border-radius:8px;font-size:.98rem;border:1.5px solid var(--info);background:var(--infobg)}
+.fb.ok{border-color:var(--ok);background:var(--okbg)}
+.fb.bad{border-color:var(--bad);background:var(--badbg)}
+.fb b{font-family:var(--f-mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-right:6px}
+.fb ul{margin:6px 0 0;padding-left:20px}
+.opts{display:grid;gap:8px}
+.opt{width:100%;font-family:var(--f-mono);font-weight:600;font-size:1.02rem;text-align:left;border:1.5px solid var(--line2);background:var(--surface);color:var(--ink);padding:12px;border-radius:8px;cursor:pointer;min-height:48px}
+.opt.no{opacity:.6;text-decoration:line-through;cursor:default}
+.opt.yes{border-color:var(--ok);background:var(--okbg);cursor:default}
+.opt:disabled{color:var(--ink)}
+.why{font-size:.92rem;color:var(--ink2);margin:5px 2px 2px}
+.eq{font-family:var(--f-mono);font-weight:500;font-size:1rem;margin:6px 0;overflow-wrap:anywhere}
+.calc{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0}
+.calc input{font-family:var(--f-mono);font-weight:600;font-size:1.15rem;width:7.5em;padding:9px 10px;border:2px solid var(--ink);border-radius:8px;background:var(--surface);color:var(--ink)}
+
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-top:14px;padding-bottom:4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs .btn{flex:none}
+.tabs .btn[aria-current="page"]{background:var(--ink);color:var(--bg)}
+.chip{min-height:40px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* admin */
+.arow{background:var(--surface);border:1.5px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.arow .at{min-width:0;flex:1 1 160px}
+.arow .at b{font-family:var(--f-display);font-weight:700;font-size:1.05rem;display:block}
+.arow .at small{color:var(--ink2)}
+.ab{display:flex;flex-wrap:wrap;gap:6px}
+.f{display:grid;gap:4px;margin:0 0 10px;min-width:0}
+.f > span{font-size:.85rem;font-weight:700}
+.f small{color:var(--ink2);font-weight:400}
+.in{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line2);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
+textarea.in{min-height:84px;resize:vertical;line-height:1.45}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 10px}
+.rowc{border:1.5px dashed var(--line2);border-radius:8px;padding:12px;margin:0 0 10px}
+.rowc h3{margin:0 0 8px;font-family:var(--f-display);font-size:1rem;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.fs{margin:18px 0 8px;font-family:var(--f-mono);font-weight:600;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.radio{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-weight:700;font-size:.92rem}
+.radio input{width:20px;height:20px}
+.foot{margin:22px 0 0;font-size:.85rem;color:var(--ink2);max-width:70ch}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header id="top"></header>
+  <main id="app"><p class="mut">Memuat soal…</p></main>
+  <p class="foot" id="foot"></p>
+</div>
+<script type="application/json" id="seed">{"versi":1,"soal":[{"id":"energi-apel","kelas":"9","topik":"Energi","judul":"Apel jatuh","cerita":"Pohon apel di kebun Pak Budi berumur 8 tahun. Sebuah apel bermassa {massa} g jatuh dari dahan setinggi {tinggi} m. Percepatan gravitasi 10 m/s². Berapa energi kinetik apel sesaat sebelum menyentuh tanah?","besaran":[{"teks":"{massa} g","sym":"m","nama":"massa","satuan":"kg","ket":"massa apel, satuannya gram","konv":"= {mkg} kg","catatan":"Di rumus, massa harus dalam kg: {massa} g = {mkg} kg."},{"teks":"{tinggi} m","sym":"h","nama":"tinggi","satuan":"m","ket":"ketinggian apel dari tanah, satuannya meter","konv":"","catatan":""},{"teks":"10 m/s²","sym":"g","nama":"gravitasi","satuan":"m/s²","ket":"percepatan gravitasi","konv":"","catatan":""}],"pengecoh":[{"teks":"8 tahun","ket":"umur pohon, tidak dipakai menghitung"}],"tanya":{"teks":"energi kinetik apel"},"rumus":[{"f":"Ep = m × g × h","benar":true,"alasan":"Apel jatuh bebas, jadi seluruh energi potensial di atas berubah menjadi energi kinetik tepat sebelum tanah. Ek = Ep = m × g × h."},{"f":"Ek = ½ × m × v²","benar":false,"alasan":"Rumus ini butuh kecepatan v. Di soal, v tidak diketahui."},{"f":"P = W ÷ t","benar":false,"alasan":"Ini rumus daya. Di soal tidak ada waktu t."}],"hitung":{"diketahui":"m = {mkg} kg · g = 10 m/s² · h = {tinggi} m","lhs":"Ek = Ep","ekspresi":"{mkg} × 10 × {tinggi}","satuan":"J","jawaban":10,"salah":[{"nilai":10000,"pesan":"Hasilnya 1.000 kali lebih besar. Massa belum diubah ke kg.","rumus":"massa * 10 * tinggi"}],"petunjuk":"Kalikan tiga angka di atas dengan teliti.","penjelasan":"Ek = Ep = m × g × h. Massa diubah ke kg dulu, lalu dikalikan 10 dan tinggi.","angka":"mkg * 10 * tinggi"},"variasi":[{"nama":"massa","min":100,"maks":500,"langkah":100},{"nama":"mkg","rumus":"massa/1000"},{"nama":"tinggi","min":2,"maks":20,"langkah":1}]},{"id":"listrik-lampu","kelas":"9","topik":"Listrik","judul":"Lampu menyala","cerita":"Ibu membeli lampu LED seharga Rp25.000. Lampu bertuliskan {daya} W dipasang pada sumber 220 V dan menyala 5 jam setiap malam. Berapa energi listrik yang dipakai lampu dalam satu malam (dalam kWh)?","besaran":[{"teks":"{daya} W","sym":"P","nama":"daya","satuan":"W","ket":"daya lampu, satuannya watt","konv":"= {dkw} kW","catatan":"Hasil diminta dalam kWh, jadi daya diubah ke kW: {daya} W = {dkw} kW."},{"teks":"220 V","sym":"V","nama":"tegangan","satuan":"V","ket":"tegangan sumber, satuannya volt","konv":"","catatan":""},{"teks":"5 jam","sym":"t","nama":"waktu","satuan":"jam","ket":"lama lampu menyala (waktu), satuannya jam","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp25.000","ket":"harga lampu, tidak dipakai menghitung"}],"tanya":{"teks":"energi listrik"},"rumus":[{"f":"W = P × t","benar":true,"alasan":"Energi listrik sama dengan daya dikali waktu. Tegangan 220 V memang tertulis di soal, tetapi tidak dibutuhkan di rumus ini."},{"f":"P = V × I","benar":false,"alasan":"Ini rumus daya. Soal sudah memberi daya, yang dicari energi."},{"f":"V = I × R","benar":false,"alasan":"Ini hukum Ohm. Di soal tidak ada kuat arus I atau hambatan R."}],"hitung":{"diketahui":"P = {dkw} kW · t = 5 jam (V = 220 V tidak dipakai)","lhs":"W","ekspresi":"{dkw} × 5","satuan":"kWh","jawaban":0.1,"salah":[{"nilai":100,"pesan":"Hasil ini masih dalam Wh. Soal minta kWh, jadi bagi 1.000.","rumus":"daya * 5"}],"petunjuk":"Kalikan daya dalam kW dengan waktu dalam jam.","penjelasan":"W = P × t = 0,02 × 5 = 0,1 kWh.","angka":"dkw * 5"},"variasi":[{"nama":"daya","min":10,"maks":60,"langkah":10},{"nama":"dkw","rumus":"daya/1000"}]},{"id":"magnet-trafo","kelas":"9","topik":"Magnet","judul":"Trafo charger","cerita":"Charger HP memakai trafo untuk mengubah tegangan listrik PLN 220 V menjadi 11 V. Kumparan primer trafo itu punya 1.000 lilitan. Charger itu dibeli Rina seharga Rp80.000. Berapa jumlah lilitan kumparan sekunder?","besaran":[{"teks":"220 V","sym":"Vp","nama":"tegangan primer","satuan":"V","ket":"tegangan dari PLN yang masuk ke trafo, jadi tegangan primer (Vp)","konv":"","catatan":""},{"teks":"11 V","sym":"Vs","nama":"tegangan sekunder","satuan":"V","ket":"tegangan yang keluar ke HP, jadi tegangan sekunder (Vs)","konv":"","catatan":""},{"teks":"1.000 lilitan","sym":"Np","nama":"lilitan primer","satuan":"lilitan","ket":"jumlah lilitan kumparan primer (Np)","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp80.000","ket":"harga charger, tidak dipakai menghitung"}],"tanya":{"teks":"jumlah lilitan kumparan sekunder"},"rumus":[{"f":"Ns = Np × Vs ÷ Vp","benar":true,"alasan":"Perbandingan trafo: Np : Ns = Vp : Vs. Rumus ini adalah bentuk yang sudah diubah untuk mencari Ns."},{"f":"Ns = Np × Vp ÷ Vs","benar":false,"alasan":"Terbalik. Tegangan turun dari 220 V ke 11 V, jadi lilitan sekunder harus lebih sedikit dari primer. Rumus ini menghasilkan lebih banyak."},{"f":"Ns = Vs ÷ (Np × Vp)","benar":false,"alasan":"Rumus ini tidak ada di materi trafo. Perbandingan lilitan sama dengan perbandingan tegangan."}],"hitung":{"diketahui":"Np = 1.000 · Vp = 220 V · Vs = 11 V","lhs":"Ns","ekspresi":"1.000 × 11 ÷ 220","satuan":"lilitan","jawaban":50,"salah":[{"nilai":20000,"pesan":"20.000 muncul kalau Vp dan Vs tertukar. Trafo ini menurunkan tegangan, jadi Ns harus lebih sedikit dari 1.000."}],"petunjuk":"Kalikan 1.000 dengan 11, lalu bagi dengan 220.","penjelasan":"Ns = Np × Vs ÷ Vp = 1.000 × 11 ÷ 220 = 50 lilitan. Lilitan sekunder jauh lebih sedikit, jadi tegangan turun menjadi 11 V."}},{"id":"energi-buku","kelas":"9","topik":"Energi","judul":"Buku di atas lemari","cerita":"Sebuah buku bermassa 500 g diletakkan di atas lemari setinggi 2 m dari lantai. Percepatan gravitasi 10 m/s². Buku itu dibeli seharga Rp40.000. Berapa energi potensial buku tersebut?","besaran":[{"teks":"500 g","sym":"m","nama":"massa","satuan":"kg","ket":"massa buku, satuannya gram","konv":"= 0,5 kg","catatan":"Di rumus, massa harus dalam kg: 500 g = 0,5 kg."},{"teks":"2 m","sym":"h","nama":"tinggi","satuan":"m","ket":"ketinggian buku dari lantai, satuannya meter","konv":"","catatan":""},{"teks":"10 m/s²","sym":"g","nama":"gravitasi","satuan":"m/s²","ket":"percepatan gravitasi","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp40.000","ket":"harga buku, tidak dipakai menghitung"}],"tanya":{"teks":"energi potensial buku"},"rumus":[{"f":"Ep = m × g × h","benar":true,"alasan":"Energi potensial bergantung pada massa, percepatan gravitasi, dan ketinggian."},{"f":"Ek = ½ × m × v²","benar":false,"alasan":"Ini energi kinetik. Buku diam di atas lemari, jadi tidak ada kecepatan v."},{"f":"W = F × s","benar":false,"alasan":"Ini rumus usaha. Di soal tidak ada gaya F atau perpindahan s."}],"hitung":{"diketahui":"m = 0,5 kg · g = 10 m/s² · h = 2 m","lhs":"Ep","ekspresi":"0,5 × 10 × 2","satuan":"J","jawaban":10,"salah":[{"nilai":10000,"pesan":"Hasil 10.000 muncul kalau massa masih 500 g. Ubah dulu ke 0,5 kg."}],"petunjuk":"Kalikan massa, gravitasi, dan tinggi.","penjelasan":"Ep = m × g × h = 0,5 × 10 × 2 = 10 J."}},{"id":"energi-sepeda","kelas":"9","topik":"Energi","judul":"Pesepeda melaju","cerita":"Seorang pesepeda bersama sepedanya bermassa 60 kg melaju dengan kecepatan 5 m/s selama 10 menit. Berapa energi kinetik pesepeda dan sepedanya?","besaran":[{"teks":"60 kg","sym":"m","nama":"massa","satuan":"kg","ket":"massa pesepeda dan sepedanya, satuannya kilogram","konv":"","catatan":""},{"teks":"5 m/s","sym":"v","nama":"kecepatan","satuan":"m/s","ket":"kecepatan sepeda, satuannya meter per sekon","konv":"","catatan":""}],"pengecoh":[{"teks":"10 menit","ket":"lama bersepeda, tidak dipakai menghitung"}],"tanya":{"teks":"energi kinetik pesepeda dan sepedanya"},"rumus":[{"f":"Ek = ½ × m × v²","benar":true,"alasan":"Energi kinetik bergantung pada massa dan kuadrat kecepatan."},{"f":"Ep = m × g × h","benar":false,"alasan":"Ini energi potensial. Di soal tidak ada ketinggian h."},{"f":"P = W ÷ t","benar":false,"alasan":"Ini rumus daya. Yang ditanya energi kinetik."}],"hitung":{"diketahui":"m = 60 kg · v = 5 m/s","lhs":"Ek","ekspresi":"0,5 × 60 × 5 × 5","satuan":"J","jawaban":750,"salah":[{"nilai":1500,"pesan":"1.500 muncul kalau lupa mengalikan dengan ½ (setengah)."},{"nilai":150,"pesan":"150 muncul kalau kecepatan belum dikuadratkan. Hitung v² = 5 × 5 = 25."}],"petunjuk":"Kalikan ½ dengan massa, lalu dengan v dikali v.","penjelasan":"Ek = ½ × m × v² = ½ × 60 × 5² = ½ × 60 × 25 = 750 J."}},{"id":"energi-dorong","kelas":"9","topik":"Energi","judul":"Mendorong lemari","cerita":"Seorang kuli mendorong lemari bermassa 40 kg dengan gaya 150 N sehingga lemari berpindah sejauh 4 m. Berapa usaha yang dilakukan kuli tersebut?","besaran":[{"teks":"150 N","sym":"F","nama":"gaya","satuan":"N","ket":"gaya dorong kuli, satuannya newton","konv":"","catatan":""},{"teks":"4 m","sym":"s","nama":"perpindahan","satuan":"m","ket":"jarak perpindahan lemari, satuannya meter","konv":"","catatan":""}],"pengecoh":[{"teks":"40 kg","ket":"massa lemari, tidak dipakai karena gaya dorong sudah diketahui"}],"tanya":{"teks":"usaha yang dilakukan kuli tersebut"},"rumus":[{"f":"W = F × s","benar":true,"alasan":"Usaha sama dengan gaya dikali perpindahan yang searah gaya."},{"f":"W = m × g × h","benar":false,"alasan":"Ini usaha untuk mengangkat benda. Lemari didorong mendatar, bukan diangkat."},{"f":"P = W ÷ t","benar":false,"alasan":"Ini rumus daya, dan di soal tidak ada waktu."}],"hitung":{"diketahui":"F = 150 N · s = 4 m","lhs":"W","ekspresi":"150 × 4","satuan":"J","jawaban":600,"salah":[{"nilai":24000,"pesan":"24.000 muncul kalau massa ikut dikalikan. Massa tidak dipakai di rumus usaha ini."}],"petunjuk":"Kalikan gaya dengan perpindahan.","penjelasan":"W = F × s = 150 × 4 = 600 J. Massa lemari 40 kg tidak dipakai."}},{"id":"energi-daya-mesin","kelas":"9","topik":"Energi","judul":"Daya mesin pengangkat","cerita":"Sebuah mesin pengangkat melakukan usaha sebesar 3.000 J dalam waktu 20 s. Mesin itu dibeli seharga Rp2.000.000. Berapa daya mesin tersebut?","besaran":[{"teks":"3.000 J","sym":"W","nama":"usaha","satuan":"J","ket":"usaha yang dilakukan mesin, satuannya joule","konv":"","catatan":""},{"teks":"20 s","sym":"t","nama":"waktu","satuan":"s","ket":"lama mesin bekerja, satuannya sekon","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp2.000.000","ket":"harga mesin, tidak dipakai menghitung"}],"tanya":{"teks":"daya mesin tersebut"},"rumus":[{"f":"P = W ÷ t","benar":true,"alasan":"Daya adalah usaha yang dilakukan setiap satuan waktu."},{"f":"P = W × t","benar":false,"alasan":"Daya dicari dengan membagi usaha dengan waktu, bukan mengalikan."},{"f":"W = F × s","benar":false,"alasan":"Ini rumus usaha, sedangkan yang ditanya daya."}],"hitung":{"diketahui":"W = 3.000 J · t = 20 s","lhs":"P","ekspresi":"3.000 ÷ 20","satuan":"W","jawaban":150,"salah":[{"nilai":60000,"pesan":"60.000 itu hasil perkalian. Daya dicari dengan membagi usaha dengan waktu."}],"petunjuk":"Bagi usaha dengan waktu.","penjelasan":"P = W ÷ t = 3.000 ÷ 20 = 150 W."}},{"id":"energi-efisiensi","kelas":"9","topik":"Energi","judul":"Efisiensi motor listrik","cerita":"Sebuah motor listrik menerima energi listrik 500 J. Dari energi itu, motor menghasilkan energi gerak 400 J selama 2 menit bekerja. Berapa efisiensi motor tersebut?","besaran":[{"teks":"500 J","sym":"Wm","nama":"energi masuk","satuan":"J","ket":"energi listrik yang diterima motor (energi masuk)","konv":"","catatan":""},{"teks":"400 J","sym":"Wk","nama":"energi berguna","satuan":"J","ket":"energi gerak yang dihasilkan motor (energi berguna)","konv":"","catatan":""}],"pengecoh":[{"teks":"2 menit","ket":"lama motor bekerja, tidak dipakai menghitung"}],"tanya":{"teks":"efisiensi motor tersebut"},"rumus":[{"f":"η = (W berguna ÷ W masuk) × 100%","benar":true,"alasan":"Efisiensi membandingkan energi berguna dengan energi yang masuk."},{"f":"η = (W masuk ÷ W berguna) × 100%","benar":false,"alasan":"Terbalik. Efisiensi tidak pernah lebih dari 100%."},{"f":"η = W masuk − W berguna","benar":false,"alasan":"Itu selisih, yaitu energi yang terbuang. Efisiensi berupa perbandingan dalam persen."}],"hitung":{"diketahui":"W masuk = 500 J · W berguna = 400 J","lhs":"η","ekspresi":"400 ÷ 500 × 100","satuan":"%","jawaban":80,"salah":[{"nilai":125,"pesan":"125% muncul kalau terbalik. Efisiensi tidak mungkin lebih dari 100%."},{"nilai":0.8,"pesan":"0,8 belum dikali 100. Efisiensi dinyatakan dalam persen."}],"petunjuk":"Bagi energi berguna dengan energi masuk, lalu kalikan 100.","penjelasan":"η = 400 ÷ 500 × 100% = 80%."}},{"id":"energi-kelapa","kelas":"9","topik":"Energi","judul":"Kelapa jatuh","cerita":"Sebuah kelapa bermassa 2 kg jatuh dari pohon setinggi 12 m. Percepatan gravitasi 10 m/s². Kelapa itu dijual seharga Rp15.000. Berapa energi kinetik kelapa sesaat sebelum menyentuh tanah?","besaran":[{"teks":"2 kg","sym":"m","nama":"massa","satuan":"kg","ket":"massa kelapa, satuannya kilogram","konv":"","catatan":""},{"teks":"12 m","sym":"h","nama":"tinggi","satuan":"m","ket":"ketinggian kelapa dari tanah, satuannya meter","konv":"","catatan":""},{"teks":"10 m/s²","sym":"g","nama":"gravitasi","satuan":"m/s²","ket":"percepatan gravitasi","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp15.000","ket":"harga kelapa, tidak dipakai menghitung"}],"tanya":{"teks":"energi kinetik kelapa"},"rumus":[{"f":"Ek = Ep = m × g × h","benar":true,"alasan":"Saat jatuh bebas, energi potensial berubah menjadi energi kinetik. Tepat sebelum tanah, Ek sama dengan Ep di atas."},{"f":"Ek = ½ × m × v²","benar":false,"alasan":"Rumus ini butuh kecepatan v, yang tidak diketahui di soal."},{"f":"P = W ÷ t","benar":false,"alasan":"Ini rumus daya. Di soal tidak ada waktu."}],"hitung":{"diketahui":"m = 2 kg · g = 10 m/s² · h = 12 m","lhs":"Ek = Ep","ekspresi":"2 × 10 × 12","satuan":"J","jawaban":240,"salah":[{"nilai":120,"pesan":"120 muncul kalau ikut mengalikan ½. Karena v tidak diketahui, pakai Ek = Ep = m × g × h tanpa ½."}],"petunjuk":"Kalikan massa, gravitasi, dan tinggi.","penjelasan":"Ek = Ep = m × g × h = 2 × 10 × 12 = 240 J."}},{"id":"energi-angkat-tas","kelas":"9","topik":"Energi","judul":"Mengangkat tas","cerita":"Ani mengangkat tas bermassa 3 kg dari lantai sampai setinggi 1,5 m. Percepatan gravitasi 10 m/s². Ani melakukannya dalam 4 detik. Berapa usaha yang dilakukan Ani?","besaran":[{"teks":"3 kg","sym":"m","nama":"massa","satuan":"kg","ket":"massa tas, satuannya kilogram","konv":"","catatan":""},{"teks":"1,5 m","sym":"h","nama":"tinggi","satuan":"m","ket":"ketinggian tas saat diangkat, satuannya meter","konv":"","catatan":""},{"teks":"10 m/s²","sym":"g","nama":"gravitasi","satuan":"m/s²","ket":"percepatan gravitasi","konv":"","catatan":""}],"pengecoh":[{"teks":"4 detik","ket":"lama mengangkat, tidak dipakai menghitung usaha"}],"tanya":{"teks":"usaha yang dilakukan Ani"},"rumus":[{"f":"W = m × g × h","benar":true,"alasan":"Usaha mengangkat benda sama dengan pertambahan energi potensialnya, yaitu m × g × h."},{"f":"Ek = ½ × m × v²","benar":false,"alasan":"Rumus ini butuh kecepatan v, yang tidak diketahui di soal."},{"f":"P = W ÷ t","benar":false,"alasan":"Ini rumus daya. Yang ditanya usaha."}],"hitung":{"diketahui":"m = 3 kg · g = 10 m/s² · h = 1,5 m","lhs":"W","ekspresi":"3 × 10 × 1,5","satuan":"J","jawaban":45,"salah":[{"nilai":11.25,"pesan":"11,25 itu hasil dibagi waktu (daya). Waktu 4 detik tidak dipakai untuk menghitung usaha."}],"petunjuk":"Kalikan massa, gravitasi, dan tinggi.","penjelasan":"W = m × g × h = 3 × 10 × 1,5 = 45 J."}},{"id":"energi-daya-menit","kelas":"9","topik":"Energi","judul":"Daya anak menaikkan beban","cerita":"Seorang anak menaikkan beban 12 kg dengan usaha sebesar 1.200 J selama 2 menit. Berapa daya yang dikeluarkan anak tersebut?","besaran":[{"teks":"1.200 J","sym":"W","nama":"usaha","satuan":"J","ket":"usaha yang dilakukan anak, satuannya joule","konv":"","catatan":""},{"teks":"2 menit","sym":"t","nama":"waktu","satuan":"s","ket":"lama pekerjaan, satuannya menit","konv":"= 120 s","catatan":"Di rumus daya, waktu harus dalam sekon: 2 menit = 120 s."}],"pengecoh":[{"teks":"12 kg","ket":"massa beban, tidak dipakai karena usaha sudah diketahui"}],"tanya":{"teks":"daya yang dikeluarkan anak tersebut"},"rumus":[{"f":"P = W ÷ t","benar":true,"alasan":"Daya adalah usaha yang dilakukan setiap satuan waktu."},{"f":"P = W × t","benar":false,"alasan":"Daya dicari dengan membagi usaha dengan waktu, bukan mengalikan."},{"f":"W = F × s","benar":false,"alasan":"Ini rumus usaha, sedangkan yang ditanya daya."}],"hitung":{"diketahui":"W = 1.200 J · t = 120 s","lhs":"P","ekspresi":"1.200 ÷ 120","satuan":"W","jawaban":10,"salah":[{"nilai":600,"pesan":"600 muncul kalau waktu masih 2 menit. Ubah dulu ke sekon: 2 menit = 120 s."}],"petunjuk":"Ubah menit ke sekon, lalu bagi usaha dengan waktu.","penjelasan":"P = W ÷ t = 1.200 ÷ 120 = 10 W."}},{"id":"energi-mobil-mainan","kelas":"9","topik":"Energi","judul":"Mobil mainan","cerita":"Sebuah mobil mainan bermassa 400 g bergerak dengan kecepatan 3 m/s di atas lantai. Mobil itu dibeli seharga Rp75.000. Berapa energi kinetik mobil mainan tersebut?","besaran":[{"teks":"400 g","sym":"m","nama":"massa","satuan":"kg","ket":"massa mobil mainan, satuannya gram","konv":"= 0,4 kg","catatan":"Di rumus, massa harus dalam kg: 400 g = 0,4 kg."},{"teks":"3 m/s","sym":"v","nama":"kecepatan","satuan":"m/s","ket":"kecepatan mobil mainan, satuannya meter per sekon","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp75.000","ket":"harga mobil mainan, tidak dipakai menghitung"}],"tanya":{"teks":"energi kinetik mobil mainan tersebut"},"rumus":[{"f":"Ek = ½ × m × v²","benar":true,"alasan":"Energi kinetik bergantung pada massa dan kuadrat kecepatan."},{"f":"Ep = m × g × h","benar":false,"alasan":"Ini energi potensial. Di soal tidak ada ketinggian h."},{"f":"W = F × s","benar":false,"alasan":"Ini rumus usaha. Di soal tidak ada gaya F atau perpindahan s."}],"hitung":{"diketahui":"m = 0,4 kg · v = 3 m/s","lhs":"Ek","ekspresi":"0,5 × 0,4 × 3 × 3","satuan":"J","jawaban":1.8,"salah":[{"nilai":1800,"pesan":"1.800 muncul kalau massa masih 400 g. Ubah dulu ke 0,4 kg."}],"petunjuk":"Kalikan ½ dengan massa, lalu dengan v dikali v.","penjelasan":"Ek = ½ × m × v² = ½ × 0,4 × 3² = ½ × 0,4 × 9 = 1,8 J."}},{"id":"energi-kalor-air","kelas":"9","topik":"Energi","judul":"Memanaskan air","cerita":"Air bermassa 2 kg dipanaskan sehingga suhunya naik sebesar 30°C. Kalor jenis air 4.200 J/kg°C. Pemanasan berlangsung selama 5 menit. Berapa kalor yang diterima air?","besaran":[{"teks":"2 kg","sym":"m","nama":"massa","satuan":"kg","ket":"massa air, satuannya kilogram","konv":"","catatan":""},{"teks":"30°C","sym":"ΔT","nama":"kenaikan suhu","satuan":"°C","ket":"kenaikan suhu air, satuannya derajat Celsius","konv":"","catatan":""},{"teks":"4.200 J/kg°C","sym":"c","nama":"kalor jenis","satuan":"J/kg°C","ket":"kalor jenis air, yaitu kalor untuk menaikkan suhu 1 kg air sebesar 1°C","konv":"","catatan":""}],"pengecoh":[{"teks":"5 menit","ket":"lama pemanasan, tidak dipakai menghitung"}],"tanya":{"teks":"kalor yang diterima air"},"rumus":[{"f":"Q = m × c × ΔT","benar":true,"alasan":"Kalor yang diterima bergantung pada massa, kalor jenis, dan kenaikan suhu."},{"f":"Q = m × ΔT ÷ c","benar":false,"alasan":"Kalor jenis c harus dikalikan, bukan membagi."},{"f":"P = W ÷ t","benar":false,"alasan":"Ini rumus daya, bukan rumus kalor."}],"hitung":{"diketahui":"m = 2 kg · c = 4.200 J/kg°C · ΔT = 30°C","lhs":"Q","ekspresi":"2 × 4.200 × 30","satuan":"J","jawaban":252000,"salah":[{"nilai":126000,"pesan":"126.000 belum dikalikan massa 2 kg."}],"petunjuk":"Kalikan massa, kalor jenis, dan kenaikan suhu.","penjelasan":"Q = m × c × ΔT = 2 × 4.200 × 30 = 252.000 J."}},{"id":"listrik-biaya-lampu","kelas":"9","topik":"Listrik","judul":"Biaya listrik lampu Rian","cerita":"Rian menggunakan lampu selama 8 jam setiap hari dengan daya lampu sebesar 50 watt. Satu bulan dianggap 30 hari. Berapa biaya listrik per bulan untuk lampu tersebut jika 1 kWh = Rp1.500?","besaran":[{"teks":"50 watt","sym":"P","nama":"daya","satuan":"kW","ket":"daya lampu, satuannya watt","konv":"= 0,05 kW","catatan":"Tarif dihitung per kWh, jadi daya diubah ke kW: 50 W = 0,05 kW."},{"teks":"8 jam","sym":"t","nama":"waktu per hari","satuan":"jam","ket":"lama lampu menyala setiap hari, satuannya jam","konv":"","catatan":""},{"teks":"30 hari","sym":"hari","nama":"jumlah hari","satuan":"hari","ket":"jumlah hari dalam satu bulan","konv":"","catatan":""},{"teks":"Rp1.500","sym":"tarif","nama":"tarif","satuan":"Rp/kWh","ket":"tarif listrik untuk setiap 1 kWh","konv":"","catatan":""}],"pengecoh":[],"tanya":{"teks":"biaya listrik per bulan"},"rumus":[{"f":"Biaya = P × t × hari × tarif","benar":true,"alasan":"Hitung dulu energi sebulan (daya × waktu per hari × jumlah hari) dalam kWh, lalu kalikan dengan tarif per kWh."},{"f":"Biaya = P × t × tarif","benar":false,"alasan":"Rumus ini baru menghasilkan biaya untuk 1 hari. Soal meminta biaya satu bulan, jadi harus dikali jumlah hari."},{"f":"Biaya = V × I × t","benar":false,"alasan":"Ini bukan rumus biaya. Di soal tidak ada tegangan V atau kuat arus I."}],"hitung":{"diketahui":"P = 0,05 kW · t = 8 jam/hari · 30 hari · tarif = Rp1.500/kWh","lhs":"Biaya","ekspresi":"0,05 × 8 × 30 × 1.500","satuan":"rupiah","jawaban":18000,"salah":[{"nilai":600,"pesan":"600 itu biaya untuk satu hari. Kalikan 30 hari untuk satu bulan."},{"nilai":18000000,"pesan":"18.000.000 muncul kalau daya masih 50 W. Ubah dulu ke kW: 50 W = 0,05 kW."},{"nilai":12,"pesan":"12 itu energi sebulan dalam kWh. Kalikan dengan tarif Rp1.500 untuk mendapat biaya."}],"petunjuk":"Hitung dulu energi sebulan dalam kWh, lalu kalikan dengan tarif.","penjelasan":"Energi sebulan = 0,05 kW × 8 jam × 30 hari = 12 kWh. Biaya = 12 × Rp1.500 = Rp18.000."}},{"id":"magnet-stepup","kelas":"9","topik":"Magnet","judul":"Trafo penaik tegangan","cerita":"Sebuah trafo memiliki kumparan primer 100 lilitan dan kumparan sekunder 500 lilitan. Trafo dihubungkan ke sumber tegangan 12 V. Trafo itu dibeli seharga Rp50.000. Berapa tegangan pada kumparan sekunder?","besaran":[{"teks":"100 lilitan","sym":"Np","nama":"lilitan primer","satuan":"lilitan","ket":"jumlah lilitan kumparan primer (Np)","konv":"","catatan":""},{"teks":"500 lilitan","sym":"Ns","nama":"lilitan sekunder","satuan":"lilitan","ket":"jumlah lilitan kumparan sekunder (Ns)","konv":"","catatan":""},{"teks":"12 V","sym":"Vp","nama":"tegangan primer","satuan":"V","ket":"tegangan sumber yang masuk ke kumparan primer (Vp)","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp50.000","ket":"harga trafo, tidak dipakai menghitung"}],"tanya":{"teks":"tegangan pada kumparan sekunder"},"rumus":[{"f":"Vs = Vp × Ns ÷ Np","benar":true,"alasan":"Dari Np : Ns = Vp : Vs, tegangan sekunder sebanding dengan jumlah lilitan sekunder."},{"f":"Vs = Vp × Np ÷ Ns","benar":false,"alasan":"Terbalik. Lilitan sekunder lebih banyak, jadi tegangan harus naik, bukan turun."},{"f":"Vs = Vp + Ns − Np","benar":false,"alasan":"Tegangan trafo ditentukan oleh perbandingan lilitan, bukan penjumlahan dan pengurangan."}],"hitung":{"diketahui":"Np = 100 · Ns = 500 · Vp = 12 V","lhs":"Vs","ekspresi":"12 × 500 ÷ 100","satuan":"V","jawaban":60,"salah":[{"nilai":2.4,"pesan":"2,4 muncul kalau Np dan Ns tertukar. Trafo ini menaikkan tegangan, jadi Vs harus lebih besar dari 12 V."}],"petunjuk":"Kalikan 12 dengan 500, lalu bagi 100.","penjelasan":"Vs = Vp × Ns ÷ Np = 12 × 500 ÷ 100 = 60 V. Trafo ini penaik tegangan (step-up) karena Ns lebih banyak dari Np."}},{"id":"magnet-adaptor-mainan","kelas":"9","topik":"Magnet","judul":"Adaptor lampu mainan","cerita":"Trafo pada adaptor lampu mainan memiliki 1.100 lilitan primer dan 100 lilitan sekunder. Adaptor dihubungkan ke listrik PLN 220 V. Adaptor itu dipakai selama 3 jam. Berapa tegangan keluaran adaptor?","besaran":[{"teks":"1.100 lilitan primer","sym":"Np","nama":"lilitan primer","satuan":"lilitan","ket":"jumlah lilitan kumparan primer (Np)","konv":"","catatan":""},{"teks":"100 lilitan sekunder","sym":"Ns","nama":"lilitan sekunder","satuan":"lilitan","ket":"jumlah lilitan kumparan sekunder (Ns)","konv":"","catatan":""},{"teks":"220 V","sym":"Vp","nama":"tegangan primer","satuan":"V","ket":"tegangan dari PLN yang masuk ke trafo, jadi tegangan primer (Vp)","konv":"","catatan":""}],"pengecoh":[{"teks":"3 jam","ket":"lama adaptor dipakai, tidak dipakai menghitung"}],"tanya":{"teks":"tegangan keluaran adaptor"},"rumus":[{"f":"Vs = Vp × Ns ÷ Np","benar":true,"alasan":"Dari Np : Ns = Vp : Vs, tegangan sekunder sebanding dengan jumlah lilitan sekunder."},{"f":"Vs = Vp × Np ÷ Ns","benar":false,"alasan":"Terbalik. Adaptor ini menurunkan tegangan, jadi hasilnya harus lebih kecil dari 220 V. Rumus ini justru memberi hasil lebih besar."},{"f":"Vs = Vp + Ns − Np","benar":false,"alasan":"Tegangan trafo ditentukan oleh perbandingan lilitan, bukan penjumlahan dan pengurangan."}],"hitung":{"diketahui":"Np = 1.100 · Ns = 100 · Vp = 220 V","lhs":"Vs","ekspresi":"220 × 100 ÷ 1.100","satuan":"V","jawaban":20,"salah":[{"nilai":2420,"pesan":"2.420 muncul kalau Np dan Ns tertukar. Adaptor ini menurunkan tegangan, jadi Vs harus lebih kecil dari 220 V."}],"petunjuk":"Kalikan 220 dengan 100, lalu bagi 1.100.","penjelasan":"Vs = Vp × Ns ÷ Np = 220 × 100 ÷ 1.100 = 20 V. Trafo ini penurun tegangan (step-down)."}},{"id":"magnet-cari-np","kelas":"9","topik":"Magnet","judul":"Mencari lilitan primer","cerita":"Sebuah trafo mengubah tegangan listrik PLN 220 V menjadi 22 V. Kumparan sekunder trafo itu memiliki 100 lilitan. Trafo itu sudah dipakai 5 tahun. Berapa jumlah lilitan kumparan primer?","besaran":[{"teks":"220 V","sym":"Vp","nama":"tegangan primer","satuan":"V","ket":"tegangan dari PLN yang masuk ke trafo, jadi tegangan primer (Vp)","konv":"","catatan":""},{"teks":"22 V","sym":"Vs","nama":"tegangan sekunder","satuan":"V","ket":"tegangan yang keluar dari trafo, jadi tegangan sekunder (Vs)","konv":"","catatan":""},{"teks":"100 lilitan","sym":"Ns","nama":"lilitan sekunder","satuan":"lilitan","ket":"jumlah lilitan kumparan sekunder (Ns)","konv":"","catatan":""}],"pengecoh":[{"teks":"5 tahun","ket":"lama trafo dipakai, tidak dipakai menghitung"}],"tanya":{"teks":"jumlah lilitan kumparan primer"},"rumus":[{"f":"Np = Ns × Vp ÷ Vs","benar":true,"alasan":"Dari Np : Ns = Vp : Vs, jumlah lilitan primer = Ns × Vp ÷ Vs."},{"f":"Np = Ns × Vs ÷ Vp","benar":false,"alasan":"Terbalik. Tegangan primer lebih besar dari sekunder, jadi lilitan primer harus lebih banyak dari lilitan sekunder."},{"f":"Np = Ns + Vp − Vs","benar":false,"alasan":"Lilitan dan tegangan dihubungkan dengan perbandingan, bukan penjumlahan dan pengurangan."}],"hitung":{"diketahui":"Ns = 100 · Vp = 220 V · Vs = 22 V","lhs":"Np","ekspresi":"100 × 220 ÷ 22","satuan":"lilitan","jawaban":1000,"salah":[{"nilai":10,"pesan":"10 muncul kalau Vp dan Vs tertukar. Lilitan primer harus lebih banyak dari 100."}],"petunjuk":"Kalikan 100 dengan 220, lalu bagi 22.","penjelasan":"Np = Ns × Vp ÷ Vs = 100 × 220 ÷ 22 = 1.000 lilitan."}},{"id":"magnet-arus-primer","kelas":"9","topik":"Magnet","judul":"Arus pada kumparan primer","cerita":"Sebuah trafo ideal mengubah tegangan 220 V menjadi 22 V. Arus pada kumparan sekunder 5 A. Trafo itu bekerja selama 2 jam. Berapa kuat arus pada kumparan primer?","besaran":[{"teks":"220 V","sym":"Vp","nama":"tegangan primer","satuan":"V","ket":"tegangan yang masuk ke kumparan primer (Vp)","konv":"","catatan":""},{"teks":"22 V","sym":"Vs","nama":"tegangan sekunder","satuan":"V","ket":"tegangan yang keluar dari kumparan sekunder (Vs)","konv":"","catatan":""},{"teks":"5 A","sym":"Is","nama":"arus sekunder","satuan":"A","ket":"kuat arus pada kumparan sekunder (Is), satuannya ampere","konv":"","catatan":""}],"pengecoh":[{"teks":"2 jam","ket":"lama trafo bekerja, tidak dipakai menghitung"}],"tanya":{"teks":"kuat arus pada kumparan primer"},"rumus":[{"f":"Ip = Vs × Is ÷ Vp","benar":true,"alasan":"Pada trafo ideal, daya primer sama dengan daya sekunder: Vp × Ip = Vs × Is."},{"f":"Ip = Vp × Is ÷ Vs","benar":false,"alasan":"Terbalik. Tegangan primer lebih besar, jadi arus primer harus lebih kecil dari arus sekunder."},{"f":"Ip = Vs + Is − Vp","benar":false,"alasan":"Arus dan tegangan dihubungkan lewat daya (perkalian), bukan penjumlahan dan pengurangan."}],"hitung":{"diketahui":"Vp = 220 V · Vs = 22 V · Is = 5 A","lhs":"Ip","ekspresi":"22 × 5 ÷ 220","satuan":"A","jawaban":0.5,"salah":[{"nilai":50,"pesan":"50 muncul kalau Vp dan Vs tertukar. Arus primer harus lebih kecil dari 5 A."}],"petunjuk":"Kalikan 22 dengan 5, lalu bagi 220.","penjelasan":"Vp × Ip = Vs × Is, jadi Ip = 22 × 5 ÷ 220 = 0,5 A."}},{"id":"magnet-daya-sekunder","kelas":"9","topik":"Magnet","judul":"Daya trafo ideal","cerita":"Sebuah trafo ideal dihubungkan ke tegangan primer 200 V dan arus primernya 2 A. Trafo itu dibeli seharga Rp90.000. Berapa daya pada kumparan sekunder?","besaran":[{"teks":"200 V","sym":"Vp","nama":"tegangan primer","satuan":"V","ket":"tegangan pada kumparan primer (Vp)","konv":"","catatan":""},{"teks":"2 A","sym":"Ip","nama":"arus primer","satuan":"A","ket":"kuat arus pada kumparan primer (Ip), satuannya ampere","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp90.000","ket":"harga trafo, tidak dipakai menghitung"}],"tanya":{"teks":"daya pada kumparan sekunder"},"rumus":[{"f":"Ps = Pp = Vp × Ip","benar":true,"alasan":"Pada trafo ideal tidak ada energi yang hilang, jadi daya sekunder sama dengan daya primer, yaitu Vp × Ip."},{"f":"Ps = Vp ÷ Ip","benar":false,"alasan":"Itu hasil bagi, yang memberi hambatan. Daya listrik dihitung dengan tegangan dikali arus."},{"f":"Ps = Vp + Ip","benar":false,"alasan":"Tegangan dan arus tidak dijumlahkan. Daya = tegangan × arus."}],"hitung":{"diketahui":"Vp = 200 V · Ip = 2 A","lhs":"Ps = Pp","ekspresi":"200 × 2","satuan":"W","jawaban":400,"salah":[{"nilai":100,"pesan":"100 itu hasil bagi. Daya = tegangan × arus."}],"petunjuk":"Kalikan tegangan primer dengan arus primer.","penjelasan":"Ps = Pp = Vp × Ip = 200 × 2 = 400 W."}},{"id":"magnet-efisiensi","kelas":"9","topik":"Magnet","judul":"Efisiensi trafo","cerita":"Sebuah trafo menerima daya 80 W pada kumparan primer dan menghasilkan daya 60 W pada kumparan sekunder. Trafo itu bekerja selama 4 jam. Berapa efisiensi trafo tersebut?","besaran":[{"teks":"80 W","sym":"Pp","nama":"daya masuk","satuan":"W","ket":"daya pada kumparan primer (daya masuk)","konv":"","catatan":""},{"teks":"60 W","sym":"Ps","nama":"daya keluar","satuan":"W","ket":"daya pada kumparan sekunder (daya keluar)","konv":"","catatan":""}],"pengecoh":[{"teks":"4 jam","ket":"lama trafo bekerja, tidak dipakai menghitung"}],"tanya":{"teks":"efisiensi trafo tersebut"},"rumus":[{"f":"η = (Ps ÷ Pp) × 100%","benar":true,"alasan":"Efisiensi membandingkan daya keluar dengan daya masuk."},{"f":"η = (Pp ÷ Ps) × 100%","benar":false,"alasan":"Terbalik. Hasilnya lebih dari 100%, padahal efisiensi tidak mungkin melebihi 100%."},{"f":"η = Pp − Ps","benar":false,"alasan":"Itu selisih daya yang terbuang. Efisiensi berupa perbandingan dalam persen."}],"hitung":{"diketahui":"Pp = 80 W · Ps = 60 W","lhs":"η","ekspresi":"60 ÷ 80 × 100","satuan":"%","jawaban":75,"salah":[{"nilai":20,"pesan":"20 itu selisih daya (80 − 60), bukan efisiensi."},{"nilai":0.75,"pesan":"0,75 belum dikali 100. Efisiensi dinyatakan dalam persen."}],"petunjuk":"Bagi daya keluar dengan daya masuk, lalu kalikan 100.","penjelasan":"η = Ps ÷ Pp × 100% = 60 ÷ 80 × 100% = 75%."}},{"id":"magnet-gaya-lorentz","kelas":"9","topik":"Magnet","judul":"Gaya pada kawat berarus","cerita":"Sebuah kawat sepanjang 50 cm dialiri arus listrik 4 A di dalam medan magnet 0,2 T. Arah arus tegak lurus medan magnet. Kawat itu terbuat dari tembaga dengan massa 20 g. Berapa gaya Lorentz yang bekerja pada kawat?","besaran":[{"teks":"50 cm","sym":"L","nama":"panjang kawat","satuan":"m","ket":"panjang kawat di dalam medan magnet, satuannya sentimeter","konv":"= 0,5 m","catatan":"Di rumus, panjang harus dalam meter: 50 cm = 0,5 m."},{"teks":"4 A","sym":"I","nama":"kuat arus","satuan":"A","ket":"kuat arus listrik pada kawat, satuannya ampere","konv":"","catatan":""},{"teks":"0,2 T","sym":"B","nama":"medan magnet","satuan":"T","ket":"kuat medan magnet, satuannya tesla","konv":"","catatan":""}],"pengecoh":[{"teks":"20 g","ket":"massa kawat, tidak dipakai menghitung"}],"tanya":{"teks":"gaya Lorentz yang bekerja pada kawat"},"rumus":[{"f":"F = B × I × L","benar":true,"alasan":"Gaya Lorentz sebanding dengan kuat medan magnet, kuat arus, dan panjang kawat (arus tegak lurus medan)."},{"f":"F = m × g","benar":false,"alasan":"Ini berat benda. Soal menanyakan gaya akibat medan magnet."},{"f":"F = B × I ÷ L","benar":false,"alasan":"Panjang kawat dikalikan, bukan membagi. Semakin panjang kawat, semakin besar gayanya."}],"hitung":{"diketahui":"B = 0,2 T · I = 4 A · L = 0,5 m","lhs":"F","ekspresi":"0,2 × 4 × 0,5","satuan":"N","jawaban":0.4,"salah":[{"nilai":40,"pesan":"40 muncul kalau panjang masih 50 cm. Ubah dulu ke 0,5 m."}],"petunjuk":"Kalikan medan magnet, kuat arus, dan panjang kawat.","penjelasan":"F = B × I × L = 0,2 × 4 × 0,5 = 0,4 N."}},{"id":"magnet-adaptor-laptop","kelas":"9","topik":"Magnet","judul":"Adaptor laptop","cerita":"Adaptor laptop memakai trafo yang dihubungkan ke listrik PLN 220 V dan menghasilkan tegangan 19 V. Kumparan primer trafo itu memiliki 2.200 lilitan. Adaptor itu dibeli seharga Rp250.000. Berapa jumlah lilitan kumparan sekunder?","besaran":[{"teks":"220 V","sym":"Vp","nama":"tegangan primer","satuan":"V","ket":"tegangan dari PLN yang masuk ke trafo, jadi tegangan primer (Vp)","konv":"","catatan":""},{"teks":"19 V","sym":"Vs","nama":"tegangan sekunder","satuan":"V","ket":"tegangan yang keluar ke laptop, jadi tegangan sekunder (Vs)","konv":"","catatan":""},{"teks":"2.200 lilitan","sym":"Np","nama":"lilitan primer","satuan":"lilitan","ket":"jumlah lilitan kumparan primer (Np)","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp250.000","ket":"harga adaptor, tidak dipakai menghitung"}],"tanya":{"teks":"jumlah lilitan kumparan sekunder"},"rumus":[{"f":"Ns = Np × Vs ÷ Vp","benar":true,"alasan":"Dari Np : Ns = Vp : Vs, jumlah lilitan sekunder = Np × Vs ÷ Vp."},{"f":"Ns = Np × Vp ÷ Vs","benar":false,"alasan":"Terbalik. Tegangan turun dari 220 V ke 19 V, jadi lilitan sekunder harus lebih sedikit dari primer."},{"f":"Ns = Np + Vs − Vp","benar":false,"alasan":"Lilitan dan tegangan dihubungkan dengan perbandingan, bukan penjumlahan dan pengurangan."}],"hitung":{"diketahui":"Np = 2.200 · Vp = 220 V · Vs = 19 V","lhs":"Ns","ekspresi":"2.200 × 19 ÷ 220","satuan":"lilitan","jawaban":190,"salah":[{"nilai":41800,"pesan":"41.800 belum dibagi dengan Vp (220 V). Selesaikan perbandingannya."}],"petunjuk":"Kalikan 2.200 dengan 19, lalu bagi 220.","penjelasan":"Ns = Np × Vs ÷ Vp = 2.200 × 19 ÷ 220 = 190 lilitan."}},{"id":"magnet-pembangkit","kelas":"9","topik":"Magnet","judul":"Trafo di pembangkit listrik","cerita":"Di sebuah pembangkit listrik, trafo menaikkan tegangan dari 10 kV menjadi 150 kV. Kumparan primer trafo itu memiliki 2.000 lilitan. Trafo itu dipasang pada tahun 2015. Berapa jumlah lilitan kumparan sekunder?","besaran":[{"teks":"10 kV","sym":"Vp","nama":"tegangan primer","satuan":"kV","ket":"tegangan yang masuk ke trafo, jadi tegangan primer (Vp)","konv":"","catatan":"Vp dan Vs sama-sama dalam kV, jadi tidak perlu diubah ke V."},{"teks":"150 kV","sym":"Vs","nama":"tegangan sekunder","satuan":"kV","ket":"tegangan yang keluar dari trafo, jadi tegangan sekunder (Vs)","konv":"","catatan":""},{"teks":"2.000 lilitan","sym":"Np","nama":"lilitan primer","satuan":"lilitan","ket":"jumlah lilitan kumparan primer (Np)","konv":"","catatan":""}],"pengecoh":[{"teks":"2015","ket":"tahun pemasangan, tidak dipakai menghitung"}],"tanya":{"teks":"jumlah lilitan kumparan sekunder"},"rumus":[{"f":"Ns = Np × Vs ÷ Vp","benar":true,"alasan":"Dari Np : Ns = Vp : Vs, jumlah lilitan sekunder = Np × Vs ÷ Vp."},{"f":"Ns = Np × Vp ÷ Vs","benar":false,"alasan":"Terbalik. Trafo ini menaikkan tegangan, jadi lilitan sekunder harus lebih banyak dari primer."},{"f":"Ns = Np ÷ (Vp × Vs)","benar":false,"alasan":"Rumus ini tidak ada di materi trafo. Perbandingan lilitan sama dengan perbandingan tegangan."}],"hitung":{"diketahui":"Np = 2.000 · Vp = 10 kV · Vs = 150 kV","lhs":"Ns","ekspresi":"2.000 × 150 ÷ 10","satuan":"lilitan","jawaban":30000,"salah":[{"nilai":300000,"pesan":"300.000 belum dibagi dengan Vp (10 kV). Selesaikan perbandingannya."}],"petunjuk":"Kalikan 2.000 dengan 150, lalu bagi 10.","penjelasan":"Ns = Np × Vs ÷ Vp = 2.000 × 150 ÷ 10 = 30.000 lilitan. Ns jauh lebih banyak dari Np karena trafo ini menaikkan tegangan."}},{"id":"magnet-arus-sekunder","kelas":"9","topik":"Magnet","judul":"Arus pada kumparan sekunder","cerita":"Sebuah trafo ideal memiliki 1.000 lilitan primer dan 200 lilitan sekunder. Arus pada kumparan primer 0,4 A. Trafo itu dipakai selama 6 jam. Berapa kuat arus pada kumparan sekunder?","besaran":[{"teks":"1.000 lilitan primer","sym":"Np","nama":"lilitan primer","satuan":"lilitan","ket":"jumlah lilitan kumparan primer (Np)","konv":"","catatan":""},{"teks":"200 lilitan sekunder","sym":"Ns","nama":"lilitan sekunder","satuan":"lilitan","ket":"jumlah lilitan kumparan sekunder (Ns)","konv":"","catatan":""},{"teks":"0,4 A","sym":"Ip","nama":"arus primer","satuan":"A","ket":"kuat arus pada kumparan primer (Ip), satuannya ampere","konv":"","catatan":""}],"pengecoh":[{"teks":"6 jam","ket":"lama trafo dipakai, tidak dipakai menghitung"}],"tanya":{"teks":"kuat arus pada kumparan sekunder"},"rumus":[{"f":"Is = Ip × Np ÷ Ns","benar":true,"alasan":"Pada trafo ideal, Np : Ns = Is : Ip. Lilitan sekunder lebih sedikit, jadi arus sekunder lebih besar."},{"f":"Is = Ip × Ns ÷ Np","benar":false,"alasan":"Terbalik. Arus berbanding terbalik dengan jumlah lilitan. Lilitan sekunder lebih sedikit berarti arus sekunder lebih besar dari 0,4 A."},{"f":"Is = Ip + Np − Ns","benar":false,"alasan":"Arus dan lilitan dihubungkan dengan perbandingan, bukan penjumlahan dan pengurangan."}],"hitung":{"diketahui":"Np = 1.000 · Ns = 200 · Ip = 0,4 A","lhs":"Is","ekspresi":"0,4 × 1.000 ÷ 200","satuan":"A","jawaban":2,"salah":[{"nilai":0.08,"pesan":"0,08 muncul kalau Np dan Ns tertukar. Is harus lebih besar dari 0,4 A."}],"petunjuk":"Kalikan 0,4 dengan 1.000, lalu bagi 200.","penjelasan":"Is = Ip × Np ÷ Ns = 0,4 × 1.000 ÷ 200 = 2 A."}},{"id":"ohm-setrika","kelas":"9","topik":"Listrik","judul":"Arus pada setrika","cerita":"Setrika listrik memiliki hambatan 40 Ω dan dihubungkan ke sumber tegangan 220 V. Setrika itu dipakai 30 menit setiap hari. Berapa kuat arus yang mengalir pada setrika?","besaran":[{"teks":"40 Ω","sym":"R","nama":"hambatan","satuan":"Ω","ket":"hambatan setrika, satuannya ohm","konv":"","catatan":""},{"teks":"220 V","sym":"V","nama":"tegangan","satuan":"V","ket":"tegangan sumber, satuannya volt","konv":"","catatan":""}],"pengecoh":[{"teks":"30 menit","ket":"lama pemakaian, tidak dipakai menghitung arus"}],"tanya":{"teks":"kuat arus yang mengalir pada setrika"},"rumus":[{"f":"I = V ÷ R","benar":true,"alasan":"Hukum Ohm: V = I × R, sehingga I = V ÷ R."},{"f":"V = I × R","benar":false,"alasan":"Ini rumus untuk mencari tegangan, sedangkan yang ditanya kuat arus."},{"f":"R = V × I","benar":false,"alasan":"Ini rumus untuk mencari hambatan dengan cara yang salah. Hambatan dicari dengan V ÷ I."}],"hitung":{"diketahui":"V = 220 V · R = 40 Ω","lhs":"I","ekspresi":"220 ÷ 40","satuan":"A","jawaban":5.5,"salah":[{"nilai":8800,"pesan":"Itu hasil kali V dan R. Kuat arus dicari dengan membagi V dengan R."}],"petunjuk":"Bagi tegangan dengan hambatan.","penjelasan":"I = V ÷ R = 220 ÷ 40 = 5,5 A."}},{"id":"ohm-lampu","kelas":"9","topik":"Listrik","judul":"Tegangan pada lampu pijar","cerita":"Sebuah lampu pijar memiliki hambatan 200 Ω. Ketika menyala, arus sebesar 0,3 A mengalir melalui lampu. Lampu itu dibeli seharga Rp12.000. Berapa tegangan pada lampu?","besaran":[{"teks":"200 Ω","sym":"R","nama":"hambatan","satuan":"Ω","ket":"hambatan lampu, satuannya ohm","konv":"","catatan":""},{"teks":"0,3 A","sym":"I","nama":"kuat arus","satuan":"A","ket":"kuat arus yang mengalir melalui lampu, satuannya ampere","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp12.000","ket":"harga lampu, tidak dipakai menghitung"}],"tanya":{"teks":"tegangan pada lampu"},"rumus":[{"f":"V = I × R","benar":true,"alasan":"Dari V = I × R, tegangan sama dengan kuat arus dikali hambatan."},{"f":"I = V ÷ R","benar":false,"alasan":"Ini rumus untuk mencari arus. Yang ditanya tegangan."},{"f":"R = V ÷ I","benar":false,"alasan":"Ini rumus untuk mencari hambatan. Yang ditanya tegangan."}],"hitung":{"diketahui":"I = 0,3 A · R = 200 Ω","lhs":"V","ekspresi":"200 × 0,3","satuan":"V","jawaban":60,"salah":[{"nilai":0.0015,"pesan":"Itu hasil bagi I dengan R. Tegangan dicari dengan mengalikan I dan R."}],"petunjuk":"Kalikan kuat arus dengan hambatan.","penjelasan":"V = I × R = 0,3 × 200 = 60 V."}},{"id":"arus-muatan","kelas":"9","topik":"Listrik","judul":"Arus dari muatan yang mengalir","cerita":"Sebuah penghantar dialiri muatan listrik sebesar 120 C selama 60 s. Penghantar itu terbuat dari tembaga. Berapa kuat arus listrik pada penghantar?","besaran":[{"teks":"120 C","sym":"q","nama":"muatan listrik","satuan":"C","ket":"muatan listrik yang mengalir, satuannya coulomb","konv":"","catatan":""},{"teks":"60 s","sym":"t","nama":"waktu","satuan":"s","ket":"lama muatan mengalir, satuannya sekon","konv":"","catatan":""}],"pengecoh":[{"teks":"tembaga","ket":"bahan penghantar, tidak dipakai menghitung arus"}],"tanya":{"teks":"kuat arus listrik pada penghantar"},"rumus":[{"f":"I = q ÷ t","benar":true,"alasan":"Kuat arus adalah muatan yang mengalir dibagi waktu."},{"f":"I = q × t","benar":false,"alasan":"Ini hasil kali, bukan kuat arus."},{"f":"I = t ÷ q","benar":false,"alasan":"Terbalik. Muatan dibagi waktu, bukan waktu dibagi muatan."}],"hitung":{"diketahui":"q = 120 C · t = 60 s","lhs":"I","ekspresi":"120 ÷ 60","satuan":"A","jawaban":2,"salah":[{"nilai":7200,"pesan":"Itu hasil kali muatan dan waktu. Kuat arus dicari dengan membagi muatan dengan waktu."},{"nilai":0.5,"pesan":"Terbalik. Muatan dibagi waktu."}],"petunjuk":"Bagi muatan dengan waktu.","penjelasan":"I = q ÷ t = 120 ÷ 60 = 2 A."}},{"id":"seri-hambatan","kelas":"9","topik":"Listrik","judul":"Hambatan pengganti seri","cerita":"Dua hambatan, 4 Ω dan 6 Ω, disusun seri pada sebuah papan rangkaian. Tegangan baterai 20 V tidak dipakai untuk mencari hambatan pengganti. Berapa hambatan pengganti rangkaian?","besaran":[{"teks":"4 Ω","sym":"R1","nama":"hambatan pertama","satuan":"Ω","ket":"hambatan pertama dalam rangkaian","konv":"","catatan":""},{"teks":"6 Ω","sym":"R2","nama":"hambatan kedua","satuan":"Ω","ket":"hambatan kedua dalam rangkaian","konv":"","catatan":""}],"pengecoh":[{"teks":"20 V","ket":"tegangan baterai, tidak dipakai mencari hambatan pengganti"}],"tanya":{"teks":"hambatan pengganti rangkaian"},"rumus":[{"f":"Rs = R1 + R2","benar":true,"alasan":"Pada rangkaian seri, hambatan pengganti adalah jumlah semua hambatan."},{"f":"1/Rs = 1/R1 + 1/R2","benar":false,"alasan":"Ini rumus paralel. Dalam seri, hambatan dijumlahkan."},{"f":"Rs = R1 × R2","benar":false,"alasan":"Ini hasil kali. Dalam seri, hambatan dijumlahkan."}],"hitung":{"diketahui":"R1 = 4 Ω · R2 = 6 Ω","lhs":"Rs","ekspresi":"4 + 6","satuan":"Ω","jawaban":10,"salah":[{"nilai":2.4,"pesan":"Itu rumus paralel. Dalam seri, hambatan dijumlahkan."},{"nilai":24,"pesan":"Itu hasil kali. Dalam seri, hambatan dijumlahkan."}],"petunjuk":"Jumlahkan semua hambatan dalam seri.","penjelasan":"Rs = R1 + R2 = 4 + 6 = 10 Ω."}},{"id":"seri-arus","kelas":"9","topik":"Listrik","judul":"Arus pada rangkaian seri","cerita":"Dua hambatan, 4 Ω dan 6 Ω, disusun seri dan dihubungkan ke sumber tegangan 20 V. Rangkaian ini dipasang di ruang kelas. Berapa kuat arus yang mengalir pada rangkaian?","besaran":[{"teks":"20 V","sym":"V","nama":"tegangan sumber","satuan":"V","ket":"tegangan sumber, satuannya volt","konv":"","catatan":""},{"teks":"4 Ω","sym":"R1","nama":"hambatan pertama","satuan":"Ω","ket":"hambatan pertama dalam rangkaian","konv":"","catatan":""},{"teks":"6 Ω","sym":"R2","nama":"hambatan kedua","satuan":"Ω","ket":"hambatan kedua dalam rangkaian","konv":"","catatan":""}],"pengecoh":[{"teks":"ruang kelas","ket":"tempat dan waktu, tidak dipakai menghitung"}],"tanya":{"teks":"kuat arus yang mengalir pada rangkaian"},"rumus":[{"f":"I = V ÷ Rs","benar":true,"alasan":"Hukum Ohm pada rangkaian seri: arus dihitung dengan tegangan dibagi hambatan pengganti."},{"f":"I = V × Rs","benar":false,"alasan":"Hasil kali tidak menghasilkan arus. Arus dicari dengan membagi."},{"f":"I = Rs ÷ V","benar":false,"alasan":"Terbalik. Tegangan dibagi hambatan, bukan sebaliknya."}],"hitung":{"diketahui":"V = 20 V · R1 = 4 Ω · R2 = 6 Ω","lhs":"I","ekspresi":"20 ÷ (4 + 6)","satuan":"A","jawaban":2,"salah":[{"nilai":0.5,"pesan":"Terbalik. Arus = tegangan dibagi hambatan total."},{"nilai":200,"pesan":"Itu hasil kali. Arus dicari dengan membagi tegangan dengan hambatan total."}],"petunjuk":"Jumlahkan hambatan dulu, lalu bagi tegangan dengan hasilnya.","penjelasan":"Rs = 4 + 6 = 10 Ω, I = V ÷ Rs = 20 ÷ 10 = 2 A."}},{"id":"paralel-hambatan","kelas":"9","topik":"Listrik","judul":"Hambatan pengganti paralel","cerita":"Dua hambatan, 6 Ω dan 3 Ω, disusun paralel. Susunan ini dibuat untuk praktikum di laboratorium sekolah. Berapa hambatan pengganti rangkaian paralel?","besaran":[{"teks":"6 Ω","sym":"R1","nama":"hambatan pertama","satuan":"Ω","ket":"hambatan pertama dalam rangkaian","konv":"","catatan":""},{"teks":"3 Ω","sym":"R2","nama":"hambatan kedua","satuan":"Ω","ket":"hambatan kedua dalam rangkaian","konv":"","catatan":""}],"pengecoh":[{"teks":"laboratorium sekolah","ket":"tempat, tidak dipakai menghitung"}],"tanya":{"teks":"hambatan pengganti rangkaian paralel"},"rumus":[{"f":"1/Rp = 1/R1 + 1/R2","benar":true,"alasan":"Pada rangkaian paralel, kebalikan hambatan pengganti sama dengan jumlah kebalikan setiap hambatan."},{"f":"Rp = R1 + R2","benar":false,"alasan":"Ini cara seri. Dalam paralel, memakai kebalikan."},{"f":"Rp = R1 × R2","benar":false,"alasan":"Ini hasil kali. Dalam paralel, memakai kebalikan."}],"hitung":{"diketahui":"R1 = 6 Ω · R2 = 3 Ω","lhs":"Rp","ekspresi":"1 ÷ (1 ÷ 6 + 1 ÷ 3)","satuan":"Ω","jawaban":2,"salah":[{"nilai":9,"pesan":"Itu penjumlahan, cara seri. Paralel memakai kebalikan."},{"nilai":18,"pesan":"Itu hasil kali. Paralel memakai kebalikan."}],"petunjuk":"Hitung kebalikan tiap hambatan, jumlahkan, lalu balikkan lagi.","penjelasan":"1/Rp = 1/6 + 1/3 = 1/2, jadi Rp = 2 Ω."}},{"id":"paralel-arus-cabang","kelas":"9","topik":"Listrik","judul":"Arus pada cabang paralel","cerita":"Hambatan 3 Ω dan hambatan lain 6 Ω disusun paralel, lalu dihubungkan ke sumber tegangan 12 V. Berapa kuat arus yang melalui hambatan 3 Ω?","besaran":[{"teks":"12 V","sym":"V","nama":"tegangan sumber","satuan":"V","ket":"tegangan sumber, satuannya volt","konv":"","catatan":""},{"teks":"3 Ω","sym":"R2","nama":"hambatan cabang","satuan":"Ω","ket":"hambatan pada cabang yang ditanya","konv":"","catatan":""}],"pengecoh":[{"teks":"6 Ω","ket":"hambatan cabang lain, tidak dipakai untuk arus 3 Ω"}],"tanya":{"teks":"kuat arus yang melalui hambatan 3 Ω"},"rumus":[{"f":"I2 = V ÷ R2","benar":true,"alasan":"Pada paralel, tegangan tiap cabang sama dengan tegangan sumber. Arus cabang = V dibagi hambatan cabang."},{"f":"I2 = V × R2","benar":false,"alasan":"Hasil kali tidak menghasilkan arus."},{"f":"I2 = V ÷ (R1 + R2)","benar":false,"alasan":"Itu cara seri. Dalam paralel, tiap cabang mendapat tegangan yang sama."}],"hitung":{"diketahui":"V = 12 V · R2 = 3 Ω","lhs":"I2","ekspresi":"12 ÷ 3","satuan":"A","jawaban":4,"salah":[{"nilai":2,"pesan":"Itu arus melalui hambatan 6 Ω, bukan 3 Ω."},{"nilai":36,"pesan":"Itu hasil kali. Arus dicari dengan membagi tegangan dengan hambatan cabangnya."}],"petunjuk":"Bagi tegangan sumber dengan hambatan cabang yang ditanya.","penjelasan":"I2 = V ÷ R2 = 12 ÷ 3 = 4 A."}},{"id":"coulomb-gaya","kelas":"9","topik":"Listrik","judul":"Gaya antara dua muatan","cerita":"Muatan q1 = 2 C dan q2 = 3 C terpisah sejauh 3 m. Konstanta k = 9 × 10⁹ Nm²/C². Percobaan ini dilakukan di ruang laboratorium. Berapa gaya Coulomb antara kedua muatan?","besaran":[{"teks":"2 C","sym":"q1","nama":"muatan pertama","satuan":"C","ket":"muatan pertama, satuannya coulomb","konv":"","catatan":""},{"teks":"3 C","sym":"q2","nama":"muatan kedua","satuan":"C","ket":"muatan kedua, satuannya coulomb","konv":"","catatan":""},{"teks":"3 m","sym":"r","nama":"jarak","satuan":"m","ket":"jarak antara kedua muatan, satuannya meter","konv":"","catatan":""},{"teks":"9 × 10⁹ Nm²/C²","sym":"k","nama":"konstanta Coulomb","satuan":"Nm²/C²","ket":"konstanta Coulomb","konv":"","catatan":""}],"pengecoh":[{"teks":"ruang laboratorium","ket":"tempat, tidak dipakai menghitung"}],"tanya":{"teks":"gaya Coulomb antara kedua muatan"},"rumus":[{"f":"Fc = k × q1 × q2 ÷ r²","benar":true,"alasan":"Gaya Coulomb sebanding dengan hasil kali muatan dan berbanding terbalik dengan kuadrat jarak."},{"f":"Fc = k × (q1 + q2) ÷ r²","benar":false,"alasan":"Muatan dikalikan, bukan dijumlahkan."},{"f":"Fc = k × q1 ÷ (q2 × r²)","benar":false,"alasan":"Muatan kedua seharusnya dikalikan, bukan dibagi."}],"hitung":{"diketahui":"q1 = 2 C · q2 = 3 C · r = 3 m · k = 9 × 10⁹","lhs":"Fc","ekspresi":"9000000000 × 2 × 3 ÷ (3 × 3)","satuan":"N","jawaban":6000000000,"salah":[{"nilai":18000000000,"pesan":"Angka ini muncul kalau jarak hanya dibagi r, bukan r². Jarak dikuadratkan dalam rumus Coulomb."}],"petunjuk":"Jarak harus dikuadratkan sebelum dibagi.","penjelasan":"Fc = k × q1 × q2 ÷ r² = 9 × 10⁹ × 2 × 3 ÷ 9 = 6 × 10⁹ N."}},{"id":"coulomb-jarak","kelas":"9","topik":"Listrik","judul":"Jarak diubah, gaya berubah","cerita":"Gaya Coulomb antara dua muatan sebesar 6 × 10⁹ N ketika jaraknya 3 m. Jarak kemudian diubah menjadi 6 m. Muatan tidak diubah. Berapa gaya Coulomb setelah jaraknya diubah?","besaran":[{"teks":"6 × 10⁹ N","sym":"F1","nama":"gaya awal","satuan":"N","ket":"gaya Coulomb awal, satuannya newton","konv":"","catatan":""},{"teks":"3 m","sym":"r1","nama":"jarak awal","satuan":"m","ket":"jarak awal, satuannya meter","konv":"","catatan":""},{"teks":"6 m","sym":"r2","nama":"jarak baru","satuan":"m","ket":"jarak baru, satuannya meter","konv":"","catatan":""}],"pengecoh":[],"tanya":{"teks":"gaya Coulomb setelah jaraknya diubah"},"rumus":[{"f":"F2 = F1 × (r1 ÷ r2)²","benar":true,"alasan":"Gaya berbanding terbalik dengan kuadrat jarak, sehingga F2 = F1 × (r1 ÷ r2)²."},{"f":"F2 = F1 × (r2 ÷ r1)²","benar":false,"alasan":"Ini kebalikannya. Jarak yang lebih besar membuat gaya lebih kecil."},{"f":"F2 = F1 × (r1 ÷ r2)","benar":false,"alasan":"Pangkatnya kurang. Gaya berbanding terbalik dengan kuadrat jarak, bukan jarak biasa."}],"hitung":{"diketahui":"F1 = 6 × 10⁹ N · r1 = 3 m · r2 = 6 m","lhs":"F2","ekspresi":"6000000000 ÷ ((6 ÷ 3) × (6 ÷ 3))","satuan":"N","jawaban":1500000000,"salah":[{"nilai":3000000000,"pesan":"Itu hasil bagi dua. Gaya berbanding terbalik dengan kuadrat jarak, jadi jarak dua kali lipat membuat gaya turun empat kali."}],"petunjuk":"Jarak dua kali lipat membuat gaya turun empat kali.","penjelasan":"F2 = F1 × (r1 ÷ r2)² = 6 × 10⁹ × (3 ÷ 6)² = 1,5 × 10⁹ N."}},{"id":"medan-listrik","kelas":"9","topik":"Listrik","judul":"Kuat medan di sekitar muatan","cerita":"Sebuah muatan titik Q = 4 C berada di udara. Titik P berjarak 2 m dari muatan itu. Konstanta k = 9 × 10⁹ Nm²/C². Berapa kuat medan listrik di titik P?","besaran":[{"teks":"4 C","sym":"Q","nama":"muatan sumber","satuan":"C","ket":"muatan yang menghasilkan medan, satuannya coulomb","konv":"","catatan":""},{"teks":"2 m","sym":"r","nama":"jarak ke titik P","satuan":"m","ket":"jarak dari muatan ke titik P, satuannya meter","konv":"","catatan":""},{"teks":"9 × 10⁹ Nm²/C²","sym":"k","nama":"konstanta Coulomb","satuan":"Nm²/C²","ket":"konstanta Coulomb","konv":"","catatan":""}],"pengecoh":[],"tanya":{"teks":"kuat medan listrik di titik P"},"rumus":[{"f":"E = k × Q ÷ r²","benar":true,"alasan":"Kuat medan listrik sama dengan konstanta dikali muatan dibagi kuadrat jarak."},{"f":"E = k × Q × r²","benar":false,"alasan":"Jarak seharusnya dibagi, bukan dikali."},{"f":"E = k × Q ÷ r","benar":false,"alasan":"Jarak harus dikuadratkan."}],"hitung":{"diketahui":"Q = 4 C · r = 2 m · k = 9 × 10⁹","lhs":"E","ekspresi":"9000000000 × 4 ÷ (2 × 2)","satuan":"N/C","jawaban":9000000000,"salah":[{"nilai":18000000000,"pesan":"Angka ini muncul kalau jarak hanya dibagi, bukan dikuadratkan."}],"petunjuk":"Kuadratkan jarak sebelum membagi.","penjelasan":"E = k × Q ÷ r² = 9 × 10⁹ × 4 ÷ 4 = 9 × 10⁹ N/C."}},{"id":"potensial-listrik","kelas":"9","topik":"Listrik","judul":"Beda potensial dari usaha","cerita":"Untuk memindahkan muatan 2 C dari titik A ke titik B, diperlukan energi listrik sebesar 60 J. Perpindahan itu melalui lintasan lurus dan pendek. Berapa beda potensial antara titik A dan B?","besaran":[{"teks":"2 C","sym":"Q","nama":"muatan","satuan":"C","ket":"muatan yang dipindahkan, satuannya coulomb","konv":"","catatan":""},{"teks":"60 J","sym":"W","nama":"energi listrik","satuan":"J","ket":"energi listrik yang diperlukan, satuannya joule","konv":"","catatan":""}],"pengecoh":[{"teks":"lintasan lurus dan pendek","ket":"tidak dipakai menghitung"}],"tanya":{"teks":"beda potensial antara titik A dan B"},"rumus":[{"f":"ΔV = W ÷ Q","benar":true,"alasan":"Beda potensial adalah energi dibagi muatan."},{"f":"ΔV = W × Q","benar":false,"alasan":"Hasil kali tidak menghasilkan beda potensial."},{"f":"ΔV = Q ÷ W","benar":false,"alasan":"Terbalik. Energi dibagi muatan."}],"hitung":{"diketahui":"W = 60 J · Q = 2 C","lhs":"ΔV","ekspresi":"60 ÷ 2","satuan":"V","jawaban":30,"salah":[{"nilai":120,"pesan":"Itu hasil kali. Beda potensial dicari dengan membagi energi dengan muatan."}],"petunjuk":"Bagi energi dengan muatan.","penjelasan":"ΔV = W ÷ Q = 60 ÷ 2 = 30 V."}},{"id":"hambatan-jenis","kelas":"9","topik":"Listrik","judul":"Hambatan kawat tembaga","cerita":"Kawat tembaga dengan hambatan jenis 1,72 × 10⁻⁸ Ωm memiliki panjang 100 m dan luas penampang 2 × 10⁻⁶ m². Harga kabel itu Rp50.000. Berapa hambatan kawat tersebut?","besaran":[{"teks":"1,72 × 10⁻⁸ Ωm","sym":"ρ","nama":"hambatan jenis","satuan":"Ωm","ket":"hambatan jenis tembaga, satuannya ohm meter","konv":"","catatan":""},{"teks":"100 m","sym":"L","nama":"panjang kawat","satuan":"m","ket":"panjang kawat, satuannya meter","konv":"","catatan":""},{"teks":"2 × 10⁻⁶ m²","sym":"A","nama":"luas penampang","satuan":"m²","ket":"luas penampang kawat, satuannya meter persegi","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp50.000","ket":"harga kabel, tidak dipakai menghitung"}],"tanya":{"teks":"hambatan kawat tersebut"},"rumus":[{"f":"R = ρ × L ÷ A","benar":true,"alasan":"Hambatan kawat berbanding lurus dengan panjang dan hambatan jenis, serta berbanding terbalik dengan luas penampang."},{"f":"R = ρ × A ÷ L","benar":false,"alasan":"Terbalik. Hambatan berbanding lurus dengan panjang, bukan luas."},{"f":"R = ρ ÷ (L × A)","benar":false,"alasan":"Panjang dan luas tidak dikalikan di penyebut."}],"hitung":{"diketahui":"ρ = 1,72 × 10⁻⁸ Ωm · L = 100 m · A = 2 × 10⁻⁶ m²","lhs":"R","ekspresi":"1,72e-8 × 100 ÷ 2e-6","satuan":"Ω","jawaban":0.86,"salah":[{"nilai":0.00000172,"pesan":"Itu lupa dibagi luas penampang."}],"petunjuk":"Kalikan hambatan jenis dengan panjang, lalu bagi dengan luas penampang.","penjelasan":"R = ρ × L ÷ A = 1,72 × 10⁻⁸ × 100 ÷ 2 × 10⁻⁶ = 0,86 Ω."}},{"id":"induksi-ggl","kelas":"9","topik":"Magnet","judul":"GGL dari perubahan fluks","cerita":"Sebuah kumparan memiliki 200 lilitan. Fluks magnetik yang melalui kumparan berubah sebesar 0,5 Wb dalam waktu 0,1 s. Kumparan itu dibeli seharga Rp15.000. Berapa besar GGL induksi yang timbul?","besaran":[{"teks":"200 lilitan","sym":"N","nama":"jumlah lilitan","satuan":"lilitan","ket":"jumlah lilitan kumparan (N)","konv":"","catatan":""},{"teks":"0,5 Wb","sym":"ΔΦ","nama":"perubahan fluks","satuan":"Wb","ket":"perubahan fluks magnetik, satuannya weber","konv":"","catatan":""},{"teks":"0,1 s","sym":"Δt","nama":"selang waktu","satuan":"s","ket":"selang waktu perubahan, satuannya sekon","konv":"","catatan":""}],"pengecoh":[{"teks":"Rp15.000","ket":"harga kumparan, tidak dipakai menghitung"}],"tanya":{"teks":"besar GGL induksi yang timbul"},"rumus":[{"f":"ε = N × ΔΦ ÷ Δt","benar":true,"alasan":"Hukum Faraday: GGL induksi sebanding dengan jumlah lilitan dan laju perubahan fluks."},{"f":"ε = N ÷ (ΔΦ × Δt)","benar":false,"alasan":"Terbalik. GGL bertambah jika lilitan atau perubahan fluks bertambah."},{"f":"ε = ΔΦ ÷ (N × Δt)","benar":false,"alasan":"Lilitan seharusnya dikalikan, bukan dibagi."}],"hitung":{"diketahui":"N = 200 · ΔΦ = 0,5 Wb · Δt = 0,1 s","lhs":"ε","ekspresi":"200 × 0,5 ÷ 0,1","satuan":"V","jawaban":1000,"salah":[{"nilai":100,"pesan":"Lupa membagi dengan selang waktu."}],"petunjuk":"Kalikan lilitan dengan perubahan fluks, lalu bagi dengan selang waktu.","penjelasan":"ε = N × ΔΦ ÷ Δt = 200 × 0,5 ÷ 0,1 = 1000 V."}},{"id":"induksi-fluks-berubah","kelas":"9","topik":"Magnet","judul":"Fluks berubah dari dua nilai","cerita":"Sebuah kumparan 100 lilitan dilalui fluks magnetik yang berubah dari 0,8 Wb menjadi 0,2 Wb dalam waktu 0,4 s. Pada saat percobaan, lampu di ruangan menyala terang. Berapa besar GGL induksi yang timbul?","besaran":[{"teks":"100 lilitan","sym":"N","nama":"jumlah lilitan","satuan":"lilitan","ket":"jumlah lilitan kumparan (N)","konv":"","catatan":""},{"teks":"0,8 Wb","sym":"Φ1","nama":"fluks awal","satuan":"Wb","ket":"fluks awal, satuannya weber","konv":"","catatan":""},{"teks":"0,2 Wb","sym":"Φ2","nama":"fluks akhir","satuan":"Wb","ket":"fluks akhir, satuannya weber","konv":"","catatan":""},{"teks":"0,4 s","sym":"Δt","nama":"selang waktu","satuan":"s","ket":"selang waktu perubahan, satuannya sekon","konv":"","catatan":""}],"pengecoh":[{"teks":"lampu di ruangan","ket":"tidak dipakai menghitung"}],"tanya":{"teks":"besar GGL induksi yang timbul"},"rumus":[{"f":"ε = N × ΔΦ ÷ Δt, dengan ΔΦ = Φ2 − Φ1","benar":true,"alasan":"Perubahan fluks adalah selisih fluks akhir dan awal, lalu dipakai di rumus GGL."},{"f":"ε = N × Φ1 ÷ Δt","benar":false,"alasan":"Yang dipakai adalah perubahan fluks, bukan fluks awal."},{"f":"ε = N ÷ Δt","benar":false,"alasan":"Perubahan fluks tidak ikut dihitung."}],"hitung":{"diketahui":"N = 100 · Φ1 = 0,8 Wb · Φ2 = 0,2 Wb · Δt = 0,4 s","lhs":"ε","ekspresi":"100 × (0,8 - 0,2) ÷ 0,4","satuan":"V","jawaban":150,"salah":[{"nilai":200,"pesan":"Itu hanya memakai fluks awal. Yang dipakai adalah selisih fluks."}],"petunjuk":"Cari dulu selisih fluks, lalu masukkan ke rumus.","penjelasan":"ΔΦ = 0,8 − 0,2 = 0,6 Wb. ε = 100 × 0,6 ÷ 0,4 = 150 V."}},{"id":"lorentz-sudut","kelas":"9","topik":"Magnet","judul":"Gaya Lorentz dengan sudut","cerita":"Kawat sepanjang 0,5 m dialiri arus 2 A di dalam medan magnet 0,4 T. Arah arus membentuk sudut 30° terhadap arah medan magnet. Sebuah kawat dicat hitam. Berapa gaya Lorentz pada kawat?","besaran":[{"teks":"0,5 m","sym":"L","nama":"panjang kawat","satuan":"m","ket":"panjang kawat di dalam medan, satuannya meter","konv":"","catatan":""},{"teks":"2 A","sym":"I","nama":"kuat arus","satuan":"A","ket":"kuat arus pada kawat, satuannya ampere","konv":"","catatan":""},{"teks":"0,4 T","sym":"B","nama":"medan magnet","satuan":"T","ket":"kuat medan magnet, satuannya tesla","konv":"","catatan":""},{"teks":"30°","sym":"θ","nama":"sudut","satuan":"°","ket":"sudut antara arah arus dan medan magnet","konv":"","catatan":""}],"pengecoh":[{"teks":"kawat dicat hitam","ket":"tidak dipakai menghitung"}],"tanya":{"teks":"gaya Lorentz pada kawat"},"rumus":[{"f":"F = B × I × L × sin θ","benar":true,"alasan":"Gaya Lorentz bergantung pada sudut. Nilai sin 30° adalah 0,5."},{"f":"F = B × I × L ÷ sin θ","benar":false,"alasan":"Sinus dibagi, bukan dikali."},{"f":"F = B × I × L × cos θ","benar":false,"alasan":"Yang dipakai sinus, bukan cosinus."}],"hitung":{"diketahui":"B = 0,4 T · I = 2 A · L = 0,5 m · θ = 30° (sin 30° = 0,5)","lhs":"F","ekspresi":"0,5 × 2 × 0,4 × 0,5","satuan":"N","jawaban":0.2,"salah":[{"nilai":0.4,"pesan":"Itu jika arus tegak lurus medan (sin 90° = 1). Di soal sudutnya 30°."}],"petunjuk":"Ingat, sin 30° = 0,5.","penjelasan":"F = B × I × L × sin θ = 0,4 × 2 × 0,5 × 0,5 = 0,2 N."}}]}</script>
+<script>
+(function(){
+'use strict';
+var KEY='cjs.soal.v1',PINKEY='cjs.pin',DONEKEY='cjs.done',DEFPIN='1234';
+var $=function(s){return document.querySelector(s)};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var store={
+  get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},
+  set:function(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}},
+  del:function(k){try{localStorage.removeItem(k)}catch(e){}}
+};
+var PAL=['--q1','--q2','--q3','--q4'];
+function colorOf(k){if(k==='ask')return '--ask';var n=parseInt(String(k).slice(1),10)||0;return PAL[n%PAL.length];}
+function fmt(n){return String(n).replace('.',',');}
+function parseNum(s){
+  s=String(s==null?'':s).trim().replace(/\s/g,'');
+  if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
+  s=s.replace(',','.');
+  return /^-?\d*\.?\d+$/.test(s)?parseFloat(s):NaN;
+}
+function newId(){return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+
+/* ---------- Data soal ---------- */
+function blank(){return {id:'',kelas:'9',variasi:[],topik:'',judul:'',cerita:'',
+  besaran:[{teks:'',sym:'',nama:'',satuan:'',ket:'',konv:'',catatan:''}],pengecoh:[],tanya:{teks:''},
+  rumus:[{f:'',benar:true,alasan:''},{f:'',benar:false,alasan:''}],
+  hitung:{diketahui:'',lhs:'',ekspresi:'',satuan:'',jawaban:'',angka:'',salah:[],petunjuk:'',penjelasan:''}};}
+function arr(x){return Array.isArray(x)?x:[];}
+function str(x){return x==null?'':String(x);}
+function norm(s){
+  s=s||{};var h=s.hitung||{};
+  return {
+    id:str(s.id)||newId(),kelas:str(s.kelas)||'9',
+    variasi:arr(s.variasi).map(function(v){v=v||{};return {nama:str(v.nama),
+      min:typeof v.min==='number'?v.min:parseNum(v.min),maks:typeof v.maks==='number'?v.maks:parseNum(v.maks),
+      langkah:typeof v.langkah==='number'?v.langkah:parseNum(v.langkah),rumus:str(v.rumus)};}),
+    topik:str(s.topik),judul:str(s.judul),cerita:str(s.cerita),
+    besaran:arr(s.besaran).map(function(b){b=b||{};return {teks:str(b.teks),sym:str(b.sym),nama:str(b.nama),satuan:str(b.satuan),ket:str(b.ket),konv:str(b.konv),catatan:str(b.catatan)};}),
+    pengecoh:arr(s.pengecoh).map(function(d){d=d||{};return {teks:str(d.teks),ket:str(d.ket)};}),
+    tanya:{teks:str((s.tanya||{}).teks)},
+    rumus:arr(s.rumus).map(function(r){r=r||{};return {f:str(r.f),benar:!!r.benar,alasan:str(r.alasan)};}),
+    hitung:{diketahui:str(h.diketahui),lhs:str(h.lhs),ekspresi:str(h.ekspresi),satuan:str(h.satuan),
+      jawaban:typeof h.jawaban==='number'?h.jawaban:parseNum(h.jawaban),
+      salah:arr(h.salah).map(function(x){x=x||{};return {nilai:typeof x.nilai==='number'?x.nilai:parseNum(x.nilai),pesan:str(x.pesan),rumus:str(x.rumus)};}),
+      angka:str(h.angka),petunjuk:str(h.petunjuk),penjelasan:str(h.penjelasan)}
+  };
+}
+function toDraft(s){
+  var d=JSON.parse(JSON.stringify(s));
+  d.hitung.jawaban=isNaN(s.hitung.jawaban)?'':fmt(s.hitung.jawaban);
+  d.hitung.salah=s.hitung.salah.map(function(x,i){return {nilai:isNaN(x.nilai)?'':fmt(x.nilai),pesan:d.hitung.salah[i].pesan,rumus:x.rumus};});
+  return d;
+}
+function fromDraft(d){
+  var s=JSON.parse(JSON.stringify(d));
+  var tr=function(o){for(var k in o){if(typeof o[k]==='string')o[k]=o[k].trim();}};
+  tr(s);s.besaran.forEach(tr);s.pengecoh.forEach(tr);tr(s.tanya);s.rumus.forEach(tr);tr(s.hitung);s.hitung.salah.forEach(tr);
+  s.hitung.jawaban=parseNum(s.hitung.jawaban);
+  s.hitung.salah.forEach(function(x){x.nilai=parseNum(x.nilai);});
+  s.variasi.forEach(tr);
+  s.variasi.forEach(function(v){v.min=parseNum(v.min);v.maks=parseNum(v.maks);v.langkah=parseNum(v.langkah);});
+  return s;
+}
+/* mencari posisi tiap penanda di dalam cerita */
+function locate(s){
+  var toks=[],errs=[],used=[];
+  s.besaran.forEach(function(b,i){toks.push({kind:'b'+i,txt:b.teks,ref:b,idx:i});});
+  s.pengecoh.forEach(function(d,i){toks.push({kind:'decoy',txt:d.teks,ref:d,idx:i});});
+  toks.push({kind:'ask',txt:s.tanya.teks,ref:s.tanya,idx:0});
+  toks.forEach(function(t){
+    if(!t.txt)return;
+    var from=0,pos=-1,i,j;
+    while(true){
+      i=s.cerita.indexOf(t.txt,from);if(i<0)break;
+      j=i+t.txt.length;
+      var clash=used.some(function(u){return i<u.j&&j>u.i;});
+      if(!clash){pos=i;break;}
+      from=i+1;
+    }
+    if(pos<0){errs.push('“'+t.txt+'” tidak ditemukan di cerita, atau bertumpukan dengan penanda lain. Ketik persis seperti di cerita.');return;}
+    t.i=pos;t.j=pos+t.txt.length;used.push(t);
+  });
+  return {toks:toks,errs:errs};
+}
+function check(s){
+  var e=[],syms={};
+  if(!s.judul)e.push('Judul soal belum diisi.');
+  if(!s.topik)e.push('Topik belum diisi.');
+  if(['7','8','9'].indexOf(s.kelas)<0)e.push('Kelas harus 7, 8, atau 9.');
+  if(!s.cerita)e.push('Cerita soal belum diisi.');
+  if(!s.besaran.length)e.push('Tambahkan minimal satu besaran.');
+  s.besaran.forEach(function(b,i){var n='Besaran '+(i+1)+': ';
+    if(!b.teks)e.push(n+'teks di cerita belum diisi.');
+    if(!b.sym)e.push(n+'simbol belum diisi.');
+    else if(syms[b.sym])e.push(n+'simbol “'+b.sym+'” dipakai dua kali.');
+    syms[b.sym]=1;
+    if(!b.nama)e.push(n+'nama besaran belum diisi.');
+  });
+  s.pengecoh.forEach(function(d,i){if(!d.teks)e.push('Pengecoh '+(i+1)+': teks belum diisi.');});
+  if(!s.tanya.teks)e.push('Kalimat yang ditanya belum diisi.');
+  if(s.cerita)locate(s).errs.forEach(function(x){e.push(x);});
+  if(s.rumus.length<2)e.push('Isi minimal dua pilihan rumus.');
+  s.rumus.forEach(function(r,i){if(!r.f)e.push('Rumus '+(i+1)+' belum diisi.');});
+  if(s.rumus.filter(function(r){return r.benar;}).length!==1)e.push('Pilih tepat satu rumus yang benar.');
+  var h=s.hitung;
+  if(!h.lhs)e.push('Hitung: bagian kiri persamaan belum diisi (contoh: Ek = Ep).');
+  if(!h.ekspresi)e.push('Hitung: isi perhitungan dengan angka belum diisi.');
+  if(!h.satuan)e.push('Hitung: satuan jawaban belum diisi.');
+  if(!h.angka&&(typeof h.jawaban!=='number'||isNaN(h.jawaban)))e.push('Hitung: jawaban akhir harus berupa angka.');
+  h.salah.forEach(function(x,i){
+    if(!x.rumus&&(typeof x.nilai!=='number'||isNaN(x.nilai)))e.push('Jawaban salah '+(i+1)+': nilainya harus berupa angka.');
+    if(!x.pesan)e.push('Jawaban salah '+(i+1)+': pesan petunjuk belum diisi.');
+  });
+  var vn=s.variasi||[],names=[];
+  vn.forEach(function(v,i){var n='Variasi '+(i+1)+': ';
+    if(!/^[A-Za-z_][A-Za-z0-9_]*$/.test(v.nama||''))e.push(n+'nama harus huruf tanpa spasi, misalnya massa.');
+    else if(names.indexOf(v.nama)>=0)e.push(n+'nama “'+v.nama+'” dipakai dua kali.');
+    names.push(v.nama);
+    if(v.rumus){if(!safeExpr(v.rumus,names))e.push(n+'rumus turunan hanya boleh berisi nama variasi di atasnya, angka, + − × ÷ dan kurung.');}
+    else if(!Number.isFinite(v.min)||!Number.isFinite(v.maks)||!Number.isFinite(v.langkah))e.push(n+'isi min, maks, dan langkah dengan angka, atau isi rumus turunan.');
+    else if(v.langkah<=0||v.maks<v.min)e.push(n+'langkah harus lebih dari 0, dan maks tidak boleh kurang dari min.');
+  });
+  var txt=JSON.stringify(s),mm,re=/\{(\w+)\}/g;
+  while((mm=re.exec(txt))){if(names.indexOf(mm[1])<0){e.push('Teks memakai {'+mm[1]+'}, tetapi belum ada variasi bernama '+mm[1]+'.');break;}}
+  if(s.hitung.angka&&!safeExpr(s.hitung.angka,vn.map(function(v){return v.nama;})))e.push('Rumus jawaban hanya boleh berisi nama variasi, angka, + − × ÷ dan kurung.');
+  if(vn.length||s.hitung.angka){
+    var inst=instanceOf(s,'min');
+    if(Number.isNaN(inst.hitung.jawaban))e.push('Rumus jawaban belum bisa dihitung. Periksa nama variasi dan tanda operasinya.');
+    inst.hitung.salah.forEach(function(x,i){if(Number.isNaN(x.nilai))e.push('Jawaban salah '+(i+1)+': rumusnya belum bisa dihitung.');});
+    if(vn.length)locate(inst).errs.forEach(function(x){e.push(x);});
+  }
+  return e;
+}
+function compile(s){
+  var L=locate(s),ok=L.toks.filter(function(t){return t.i!=null;}).sort(function(a,b){return a.i-b.i;});
+  var story=[],pos=0;
+  ok.forEach(function(t){
+    if(t.i>pos)story.push(s.cerita.slice(pos,t.i));
+    if(t.kind==='ask')story.push({k:'ask',id:'tq',txt:t.txt,what:'kalimat pertanyaan'});
+    else if(t.kind==='decoy')story.push({k:'decoy',id:'d'+t.idx,txt:t.txt,what:t.ref.ket||'info yang tidak dipakai menghitung'});
+    else story.push({k:t.kind,id:'t'+t.idx,txt:t.txt,what:t.ref.ket||t.ref.nama,conv:t.ref.konv,note:t.ref.catatan});
+    pos=t.j;
+  });
+  if(pos<s.cerita.length)story.push(s.cerita.slice(pos));
+  var slots=s.besaran.map(function(b,i){return {k:'b'+i,sym:b.sym,name:b.nama,u:b.satuan?'satuan '+b.satuan:''};});
+  slots.push({k:'ask',sym:'?',name:'Ditanya',u:'jawab dalam '+s.hitung.satuan});
+  var h=s.hitung;
+  return {id:s.id,judul:s.judul,topik:s.topik,story:story,slots:slots,
+    formulas:s.rumus.map(function(r){return {f:r.f,ok:r.benar,why:r.alasan};}),
+    calc:{given:h.diketahui,lhs:h.lhs,expr:h.ekspresi,unit:h.satuan,ans:h.jawaban,
+      alt:h.salah.map(function(x){return {v:x.nilai,msg:x.pesan};}),tip:h.petunjuk||'Hitung lagi dengan teliti.',explain:h.penjelasan}};
+}
+
+/* ---------- Variasi angka ---------- */
+var SRC={};
+var SAFE=/^[0-9A-Za-z_.+\-*\/()\s×÷,]*$/;
+function normExpr(x){return String(x==null?'':x).replace(/×/g,'*').replace(/÷/g,'/').replace(/,/g,'.');}
+/* rumus hanya boleh memakai angka, operator, kurung, dan nama variasi yang sudah didefinisikan */
+function safeExpr(x,names){
+  var e=normExpr(x);
+  var ids=e.match(/[A-Za-z_][A-Za-z0-9_]*/g)||[];
+  return SAFE.test(e)&&ids.every(function(id){return (names||[]).indexOf(id)>=0;});
+}
+function evalAngka(expr,vals){
+  var e=normExpr(expr),names=Object.keys(vals);
+  if(!safeExpr(e,names))return NaN;
+  try{
+    var f=new Function(names.join(','),'"use strict";return ('+e+');');
+    var r=f.apply(null,names.map(function(k){return vals[k];}));
+    return typeof r==='number'&&isFinite(r)?Math.round(r*1000)/1000:NaN;
+  }catch(err){return NaN;}
+}
+/* mengganti {nama} dengan angka acak (atau nilai minimum saat mode 'min') */
+function instanceOf(s,mode){
+  var vn=s.variasi||[];
+  if(!vn.length&&!(s.hitung&&s.hitung.angka))return s;
+  var vals={};
+  vn.forEach(function(v){
+    if(v.rumus){vals[v.nama]=evalAngka(v.rumus,vals);return;}
+    var n=Math.max(0,Math.floor((v.maks-v.min)/v.langkah+1e-9));
+    var k=mode==='min'?0:Math.floor(Math.random()*(n+1));
+    vals[v.nama]=Math.round((v.min+k*v.langkah)*1000)/1000;
+  });
+  var sub=function(t){return String(t==null?'':t).replace(/\{(\w+)\}/g,function(m,k){return Object.prototype.hasOwnProperty.call(vals,k)?fmt(vals[k]):m;});};
+  var o=JSON.parse(JSON.stringify(s));
+  o.cerita=sub(o.cerita);
+  o.besaran.forEach(function(b){b.teks=sub(b.teks);b.konv=sub(b.konv);b.catatan=sub(b.catatan);b.ket=sub(b.ket);});
+  o.pengecoh.forEach(function(d){d.teks=sub(d.teks);d.ket=sub(d.ket);});
+  o.tanya.teks=sub(o.tanya.teks);
+  var h=o.hitung;
+  h.diketahui=sub(h.diketahui);h.ekspresi=sub(h.ekspresi);h.petunjuk=sub(h.petunjuk);h.penjelasan=sub(h.penjelasan);
+  if(h.angka)h.jawaban=evalAngka(h.angka,vals);
+  h.salah=h.salah.map(function(x){return {nilai:x.rumus?evalAngka(x.rumus,vals):x.nilai,pesan:sub(x.pesan)};});
+  return o;
+}
+
+/* ---------- Status ---------- */
+var data=[],source='bawaan',done={},pin=DEFPIN;
+var view='home',cur=null,cp=null,RS={},sel=null,fk=null,scrollTo=null,previewFrom=null;
+var adminOK=false,adminTab='list',D=null,editId=null,formErr=null,notice=null,confirmKey=null,loginErr=false;
+var impText='',impMode='tambah',selectExport=false;
+var tingkat=(function(){var v=store.get('cjs.tingkat');return ['mudah','menengah','sulit'].indexOf(v)>=0?v:'menengah';})();
+var kelasSel=(function(){var v=store.get('cjs.kelas');return ['7','8','9'].indexOf(v)>=0?v:'9';})();
+
+function persist(){
+  var ok=store.set(KEY,JSON.stringify({versi:1,soal:data}));
+  if(ok)source='perangkat';
+  return ok;
+}
+function saveDone(){store.set(DONEKEY,JSON.stringify(done));}
+function readList(j){var l=Array.isArray(j)?j:(j&&Array.isArray(j.soal)?j.soal:null);return l?l.map(norm):null;}
+async function load(skipLocal){
+  var list=null;
+  if(!skipLocal){
+    var raw=store.get(KEY);
+    if(raw){try{list=readList(JSON.parse(raw));if(list)source='perangkat';}catch(e){list=null;}}
+  }
+  if(!list){
+    try{var r=await fetch('soal.json',{cache:'no-cache'});if(r.ok){list=readList(await r.json());if(list)source='soal.json';}}catch(e){list=null;}
+  }
+  if(!list){try{list=readList(JSON.parse($('#seed').textContent));source='bawaan';}catch(e){list=[];}}
+  data=list;
+}
+function newState(p){
+  var order=p.formulas.map(function(_,i){return i;});
+  for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t;}
+  var placed={},bs=p.slots.filter(function(s){return s.k!=='ask';}),msg='Mulai dari cerita: sentuh satu angka, lalu sentuh kotak yang cocok.';
+  if(tingkat==='mudah'){
+    bs.slice(0,Math.ceil(bs.length/2)).forEach(function(s){
+      var t=p.story.find(function(x){return typeof x!=='string'&&x.k===s.k;});
+      if(t)placed[s.k]=t.id;
+    });
+    msg='Tingkat mudah: sebagian kotak sudah terisi. Lengkapi sisanya, lalu coret info yang tidak dipakai.';
+  }
+  return {placed:placed,crossed:[],fTried:[],formulaOk:false,solved:false,input:'',calcMsg:null,order:order,
+    msg:{t:'info',x:msg}};
+}
+
+/* ---------- Latihan ---------- */
+function tokenById(p,id){for(var i=0;i<p.story.length;i++){if(typeof p.story[i]!=='string'&&p.story[i].id===id)return p.story[i];}return null;}
+function decoysOf(p){return p.story.filter(function(x){return typeof x!=='string'&&x.k==='decoy';});}
+function stage1Done(p,st){
+  return p.slots.every(function(s){return st.placed[s.k];})&&decoysOf(p).every(function(d){return st.crossed.indexOf(d.id)>=0;});
+}
+function setMsg(t,x){RS[cur].msg={t:t,x:x};}
+function onToken(id){
+  var p=cp,st=RS[cur],k,pk=null;
+  for(k in st.placed){if(st.placed[k]===id)pk=k;}
+  if(pk){delete st.placed[pk];sel=null;setMsg('info','Dikembalikan ke cerita. Pilih lagi kalau mau.');return;}
+  var ci=st.crossed.indexOf(id);
+  if(ci>=0){st.crossed.splice(ci,1);sel=null;setMsg('info','Coretan dibatalkan.');return;}
+  var t=tokenById(p,id);
+  if(sel===id){sel=null;setMsg('info','Pilihan dibatalkan.');return;}
+  sel=id;setMsg('info','Terpilih: “'+t.txt+'”. Sekarang sentuh kotak yang cocok.');
+}
+function onSlot(kind){
+  var p=cp,st=RS[cur];
+  if(!sel){
+    if(kind!=='coret'&&st.placed[kind]){delete st.placed[kind];setMsg('info','Kotak dikosongkan.');}
+    else{setMsg('info','Pilih dulu kata atau angka di cerita, baru sentuh kotaknya.');}
+    return;
+  }
+  var t=tokenById(p,sel),slot=null;
+  p.slots.forEach(function(s){if(s.k===kind)slot=s;});
+  if(kind==='coret'){
+    if(t.k==='decoy'){st.crossed.push(t.id);sel=null;setMsg('ok','“'+t.txt+'” itu '+t.what+'. Dicoret.');}
+    else{setMsg('bad','“'+t.txt+'” dipakai untuk menjawab soal. Jangan dicoret.');}
+  }else if(t.k===kind){
+    st.placed[kind]=t.id;sel=null;
+    setMsg('ok','“'+t.txt+'” itu '+t.what+'.'+(t.note?' '+t.note:''));
+  }else if(t.k==='decoy'){
+    setMsg('bad','“'+t.txt+'” itu '+t.what+'. Taruh di kotak Coret.');
+  }else if(t.k==='ask'){
+    setMsg('bad','Ini kalimat pertanyaan. Taruhnya di kotak Ditanya.');
+  }else if(kind==='ask'){
+    setMsg('bad','Kotak Ditanya untuk kalimat pertanyaan, yang biasanya diawali “Berapa”.');
+  }else{
+    setMsg('bad','“'+t.txt+'” itu '+t.what+'. Kotak '+slot.sym+' untuk '+slot.name+'.');
+  }
+  if(stage1Done(p,st)){sel=null;setMsg('ok','Semua kotak terisi dan pengecoh sudah dicoret. Lanjut ke langkah 2.');scrollTo='s2';}
+}
+function onOpt(i){
+  var st=RS[cur];
+  if(st.fTried.indexOf(i)>=0||st.formulaOk)return;
+  st.fTried.push(i);
+  if(cp.formulas[i].ok){st.formulaOk=true;scrollTo='s3';}
+}
+function onCheck(){
+  var st=RS[cur],c=cp.calc,v=parseNum(st.input),i;
+  if(isNaN(v)){st.calcMsg={t:'bad',x:'Tulis angkanya saja, contoh 12,5.'};return;}
+  if(Math.abs(v-c.ans)<=Math.max(1e-6,Math.abs(c.ans)*0.005)){
+    st.solved=true;st.calcMsg={t:'ok',x:c.explain||'Jawabanmu benar.'};
+    if(cur!=='__prev'){done[cur]=1;saveDone();}
+    return;
+  }
+  for(i=0;i<c.alt.length;i++){if(Math.abs(v-c.alt[i].v)<1e-6){st.calcMsg={t:'bad',x:c.alt[i].msg};return;}}
+  st.calcMsg={t:'bad',x:'Belum tepat. '+c.tip};
+}
+function startPlay(id,s){
+  SRC[id]=s;cp=compile(instanceOf(s));cur=id;RS[id]=newState(cp);sel=null;view='play';
+}
+
+/* ---------- Tampilan umum ---------- */
+function fbHtml(m){
+  if(!m)return '';
+  var lab={ok:'Tepat',bad:'Belum cocok',info:'Petunjuk'}[m.t];
+  return '<div class="fb '+m.t+'" role="status" aria-live="polite"><b>'+lab+'</b>'+esc(m.x)+'</div>';
+}
+function noticeHtml(){return notice?'<div class="fb '+notice.t+'" role="status" aria-live="polite">'+esc(notice.x)+'</div>':'';}
+function topHtml(){
+  if(view==='admin'){
+    return '<div class="bar"><div><p class="eyebrow">Mode admin</p><h1>Kelola soal</h1></div><div class="ab"><button class="btn ghost sm" data-act="home" data-fk="top">Halaman siswa</button><button class="btn ghost sm" data-act="a-out">Keluar</button></div></div>';
+  }
+  var h='<div class="bar"><div><p class="eyebrow">IPA SMP · latihan soal cerita</p><h1>Cerita Jadi Simbol</h1></div><button class="btn ghost sm" data-act="a-open" data-fk="top">Admin</button></div>';
+  if(view==='home')h+='<p class="lede">Ubah kalimat soal menjadi besaran fisika, pilih rumus, lalu hitung.</p>';
+  return h;
+}
+var TINGKAT=[['mudah','Mudah'],['menengah','Menengah'],['sulit','Sulit']];
+var TINGKAT_KET={mudah:'Sebagian kotak sudah terisi. Cocok untuk pemanasan.',menengah:'Kotak lengkap, dengan satuan sebagai petunjuk.',sulit:'Tanpa petunjuk satuan. Soal cerita murni.'};
+function chipsHtml(list,cur,act){
+  return '<div class="row" role="group">'+list.map(function(x){var on=cur===x[0];
+    return '<button class="btn ghost sm chip" aria-pressed="'+on+'" data-act="'+act+'" data-v="'+x[0]+'" data-fk="'+act+'-'+x[0]+'">'+esc(x[1])+'</button>';}).join('')+'</div>';
+}
+function homeHtml(){
+  var h='<section class="card"><div class="sh"><h2>Tingkat bantuan</h2></div>'+chipsHtml(TINGKAT,tingkat,'set-tingkat')
+    +'<p class="mut" style="margin:10px 0 0">'+TINGKAT_KET[tingkat]+'</p></section>';
+  h+='<section class="card"><div class="sh"><h2>Kelas</h2></div>'+chipsHtml([['7','Kelas 7'],['8','Kelas 8'],['9','Kelas 9']],kelasSel,'set-kelas')+'</section>';
+  var list=data.filter(function(s){return s.kelas===kelasSel;});
+  if(!list.length)return h+'<div class="card"><p class="mut">Belum ada soal untuk kelas '+kelasSel+'. Soal kelas ini sedang disiapkan.</p></div>';
+  var groups=[],map={};
+  list.forEach(function(s){if(!map[s.topik]){map[s.topik]=[];groups.push(s.topik);}map[s.topik].push(s);});
+  var nd=list.filter(function(s){return done[s.id];}).length;
+  h+='<p class="sum">Selesai '+nd+' dari '+list.length+' soal</p>';
+  groups.forEach(function(g){
+    h+='<section class="grp"><h2>'+esc(g)+'</h2><div class="list">'+map[g].map(function(s){
+      return '<button class="item" data-act="play" data-v="'+esc(s.id)+'"><span><b>'+esc(s.judul)+'</b><small>'+s.besaran.length+' besaran</small></span>'+(done[s.id]?'<span class="ck">✓ selesai</span>':'')+'</button>';
+    }).join('')+'</div></section>';
+  });
+  return h;
+}
+function nextUnsolvedId(){
+  var i0=data.findIndex(function(s){return s.id===cur;});
+  for(var i=1;i<=data.length;i++){var s=data[(i0+i)%data.length];if(s&&!done[s.id]&&s.id!==cur)return s.id;}
+  return null;
+}
+function playHtml(){
+  var p=cp,st=RS[cur],done1=stage1Done(p,st),h='';
+  var back=previewFrom?'<button class="btn ghost sm" data-act="a-back" data-fk="back">← Kembali ke admin</button>':'<button class="btn ghost sm" data-act="home" data-fk="back">← Semua soal</button>';
+  h+='<div class="row" style="margin-top:14px">'+back+'</div><h2 class="t">'+esc(p.judul)+'</h2><p class="eyebrow">'+esc(p.topik)+(previewFrom?' · pratinjau':'')+'</p>';
+  var placedIds=Object.keys(st.placed).map(function(k){return st.placed[k];});
+  var story=p.story.map(function(x){
+    if(typeof x==='string')return esc(x);
+    var on=placedIds.indexOf(x.id)>=0,cut=st.crossed.indexOf(x.id)>=0;
+    var cls='tok'+(sel===x.id?' sel':'')+(on?' on':'')+(cut?' cut':'');
+    var c=x.k==='decoy'?'':' style="--c:var('+colorOf(x.k)+')"';
+    return '<button class="'+cls+'"'+c+' data-act="tok" data-v="'+x.id+'" data-fk="t-'+x.id+'" aria-pressed="'+(sel===x.id)+'"'+(done1?' disabled':'')+'>'+esc(x.txt)+'</button>';
+  }).join('');
+  var slots=p.slots.map(function(s){
+    var tid=st.placed[s.k],t=tid?tokenById(p,tid):null;
+    var cls='slot'+(t?' filled':'')+(sel&&!t?' armed':'');
+    return '<button class="'+cls+'" style="--c:var('+colorOf(s.k)+')" data-act="slot" data-v="'+s.k+'" data-fk="s-'+s.k+'"'+(done1?' disabled':'')+'><span class="sym">'+esc(s.sym)+'</span><span class="nm">'+esc(s.name)+(tingkat==='sulit'?'':'<small>'+esc(s.u)+'</small>')+'</span><span class="val">'+(t?esc(t.txt)+(t.conv?' <em>'+esc(t.conv)+'</em>':''):'<span class="ph">kosong</span>')+'</span></button>';
+  }).join('');
+  var cr=st.crossed.map(function(id){return esc(tokenById(p,id).txt);}).join(' · ');
+  slots+='<button class="slot coret'+(sel?' armed':'')+'" data-act="slot" data-v="coret" data-fk="s-coret"'+(done1?' disabled':'')+'><span class="sym">✕</span><span class="nm">Coret<small>info yang tidak dipakai menghitung</small></span><span class="val">'+(cr||'<span class="ph">kosong</span>')+'</span></button>';
+  h+='<section class="card" id="s1"><div class="sh"><span class="num">1</span><h2>Pilah cerita</h2><span class="stt'+(done1?' done':'')+'">'+(done1?'selesai':'sekarang')+'</span></div>'
+    +'<p class="mut">Sentuh angka atau kalimat di cerita, lalu sentuh kotak yang cocok. Info yang tidak dipakai taruh di Coret.</p>'
+    +'<p class="story">'+story+'</p><div class="slots">'+slots+'</div>'+fbHtml(st.msg)+'</section>';
+  var lock2=!done1,opts='';
+  if(!lock2){
+    opts='<div class="opts">'+st.order.map(function(i){
+      var f=p.formulas[i],tried=st.fTried.indexOf(i)>=0,cls='opt'+(tried?(f.ok?' yes':' no'):'');
+      return '<div><button class="'+cls+'" data-act="opt" data-v="'+i+'" data-fk="o'+i+'"'+(tried||st.formulaOk?' disabled':'')+'>'+(tried&&f.ok?'✓ ':'')+esc(f.f)+'</button>'+(tried&&f.why?'<p class="why">'+esc(f.why)+'</p>':'')+'</div>';
+    }).join('')+'</div>';
+  }
+  h+='<section class="card'+(lock2?' locked':'')+'" id="s2"><div class="sh"><span class="num">2</span><h2>Pilih rumus</h2><span class="stt'+(st.formulaOk?' done':'')+'">'+(st.formulaOk?'selesai':(lock2?'terkunci':'sekarang'))+'</span></div>'
+    +(lock2?'<p class="mut">Terbuka setelah semua kotak terisi dan pengecoh dicoret.</p>':'<p class="mut">Rumus mana yang cocok dengan besaran di kotak dan yang ditanya?</p>'+opts)+'</section>';
+  var lock3=!st.formulaOk,c=p.calc,b3='';
+  if(!lock3){
+    var nx=previewFrom?null:nextUnsolvedId();
+    b3='<p class="mut">Masukkan angka dari kotak, lalu hitung.</p>'+(c.given?'<p class="eq">'+esc(c.given)+'</p>':'')
+      +'<div class="calc"><span class="eq">'+esc(c.lhs)+' = '+esc(c.expr)+' =</span><input id="ans" type="text" inputmode="decimal" autocomplete="off" aria-label="Jawaban" value="'+esc(st.input)+'"'+(st.solved?' disabled':'')+'><span class="eq">'+esc(c.unit)+'</span></div>'
+      +(st.solved?'':'<div class="row"><button class="btn" data-act="check" data-fk="check">Periksa</button></div>')
+      +fbHtml(st.calcMsg);
+    if(st.solved){
+      b3+='<div class="row">'+(previewFrom?'<button class="btn" data-act="a-back" data-fk="next">Kembali ke admin</button>':(nx?'<button class="btn" data-act="next" data-fk="next">Soal berikutnya</button>':'<button class="btn" data-act="home" data-fk="next">Kembali ke daftar soal</button>'))
+        +'<button class="btn ghost" data-act="again" data-fk="again">Ulangi soal ini</button></div>';
+    }
+  }
+  h+='<section class="card'+(lock3?' locked':'')+'" id="s3"><div class="sh"><span class="num">3</span><h2>Hitung</h2><span class="stt'+(st.solved?' done':'')+'">'+(st.solved?'selesai':(lock3?'terkunci':'sekarang'))+'</span></div>'
+    +(lock3?'<p class="mut">Terbuka setelah rumus yang benar dipilih.</p>':b3)+'</section>';
+  return h;
+}
+
+/* ---------- Admin ---------- */
+function loginHtml(){
+  return '<section class="card"><div class="sh"><h2>Masuk admin</h2></div><p class="mut">Masukkan PIN. PIN awal adalah 1234, ganti di Pengaturan.</p>'
+    +'<label class="f"><span>PIN</span><input class="in" id="pin" type="password" inputmode="numeric" autocomplete="off" style="max-width:12em"></label>'
+    +(loginErr?'<div class="fb bad" role="status">PIN salah. Coba lagi.</div>':'')
+    +'<div class="row"><button class="btn" data-act="a-login" data-fk="login">Masuk</button><button class="btn ghost" data-act="home">Batal</button></div></section>';
+}
+function toolbar(){
+  var t=function(id,l){return '<button class="btn ghost sm" data-act="a-tab" data-v="'+id+'" data-fk="tb-'+id+'"'+(adminTab===id?' aria-current="page"':'')+' role="tab">'+l+'</button>';};
+  return '<div class="tabs" role="tablist">'+t('list','Daftar soal')+t('import','Impor')+t('export','Ekspor')+t('set','Pengaturan')+'</div>';
+}
+function srcLabel(){return {perangkat:'perangkat ini (sudah diubah)','soal.json':'berkas soal.json',bawaan:'soal bawaan aplikasi'}[source];}
+function listHtml(){
+  var h='<div class="row"><button class="btn" data-act="a-new" data-fk="new">+ Tambah soal</button></div>';
+  h+='<p class="mut" style="margin-top:12px">'+data.length+' soal · sumber data: '+srcLabel()+'</p>';
+  if(!data.length)h+='<div class="card"><p class="mut">Belum ada soal.</p></div>';
+  h+='<div class="list">'+data.map(function(s,i){
+    var id=esc(s.id),btns;
+    if(confirmKey==='del:'+s.id){
+      btns='<span class="mut" style="margin:0">Hapus soal ini?</span><button class="btn danger sm" data-act="a-del-yes" data-v="'+id+'" data-fk="del-yes">Ya, hapus</button><button class="btn ghost sm" data-act="a-cancel" data-fk="cancel">Batal</button>';
+    }else{
+      btns='<button class="btn ghost sm" data-act="a-try" data-v="'+id+'" data-fk="try-'+id+'">Coba</button>'
+        +'<button class="btn sm" data-act="a-edit" data-v="'+id+'" data-fk="edit-'+id+'">Ubah</button>'
+        +'<button class="btn ghost sm" data-act="a-dup" data-v="'+id+'" data-fk="dup-'+id+'">Gandakan</button>'
+        +'<button class="btn ghost sm" data-act="a-up" data-v="'+id+'" data-fk="up-'+id+'" aria-label="Naikkan"'+(i===0?' disabled':'')+'>↑</button>'
+        +'<button class="btn ghost sm" data-act="a-down" data-v="'+id+'" data-fk="down-'+id+'" aria-label="Turunkan"'+(i===data.length-1?' disabled':'')+'>↓</button>'
+        +'<button class="btn ghost sm" data-act="a-del" data-v="'+id+'" data-fk="del-'+id+'">Hapus</button>';
+    }
+    return '<div class="arow"><div class="at"><b>'+esc(s.judul||'(tanpa judul)')+'</b><small>Kelas '+esc(s.kelas)+' · '+esc(s.topik)+' · '+s.besaran.length+' besaran</small></div><div class="ab">'+btns+'</div></div>';
+  }).join('')+'</div>';
+  return h;
+}
+function fld(path,label,val,o){
+  o=o||{};var id='f-'+path.replace(/\./g,'-');
+  var ctl=o.area?'<textarea class="in" id="'+id+'" data-p="'+path+'" rows="'+(o.rows||3)+'" placeholder="'+esc(o.ph||'')+'">'+esc(val)+'</textarea>'
+    :'<input class="in" type="text" id="'+id+'" data-p="'+path+'" value="'+esc(val)+'" placeholder="'+esc(o.ph||'')+'"'+(o.num?' inputmode="decimal"':'')+' autocomplete="off">';
+  return '<label class="f"><span>'+label+(o.hint?' <small>'+o.hint+'</small>':'')+'</span>'+ctl+'</label>';
+}
+function formHtml(){
+  var d=D,h='';
+  h+='<h2 class="t">'+(editId?'Ubah soal':'Soal baru')+'</h2>';
+  if(formErr&&formErr.length)h+='<div class="fb bad" role="alert"><b>Perlu diperbaiki</b><ul>'+formErr.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>';
+  h+='<div class="fs">Identitas soal</div>'+fld('kelas','Kelas',d.kelas,{ph:'7, 8, atau 9'})+'<div class="grid2">'+fld('topik','Topik',d.topik,{ph:'contoh: Energi'})+fld('judul','Judul soal',d.judul,{ph:'contoh: Apel jatuh'})+'</div>';
+  h+='<div class="fs">Cerita soal</div>'+fld('cerita','Cerita',d.cerita,{area:true,rows:5,hint:'Tulis lengkap, termasuk kalimat pertanyaan.'});
+  h+='<div class="fs">Variasi angka (opsional)</div><p class="mut">Angka di cerita bisa dibuat acak setiap soal dibuka. Tulis nama variasi di cerita dalam kurung kurawal, misalnya {massa}. Isi min, maks, dan langkah, atau isi rumus turunan.</p>';
+  (d.variasi||[]).forEach(function(v,i){var p='variasi.'+i+'.';
+    h+='<div class="rowc" id="row-variasi-'+i+'"><h3>Variasi '+(i+1)+'<button class="btn ghost sm" data-act="a-rm" data-v="variasi:'+i+'">Hapus</button></h3>'
+      +fld(p+'nama','Nama',v.nama,{ph:'massa'})
+      +'<div class="grid2">'+fld(p+'min','Min',v.min,{ph:'100',num:true})+fld(p+'maks','Maks',v.maks,{ph:'500',num:true})+fld(p+'langkah','Langkah',v.langkah,{ph:'100',num:true})+'</div>'
+      +fld(p+'rumus','Atau rumus turunan',v.rumus,{ph:'massa/1000',hint:'kosongkan min, maks, dan langkah kalau pakai ini'})+'</div>';
+  });
+  h+='<div class="row" style="margin:0 0 6px"><button class="btn ghost sm" data-act="a-add" data-v="variasi">+ Variasi</button></div>';
+  h+='<div class="fs">Besaran yang dipakai</div><p class="mut">Satu besaran untuk satu angka di cerita yang dipakai menghitung.</p>';
+  d.besaran.forEach(function(b,i){var p='besaran.'+i+'.';
+    h+='<div class="rowc" id="row-besaran-'+i+'"><h3>Besaran '+(i+1)+'<button class="btn ghost sm" data-act="a-rm" data-v="besaran:'+i+'">Hapus</button></h3>'
+      +fld(p+'teks','Teks di cerita',b.teks,{ph:'contoh: 200 g',hint:'ketik persis seperti di cerita'})
+      +'<div class="grid2">'+fld(p+'sym','Simbol',b.sym,{ph:'m'})+fld(p+'nama','Nama besaran',b.nama,{ph:'massa'})+fld(p+'satuan','Satuan di rumus',b.satuan,{ph:'kg'})+'</div>'
+      +fld(p+'ket','Keterangan',b.ket,{ph:'massa apel, satuannya gram',hint:'dibaca sebagai “… itu [keterangan]”'})
+      +'<div class="grid2">'+fld(p+'konv','Hasil konversi',b.konv,{ph:'= 0,2 kg',hint:'boleh kosong'})+fld(p+'catatan','Catatan konversi',b.catatan,{ph:'200 g = 0,2 kg',hint:'boleh kosong'})+'</div></div>';
+  });
+  h+='<div class="row" style="margin:0 0 6px"><button class="btn ghost sm" data-act="a-add" data-v="besaran">+ Besaran</button></div>';
+  h+='<div class="fs">Info pengecoh</div><p class="mut">Angka di cerita yang tidak dipakai menghitung. Boleh kosong.</p>';
+  d.pengecoh.forEach(function(x,i){var p='pengecoh.'+i+'.';
+    h+='<div class="rowc" id="row-pengecoh-'+i+'"><h3>Pengecoh '+(i+1)+'<button class="btn ghost sm" data-act="a-rm" data-v="pengecoh:'+i+'">Hapus</button></h3>'
+      +'<div class="grid2">'+fld(p+'teks','Teks di cerita',x.teks,{ph:'8 tahun'})+fld(p+'ket','Keterangan',x.ket,{ph:'umur pohon, tidak dipakai menghitung'})+'</div></div>';
+  });
+  h+='<div class="row" style="margin:0 0 6px"><button class="btn ghost sm" data-act="a-add" data-v="pengecoh">+ Pengecoh</button></div>';
+  h+='<div class="fs">Yang ditanya</div>'+fld('tanya.teks','Kalimat yang dicari di cerita',d.tanya.teks,{ph:'energi kinetik apel',hint:'bagian cerita yang menjadi pertanyaan'});
+  h+='<div class="fs">Pilihan rumus</div><p class="mut">Isi dua sampai empat rumus, dan tandai satu yang benar. Urutan akan diacak untuk siswa.</p>';
+  d.rumus.forEach(function(r,i){var p='rumus.'+i+'.';
+    h+='<div class="rowc" id="row-rumus-'+i+'"><h3>Rumus '+(i+1)+'<button class="btn ghost sm" data-act="a-rm" data-v="rumus:'+i+'">Hapus</button></h3>'
+      +fld(p+'f','Rumus',r.f,{ph:'Ep = m × g × h'})
+      +'<label class="radio"><input type="radio" name="benar" id="f-benar-'+i+'" data-act="a-benar" data-v="'+i+'"'+(r.benar?' checked':'')+'> Ini rumus yang benar</label>'
+      +fld(p+'alasan','Penjelasan',r.alasan,{area:true,rows:2,ph:'Mengapa rumus ini benar atau salah?'})+'</div>';
+  });
+  if(d.rumus.length<4)h+='<div class="row" style="margin:0 0 6px"><button class="btn ghost sm" data-act="a-add" data-v="rumus">+ Rumus</button></div>';
+  var hh=d.hitung;
+  h+='<div class="fs">Perhitungan</div>'
+    +fld('hitung.diketahui','Ringkasan diketahui',hh.diketahui,{ph:'m = 0,2 kg · g = 10 m/s² · h = 5 m',hint:'boleh kosong'})
+    +'<div class="grid2">'+fld('hitung.lhs','Bagian kiri persamaan',hh.lhs,{ph:'Ek = Ep'})+fld('hitung.ekspresi','Perhitungan dengan angka',hh.ekspresi,{ph:'0,2 × 10 × 5'})+'</div>'
+    +'<div class="grid2">'+fld('hitung.satuan','Satuan jawaban',hh.satuan,{ph:'J'})+fld('hitung.jawaban','Jawaban benar',hh.jawaban,{ph:'10',num:true,hint:'angka saja'})+'</div>'
+    +fld('hitung.angka','Rumus jawaban (dengan variasi)',hh.angka,{ph:'mkg * 10 * tinggi',hint:'kosongkan kalau tidak pakai variasi'})
+    +fld('hitung.petunjuk','Petunjuk kalau salah',hh.petunjuk,{ph:'Kalikan tiga angka di atas dengan teliti.',hint:'boleh kosong'})
+    +fld('hitung.penjelasan','Penjelasan jawaban benar',hh.penjelasan,{area:true,rows:2,ph:'Ek = Ep = m × g × h = 10 J',hint:'boleh kosong'});
+  h+='<div class="fs">Kesalahan yang sering muncul</div><p class="mut">Kalau siswa menjawab angka tertentu, tampilkan petunjuk khusus. Boleh kosong.</p>';
+  hh.salah.forEach(function(x,i){var p='hitung.salah.'+i+'.';
+    h+='<div class="rowc" id="row-salah-'+i+'"><h3>Jawaban salah '+(i+1)+'<button class="btn ghost sm" data-act="a-rm" data-v="salah:'+i+'">Hapus</button></h3>'
+      +'<div class="grid2">'+fld(p+'nilai','Angka jawaban',x.nilai,{ph:'10000',num:true})+fld(p+'pesan','Petunjuk',x.pesan,{ph:'Massa belum diubah ke kg.'})+'</div>'+fld(p+'rumus','Rumus jawaban salah (opsional)',x.rumus,{ph:'massa * 10 * tinggi',hint:'kalau pakai variasi'})+'</div>';
+  });
+  h+='<div class="row" style="margin:0 0 6px"><button class="btn ghost sm" data-act="a-add" data-v="salah">+ Jawaban salah umum</button></div>';
+  h+='<div class="row" style="margin-top:20px"><button class="btn" data-act="a-save" data-fk="save">Simpan soal</button><button class="btn ghost" data-act="a-preview" data-fk="preview">Coba soal ini</button><button class="btn ghost" data-act="a-cancel-edit" data-fk="cancel-edit">Batal</button></div>';
+  return h;
+}
+function jsonText(){return JSON.stringify({versi:1,soal:data},null,2);}
+function exportHtml(){
+  return '<section class="card"><div class="sh"><h2>Ekspor soal</h2></div><p class="mut">Simpan teks ini sebagai <b>soal.json</b> lalu unggah ke tempat aplikasi dihosting supaya semua siswa memakai soal terbaru.</p>'
+    +'<textarea class="in" id="exp" readonly rows="10" style="font-family:var(--f-mono);font-size:.8rem">'+esc(jsonText())+'</textarea>'
+    +'<div class="row"><button class="btn" data-act="a-copy" data-fk="copy">Salin teks</button><button class="btn ghost" data-act="a-download" data-fk="dl">Unduh soal.json</button></div></section>';
+}
+function importHtml(){
+  var h='<section class="card"><div class="sh"><h2>Impor soal</h2></div><p class="mut">Tempel isi soal.json di bawah, atau pilih berkasnya.</p>'
+    +'<label class="f"><span>Berkas soal.json</span><input class="in" type="file" id="impf" accept=".json,application/json"></label>'
+    +'<label class="f"><span>Atau tempel teks</span><textarea class="in" id="imp" rows="8" style="font-family:var(--f-mono);font-size:.8rem">'+esc(impText)+'</textarea></label>'
+    +'<label class="radio"><input type="radio" name="mode" id="mode-tambah" data-act="a-mode" data-v="tambah"'+(impMode==='tambah'?' checked':'')+'> Tambahkan ke daftar yang ada</label>'
+    +'<label class="radio"><input type="radio" name="mode" id="mode-ganti" data-act="a-mode" data-v="ganti"'+(impMode==='ganti'?' checked':'')+'> Ganti semua soal</label>';
+  if(confirmKey==='imp')h+='<div class="fb bad" role="status"><b>Yakin?</b>Semua soal yang ada sekarang akan diganti.</div><div class="row"><button class="btn danger" data-act="a-imp" data-fk="imp">Ya, ganti</button><button class="btn ghost" data-act="a-cancel" data-fk="cancel">Batal</button></div>';
+  else h+='<div class="row"><button class="btn" data-act="a-imp" data-fk="imp">Impor</button></div>';
+  return h+'</section>';
+}
+function setHtml(){
+  var h='<section class="card"><div class="sh"><h2>Ganti PIN</h2></div><label class="f"><span>PIN baru <small>minimal 4 karakter</small></span><input class="in" id="pin1" type="password" inputmode="numeric" autocomplete="off" style="max-width:12em"></label><div class="row"><button class="btn" data-act="a-pin" data-fk="pin">Simpan PIN</button></div>'
+    +'<p class="mut" style="margin-top:10px">PIN hanya mencegah ubahan tak sengaja di perangkat ini. PIN bukan pengaman data.</p></section>';
+  h+='<section class="card"><div class="sh"><h2>Data di perangkat ini</h2></div><p class="mut">Soal yang kamu ubah tersimpan di peramban perangkat ini. Buang ubahan untuk kembali ke soal.json atau soal bawaan.</p>';
+  if(confirmKey==='reset')h+='<div class="fb bad" role="status"><b>Yakin?</b>Semua ubahan di perangkat ini hilang. Ekspor dulu kalau perlu.</div><div class="row"><button class="btn danger" data-act="a-reset-yes" data-fk="reset">Ya, buang ubahan</button><button class="btn ghost" data-act="a-cancel" data-fk="cancel">Batal</button></div>';
+  else h+='<div class="row"><button class="btn ghost" data-act="a-reset" data-fk="reset">Buang ubahan di perangkat ini</button><button class="btn ghost" data-act="a-clear-done" data-fk="cleardone">Hapus catatan selesai siswa</button></div>';
+  return h+'</section>';
+}
+function adminHtml(){
+  if(!adminOK)return loginHtml();
+  var h=toolbar()+noticeHtml();
+  if(adminTab==='edit')return h+formHtml();
+  if(adminTab==='import')return h+importHtml();
+  if(adminTab==='export')return h+exportHtml();
+  if(adminTab==='set')return h+setHtml();
+  return h+listHtml();
+}
+function setPath(o,path,v){
+  var ks=path.split('.'),i;
+  for(i=0;i<ks.length-1;i++)o=o[ks[i]];
+  o[ks[ks.length-1]]=v;
+}
+function freshId(){var id;do{id=newId();}while(data.some(function(s){return s.id===id;}));return id;}
+function moveItem(id,dir){
+  var i=data.findIndex(function(s){return s.id===id;}),j=i+dir;
+  if(i<0||j<0||j>=data.length)return;
+  var t=data[i];data[i]=data[j];data[j]=t;
+}
+function doSave(){
+  var s=fromDraft(D),errs=check(s);
+  if(errs.length){formErr=errs;scrollTo='app';return;}
+  formErr=null;
+  if(editId){var i=data.findIndex(function(x){return x.id===editId;});s.id=editId;if(i>=0)data[i]=s;else data.push(s);}
+  else{s.id=freshId();data.push(s);}
+  var ok=persist();
+  notice=ok?{t:'ok',x:'Soal “'+s.judul+'” disimpan.'}:{t:'bad',x:'Soal berubah di layar tetapi tidak bisa disimpan di perangkat ini. Ekspor sekarang agar tidak hilang.'};
+  adminTab='list';D=null;editId=null;
+}
+function doImport(){
+  var j;
+  try{j=JSON.parse(impText);}catch(e){notice={t:'bad',x:'Teks bukan JSON yang valid. Periksa lagi isinya.'};confirmKey=null;return;}
+  var list=readList(j);
+  if(!list||!list.length){notice={t:'bad',x:'Tidak ada soal di dalam teks itu.'};confirmKey=null;return;}
+  var errs=[];
+  list.forEach(function(s,i){check(s).forEach(function(m){errs.push('Soal '+(i+1)+' ('+(s.judul||'tanpa judul')+'): '+m);});});
+  if(errs.length){notice={t:'bad',x:'Impor dibatalkan. '+errs.slice(0,3).join(' ')+(errs.length>3?' …dan '+(errs.length-3)+' masalah lain.':'')};confirmKey=null;return;}
+  if(impMode==='ganti'){
+    if(confirmKey!=='imp'){confirmKey='imp';return;}
+    data=list;
+  }else{
+    list.forEach(function(s){if(data.some(function(x){return x.id===s.id;}))s.id=freshId();data.push(s);});
+  }
+  confirmKey=null;impText='';
+  var ok=persist();
+  notice={t:ok?'ok':'bad',x:ok?list.length+' soal diimpor.':'Soal diimpor tetapi tidak bisa disimpan di perangkat ini.'};
+  adminTab='list';
+}
+
+/* ---------- Render ---------- */
+function render(){
+  $('#top').innerHTML=topHtml();
+  var h='';
+  if(view==='home')h=homeHtml();
+  else if(view==='play')h=playHtml();
+  else h=adminHtml();
+  $('#app').innerHTML=h;
+  $('#foot').textContent=view==='home'?'Soal dikelola guru lewat tombol Admin.':'';
+  if(fk){var el=document.querySelector('[data-fk="'+fk+'"]');if(el&&!el.disabled){try{el.focus({preventScroll:true});}catch(_){}}fk=null;}
+  if(selectExport){selectExport=false;var ta=$('#exp');if(ta){ta.focus();ta.select();}}
+  if(scrollTo){
+    var s=document.getElementById(scrollTo);scrollTo=null;
+    if(s){var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;s.scrollIntoView({behavior:rm?'auto':'smooth',block:'nearest'});}
+  }
+}
+
+/* ---------- Aksi ---------- */
+function copyExport(){
+  var t=jsonText();
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){notice={t:'ok',x:'Teks soal.json sudah disalin.'};render();},function(){copyFail();});
+  }else copyFail();
+}
+function copyFail(){notice={t:'info',x:'Salin otomatis tidak didukung. Teks sudah dipilih, tekan lama lalu pilih Salin.'};selectExport=true;render();}
+function download(){
+  try{
+    var b=new Blob([jsonText()],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
+    a.href=u;a.download='soal.json';document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(u);},2000);
+    notice={t:'info',x:'Perintah unduh dikirim. Kalau berkas tidak muncul, pakai tombol Salin teks.'};
+  }catch(e){notice={t:'info',x:'Unduh tidak tersedia di sini. Pakai tombol Salin teks.'};}
+}
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]');if(!b)return;
+  var a=b.dataset.act,v=b.dataset.v;
+  fk=b.dataset.fk||null;
+  if(a==='a-benar'){D.rumus.forEach(function(r,i){r.benar=(i===+v);});return;}
+  if(a==='a-mode'){impMode=v;confirmKey=null;return;}
+  notice=notice&&a==='a-copy'?notice:null;
+  if(a==='home'){view='home';previewFrom=null;sel=null;}
+  else if(a==='play'){startPlay(v,data.find(function(s){return s.id===v;}));previewFrom=null;fk=null;window.scrollTo(0,0);}
+  else if(a==='set-tingkat'){tingkat=v;store.set('cjs.tingkat',v);}
+  else if(a==='set-kelas'){kelasSel=v;store.set('cjs.kelas',v);}
+  else if(a==='tok')onToken(v);
+  else if(a==='slot')onSlot(v);
+  else if(a==='opt')onOpt(+v);
+  else if(a==='check')onCheck();
+  else if(a==='again'){delete done[cur];saveDone();startPlay(cur,SRC[cur]);fk=null;window.scrollTo(0,0);}
+  else if(a==='next'){var n=nextUnsolvedId();if(n){startPlay(n,data.find(function(s){return s.id===n;}));fk=null;window.scrollTo(0,0);}else view='home';}
+  else if(a==='a-open'){view='admin';adminTab='list';loginErr=false;confirmKey=null;fk=adminOK?null:'login';}
+  else if(a==='a-login'){var pv=$('#pin');if(pv&&pv.value===pin){adminOK=true;loginErr=false;fk=null;}else{loginErr=true;fk='login';}}
+  else if(a==='a-out'){adminOK=false;view='home';}
+  else if(a==='a-tab'){adminTab=v;confirmKey=null;D=null;editId=null;formErr=null;}
+  else if(a==='a-new'){D=blank();editId=null;formErr=null;adminTab='edit';fk=null;}
+  else if(a==='a-edit'){var s0=data.find(function(s){return s.id===v;});D=toDraft(s0);editId=v;formErr=null;adminTab='edit';fk=null;window.scrollTo(0,0);}
+  else if(a==='a-dup'){var s1=data.find(function(s){return s.id===v;});var c=JSON.parse(JSON.stringify(s1));c.id=freshId();c.judul=c.judul+' (salinan)';data.splice(data.indexOf(s1)+1,0,c);persist();notice={t:'ok',x:'Soal digandakan. Salinannya ada tepat di bawah.'};}
+  else if(a==='a-up'){moveItem(v,-1);persist();}
+  else if(a==='a-down'){moveItem(v,1);persist();}
+  else if(a==='a-del'){confirmKey='del:'+v;fk='del-yes';}
+  else if(a==='a-del-yes'){data=data.filter(function(s){return s.id!==v;});confirmKey=null;var ok=persist();notice={t:ok?'ok':'bad',x:ok?'Soal dihapus.':'Soal dihapus di layar tetapi tidak bisa disimpan di perangkat ini.'};fk=null;}
+  else if(a==='a-cancel'){confirmKey=null;}
+  else if(a==='a-cancel-edit'){adminTab='list';D=null;editId=null;formErr=null;fk=null;}
+  else if(a==='a-add'){
+    if(v==='besaran')D.besaran.push({teks:'',sym:'',nama:'',satuan:'',ket:'',konv:'',catatan:''});
+    if(v==='pengecoh')D.pengecoh.push({teks:'',ket:''});
+    if(v==='rumus')D.rumus.push({f:'',benar:false,alasan:''});
+    if(v==='salah')D.hitung.salah.push({nilai:'',pesan:'',rumus:''});
+    if(v==='variasi')D.variasi.push({nama:'',min:'',maks:'',langkah:'',rumus:''});
+    var lst=v==='salah'?D.hitung.salah:D[v];scrollTo='row-'+v+'-'+(lst.length-1);fk=null;
+  }
+  else if(a==='a-rm'){
+    var pr=v.split(':'),idx=+pr[1],lst2=pr[0]==='salah'?D.hitung.salah:D[pr[0]];
+    lst2.splice(idx,1);
+    if(pr[0]==='rumus'&&lst2.length&&!lst2.some(function(r){return r.benar;}))lst2[0].benar=true;
+    fk=null;
+  }
+  else if(a==='a-save')doSave();
+  else if(a==='a-preview'){
+    var sp=fromDraft(D),er=check(sp);
+    if(er.length){formErr=er;scrollTo='app';}
+    else{formErr=null;sp.id='__prev';startPlay('__prev',sp);previewFrom='edit';window.scrollTo(0,0);fk=null;}
+  }
+  else if(a==='a-try'){startPlay('__prev',data.find(function(s){return s.id===v;}));previewFrom='list';window.scrollTo(0,0);fk=null;}
+  else if(a==='a-back'){view='admin';adminTab=previewFrom==='edit'?'edit':'list';previewFrom=null;fk=null;}
+  else if(a==='a-copy')copyExport();
+  else if(a==='a-download')download();
+  else if(a==='a-imp')doImport();
+  else if(a==='a-pin'){var np=$('#pin1');if(np&&np.value.length>=4){pin=np.value;store.set(PINKEY,pin);notice={t:'ok',x:'PIN diganti.'};}else{notice={t:'bad',x:'PIN minimal 4 karakter.'};}}
+  else if(a==='a-reset'){confirmKey='reset';}
+  else if(a==='a-reset-yes'){store.del(KEY);confirmKey=null;load(true).then(function(){notice={t:'ok',x:'Ubahan dibuang. Sumber data sekarang: '+srcLabel()+'.'};render();});return;}
+  else if(a==='a-clear-done'){done={};saveDone();notice={t:'ok',x:'Catatan selesai siswa di perangkat ini dihapus.'};}
+  render();
+});
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.p&&D){setPath(D,t.dataset.p,t.value);}
+  else if(t.id==='ans'){RS[cur].input=t.value;}
+  else if(t.id==='imp'){impText=t.value;confirmKey=null;}
+});
+document.addEventListener('change',function(e){
+  var t=e.target;
+  if(t.id==='impf'&&t.files&&t.files[0]){
+    var fr=new FileReader();
+    fr.onload=function(){impText=String(fr.result||'');confirmKey=null;render();};
+    fr.readAsText(t.files[0]);
+  }
+});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter')return;
+  if(e.target.id==='ans'){e.preventDefault();onCheck();fk='check';render();}
+  else if(e.target.id==='pin'){e.preventDefault();var pv=$('#pin');if(pv&&pv.value===pin){adminOK=true;loginErr=false;}else loginErr=true;render();}
+});
+
+/* ---------- Mulai ---------- */
+(async function(){
+  pin=store.get(PINKEY)||DEFPIN;
+  try{done=JSON.parse(store.get(DONEKEY)||'{}')||{};}catch(e){done={};}
+  await load(false);
+  render();
+  if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+    try{navigator.serviceWorker.register('sw.js').catch(function(){});}catch(e){}
+  }
+})();
+})();
+</script>
+</body>
+</html>

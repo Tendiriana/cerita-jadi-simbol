@@ -1,0 +1,2968 @@
+{
+  "versi": 1,
+  "soal": [
+    {
+      "id": "energi-apel",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Apel jatuh",
+      "cerita": "Pohon apel di kebun Pak Budi berumur 8 tahun. Sebuah apel bermassa {massa} g jatuh dari dahan setinggi {tinggi} m. Percepatan gravitasi 10 m/s². Berapa energi kinetik apel sesaat sebelum menyentuh tanah?",
+      "besaran": [
+        {
+          "teks": "{massa} g",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa apel, satuannya gram",
+          "konv": "= {mkg} kg",
+          "catatan": "Di rumus, massa harus dalam kg: {massa} g = {mkg} kg."
+        },
+        {
+          "teks": "{tinggi} m",
+          "sym": "h",
+          "nama": "tinggi",
+          "satuan": "m",
+          "ket": "ketinggian apel dari tanah, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "10 m/s²",
+          "sym": "g",
+          "nama": "gravitasi",
+          "satuan": "m/s²",
+          "ket": "percepatan gravitasi",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "8 tahun",
+          "ket": "umur pohon, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "energi kinetik apel"
+      },
+      "rumus": [
+        {
+          "f": "Ep = m × g × h",
+          "benar": true,
+          "alasan": "Apel jatuh bebas, jadi seluruh energi potensial di atas berubah menjadi energi kinetik tepat sebelum tanah. Ek = Ep = m × g × h."
+        },
+        {
+          "f": "Ek = ½ × m × v²",
+          "benar": false,
+          "alasan": "Rumus ini butuh kecepatan v. Di soal, v tidak diketahui."
+        },
+        {
+          "f": "P = W ÷ t",
+          "benar": false,
+          "alasan": "Ini rumus daya. Di soal tidak ada waktu t."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = {mkg} kg · g = 10 m/s² · h = {tinggi} m",
+        "lhs": "Ek = Ep",
+        "ekspresi": "{mkg} × 10 × {tinggi}",
+        "satuan": "J",
+        "jawaban": 10,
+        "salah": [
+          {
+            "nilai": 10000,
+            "pesan": "Hasilnya 1.000 kali lebih besar. Massa belum diubah ke kg.",
+            "rumus": "massa * 10 * tinggi"
+          }
+        ],
+        "petunjuk": "Kalikan tiga angka di atas dengan teliti.",
+        "penjelasan": "Ek = Ep = m × g × h. Massa diubah ke kg dulu, lalu dikalikan 10 dan tinggi.",
+        "angka": "mkg * 10 * tinggi"
+      },
+      "variasi": [
+        {
+          "nama": "massa",
+          "min": 100,
+          "maks": 500,
+          "langkah": 100
+        },
+        {
+          "nama": "mkg",
+          "rumus": "massa/1000"
+        },
+        {
+          "nama": "tinggi",
+          "min": 2,
+          "maks": 20,
+          "langkah": 1
+        }
+      ]
+    },
+    {
+      "id": "listrik-lampu",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Lampu menyala",
+      "cerita": "Ibu membeli lampu LED seharga Rp25.000. Lampu bertuliskan {daya} W dipasang pada sumber 220 V dan menyala 5 jam setiap malam. Berapa energi listrik yang dipakai lampu dalam satu malam (dalam kWh)?",
+      "besaran": [
+        {
+          "teks": "{daya} W",
+          "sym": "P",
+          "nama": "daya",
+          "satuan": "W",
+          "ket": "daya lampu, satuannya watt",
+          "konv": "= {dkw} kW",
+          "catatan": "Hasil diminta dalam kWh, jadi daya diubah ke kW: {daya} W = {dkw} kW."
+        },
+        {
+          "teks": "220 V",
+          "sym": "V",
+          "nama": "tegangan",
+          "satuan": "V",
+          "ket": "tegangan sumber, satuannya volt",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "5 jam",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "jam",
+          "ket": "lama lampu menyala (waktu), satuannya jam",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp25.000",
+          "ket": "harga lampu, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "energi listrik"
+      },
+      "rumus": [
+        {
+          "f": "W = P × t",
+          "benar": true,
+          "alasan": "Energi listrik sama dengan daya dikali waktu. Tegangan 220 V memang tertulis di soal, tetapi tidak dibutuhkan di rumus ini."
+        },
+        {
+          "f": "P = V × I",
+          "benar": false,
+          "alasan": "Ini rumus daya. Soal sudah memberi daya, yang dicari energi."
+        },
+        {
+          "f": "V = I × R",
+          "benar": false,
+          "alasan": "Ini hukum Ohm. Di soal tidak ada kuat arus I atau hambatan R."
+        }
+      ],
+      "hitung": {
+        "diketahui": "P = {dkw} kW · t = 5 jam (V = 220 V tidak dipakai)",
+        "lhs": "W",
+        "ekspresi": "{dkw} × 5",
+        "satuan": "kWh",
+        "jawaban": 0.1,
+        "salah": [
+          {
+            "nilai": 100,
+            "pesan": "Hasil ini masih dalam Wh. Soal minta kWh, jadi bagi 1.000.",
+            "rumus": "daya * 5"
+          }
+        ],
+        "petunjuk": "Kalikan daya dalam kW dengan waktu dalam jam.",
+        "penjelasan": "W = P × t = 0,02 × 5 = 0,1 kWh.",
+        "angka": "dkw * 5"
+      },
+      "variasi": [
+        {
+          "nama": "daya",
+          "min": 10,
+          "maks": 60,
+          "langkah": 10
+        },
+        {
+          "nama": "dkw",
+          "rumus": "daya/1000"
+        }
+      ]
+    },
+    {
+      "id": "magnet-trafo",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Trafo charger",
+      "cerita": "Charger HP memakai trafo untuk mengubah tegangan listrik PLN 220 V menjadi 11 V. Kumparan primer trafo itu punya 1.000 lilitan. Charger itu dibeli Rina seharga Rp80.000. Berapa jumlah lilitan kumparan sekunder?",
+      "besaran": [
+        {
+          "teks": "220 V",
+          "sym": "Vp",
+          "nama": "tegangan primer",
+          "satuan": "V",
+          "ket": "tegangan dari PLN yang masuk ke trafo, jadi tegangan primer (Vp)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "11 V",
+          "sym": "Vs",
+          "nama": "tegangan sekunder",
+          "satuan": "V",
+          "ket": "tegangan yang keluar ke HP, jadi tegangan sekunder (Vs)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "1.000 lilitan",
+          "sym": "Np",
+          "nama": "lilitan primer",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan primer (Np)",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp80.000",
+          "ket": "harga charger, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "jumlah lilitan kumparan sekunder"
+      },
+      "rumus": [
+        {
+          "f": "Ns = Np × Vs ÷ Vp",
+          "benar": true,
+          "alasan": "Perbandingan trafo: Np : Ns = Vp : Vs. Rumus ini adalah bentuk yang sudah diubah untuk mencari Ns."
+        },
+        {
+          "f": "Ns = Np × Vp ÷ Vs",
+          "benar": false,
+          "alasan": "Terbalik. Tegangan turun dari 220 V ke 11 V, jadi lilitan sekunder harus lebih sedikit dari primer. Rumus ini menghasilkan lebih banyak."
+        },
+        {
+          "f": "Ns = Vs ÷ (Np × Vp)",
+          "benar": false,
+          "alasan": "Rumus ini tidak ada di materi trafo. Perbandingan lilitan sama dengan perbandingan tegangan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Np = 1.000 · Vp = 220 V · Vs = 11 V",
+        "lhs": "Ns",
+        "ekspresi": "1.000 × 11 ÷ 220",
+        "satuan": "lilitan",
+        "jawaban": 50,
+        "salah": [
+          {
+            "nilai": 20000,
+            "pesan": "20.000 muncul kalau Vp dan Vs tertukar. Trafo ini menurunkan tegangan, jadi Ns harus lebih sedikit dari 1.000."
+          }
+        ],
+        "petunjuk": "Kalikan 1.000 dengan 11, lalu bagi dengan 220.",
+        "penjelasan": "Ns = Np × Vs ÷ Vp = 1.000 × 11 ÷ 220 = 50 lilitan. Lilitan sekunder jauh lebih sedikit, jadi tegangan turun menjadi 11 V."
+      }
+    },
+    {
+      "id": "energi-buku",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Buku di atas lemari",
+      "cerita": "Sebuah buku bermassa 500 g diletakkan di atas lemari setinggi 2 m dari lantai. Percepatan gravitasi 10 m/s². Buku itu dibeli seharga Rp40.000. Berapa energi potensial buku tersebut?",
+      "besaran": [
+        {
+          "teks": "500 g",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa buku, satuannya gram",
+          "konv": "= 0,5 kg",
+          "catatan": "Di rumus, massa harus dalam kg: 500 g = 0,5 kg."
+        },
+        {
+          "teks": "2 m",
+          "sym": "h",
+          "nama": "tinggi",
+          "satuan": "m",
+          "ket": "ketinggian buku dari lantai, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "10 m/s²",
+          "sym": "g",
+          "nama": "gravitasi",
+          "satuan": "m/s²",
+          "ket": "percepatan gravitasi",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp40.000",
+          "ket": "harga buku, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "energi potensial buku"
+      },
+      "rumus": [
+        {
+          "f": "Ep = m × g × h",
+          "benar": true,
+          "alasan": "Energi potensial bergantung pada massa, percepatan gravitasi, dan ketinggian."
+        },
+        {
+          "f": "Ek = ½ × m × v²",
+          "benar": false,
+          "alasan": "Ini energi kinetik. Buku diam di atas lemari, jadi tidak ada kecepatan v."
+        },
+        {
+          "f": "W = F × s",
+          "benar": false,
+          "alasan": "Ini rumus usaha. Di soal tidak ada gaya F atau perpindahan s."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = 0,5 kg · g = 10 m/s² · h = 2 m",
+        "lhs": "Ep",
+        "ekspresi": "0,5 × 10 × 2",
+        "satuan": "J",
+        "jawaban": 10,
+        "salah": [
+          {
+            "nilai": 10000,
+            "pesan": "Hasil 10.000 muncul kalau massa masih 500 g. Ubah dulu ke 0,5 kg."
+          }
+        ],
+        "petunjuk": "Kalikan massa, gravitasi, dan tinggi.",
+        "penjelasan": "Ep = m × g × h = 0,5 × 10 × 2 = 10 J."
+      }
+    },
+    {
+      "id": "energi-sepeda",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Pesepeda melaju",
+      "cerita": "Seorang pesepeda bersama sepedanya bermassa 60 kg melaju dengan kecepatan 5 m/s selama 10 menit. Berapa energi kinetik pesepeda dan sepedanya?",
+      "besaran": [
+        {
+          "teks": "60 kg",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa pesepeda dan sepedanya, satuannya kilogram",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "5 m/s",
+          "sym": "v",
+          "nama": "kecepatan",
+          "satuan": "m/s",
+          "ket": "kecepatan sepeda, satuannya meter per sekon",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "10 menit",
+          "ket": "lama bersepeda, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "energi kinetik pesepeda dan sepedanya"
+      },
+      "rumus": [
+        {
+          "f": "Ek = ½ × m × v²",
+          "benar": true,
+          "alasan": "Energi kinetik bergantung pada massa dan kuadrat kecepatan."
+        },
+        {
+          "f": "Ep = m × g × h",
+          "benar": false,
+          "alasan": "Ini energi potensial. Di soal tidak ada ketinggian h."
+        },
+        {
+          "f": "P = W ÷ t",
+          "benar": false,
+          "alasan": "Ini rumus daya. Yang ditanya energi kinetik."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = 60 kg · v = 5 m/s",
+        "lhs": "Ek",
+        "ekspresi": "0,5 × 60 × 5 × 5",
+        "satuan": "J",
+        "jawaban": 750,
+        "salah": [
+          {
+            "nilai": 1500,
+            "pesan": "1.500 muncul kalau lupa mengalikan dengan ½ (setengah)."
+          },
+          {
+            "nilai": 150,
+            "pesan": "150 muncul kalau kecepatan belum dikuadratkan. Hitung v² = 5 × 5 = 25."
+          }
+        ],
+        "petunjuk": "Kalikan ½ dengan massa, lalu dengan v dikali v.",
+        "penjelasan": "Ek = ½ × m × v² = ½ × 60 × 5² = ½ × 60 × 25 = 750 J."
+      }
+    },
+    {
+      "id": "energi-dorong",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Mendorong lemari",
+      "cerita": "Seorang kuli mendorong lemari bermassa 40 kg dengan gaya 150 N sehingga lemari berpindah sejauh 4 m. Berapa usaha yang dilakukan kuli tersebut?",
+      "besaran": [
+        {
+          "teks": "150 N",
+          "sym": "F",
+          "nama": "gaya",
+          "satuan": "N",
+          "ket": "gaya dorong kuli, satuannya newton",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "4 m",
+          "sym": "s",
+          "nama": "perpindahan",
+          "satuan": "m",
+          "ket": "jarak perpindahan lemari, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "40 kg",
+          "ket": "massa lemari, tidak dipakai karena gaya dorong sudah diketahui"
+        }
+      ],
+      "tanya": {
+        "teks": "usaha yang dilakukan kuli tersebut"
+      },
+      "rumus": [
+        {
+          "f": "W = F × s",
+          "benar": true,
+          "alasan": "Usaha sama dengan gaya dikali perpindahan yang searah gaya."
+        },
+        {
+          "f": "W = m × g × h",
+          "benar": false,
+          "alasan": "Ini usaha untuk mengangkat benda. Lemari didorong mendatar, bukan diangkat."
+        },
+        {
+          "f": "P = W ÷ t",
+          "benar": false,
+          "alasan": "Ini rumus daya, dan di soal tidak ada waktu."
+        }
+      ],
+      "hitung": {
+        "diketahui": "F = 150 N · s = 4 m",
+        "lhs": "W",
+        "ekspresi": "150 × 4",
+        "satuan": "J",
+        "jawaban": 600,
+        "salah": [
+          {
+            "nilai": 24000,
+            "pesan": "24.000 muncul kalau massa ikut dikalikan. Massa tidak dipakai di rumus usaha ini."
+          }
+        ],
+        "petunjuk": "Kalikan gaya dengan perpindahan.",
+        "penjelasan": "W = F × s = 150 × 4 = 600 J. Massa lemari 40 kg tidak dipakai."
+      }
+    },
+    {
+      "id": "energi-daya-mesin",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Daya mesin pengangkat",
+      "cerita": "Sebuah mesin pengangkat melakukan usaha sebesar 3.000 J dalam waktu 20 s. Mesin itu dibeli seharga Rp2.000.000. Berapa daya mesin tersebut?",
+      "besaran": [
+        {
+          "teks": "3.000 J",
+          "sym": "W",
+          "nama": "usaha",
+          "satuan": "J",
+          "ket": "usaha yang dilakukan mesin, satuannya joule",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "20 s",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "s",
+          "ket": "lama mesin bekerja, satuannya sekon",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp2.000.000",
+          "ket": "harga mesin, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "daya mesin tersebut"
+      },
+      "rumus": [
+        {
+          "f": "P = W ÷ t",
+          "benar": true,
+          "alasan": "Daya adalah usaha yang dilakukan setiap satuan waktu."
+        },
+        {
+          "f": "P = W × t",
+          "benar": false,
+          "alasan": "Daya dicari dengan membagi usaha dengan waktu, bukan mengalikan."
+        },
+        {
+          "f": "W = F × s",
+          "benar": false,
+          "alasan": "Ini rumus usaha, sedangkan yang ditanya daya."
+        }
+      ],
+      "hitung": {
+        "diketahui": "W = 3.000 J · t = 20 s",
+        "lhs": "P",
+        "ekspresi": "3.000 ÷ 20",
+        "satuan": "W",
+        "jawaban": 150,
+        "salah": [
+          {
+            "nilai": 60000,
+            "pesan": "60.000 itu hasil perkalian. Daya dicari dengan membagi usaha dengan waktu."
+          }
+        ],
+        "petunjuk": "Bagi usaha dengan waktu.",
+        "penjelasan": "P = W ÷ t = 3.000 ÷ 20 = 150 W."
+      }
+    },
+    {
+      "id": "energi-efisiensi",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Efisiensi motor listrik",
+      "cerita": "Sebuah motor listrik menerima energi listrik 500 J. Dari energi itu, motor menghasilkan energi gerak 400 J selama 2 menit bekerja. Berapa efisiensi motor tersebut?",
+      "besaran": [
+        {
+          "teks": "500 J",
+          "sym": "Wm",
+          "nama": "energi masuk",
+          "satuan": "J",
+          "ket": "energi listrik yang diterima motor (energi masuk)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "400 J",
+          "sym": "Wk",
+          "nama": "energi berguna",
+          "satuan": "J",
+          "ket": "energi gerak yang dihasilkan motor (energi berguna)",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "2 menit",
+          "ket": "lama motor bekerja, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "efisiensi motor tersebut"
+      },
+      "rumus": [
+        {
+          "f": "η = (W berguna ÷ W masuk) × 100%",
+          "benar": true,
+          "alasan": "Efisiensi membandingkan energi berguna dengan energi yang masuk."
+        },
+        {
+          "f": "η = (W masuk ÷ W berguna) × 100%",
+          "benar": false,
+          "alasan": "Terbalik. Efisiensi tidak pernah lebih dari 100%."
+        },
+        {
+          "f": "η = W masuk − W berguna",
+          "benar": false,
+          "alasan": "Itu selisih, yaitu energi yang terbuang. Efisiensi berupa perbandingan dalam persen."
+        }
+      ],
+      "hitung": {
+        "diketahui": "W masuk = 500 J · W berguna = 400 J",
+        "lhs": "η",
+        "ekspresi": "400 ÷ 500 × 100",
+        "satuan": "%",
+        "jawaban": 80,
+        "salah": [
+          {
+            "nilai": 125,
+            "pesan": "125% muncul kalau terbalik. Efisiensi tidak mungkin lebih dari 100%."
+          },
+          {
+            "nilai": 0.8,
+            "pesan": "0,8 belum dikali 100. Efisiensi dinyatakan dalam persen."
+          }
+        ],
+        "petunjuk": "Bagi energi berguna dengan energi masuk, lalu kalikan 100.",
+        "penjelasan": "η = 400 ÷ 500 × 100% = 80%."
+      }
+    },
+    {
+      "id": "energi-kelapa",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Kelapa jatuh",
+      "cerita": "Sebuah kelapa bermassa 2 kg jatuh dari pohon setinggi 12 m. Percepatan gravitasi 10 m/s². Kelapa itu dijual seharga Rp15.000. Berapa energi kinetik kelapa sesaat sebelum menyentuh tanah?",
+      "besaran": [
+        {
+          "teks": "2 kg",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa kelapa, satuannya kilogram",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "12 m",
+          "sym": "h",
+          "nama": "tinggi",
+          "satuan": "m",
+          "ket": "ketinggian kelapa dari tanah, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "10 m/s²",
+          "sym": "g",
+          "nama": "gravitasi",
+          "satuan": "m/s²",
+          "ket": "percepatan gravitasi",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp15.000",
+          "ket": "harga kelapa, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "energi kinetik kelapa"
+      },
+      "rumus": [
+        {
+          "f": "Ek = Ep = m × g × h",
+          "benar": true,
+          "alasan": "Saat jatuh bebas, energi potensial berubah menjadi energi kinetik. Tepat sebelum tanah, Ek sama dengan Ep di atas."
+        },
+        {
+          "f": "Ek = ½ × m × v²",
+          "benar": false,
+          "alasan": "Rumus ini butuh kecepatan v, yang tidak diketahui di soal."
+        },
+        {
+          "f": "P = W ÷ t",
+          "benar": false,
+          "alasan": "Ini rumus daya. Di soal tidak ada waktu."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = 2 kg · g = 10 m/s² · h = 12 m",
+        "lhs": "Ek = Ep",
+        "ekspresi": "2 × 10 × 12",
+        "satuan": "J",
+        "jawaban": 240,
+        "salah": [
+          {
+            "nilai": 120,
+            "pesan": "120 muncul kalau ikut mengalikan ½. Karena v tidak diketahui, pakai Ek = Ep = m × g × h tanpa ½."
+          }
+        ],
+        "petunjuk": "Kalikan massa, gravitasi, dan tinggi.",
+        "penjelasan": "Ek = Ep = m × g × h = 2 × 10 × 12 = 240 J."
+      }
+    },
+    {
+      "id": "energi-angkat-tas",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Mengangkat tas",
+      "cerita": "Ani mengangkat tas bermassa 3 kg dari lantai sampai setinggi 1,5 m. Percepatan gravitasi 10 m/s². Ani melakukannya dalam 4 detik. Berapa usaha yang dilakukan Ani?",
+      "besaran": [
+        {
+          "teks": "3 kg",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa tas, satuannya kilogram",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "1,5 m",
+          "sym": "h",
+          "nama": "tinggi",
+          "satuan": "m",
+          "ket": "ketinggian tas saat diangkat, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "10 m/s²",
+          "sym": "g",
+          "nama": "gravitasi",
+          "satuan": "m/s²",
+          "ket": "percepatan gravitasi",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "4 detik",
+          "ket": "lama mengangkat, tidak dipakai menghitung usaha"
+        }
+      ],
+      "tanya": {
+        "teks": "usaha yang dilakukan Ani"
+      },
+      "rumus": [
+        {
+          "f": "W = m × g × h",
+          "benar": true,
+          "alasan": "Usaha mengangkat benda sama dengan pertambahan energi potensialnya, yaitu m × g × h."
+        },
+        {
+          "f": "Ek = ½ × m × v²",
+          "benar": false,
+          "alasan": "Rumus ini butuh kecepatan v, yang tidak diketahui di soal."
+        },
+        {
+          "f": "P = W ÷ t",
+          "benar": false,
+          "alasan": "Ini rumus daya. Yang ditanya usaha."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = 3 kg · g = 10 m/s² · h = 1,5 m",
+        "lhs": "W",
+        "ekspresi": "3 × 10 × 1,5",
+        "satuan": "J",
+        "jawaban": 45,
+        "salah": [
+          {
+            "nilai": 11.25,
+            "pesan": "11,25 itu hasil dibagi waktu (daya). Waktu 4 detik tidak dipakai untuk menghitung usaha."
+          }
+        ],
+        "petunjuk": "Kalikan massa, gravitasi, dan tinggi.",
+        "penjelasan": "W = m × g × h = 3 × 10 × 1,5 = 45 J."
+      }
+    },
+    {
+      "id": "energi-daya-menit",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Daya anak menaikkan beban",
+      "cerita": "Seorang anak menaikkan beban 12 kg dengan usaha sebesar 1.200 J selama 2 menit. Berapa daya yang dikeluarkan anak tersebut?",
+      "besaran": [
+        {
+          "teks": "1.200 J",
+          "sym": "W",
+          "nama": "usaha",
+          "satuan": "J",
+          "ket": "usaha yang dilakukan anak, satuannya joule",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2 menit",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "s",
+          "ket": "lama pekerjaan, satuannya menit",
+          "konv": "= 120 s",
+          "catatan": "Di rumus daya, waktu harus dalam sekon: 2 menit = 120 s."
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "12 kg",
+          "ket": "massa beban, tidak dipakai karena usaha sudah diketahui"
+        }
+      ],
+      "tanya": {
+        "teks": "daya yang dikeluarkan anak tersebut"
+      },
+      "rumus": [
+        {
+          "f": "P = W ÷ t",
+          "benar": true,
+          "alasan": "Daya adalah usaha yang dilakukan setiap satuan waktu."
+        },
+        {
+          "f": "P = W × t",
+          "benar": false,
+          "alasan": "Daya dicari dengan membagi usaha dengan waktu, bukan mengalikan."
+        },
+        {
+          "f": "W = F × s",
+          "benar": false,
+          "alasan": "Ini rumus usaha, sedangkan yang ditanya daya."
+        }
+      ],
+      "hitung": {
+        "diketahui": "W = 1.200 J · t = 120 s",
+        "lhs": "P",
+        "ekspresi": "1.200 ÷ 120",
+        "satuan": "W",
+        "jawaban": 10,
+        "salah": [
+          {
+            "nilai": 600,
+            "pesan": "600 muncul kalau waktu masih 2 menit. Ubah dulu ke sekon: 2 menit = 120 s."
+          }
+        ],
+        "petunjuk": "Ubah menit ke sekon, lalu bagi usaha dengan waktu.",
+        "penjelasan": "P = W ÷ t = 1.200 ÷ 120 = 10 W."
+      }
+    },
+    {
+      "id": "energi-mobil-mainan",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Mobil mainan",
+      "cerita": "Sebuah mobil mainan bermassa 400 g bergerak dengan kecepatan 3 m/s di atas lantai. Mobil itu dibeli seharga Rp75.000. Berapa energi kinetik mobil mainan tersebut?",
+      "besaran": [
+        {
+          "teks": "400 g",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa mobil mainan, satuannya gram",
+          "konv": "= 0,4 kg",
+          "catatan": "Di rumus, massa harus dalam kg: 400 g = 0,4 kg."
+        },
+        {
+          "teks": "3 m/s",
+          "sym": "v",
+          "nama": "kecepatan",
+          "satuan": "m/s",
+          "ket": "kecepatan mobil mainan, satuannya meter per sekon",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp75.000",
+          "ket": "harga mobil mainan, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "energi kinetik mobil mainan tersebut"
+      },
+      "rumus": [
+        {
+          "f": "Ek = ½ × m × v²",
+          "benar": true,
+          "alasan": "Energi kinetik bergantung pada massa dan kuadrat kecepatan."
+        },
+        {
+          "f": "Ep = m × g × h",
+          "benar": false,
+          "alasan": "Ini energi potensial. Di soal tidak ada ketinggian h."
+        },
+        {
+          "f": "W = F × s",
+          "benar": false,
+          "alasan": "Ini rumus usaha. Di soal tidak ada gaya F atau perpindahan s."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = 0,4 kg · v = 3 m/s",
+        "lhs": "Ek",
+        "ekspresi": "0,5 × 0,4 × 3 × 3",
+        "satuan": "J",
+        "jawaban": 1.8,
+        "salah": [
+          {
+            "nilai": 1800,
+            "pesan": "1.800 muncul kalau massa masih 400 g. Ubah dulu ke 0,4 kg."
+          }
+        ],
+        "petunjuk": "Kalikan ½ dengan massa, lalu dengan v dikali v.",
+        "penjelasan": "Ek = ½ × m × v² = ½ × 0,4 × 3² = ½ × 0,4 × 9 = 1,8 J."
+      }
+    },
+    {
+      "id": "energi-kalor-air",
+      "kelas": "9",
+      "topik": "Energi",
+      "judul": "Memanaskan air",
+      "cerita": "Air bermassa 2 kg dipanaskan sehingga suhunya naik sebesar 30°C. Kalor jenis air 4.200 J/kg°C. Pemanasan berlangsung selama 5 menit. Berapa kalor yang diterima air?",
+      "besaran": [
+        {
+          "teks": "2 kg",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa air, satuannya kilogram",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "30°C",
+          "sym": "ΔT",
+          "nama": "kenaikan suhu",
+          "satuan": "°C",
+          "ket": "kenaikan suhu air, satuannya derajat Celsius",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "4.200 J/kg°C",
+          "sym": "c",
+          "nama": "kalor jenis",
+          "satuan": "J/kg°C",
+          "ket": "kalor jenis air, yaitu kalor untuk menaikkan suhu 1 kg air sebesar 1°C",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "5 menit",
+          "ket": "lama pemanasan, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kalor yang diterima air"
+      },
+      "rumus": [
+        {
+          "f": "Q = m × c × ΔT",
+          "benar": true,
+          "alasan": "Kalor yang diterima bergantung pada massa, kalor jenis, dan kenaikan suhu."
+        },
+        {
+          "f": "Q = m × ΔT ÷ c",
+          "benar": false,
+          "alasan": "Kalor jenis c harus dikalikan, bukan membagi."
+        },
+        {
+          "f": "P = W ÷ t",
+          "benar": false,
+          "alasan": "Ini rumus daya, bukan rumus kalor."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = 2 kg · c = 4.200 J/kg°C · ΔT = 30°C",
+        "lhs": "Q",
+        "ekspresi": "2 × 4.200 × 30",
+        "satuan": "J",
+        "jawaban": 252000,
+        "salah": [
+          {
+            "nilai": 126000,
+            "pesan": "126.000 belum dikalikan massa 2 kg."
+          }
+        ],
+        "petunjuk": "Kalikan massa, kalor jenis, dan kenaikan suhu.",
+        "penjelasan": "Q = m × c × ΔT = 2 × 4.200 × 30 = 252.000 J."
+      }
+    },
+    {
+      "id": "listrik-biaya-lampu",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Biaya listrik lampu Rian",
+      "cerita": "Rian menggunakan lampu selama 8 jam setiap hari dengan daya lampu sebesar 50 watt. Satu bulan dianggap 30 hari. Berapa biaya listrik per bulan untuk lampu tersebut jika 1 kWh = Rp1.500?",
+      "besaran": [
+        {
+          "teks": "50 watt",
+          "sym": "P",
+          "nama": "daya",
+          "satuan": "kW",
+          "ket": "daya lampu, satuannya watt",
+          "konv": "= 0,05 kW",
+          "catatan": "Tarif dihitung per kWh, jadi daya diubah ke kW: 50 W = 0,05 kW."
+        },
+        {
+          "teks": "8 jam",
+          "sym": "t",
+          "nama": "waktu per hari",
+          "satuan": "jam",
+          "ket": "lama lampu menyala setiap hari, satuannya jam",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "30 hari",
+          "sym": "hari",
+          "nama": "jumlah hari",
+          "satuan": "hari",
+          "ket": "jumlah hari dalam satu bulan",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "Rp1.500",
+          "sym": "tarif",
+          "nama": "tarif",
+          "satuan": "Rp/kWh",
+          "ket": "tarif listrik untuk setiap 1 kWh",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [],
+      "tanya": {
+        "teks": "biaya listrik per bulan"
+      },
+      "rumus": [
+        {
+          "f": "Biaya = P × t × hari × tarif",
+          "benar": true,
+          "alasan": "Hitung dulu energi sebulan (daya × waktu per hari × jumlah hari) dalam kWh, lalu kalikan dengan tarif per kWh."
+        },
+        {
+          "f": "Biaya = P × t × tarif",
+          "benar": false,
+          "alasan": "Rumus ini baru menghasilkan biaya untuk 1 hari. Soal meminta biaya satu bulan, jadi harus dikali jumlah hari."
+        },
+        {
+          "f": "Biaya = V × I × t",
+          "benar": false,
+          "alasan": "Ini bukan rumus biaya. Di soal tidak ada tegangan V atau kuat arus I."
+        }
+      ],
+      "hitung": {
+        "diketahui": "P = 0,05 kW · t = 8 jam/hari · 30 hari · tarif = Rp1.500/kWh",
+        "lhs": "Biaya",
+        "ekspresi": "0,05 × 8 × 30 × 1.500",
+        "satuan": "rupiah",
+        "jawaban": 18000,
+        "salah": [
+          {
+            "nilai": 600,
+            "pesan": "600 itu biaya untuk satu hari. Kalikan 30 hari untuk satu bulan."
+          },
+          {
+            "nilai": 18000000,
+            "pesan": "18.000.000 muncul kalau daya masih 50 W. Ubah dulu ke kW: 50 W = 0,05 kW."
+          },
+          {
+            "nilai": 12,
+            "pesan": "12 itu energi sebulan dalam kWh. Kalikan dengan tarif Rp1.500 untuk mendapat biaya."
+          }
+        ],
+        "petunjuk": "Hitung dulu energi sebulan dalam kWh, lalu kalikan dengan tarif.",
+        "penjelasan": "Energi sebulan = 0,05 kW × 8 jam × 30 hari = 12 kWh. Biaya = 12 × Rp1.500 = Rp18.000."
+      }
+    },
+    {
+      "id": "magnet-stepup",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Trafo penaik tegangan",
+      "cerita": "Sebuah trafo memiliki kumparan primer 100 lilitan dan kumparan sekunder 500 lilitan. Trafo dihubungkan ke sumber tegangan 12 V. Trafo itu dibeli seharga Rp50.000. Berapa tegangan pada kumparan sekunder?",
+      "besaran": [
+        {
+          "teks": "100 lilitan",
+          "sym": "Np",
+          "nama": "lilitan primer",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan primer (Np)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "500 lilitan",
+          "sym": "Ns",
+          "nama": "lilitan sekunder",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan sekunder (Ns)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "12 V",
+          "sym": "Vp",
+          "nama": "tegangan primer",
+          "satuan": "V",
+          "ket": "tegangan sumber yang masuk ke kumparan primer (Vp)",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp50.000",
+          "ket": "harga trafo, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "tegangan pada kumparan sekunder"
+      },
+      "rumus": [
+        {
+          "f": "Vs = Vp × Ns ÷ Np",
+          "benar": true,
+          "alasan": "Dari Np : Ns = Vp : Vs, tegangan sekunder sebanding dengan jumlah lilitan sekunder."
+        },
+        {
+          "f": "Vs = Vp × Np ÷ Ns",
+          "benar": false,
+          "alasan": "Terbalik. Lilitan sekunder lebih banyak, jadi tegangan harus naik, bukan turun."
+        },
+        {
+          "f": "Vs = Vp + Ns − Np",
+          "benar": false,
+          "alasan": "Tegangan trafo ditentukan oleh perbandingan lilitan, bukan penjumlahan dan pengurangan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Np = 100 · Ns = 500 · Vp = 12 V",
+        "lhs": "Vs",
+        "ekspresi": "12 × 500 ÷ 100",
+        "satuan": "V",
+        "jawaban": 60,
+        "salah": [
+          {
+            "nilai": 2.4,
+            "pesan": "2,4 muncul kalau Np dan Ns tertukar. Trafo ini menaikkan tegangan, jadi Vs harus lebih besar dari 12 V."
+          }
+        ],
+        "petunjuk": "Kalikan 12 dengan 500, lalu bagi 100.",
+        "penjelasan": "Vs = Vp × Ns ÷ Np = 12 × 500 ÷ 100 = 60 V. Trafo ini penaik tegangan (step-up) karena Ns lebih banyak dari Np."
+      }
+    },
+    {
+      "id": "magnet-adaptor-mainan",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Adaptor lampu mainan",
+      "cerita": "Trafo pada adaptor lampu mainan memiliki 1.100 lilitan primer dan 100 lilitan sekunder. Adaptor dihubungkan ke listrik PLN 220 V. Adaptor itu dipakai selama 3 jam. Berapa tegangan keluaran adaptor?",
+      "besaran": [
+        {
+          "teks": "1.100 lilitan primer",
+          "sym": "Np",
+          "nama": "lilitan primer",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan primer (Np)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "100 lilitan sekunder",
+          "sym": "Ns",
+          "nama": "lilitan sekunder",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan sekunder (Ns)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "220 V",
+          "sym": "Vp",
+          "nama": "tegangan primer",
+          "satuan": "V",
+          "ket": "tegangan dari PLN yang masuk ke trafo, jadi tegangan primer (Vp)",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "3 jam",
+          "ket": "lama adaptor dipakai, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "tegangan keluaran adaptor"
+      },
+      "rumus": [
+        {
+          "f": "Vs = Vp × Ns ÷ Np",
+          "benar": true,
+          "alasan": "Dari Np : Ns = Vp : Vs, tegangan sekunder sebanding dengan jumlah lilitan sekunder."
+        },
+        {
+          "f": "Vs = Vp × Np ÷ Ns",
+          "benar": false,
+          "alasan": "Terbalik. Adaptor ini menurunkan tegangan, jadi hasilnya harus lebih kecil dari 220 V. Rumus ini justru memberi hasil lebih besar."
+        },
+        {
+          "f": "Vs = Vp + Ns − Np",
+          "benar": false,
+          "alasan": "Tegangan trafo ditentukan oleh perbandingan lilitan, bukan penjumlahan dan pengurangan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Np = 1.100 · Ns = 100 · Vp = 220 V",
+        "lhs": "Vs",
+        "ekspresi": "220 × 100 ÷ 1.100",
+        "satuan": "V",
+        "jawaban": 20,
+        "salah": [
+          {
+            "nilai": 2420,
+            "pesan": "2.420 muncul kalau Np dan Ns tertukar. Adaptor ini menurunkan tegangan, jadi Vs harus lebih kecil dari 220 V."
+          }
+        ],
+        "petunjuk": "Kalikan 220 dengan 100, lalu bagi 1.100.",
+        "penjelasan": "Vs = Vp × Ns ÷ Np = 220 × 100 ÷ 1.100 = 20 V. Trafo ini penurun tegangan (step-down)."
+      }
+    },
+    {
+      "id": "magnet-cari-np",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Mencari lilitan primer",
+      "cerita": "Sebuah trafo mengubah tegangan listrik PLN 220 V menjadi 22 V. Kumparan sekunder trafo itu memiliki 100 lilitan. Trafo itu sudah dipakai 5 tahun. Berapa jumlah lilitan kumparan primer?",
+      "besaran": [
+        {
+          "teks": "220 V",
+          "sym": "Vp",
+          "nama": "tegangan primer",
+          "satuan": "V",
+          "ket": "tegangan dari PLN yang masuk ke trafo, jadi tegangan primer (Vp)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "22 V",
+          "sym": "Vs",
+          "nama": "tegangan sekunder",
+          "satuan": "V",
+          "ket": "tegangan yang keluar dari trafo, jadi tegangan sekunder (Vs)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "100 lilitan",
+          "sym": "Ns",
+          "nama": "lilitan sekunder",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan sekunder (Ns)",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "5 tahun",
+          "ket": "lama trafo dipakai, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "jumlah lilitan kumparan primer"
+      },
+      "rumus": [
+        {
+          "f": "Np = Ns × Vp ÷ Vs",
+          "benar": true,
+          "alasan": "Dari Np : Ns = Vp : Vs, jumlah lilitan primer = Ns × Vp ÷ Vs."
+        },
+        {
+          "f": "Np = Ns × Vs ÷ Vp",
+          "benar": false,
+          "alasan": "Terbalik. Tegangan primer lebih besar dari sekunder, jadi lilitan primer harus lebih banyak dari lilitan sekunder."
+        },
+        {
+          "f": "Np = Ns + Vp − Vs",
+          "benar": false,
+          "alasan": "Lilitan dan tegangan dihubungkan dengan perbandingan, bukan penjumlahan dan pengurangan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Ns = 100 · Vp = 220 V · Vs = 22 V",
+        "lhs": "Np",
+        "ekspresi": "100 × 220 ÷ 22",
+        "satuan": "lilitan",
+        "jawaban": 1000,
+        "salah": [
+          {
+            "nilai": 10,
+            "pesan": "10 muncul kalau Vp dan Vs tertukar. Lilitan primer harus lebih banyak dari 100."
+          }
+        ],
+        "petunjuk": "Kalikan 100 dengan 220, lalu bagi 22.",
+        "penjelasan": "Np = Ns × Vp ÷ Vs = 100 × 220 ÷ 22 = 1.000 lilitan."
+      }
+    },
+    {
+      "id": "magnet-arus-primer",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Arus pada kumparan primer",
+      "cerita": "Sebuah trafo ideal mengubah tegangan 220 V menjadi 22 V. Arus pada kumparan sekunder 5 A. Trafo itu bekerja selama 2 jam. Berapa kuat arus pada kumparan primer?",
+      "besaran": [
+        {
+          "teks": "220 V",
+          "sym": "Vp",
+          "nama": "tegangan primer",
+          "satuan": "V",
+          "ket": "tegangan yang masuk ke kumparan primer (Vp)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "22 V",
+          "sym": "Vs",
+          "nama": "tegangan sekunder",
+          "satuan": "V",
+          "ket": "tegangan yang keluar dari kumparan sekunder (Vs)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "5 A",
+          "sym": "Is",
+          "nama": "arus sekunder",
+          "satuan": "A",
+          "ket": "kuat arus pada kumparan sekunder (Is), satuannya ampere",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "2 jam",
+          "ket": "lama trafo bekerja, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kuat arus pada kumparan primer"
+      },
+      "rumus": [
+        {
+          "f": "Ip = Vs × Is ÷ Vp",
+          "benar": true,
+          "alasan": "Pada trafo ideal, daya primer sama dengan daya sekunder: Vp × Ip = Vs × Is."
+        },
+        {
+          "f": "Ip = Vp × Is ÷ Vs",
+          "benar": false,
+          "alasan": "Terbalik. Tegangan primer lebih besar, jadi arus primer harus lebih kecil dari arus sekunder."
+        },
+        {
+          "f": "Ip = Vs + Is − Vp",
+          "benar": false,
+          "alasan": "Arus dan tegangan dihubungkan lewat daya (perkalian), bukan penjumlahan dan pengurangan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Vp = 220 V · Vs = 22 V · Is = 5 A",
+        "lhs": "Ip",
+        "ekspresi": "22 × 5 ÷ 220",
+        "satuan": "A",
+        "jawaban": 0.5,
+        "salah": [
+          {
+            "nilai": 50,
+            "pesan": "50 muncul kalau Vp dan Vs tertukar. Arus primer harus lebih kecil dari 5 A."
+          }
+        ],
+        "petunjuk": "Kalikan 22 dengan 5, lalu bagi 220.",
+        "penjelasan": "Vp × Ip = Vs × Is, jadi Ip = 22 × 5 ÷ 220 = 0,5 A."
+      }
+    },
+    {
+      "id": "magnet-daya-sekunder",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Daya trafo ideal",
+      "cerita": "Sebuah trafo ideal dihubungkan ke tegangan primer 200 V dan arus primernya 2 A. Trafo itu dibeli seharga Rp90.000. Berapa daya pada kumparan sekunder?",
+      "besaran": [
+        {
+          "teks": "200 V",
+          "sym": "Vp",
+          "nama": "tegangan primer",
+          "satuan": "V",
+          "ket": "tegangan pada kumparan primer (Vp)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2 A",
+          "sym": "Ip",
+          "nama": "arus primer",
+          "satuan": "A",
+          "ket": "kuat arus pada kumparan primer (Ip), satuannya ampere",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp90.000",
+          "ket": "harga trafo, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "daya pada kumparan sekunder"
+      },
+      "rumus": [
+        {
+          "f": "Ps = Pp = Vp × Ip",
+          "benar": true,
+          "alasan": "Pada trafo ideal tidak ada energi yang hilang, jadi daya sekunder sama dengan daya primer, yaitu Vp × Ip."
+        },
+        {
+          "f": "Ps = Vp ÷ Ip",
+          "benar": false,
+          "alasan": "Itu hasil bagi, yang memberi hambatan. Daya listrik dihitung dengan tegangan dikali arus."
+        },
+        {
+          "f": "Ps = Vp + Ip",
+          "benar": false,
+          "alasan": "Tegangan dan arus tidak dijumlahkan. Daya = tegangan × arus."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Vp = 200 V · Ip = 2 A",
+        "lhs": "Ps = Pp",
+        "ekspresi": "200 × 2",
+        "satuan": "W",
+        "jawaban": 400,
+        "salah": [
+          {
+            "nilai": 100,
+            "pesan": "100 itu hasil bagi. Daya = tegangan × arus."
+          }
+        ],
+        "petunjuk": "Kalikan tegangan primer dengan arus primer.",
+        "penjelasan": "Ps = Pp = Vp × Ip = 200 × 2 = 400 W."
+      }
+    },
+    {
+      "id": "magnet-efisiensi",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Efisiensi trafo",
+      "cerita": "Sebuah trafo menerima daya 80 W pada kumparan primer dan menghasilkan daya 60 W pada kumparan sekunder. Trafo itu bekerja selama 4 jam. Berapa efisiensi trafo tersebut?",
+      "besaran": [
+        {
+          "teks": "80 W",
+          "sym": "Pp",
+          "nama": "daya masuk",
+          "satuan": "W",
+          "ket": "daya pada kumparan primer (daya masuk)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "60 W",
+          "sym": "Ps",
+          "nama": "daya keluar",
+          "satuan": "W",
+          "ket": "daya pada kumparan sekunder (daya keluar)",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "4 jam",
+          "ket": "lama trafo bekerja, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "efisiensi trafo tersebut"
+      },
+      "rumus": [
+        {
+          "f": "η = (Ps ÷ Pp) × 100%",
+          "benar": true,
+          "alasan": "Efisiensi membandingkan daya keluar dengan daya masuk."
+        },
+        {
+          "f": "η = (Pp ÷ Ps) × 100%",
+          "benar": false,
+          "alasan": "Terbalik. Hasilnya lebih dari 100%, padahal efisiensi tidak mungkin melebihi 100%."
+        },
+        {
+          "f": "η = Pp − Ps",
+          "benar": false,
+          "alasan": "Itu selisih daya yang terbuang. Efisiensi berupa perbandingan dalam persen."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Pp = 80 W · Ps = 60 W",
+        "lhs": "η",
+        "ekspresi": "60 ÷ 80 × 100",
+        "satuan": "%",
+        "jawaban": 75,
+        "salah": [
+          {
+            "nilai": 20,
+            "pesan": "20 itu selisih daya (80 − 60), bukan efisiensi."
+          },
+          {
+            "nilai": 0.75,
+            "pesan": "0,75 belum dikali 100. Efisiensi dinyatakan dalam persen."
+          }
+        ],
+        "petunjuk": "Bagi daya keluar dengan daya masuk, lalu kalikan 100.",
+        "penjelasan": "η = Ps ÷ Pp × 100% = 60 ÷ 80 × 100% = 75%."
+      }
+    },
+    {
+      "id": "magnet-gaya-lorentz",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Gaya pada kawat berarus",
+      "cerita": "Sebuah kawat sepanjang 50 cm dialiri arus listrik 4 A di dalam medan magnet 0,2 T. Arah arus tegak lurus medan magnet. Kawat itu terbuat dari tembaga dengan massa 20 g. Berapa gaya Lorentz yang bekerja pada kawat?",
+      "besaran": [
+        {
+          "teks": "50 cm",
+          "sym": "L",
+          "nama": "panjang kawat",
+          "satuan": "m",
+          "ket": "panjang kawat di dalam medan magnet, satuannya sentimeter",
+          "konv": "= 0,5 m",
+          "catatan": "Di rumus, panjang harus dalam meter: 50 cm = 0,5 m."
+        },
+        {
+          "teks": "4 A",
+          "sym": "I",
+          "nama": "kuat arus",
+          "satuan": "A",
+          "ket": "kuat arus listrik pada kawat, satuannya ampere",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,2 T",
+          "sym": "B",
+          "nama": "medan magnet",
+          "satuan": "T",
+          "ket": "kuat medan magnet, satuannya tesla",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "20 g",
+          "ket": "massa kawat, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "gaya Lorentz yang bekerja pada kawat"
+      },
+      "rumus": [
+        {
+          "f": "F = B × I × L",
+          "benar": true,
+          "alasan": "Gaya Lorentz sebanding dengan kuat medan magnet, kuat arus, dan panjang kawat (arus tegak lurus medan)."
+        },
+        {
+          "f": "F = m × g",
+          "benar": false,
+          "alasan": "Ini berat benda. Soal menanyakan gaya akibat medan magnet."
+        },
+        {
+          "f": "F = B × I ÷ L",
+          "benar": false,
+          "alasan": "Panjang kawat dikalikan, bukan membagi. Semakin panjang kawat, semakin besar gayanya."
+        }
+      ],
+      "hitung": {
+        "diketahui": "B = 0,2 T · I = 4 A · L = 0,5 m",
+        "lhs": "F",
+        "ekspresi": "0,2 × 4 × 0,5",
+        "satuan": "N",
+        "jawaban": 0.4,
+        "salah": [
+          {
+            "nilai": 40,
+            "pesan": "40 muncul kalau panjang masih 50 cm. Ubah dulu ke 0,5 m."
+          }
+        ],
+        "petunjuk": "Kalikan medan magnet, kuat arus, dan panjang kawat.",
+        "penjelasan": "F = B × I × L = 0,2 × 4 × 0,5 = 0,4 N."
+      }
+    },
+    {
+      "id": "magnet-adaptor-laptop",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Adaptor laptop",
+      "cerita": "Adaptor laptop memakai trafo yang dihubungkan ke listrik PLN 220 V dan menghasilkan tegangan 19 V. Kumparan primer trafo itu memiliki 2.200 lilitan. Adaptor itu dibeli seharga Rp250.000. Berapa jumlah lilitan kumparan sekunder?",
+      "besaran": [
+        {
+          "teks": "220 V",
+          "sym": "Vp",
+          "nama": "tegangan primer",
+          "satuan": "V",
+          "ket": "tegangan dari PLN yang masuk ke trafo, jadi tegangan primer (Vp)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "19 V",
+          "sym": "Vs",
+          "nama": "tegangan sekunder",
+          "satuan": "V",
+          "ket": "tegangan yang keluar ke laptop, jadi tegangan sekunder (Vs)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2.200 lilitan",
+          "sym": "Np",
+          "nama": "lilitan primer",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan primer (Np)",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp250.000",
+          "ket": "harga adaptor, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "jumlah lilitan kumparan sekunder"
+      },
+      "rumus": [
+        {
+          "f": "Ns = Np × Vs ÷ Vp",
+          "benar": true,
+          "alasan": "Dari Np : Ns = Vp : Vs, jumlah lilitan sekunder = Np × Vs ÷ Vp."
+        },
+        {
+          "f": "Ns = Np × Vp ÷ Vs",
+          "benar": false,
+          "alasan": "Terbalik. Tegangan turun dari 220 V ke 19 V, jadi lilitan sekunder harus lebih sedikit dari primer."
+        },
+        {
+          "f": "Ns = Np + Vs − Vp",
+          "benar": false,
+          "alasan": "Lilitan dan tegangan dihubungkan dengan perbandingan, bukan penjumlahan dan pengurangan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Np = 2.200 · Vp = 220 V · Vs = 19 V",
+        "lhs": "Ns",
+        "ekspresi": "2.200 × 19 ÷ 220",
+        "satuan": "lilitan",
+        "jawaban": 190,
+        "salah": [
+          {
+            "nilai": 41800,
+            "pesan": "41.800 belum dibagi dengan Vp (220 V). Selesaikan perbandingannya."
+          }
+        ],
+        "petunjuk": "Kalikan 2.200 dengan 19, lalu bagi 220.",
+        "penjelasan": "Ns = Np × Vs ÷ Vp = 2.200 × 19 ÷ 220 = 190 lilitan."
+      }
+    },
+    {
+      "id": "magnet-pembangkit",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Trafo di pembangkit listrik",
+      "cerita": "Di sebuah pembangkit listrik, trafo menaikkan tegangan dari 10 kV menjadi 150 kV. Kumparan primer trafo itu memiliki 2.000 lilitan. Trafo itu dipasang pada tahun 2015. Berapa jumlah lilitan kumparan sekunder?",
+      "besaran": [
+        {
+          "teks": "10 kV",
+          "sym": "Vp",
+          "nama": "tegangan primer",
+          "satuan": "kV",
+          "ket": "tegangan yang masuk ke trafo, jadi tegangan primer (Vp)",
+          "konv": "",
+          "catatan": "Vp dan Vs sama-sama dalam kV, jadi tidak perlu diubah ke V."
+        },
+        {
+          "teks": "150 kV",
+          "sym": "Vs",
+          "nama": "tegangan sekunder",
+          "satuan": "kV",
+          "ket": "tegangan yang keluar dari trafo, jadi tegangan sekunder (Vs)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2.000 lilitan",
+          "sym": "Np",
+          "nama": "lilitan primer",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan primer (Np)",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "2015",
+          "ket": "tahun pemasangan, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "jumlah lilitan kumparan sekunder"
+      },
+      "rumus": [
+        {
+          "f": "Ns = Np × Vs ÷ Vp",
+          "benar": true,
+          "alasan": "Dari Np : Ns = Vp : Vs, jumlah lilitan sekunder = Np × Vs ÷ Vp."
+        },
+        {
+          "f": "Ns = Np × Vp ÷ Vs",
+          "benar": false,
+          "alasan": "Terbalik. Trafo ini menaikkan tegangan, jadi lilitan sekunder harus lebih banyak dari primer."
+        },
+        {
+          "f": "Ns = Np ÷ (Vp × Vs)",
+          "benar": false,
+          "alasan": "Rumus ini tidak ada di materi trafo. Perbandingan lilitan sama dengan perbandingan tegangan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Np = 2.000 · Vp = 10 kV · Vs = 150 kV",
+        "lhs": "Ns",
+        "ekspresi": "2.000 × 150 ÷ 10",
+        "satuan": "lilitan",
+        "jawaban": 30000,
+        "salah": [
+          {
+            "nilai": 300000,
+            "pesan": "300.000 belum dibagi dengan Vp (10 kV). Selesaikan perbandingannya."
+          }
+        ],
+        "petunjuk": "Kalikan 2.000 dengan 150, lalu bagi 10.",
+        "penjelasan": "Ns = Np × Vs ÷ Vp = 2.000 × 150 ÷ 10 = 30.000 lilitan. Ns jauh lebih banyak dari Np karena trafo ini menaikkan tegangan."
+      }
+    },
+    {
+      "id": "magnet-arus-sekunder",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Arus pada kumparan sekunder",
+      "cerita": "Sebuah trafo ideal memiliki 1.000 lilitan primer dan 200 lilitan sekunder. Arus pada kumparan primer 0,4 A. Trafo itu dipakai selama 6 jam. Berapa kuat arus pada kumparan sekunder?",
+      "besaran": [
+        {
+          "teks": "1.000 lilitan primer",
+          "sym": "Np",
+          "nama": "lilitan primer",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan primer (Np)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "200 lilitan sekunder",
+          "sym": "Ns",
+          "nama": "lilitan sekunder",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan sekunder (Ns)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,4 A",
+          "sym": "Ip",
+          "nama": "arus primer",
+          "satuan": "A",
+          "ket": "kuat arus pada kumparan primer (Ip), satuannya ampere",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "6 jam",
+          "ket": "lama trafo dipakai, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kuat arus pada kumparan sekunder"
+      },
+      "rumus": [
+        {
+          "f": "Is = Ip × Np ÷ Ns",
+          "benar": true,
+          "alasan": "Pada trafo ideal, Np : Ns = Is : Ip. Lilitan sekunder lebih sedikit, jadi arus sekunder lebih besar."
+        },
+        {
+          "f": "Is = Ip × Ns ÷ Np",
+          "benar": false,
+          "alasan": "Terbalik. Arus berbanding terbalik dengan jumlah lilitan. Lilitan sekunder lebih sedikit berarti arus sekunder lebih besar dari 0,4 A."
+        },
+        {
+          "f": "Is = Ip + Np − Ns",
+          "benar": false,
+          "alasan": "Arus dan lilitan dihubungkan dengan perbandingan, bukan penjumlahan dan pengurangan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Np = 1.000 · Ns = 200 · Ip = 0,4 A",
+        "lhs": "Is",
+        "ekspresi": "0,4 × 1.000 ÷ 200",
+        "satuan": "A",
+        "jawaban": 2,
+        "salah": [
+          {
+            "nilai": 0.08,
+            "pesan": "0,08 muncul kalau Np dan Ns tertukar. Is harus lebih besar dari 0,4 A."
+          }
+        ],
+        "petunjuk": "Kalikan 0,4 dengan 1.000, lalu bagi 200.",
+        "penjelasan": "Is = Ip × Np ÷ Ns = 0,4 × 1.000 ÷ 200 = 2 A."
+      }
+    },
+    {
+      "id": "ohm-setrika",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Arus pada setrika",
+      "cerita": "Setrika listrik memiliki hambatan 40 Ω dan dihubungkan ke sumber tegangan 220 V. Setrika itu dipakai 30 menit setiap hari. Berapa kuat arus yang mengalir pada setrika?",
+      "besaran": [
+        {
+          "teks": "40 Ω",
+          "sym": "R",
+          "nama": "hambatan",
+          "satuan": "Ω",
+          "ket": "hambatan setrika, satuannya ohm",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "220 V",
+          "sym": "V",
+          "nama": "tegangan",
+          "satuan": "V",
+          "ket": "tegangan sumber, satuannya volt",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "30 menit",
+          "ket": "lama pemakaian, tidak dipakai menghitung arus"
+        }
+      ],
+      "tanya": {
+        "teks": "kuat arus yang mengalir pada setrika"
+      },
+      "rumus": [
+        {
+          "f": "I = V ÷ R",
+          "benar": true,
+          "alasan": "Hukum Ohm: V = I × R, sehingga I = V ÷ R."
+        },
+        {
+          "f": "V = I × R",
+          "benar": false,
+          "alasan": "Ini rumus untuk mencari tegangan, sedangkan yang ditanya kuat arus."
+        },
+        {
+          "f": "R = V × I",
+          "benar": false,
+          "alasan": "Ini rumus untuk mencari hambatan dengan cara yang salah. Hambatan dicari dengan V ÷ I."
+        }
+      ],
+      "hitung": {
+        "diketahui": "V = 220 V · R = 40 Ω",
+        "lhs": "I",
+        "ekspresi": "220 ÷ 40",
+        "satuan": "A",
+        "jawaban": 5.5,
+        "salah": [
+          {
+            "nilai": 8800,
+            "pesan": "Itu hasil kali V dan R. Kuat arus dicari dengan membagi V dengan R."
+          }
+        ],
+        "petunjuk": "Bagi tegangan dengan hambatan.",
+        "penjelasan": "I = V ÷ R = 220 ÷ 40 = 5,5 A."
+      }
+    },
+    {
+      "id": "ohm-lampu",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Tegangan pada lampu pijar",
+      "cerita": "Sebuah lampu pijar memiliki hambatan 200 Ω. Ketika menyala, arus sebesar 0,3 A mengalir melalui lampu. Lampu itu dibeli seharga Rp12.000. Berapa tegangan pada lampu?",
+      "besaran": [
+        {
+          "teks": "200 Ω",
+          "sym": "R",
+          "nama": "hambatan",
+          "satuan": "Ω",
+          "ket": "hambatan lampu, satuannya ohm",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,3 A",
+          "sym": "I",
+          "nama": "kuat arus",
+          "satuan": "A",
+          "ket": "kuat arus yang mengalir melalui lampu, satuannya ampere",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp12.000",
+          "ket": "harga lampu, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "tegangan pada lampu"
+      },
+      "rumus": [
+        {
+          "f": "V = I × R",
+          "benar": true,
+          "alasan": "Dari V = I × R, tegangan sama dengan kuat arus dikali hambatan."
+        },
+        {
+          "f": "I = V ÷ R",
+          "benar": false,
+          "alasan": "Ini rumus untuk mencari arus. Yang ditanya tegangan."
+        },
+        {
+          "f": "R = V ÷ I",
+          "benar": false,
+          "alasan": "Ini rumus untuk mencari hambatan. Yang ditanya tegangan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "I = 0,3 A · R = 200 Ω",
+        "lhs": "V",
+        "ekspresi": "200 × 0,3",
+        "satuan": "V",
+        "jawaban": 60,
+        "salah": [
+          {
+            "nilai": 0.0015,
+            "pesan": "Itu hasil bagi I dengan R. Tegangan dicari dengan mengalikan I dan R."
+          }
+        ],
+        "petunjuk": "Kalikan kuat arus dengan hambatan.",
+        "penjelasan": "V = I × R = 0,3 × 200 = 60 V."
+      }
+    },
+    {
+      "id": "arus-muatan",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Arus dari muatan yang mengalir",
+      "cerita": "Sebuah penghantar dialiri muatan listrik sebesar 120 C selama 60 s. Penghantar itu terbuat dari tembaga. Berapa kuat arus listrik pada penghantar?",
+      "besaran": [
+        {
+          "teks": "120 C",
+          "sym": "q",
+          "nama": "muatan listrik",
+          "satuan": "C",
+          "ket": "muatan listrik yang mengalir, satuannya coulomb",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "60 s",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "s",
+          "ket": "lama muatan mengalir, satuannya sekon",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "tembaga",
+          "ket": "bahan penghantar, tidak dipakai menghitung arus"
+        }
+      ],
+      "tanya": {
+        "teks": "kuat arus listrik pada penghantar"
+      },
+      "rumus": [
+        {
+          "f": "I = q ÷ t",
+          "benar": true,
+          "alasan": "Kuat arus adalah muatan yang mengalir dibagi waktu."
+        },
+        {
+          "f": "I = q × t",
+          "benar": false,
+          "alasan": "Ini hasil kali, bukan kuat arus."
+        },
+        {
+          "f": "I = t ÷ q",
+          "benar": false,
+          "alasan": "Terbalik. Muatan dibagi waktu, bukan waktu dibagi muatan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "q = 120 C · t = 60 s",
+        "lhs": "I",
+        "ekspresi": "120 ÷ 60",
+        "satuan": "A",
+        "jawaban": 2,
+        "salah": [
+          {
+            "nilai": 7200,
+            "pesan": "Itu hasil kali muatan dan waktu. Kuat arus dicari dengan membagi muatan dengan waktu."
+          },
+          {
+            "nilai": 0.5,
+            "pesan": "Terbalik. Muatan dibagi waktu."
+          }
+        ],
+        "petunjuk": "Bagi muatan dengan waktu.",
+        "penjelasan": "I = q ÷ t = 120 ÷ 60 = 2 A."
+      }
+    },
+    {
+      "id": "seri-hambatan",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Hambatan pengganti seri",
+      "cerita": "Dua hambatan, 4 Ω dan 6 Ω, disusun seri pada sebuah papan rangkaian. Tegangan baterai 20 V tidak dipakai untuk mencari hambatan pengganti. Berapa hambatan pengganti rangkaian?",
+      "besaran": [
+        {
+          "teks": "4 Ω",
+          "sym": "R1",
+          "nama": "hambatan pertama",
+          "satuan": "Ω",
+          "ket": "hambatan pertama dalam rangkaian",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "6 Ω",
+          "sym": "R2",
+          "nama": "hambatan kedua",
+          "satuan": "Ω",
+          "ket": "hambatan kedua dalam rangkaian",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "20 V",
+          "ket": "tegangan baterai, tidak dipakai mencari hambatan pengganti"
+        }
+      ],
+      "tanya": {
+        "teks": "hambatan pengganti rangkaian"
+      },
+      "rumus": [
+        {
+          "f": "Rs = R1 + R2",
+          "benar": true,
+          "alasan": "Pada rangkaian seri, hambatan pengganti adalah jumlah semua hambatan."
+        },
+        {
+          "f": "1/Rs = 1/R1 + 1/R2",
+          "benar": false,
+          "alasan": "Ini rumus paralel. Dalam seri, hambatan dijumlahkan."
+        },
+        {
+          "f": "Rs = R1 × R2",
+          "benar": false,
+          "alasan": "Ini hasil kali. Dalam seri, hambatan dijumlahkan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "R1 = 4 Ω · R2 = 6 Ω",
+        "lhs": "Rs",
+        "ekspresi": "4 + 6",
+        "satuan": "Ω",
+        "jawaban": 10,
+        "salah": [
+          {
+            "nilai": 2.4,
+            "pesan": "Itu rumus paralel. Dalam seri, hambatan dijumlahkan."
+          },
+          {
+            "nilai": 24,
+            "pesan": "Itu hasil kali. Dalam seri, hambatan dijumlahkan."
+          }
+        ],
+        "petunjuk": "Jumlahkan semua hambatan dalam seri.",
+        "penjelasan": "Rs = R1 + R2 = 4 + 6 = 10 Ω."
+      }
+    },
+    {
+      "id": "seri-arus",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Arus pada rangkaian seri",
+      "cerita": "Dua hambatan, 4 Ω dan 6 Ω, disusun seri dan dihubungkan ke sumber tegangan 20 V. Rangkaian ini dipasang di ruang kelas. Berapa kuat arus yang mengalir pada rangkaian?",
+      "besaran": [
+        {
+          "teks": "20 V",
+          "sym": "V",
+          "nama": "tegangan sumber",
+          "satuan": "V",
+          "ket": "tegangan sumber, satuannya volt",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "4 Ω",
+          "sym": "R1",
+          "nama": "hambatan pertama",
+          "satuan": "Ω",
+          "ket": "hambatan pertama dalam rangkaian",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "6 Ω",
+          "sym": "R2",
+          "nama": "hambatan kedua",
+          "satuan": "Ω",
+          "ket": "hambatan kedua dalam rangkaian",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "ruang kelas",
+          "ket": "tempat dan waktu, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kuat arus yang mengalir pada rangkaian"
+      },
+      "rumus": [
+        {
+          "f": "I = V ÷ Rs",
+          "benar": true,
+          "alasan": "Hukum Ohm pada rangkaian seri: arus dihitung dengan tegangan dibagi hambatan pengganti."
+        },
+        {
+          "f": "I = V × Rs",
+          "benar": false,
+          "alasan": "Hasil kali tidak menghasilkan arus. Arus dicari dengan membagi."
+        },
+        {
+          "f": "I = Rs ÷ V",
+          "benar": false,
+          "alasan": "Terbalik. Tegangan dibagi hambatan, bukan sebaliknya."
+        }
+      ],
+      "hitung": {
+        "diketahui": "V = 20 V · R1 = 4 Ω · R2 = 6 Ω",
+        "lhs": "I",
+        "ekspresi": "20 ÷ (4 + 6)",
+        "satuan": "A",
+        "jawaban": 2,
+        "salah": [
+          {
+            "nilai": 0.5,
+            "pesan": "Terbalik. Arus = tegangan dibagi hambatan total."
+          },
+          {
+            "nilai": 200,
+            "pesan": "Itu hasil kali. Arus dicari dengan membagi tegangan dengan hambatan total."
+          }
+        ],
+        "petunjuk": "Jumlahkan hambatan dulu, lalu bagi tegangan dengan hasilnya.",
+        "penjelasan": "Rs = 4 + 6 = 10 Ω, I = V ÷ Rs = 20 ÷ 10 = 2 A."
+      }
+    },
+    {
+      "id": "paralel-hambatan",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Hambatan pengganti paralel",
+      "cerita": "Dua hambatan, 6 Ω dan 3 Ω, disusun paralel. Susunan ini dibuat untuk praktikum di laboratorium sekolah. Berapa hambatan pengganti rangkaian paralel?",
+      "besaran": [
+        {
+          "teks": "6 Ω",
+          "sym": "R1",
+          "nama": "hambatan pertama",
+          "satuan": "Ω",
+          "ket": "hambatan pertama dalam rangkaian",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "3 Ω",
+          "sym": "R2",
+          "nama": "hambatan kedua",
+          "satuan": "Ω",
+          "ket": "hambatan kedua dalam rangkaian",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "laboratorium sekolah",
+          "ket": "tempat, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "hambatan pengganti rangkaian paralel"
+      },
+      "rumus": [
+        {
+          "f": "1/Rp = 1/R1 + 1/R2",
+          "benar": true,
+          "alasan": "Pada rangkaian paralel, kebalikan hambatan pengganti sama dengan jumlah kebalikan setiap hambatan."
+        },
+        {
+          "f": "Rp = R1 + R2",
+          "benar": false,
+          "alasan": "Ini cara seri. Dalam paralel, memakai kebalikan."
+        },
+        {
+          "f": "Rp = R1 × R2",
+          "benar": false,
+          "alasan": "Ini hasil kali. Dalam paralel, memakai kebalikan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "R1 = 6 Ω · R2 = 3 Ω",
+        "lhs": "Rp",
+        "ekspresi": "1 ÷ (1 ÷ 6 + 1 ÷ 3)",
+        "satuan": "Ω",
+        "jawaban": 2,
+        "salah": [
+          {
+            "nilai": 9,
+            "pesan": "Itu penjumlahan, cara seri. Paralel memakai kebalikan."
+          },
+          {
+            "nilai": 18,
+            "pesan": "Itu hasil kali. Paralel memakai kebalikan."
+          }
+        ],
+        "petunjuk": "Hitung kebalikan tiap hambatan, jumlahkan, lalu balikkan lagi.",
+        "penjelasan": "1/Rp = 1/6 + 1/3 = 1/2, jadi Rp = 2 Ω."
+      }
+    },
+    {
+      "id": "paralel-arus-cabang",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Arus pada cabang paralel",
+      "cerita": "Hambatan 3 Ω dan hambatan lain 6 Ω disusun paralel, lalu dihubungkan ke sumber tegangan 12 V. Berapa kuat arus yang melalui hambatan 3 Ω?",
+      "besaran": [
+        {
+          "teks": "12 V",
+          "sym": "V",
+          "nama": "tegangan sumber",
+          "satuan": "V",
+          "ket": "tegangan sumber, satuannya volt",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "3 Ω",
+          "sym": "R2",
+          "nama": "hambatan cabang",
+          "satuan": "Ω",
+          "ket": "hambatan pada cabang yang ditanya",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "6 Ω",
+          "ket": "hambatan cabang lain, tidak dipakai untuk arus 3 Ω"
+        }
+      ],
+      "tanya": {
+        "teks": "kuat arus yang melalui hambatan 3 Ω"
+      },
+      "rumus": [
+        {
+          "f": "I2 = V ÷ R2",
+          "benar": true,
+          "alasan": "Pada paralel, tegangan tiap cabang sama dengan tegangan sumber. Arus cabang = V dibagi hambatan cabang."
+        },
+        {
+          "f": "I2 = V × R2",
+          "benar": false,
+          "alasan": "Hasil kali tidak menghasilkan arus."
+        },
+        {
+          "f": "I2 = V ÷ (R1 + R2)",
+          "benar": false,
+          "alasan": "Itu cara seri. Dalam paralel, tiap cabang mendapat tegangan yang sama."
+        }
+      ],
+      "hitung": {
+        "diketahui": "V = 12 V · R2 = 3 Ω",
+        "lhs": "I2",
+        "ekspresi": "12 ÷ 3",
+        "satuan": "A",
+        "jawaban": 4,
+        "salah": [
+          {
+            "nilai": 2,
+            "pesan": "Itu arus melalui hambatan 6 Ω, bukan 3 Ω."
+          },
+          {
+            "nilai": 36,
+            "pesan": "Itu hasil kali. Arus dicari dengan membagi tegangan dengan hambatan cabangnya."
+          }
+        ],
+        "petunjuk": "Bagi tegangan sumber dengan hambatan cabang yang ditanya.",
+        "penjelasan": "I2 = V ÷ R2 = 12 ÷ 3 = 4 A."
+      }
+    },
+    {
+      "id": "coulomb-gaya",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Gaya antara dua muatan",
+      "cerita": "Muatan q1 = 2 C dan q2 = 3 C terpisah sejauh 3 m. Konstanta k = 9 × 10⁹ Nm²/C². Percobaan ini dilakukan di ruang laboratorium. Berapa gaya Coulomb antara kedua muatan?",
+      "besaran": [
+        {
+          "teks": "2 C",
+          "sym": "q1",
+          "nama": "muatan pertama",
+          "satuan": "C",
+          "ket": "muatan pertama, satuannya coulomb",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "3 C",
+          "sym": "q2",
+          "nama": "muatan kedua",
+          "satuan": "C",
+          "ket": "muatan kedua, satuannya coulomb",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "3 m",
+          "sym": "r",
+          "nama": "jarak",
+          "satuan": "m",
+          "ket": "jarak antara kedua muatan, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "9 × 10⁹ Nm²/C²",
+          "sym": "k",
+          "nama": "konstanta Coulomb",
+          "satuan": "Nm²/C²",
+          "ket": "konstanta Coulomb",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "ruang laboratorium",
+          "ket": "tempat, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "gaya Coulomb antara kedua muatan"
+      },
+      "rumus": [
+        {
+          "f": "Fc = k × q1 × q2 ÷ r²",
+          "benar": true,
+          "alasan": "Gaya Coulomb sebanding dengan hasil kali muatan dan berbanding terbalik dengan kuadrat jarak."
+        },
+        {
+          "f": "Fc = k × (q1 + q2) ÷ r²",
+          "benar": false,
+          "alasan": "Muatan dikalikan, bukan dijumlahkan."
+        },
+        {
+          "f": "Fc = k × q1 ÷ (q2 × r²)",
+          "benar": false,
+          "alasan": "Muatan kedua seharusnya dikalikan, bukan dibagi."
+        }
+      ],
+      "hitung": {
+        "diketahui": "q1 = 2 C · q2 = 3 C · r = 3 m · k = 9 × 10⁹",
+        "lhs": "Fc",
+        "ekspresi": "9000000000 × 2 × 3 ÷ (3 × 3)",
+        "satuan": "N",
+        "jawaban": 6000000000,
+        "salah": [
+          {
+            "nilai": 18000000000,
+            "pesan": "Angka ini muncul kalau jarak hanya dibagi r, bukan r². Jarak dikuadratkan dalam rumus Coulomb."
+          }
+        ],
+        "petunjuk": "Jarak harus dikuadratkan sebelum dibagi.",
+        "penjelasan": "Fc = k × q1 × q2 ÷ r² = 9 × 10⁹ × 2 × 3 ÷ 9 = 6 × 10⁹ N."
+      }
+    },
+    {
+      "id": "coulomb-jarak",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Jarak diubah, gaya berubah",
+      "cerita": "Gaya Coulomb antara dua muatan sebesar 6 × 10⁹ N ketika jaraknya 3 m. Jarak kemudian diubah menjadi 6 m. Muatan tidak diubah. Berapa gaya Coulomb setelah jaraknya diubah?",
+      "besaran": [
+        {
+          "teks": "6 × 10⁹ N",
+          "sym": "F1",
+          "nama": "gaya awal",
+          "satuan": "N",
+          "ket": "gaya Coulomb awal, satuannya newton",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "3 m",
+          "sym": "r1",
+          "nama": "jarak awal",
+          "satuan": "m",
+          "ket": "jarak awal, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "6 m",
+          "sym": "r2",
+          "nama": "jarak baru",
+          "satuan": "m",
+          "ket": "jarak baru, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [],
+      "tanya": {
+        "teks": "gaya Coulomb setelah jaraknya diubah"
+      },
+      "rumus": [
+        {
+          "f": "F2 = F1 × (r1 ÷ r2)²",
+          "benar": true,
+          "alasan": "Gaya berbanding terbalik dengan kuadrat jarak, sehingga F2 = F1 × (r1 ÷ r2)²."
+        },
+        {
+          "f": "F2 = F1 × (r2 ÷ r1)²",
+          "benar": false,
+          "alasan": "Ini kebalikannya. Jarak yang lebih besar membuat gaya lebih kecil."
+        },
+        {
+          "f": "F2 = F1 × (r1 ÷ r2)",
+          "benar": false,
+          "alasan": "Pangkatnya kurang. Gaya berbanding terbalik dengan kuadrat jarak, bukan jarak biasa."
+        }
+      ],
+      "hitung": {
+        "diketahui": "F1 = 6 × 10⁹ N · r1 = 3 m · r2 = 6 m",
+        "lhs": "F2",
+        "ekspresi": "6000000000 ÷ ((6 ÷ 3) × (6 ÷ 3))",
+        "satuan": "N",
+        "jawaban": 1500000000,
+        "salah": [
+          {
+            "nilai": 3000000000,
+            "pesan": "Itu hasil bagi dua. Gaya berbanding terbalik dengan kuadrat jarak, jadi jarak dua kali lipat membuat gaya turun empat kali."
+          }
+        ],
+        "petunjuk": "Jarak dua kali lipat membuat gaya turun empat kali.",
+        "penjelasan": "F2 = F1 × (r1 ÷ r2)² = 6 × 10⁹ × (3 ÷ 6)² = 1,5 × 10⁹ N."
+      }
+    },
+    {
+      "id": "medan-listrik",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Kuat medan di sekitar muatan",
+      "cerita": "Sebuah muatan titik Q = 4 C berada di udara. Titik P berjarak 2 m dari muatan itu. Konstanta k = 9 × 10⁹ Nm²/C². Berapa kuat medan listrik di titik P?",
+      "besaran": [
+        {
+          "teks": "4 C",
+          "sym": "Q",
+          "nama": "muatan sumber",
+          "satuan": "C",
+          "ket": "muatan yang menghasilkan medan, satuannya coulomb",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2 m",
+          "sym": "r",
+          "nama": "jarak ke titik P",
+          "satuan": "m",
+          "ket": "jarak dari muatan ke titik P, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "9 × 10⁹ Nm²/C²",
+          "sym": "k",
+          "nama": "konstanta Coulomb",
+          "satuan": "Nm²/C²",
+          "ket": "konstanta Coulomb",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [],
+      "tanya": {
+        "teks": "kuat medan listrik di titik P"
+      },
+      "rumus": [
+        {
+          "f": "E = k × Q ÷ r²",
+          "benar": true,
+          "alasan": "Kuat medan listrik sama dengan konstanta dikali muatan dibagi kuadrat jarak."
+        },
+        {
+          "f": "E = k × Q × r²",
+          "benar": false,
+          "alasan": "Jarak seharusnya dibagi, bukan dikali."
+        },
+        {
+          "f": "E = k × Q ÷ r",
+          "benar": false,
+          "alasan": "Jarak harus dikuadratkan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "Q = 4 C · r = 2 m · k = 9 × 10⁹",
+        "lhs": "E",
+        "ekspresi": "9000000000 × 4 ÷ (2 × 2)",
+        "satuan": "N/C",
+        "jawaban": 9000000000,
+        "salah": [
+          {
+            "nilai": 18000000000,
+            "pesan": "Angka ini muncul kalau jarak hanya dibagi, bukan dikuadratkan."
+          }
+        ],
+        "petunjuk": "Kuadratkan jarak sebelum membagi.",
+        "penjelasan": "E = k × Q ÷ r² = 9 × 10⁹ × 4 ÷ 4 = 9 × 10⁹ N/C."
+      }
+    },
+    {
+      "id": "potensial-listrik",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Beda potensial dari usaha",
+      "cerita": "Untuk memindahkan muatan 2 C dari titik A ke titik B, diperlukan energi listrik sebesar 60 J. Perpindahan itu melalui lintasan lurus dan pendek. Berapa beda potensial antara titik A dan B?",
+      "besaran": [
+        {
+          "teks": "2 C",
+          "sym": "Q",
+          "nama": "muatan",
+          "satuan": "C",
+          "ket": "muatan yang dipindahkan, satuannya coulomb",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "60 J",
+          "sym": "W",
+          "nama": "energi listrik",
+          "satuan": "J",
+          "ket": "energi listrik yang diperlukan, satuannya joule",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "lintasan lurus dan pendek",
+          "ket": "tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "beda potensial antara titik A dan B"
+      },
+      "rumus": [
+        {
+          "f": "ΔV = W ÷ Q",
+          "benar": true,
+          "alasan": "Beda potensial adalah energi dibagi muatan."
+        },
+        {
+          "f": "ΔV = W × Q",
+          "benar": false,
+          "alasan": "Hasil kali tidak menghasilkan beda potensial."
+        },
+        {
+          "f": "ΔV = Q ÷ W",
+          "benar": false,
+          "alasan": "Terbalik. Energi dibagi muatan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "W = 60 J · Q = 2 C",
+        "lhs": "ΔV",
+        "ekspresi": "60 ÷ 2",
+        "satuan": "V",
+        "jawaban": 30,
+        "salah": [
+          {
+            "nilai": 120,
+            "pesan": "Itu hasil kali. Beda potensial dicari dengan membagi energi dengan muatan."
+          }
+        ],
+        "petunjuk": "Bagi energi dengan muatan.",
+        "penjelasan": "ΔV = W ÷ Q = 60 ÷ 2 = 30 V."
+      }
+    },
+    {
+      "id": "hambatan-jenis",
+      "kelas": "9",
+      "topik": "Listrik",
+      "judul": "Hambatan kawat tembaga",
+      "cerita": "Kawat tembaga dengan hambatan jenis 1,72 × 10⁻⁸ Ωm memiliki panjang 100 m dan luas penampang 2 × 10⁻⁶ m². Harga kabel itu Rp50.000. Berapa hambatan kawat tersebut?",
+      "besaran": [
+        {
+          "teks": "1,72 × 10⁻⁸ Ωm",
+          "sym": "ρ",
+          "nama": "hambatan jenis",
+          "satuan": "Ωm",
+          "ket": "hambatan jenis tembaga, satuannya ohm meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "100 m",
+          "sym": "L",
+          "nama": "panjang kawat",
+          "satuan": "m",
+          "ket": "panjang kawat, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2 × 10⁻⁶ m²",
+          "sym": "A",
+          "nama": "luas penampang",
+          "satuan": "m²",
+          "ket": "luas penampang kawat, satuannya meter persegi",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp50.000",
+          "ket": "harga kabel, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "hambatan kawat tersebut"
+      },
+      "rumus": [
+        {
+          "f": "R = ρ × L ÷ A",
+          "benar": true,
+          "alasan": "Hambatan kawat berbanding lurus dengan panjang dan hambatan jenis, serta berbanding terbalik dengan luas penampang."
+        },
+        {
+          "f": "R = ρ × A ÷ L",
+          "benar": false,
+          "alasan": "Terbalik. Hambatan berbanding lurus dengan panjang, bukan luas."
+        },
+        {
+          "f": "R = ρ ÷ (L × A)",
+          "benar": false,
+          "alasan": "Panjang dan luas tidak dikalikan di penyebut."
+        }
+      ],
+      "hitung": {
+        "diketahui": "ρ = 1,72 × 10⁻⁸ Ωm · L = 100 m · A = 2 × 10⁻⁶ m²",
+        "lhs": "R",
+        "ekspresi": "1,72e-8 × 100 ÷ 2e-6",
+        "satuan": "Ω",
+        "jawaban": 0.86,
+        "salah": [
+          {
+            "nilai": 0.00000172,
+            "pesan": "Itu lupa dibagi luas penampang."
+          }
+        ],
+        "petunjuk": "Kalikan hambatan jenis dengan panjang, lalu bagi dengan luas penampang.",
+        "penjelasan": "R = ρ × L ÷ A = 1,72 × 10⁻⁸ × 100 ÷ 2 × 10⁻⁶ = 0,86 Ω."
+      }
+    },
+    {
+      "id": "induksi-ggl",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "GGL dari perubahan fluks",
+      "cerita": "Sebuah kumparan memiliki 200 lilitan. Fluks magnetik yang melalui kumparan berubah sebesar 0,5 Wb dalam waktu 0,1 s. Kumparan itu dibeli seharga Rp15.000. Berapa besar GGL induksi yang timbul?",
+      "besaran": [
+        {
+          "teks": "200 lilitan",
+          "sym": "N",
+          "nama": "jumlah lilitan",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan (N)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,5 Wb",
+          "sym": "ΔΦ",
+          "nama": "perubahan fluks",
+          "satuan": "Wb",
+          "ket": "perubahan fluks magnetik, satuannya weber",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,1 s",
+          "sym": "Δt",
+          "nama": "selang waktu",
+          "satuan": "s",
+          "ket": "selang waktu perubahan, satuannya sekon",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp15.000",
+          "ket": "harga kumparan, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "besar GGL induksi yang timbul"
+      },
+      "rumus": [
+        {
+          "f": "ε = N × ΔΦ ÷ Δt",
+          "benar": true,
+          "alasan": "Hukum Faraday: GGL induksi sebanding dengan jumlah lilitan dan laju perubahan fluks."
+        },
+        {
+          "f": "ε = N ÷ (ΔΦ × Δt)",
+          "benar": false,
+          "alasan": "Terbalik. GGL bertambah jika lilitan atau perubahan fluks bertambah."
+        },
+        {
+          "f": "ε = ΔΦ ÷ (N × Δt)",
+          "benar": false,
+          "alasan": "Lilitan seharusnya dikalikan, bukan dibagi."
+        }
+      ],
+      "hitung": {
+        "diketahui": "N = 200 · ΔΦ = 0,5 Wb · Δt = 0,1 s",
+        "lhs": "ε",
+        "ekspresi": "200 × 0,5 ÷ 0,1",
+        "satuan": "V",
+        "jawaban": 1000,
+        "salah": [
+          {
+            "nilai": 100,
+            "pesan": "Lupa membagi dengan selang waktu."
+          }
+        ],
+        "petunjuk": "Kalikan lilitan dengan perubahan fluks, lalu bagi dengan selang waktu.",
+        "penjelasan": "ε = N × ΔΦ ÷ Δt = 200 × 0,5 ÷ 0,1 = 1000 V."
+      }
+    },
+    {
+      "id": "induksi-fluks-berubah",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Fluks berubah dari dua nilai",
+      "cerita": "Sebuah kumparan 100 lilitan dilalui fluks magnetik yang berubah dari 0,8 Wb menjadi 0,2 Wb dalam waktu 0,4 s. Pada saat percobaan, lampu di ruangan menyala terang. Berapa besar GGL induksi yang timbul?",
+      "besaran": [
+        {
+          "teks": "100 lilitan",
+          "sym": "N",
+          "nama": "jumlah lilitan",
+          "satuan": "lilitan",
+          "ket": "jumlah lilitan kumparan (N)",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,8 Wb",
+          "sym": "Φ1",
+          "nama": "fluks awal",
+          "satuan": "Wb",
+          "ket": "fluks awal, satuannya weber",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,2 Wb",
+          "sym": "Φ2",
+          "nama": "fluks akhir",
+          "satuan": "Wb",
+          "ket": "fluks akhir, satuannya weber",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,4 s",
+          "sym": "Δt",
+          "nama": "selang waktu",
+          "satuan": "s",
+          "ket": "selang waktu perubahan, satuannya sekon",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "lampu di ruangan",
+          "ket": "tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "besar GGL induksi yang timbul"
+      },
+      "rumus": [
+        {
+          "f": "ε = N × ΔΦ ÷ Δt, dengan ΔΦ = Φ2 − Φ1",
+          "benar": true,
+          "alasan": "Perubahan fluks adalah selisih fluks akhir dan awal, lalu dipakai di rumus GGL."
+        },
+        {
+          "f": "ε = N × Φ1 ÷ Δt",
+          "benar": false,
+          "alasan": "Yang dipakai adalah perubahan fluks, bukan fluks awal."
+        },
+        {
+          "f": "ε = N ÷ Δt",
+          "benar": false,
+          "alasan": "Perubahan fluks tidak ikut dihitung."
+        }
+      ],
+      "hitung": {
+        "diketahui": "N = 100 · Φ1 = 0,8 Wb · Φ2 = 0,2 Wb · Δt = 0,4 s",
+        "lhs": "ε",
+        "ekspresi": "100 × (0,8 - 0,2) ÷ 0,4",
+        "satuan": "V",
+        "jawaban": 150,
+        "salah": [
+          {
+            "nilai": 200,
+            "pesan": "Itu hanya memakai fluks awal. Yang dipakai adalah selisih fluks."
+          }
+        ],
+        "petunjuk": "Cari dulu selisih fluks, lalu masukkan ke rumus.",
+        "penjelasan": "ΔΦ = 0,8 − 0,2 = 0,6 Wb. ε = 100 × 0,6 ÷ 0,4 = 150 V."
+      }
+    },
+    {
+      "id": "lorentz-sudut",
+      "kelas": "9",
+      "topik": "Magnet",
+      "judul": "Gaya Lorentz dengan sudut",
+      "cerita": "Kawat sepanjang 0,5 m dialiri arus 2 A di dalam medan magnet 0,4 T. Arah arus membentuk sudut 30° terhadap arah medan magnet. Sebuah kawat dicat hitam. Berapa gaya Lorentz pada kawat?",
+      "besaran": [
+        {
+          "teks": "0,5 m",
+          "sym": "L",
+          "nama": "panjang kawat",
+          "satuan": "m",
+          "ket": "panjang kawat di dalam medan, satuannya meter",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2 A",
+          "sym": "I",
+          "nama": "kuat arus",
+          "satuan": "A",
+          "ket": "kuat arus pada kawat, satuannya ampere",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,4 T",
+          "sym": "B",
+          "nama": "medan magnet",
+          "satuan": "T",
+          "ket": "kuat medan magnet, satuannya tesla",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "30°",
+          "sym": "θ",
+          "nama": "sudut",
+          "satuan": "°",
+          "ket": "sudut antara arah arus dan medan magnet",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "kawat dicat hitam",
+          "ket": "tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "gaya Lorentz pada kawat"
+      },
+      "rumus": [
+        {
+          "f": "F = B × I × L × sin θ",
+          "benar": true,
+          "alasan": "Gaya Lorentz bergantung pada sudut. Nilai sin 30° adalah 0,5."
+        },
+        {
+          "f": "F = B × I × L ÷ sin θ",
+          "benar": false,
+          "alasan": "Sinus dibagi, bukan dikali."
+        },
+        {
+          "f": "F = B × I × L × cos θ",
+          "benar": false,
+          "alasan": "Yang dipakai sinus, bukan cosinus."
+        }
+      ],
+      "hitung": {
+        "diketahui": "B = 0,4 T · I = 2 A · L = 0,5 m · θ = 30° (sin 30° = 0,5)",
+        "lhs": "F",
+        "ekspresi": "0,5 × 2 × 0,4 × 0,5",
+        "satuan": "N",
+        "jawaban": 0.2,
+        "salah": [
+          {
+            "nilai": 0.4,
+            "pesan": "Itu jika arus tegak lurus medan (sin 90° = 1). Di soal sudutnya 30°."
+          }
+        ],
+        "petunjuk": "Ingat, sin 30° = 0,5.",
+        "penjelasan": "F = B × I × L × sin θ = 0,4 × 2 × 0,5 × 0,5 = 0,2 N."
+      }
+    }
+  ]
+}
