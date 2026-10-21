@@ -60,7 +60,9 @@ Soal dikirim lewat server Cloudflare (`server/worker.js`), jadi guru tidak perlu
 - **Siswa**: isi kode kelas dari guru di Pengaturan. Tanpa kode, siswa memakai soal utama. Soal terakhir tetap tersimpan untuk dipakai tanpa internet.
 - PIN dicek di server. Setelah 10 kali PIN salah, percobaan dikunci 15 menit.
 
-Pemasangan server: Worker `taktik-api` dengan binding KV bernama `DB` dan secret `ADMIN_PIN`. Alamat server ditulis di `server/api.txt` saat membangun aplikasi.
+- **Buat dengan AI**: di mode guru, guru menulis permintaan soal seperti mengobrol. AI (Cloudflare Workers AI, gratis dengan kuota harian) menyusun soal lengkap, aplikasi memeriksa dan menghitung ulang jawabannya, lalu guru menekan **Tambahkan & kirim ke siswa**. Batas 40 permintaan per kode kelas per hari.
+
+Pemasangan server: Worker `taktik-api` dengan binding KV bernama `DB`, binding Workers AI bernama `AI`, dan secret `ADMIN_PIN`. Alamat server ditulis di `server/api.txt` saat membangun aplikasi.
 
 ## Tingkat bantuan (untuk siswa)
 

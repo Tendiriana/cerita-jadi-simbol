@@ -270,6 +270,20 @@ details.fold[open] summary{margin-bottom:10px}
 .intro-art{margin:0 0 6px}
 .intro-chips{display:flex;flex-wrap:wrap;gap:6px}
 .intro .row .btn{flex:1}
+.ai-saran{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+.ai-saran .chip{text-align:left;white-space:normal;line-height:1.35;padding:8px 12px;height:auto}
+.ai-chat{display:grid;gap:12px;margin:14px 0}
+.ai-msg{max-width:100%;min-width:0}
+.ai-msg>p{margin:0;padding:10px 14px;border-radius:16px;line-height:1.5}
+.ai-msg.me{justify-self:end;max-width:88%}
+.ai-msg.me>p{background:var(--acc);color:var(--surface);border-bottom-right-radius:6px}
+.ai-msg.ai>p{background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:6px}
+.ai-soal{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:14px;padding:12px 14px;margin-top:10px;display:grid;gap:4px}
+.ai-soal.bad{border-left-color:var(--bad)}
+.ai-soal .mh{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.ai-cerita{margin:4px 0 0;line-height:1.55}
+.ai-err{margin:4px 0 0;padding-left:1.2em}
+.ai-in{padding:10px 0 6px;border-top:1px solid var(--line)}
 .mat-card.locked{background:var(--sunk);box-shadow:none;border-style:dashed;color:var(--ink2)}
 .mat-card.locked b{color:var(--ink2)}
 .toast{margin:0 0 10px}
@@ -1721,9 +1735,20 @@ function loginHtml(){
 }
 function toolbar(){
   var t=function(id,l){return '<button class="btn ghost sm" data-act="a-tab" data-v="'+id+'" data-fk="tb-'+id+'"'+(adminTab===id?' aria-current="page"':'')+' role="tab">'+l+'</button>';};
-  return '<div class="tabs" role="tablist">'+t('list','Daftar soal')+t('tampil','Tampil di kelas')+(apiBase()&&adminRole==='utama'&&!activeKode?t('kelas','Kelas'):'')+t('import','Impor')+t('export',apiBase()?'Cadangan':'Ekspor')+t('set','Pengaturan')+'</div>';
+  return '<div class="tabs" role="tablist">'+t('list','Daftar soal')+t('tampil','Tampil di kelas')+(apiBase()&&adminRole&&adminRole!=='offline'?t('ai','Buat dengan AI'):'')+(apiBase()&&adminRole==='utama'&&!activeKode?t('kelas','Kelas'):'')+t('import','Impor')+t('export',apiBase()?'Cadangan':'Ekspor')+t('set','Pengaturan')+'</div>';
 }
 function srcLabel(){return {perangkat:'perangkat ini (belum dikirim)','soal.json':'berkas soal.json',bawaan:'soal bawaan aplikasi',server:'server (soal utama)',kelas:'server (kelas '+activeKode+')'}[source];}
+function kirimNow(){if(sending||!apiBase())return;sending=true;notice=null;render();
+    var kd=activeKode;
+    apiCall('/simpan',{kode:kd||'UTAMA',pin:adminPin||'',soal:data,kunci:kunci}).then(function(res){sending=false;
+      if(res.ok){var bk={kode:kd,rev:res.j.rev,nama:bankInfo?bankInfo.nama:'',kunci:kunci.slice(),soal:data};store.set(BANKKEY,JSON.stringify(bk));store.del(KEY);
+        dataRev=res.j.rev;source=kd?'kelas':'server';bankInfo={kode:kd,nama:bk.nama,rev:bk.rev};
+        notice={t:'ok',x:'Terkirim. Siswa mendapat soal terbaru saat membuka aplikasi dengan internet.'};}
+      else if(res.status===0)notice={t:'bad',x:'Tidak ada internet. Perubahan tetap tersimpan di HP ini. Coba kirim lagi nanti.'};
+      else if(res.status===401){adminOK=false;loginErr='PIN sudah berubah. Masuk lagi dengan PIN terbaru, lalu kirim lagi.';view='admin';notice=null;}
+      else notice={t:'bad',x:(res.j&&res.j.pesan)||'Gagal mengirim. Coba lagi.'};
+      render();});
+}
 function kirimHtml(){
   if(!apiBase())return '';
   var head='<p class="mut" style="margin:10px 0 0">Mengelola: <b>'+esc(bankLabel())+'</b></p>',msg=null;
@@ -1847,6 +1872,112 @@ function setHtml(){
   else h+='<div class="row"><button class="btn ghost" data-act="a-reset" data-fk="reset">Buang ubahan di perangkat ini</button><button class="btn ghost" data-act="a-clear-done" data-fk="cleardone">Hapus catatan selesai siswa</button></div>';
   return h+'</section>';
 }
+
+/* ---------- Buat soal dengan AI ---------- */
+var aiChat=[],aiBusy=false,aiInput='',aiErr=null,aiSisa=null;
+var AISARAN=['Buatkan 1 soal Listrik tentang daya rice cooker, ada pengecoh harga.','Buat soal gaya Lorentz dengan konteks kipas angin di kelas.','Buat 2 soal Energi alternatif tentang panel surya di sekolah.','Buat soal hukum Ohm yang perlu konversi mA ke A.'];
+function aiKonteks(){
+  var mat=[],jud=[];data.forEach(function(s){if(s.topik&&mat.indexOf(s.topik)<0)mat.push(s.topik);if(s.judul)jud.push(s.judul);});
+  return {kelas:kelasSel,materi:mat,kunci:kunci.slice(),judul:jud.slice(0,120)};
+}
+function aiExtract(txt){
+  var t=String(txt||''),m=t.match(/```(?:json)?\s*([\s\S]*?)```/i),raw=null,teks=t;
+  if(m){raw=m[1];teks=t.replace(m[0],'').trim();}
+  else{var i=t.indexOf('{'),j=t.lastIndexOf('}');if(i>=0&&j>i&&/"soal"|"cerita"/.test(t)){raw=t.slice(i,j+1);teks=(t.slice(0,i)+t.slice(j+1)).trim();}}
+  var list=null;
+  if(raw){try{var o=JSON.parse(raw);list=Array.isArray(o)?o:(Array.isArray(o.soal)?o.soal:(o&&o.cerita?[o]:null));}catch(e){list=null;}}
+  return {teks:teks,list:list,rusak:!!raw&&!list};
+}
+/* memeriksa soal buatan AI dengan aturan aplikasi; jawaban dihitung ulang oleh aplikasi */
+function aiCheck(raw){
+  var s=norm(raw),note=[];
+  s.id=freshId();if(['7','8','9'].indexOf(s.kelas)<0||!raw.kelas)s.kelas=kelasSel;
+  s.rumus.forEach(function(r){r.benar=!!r.benar;});
+  if(!s.variasi.length&&!s.hitung.angka&&s.hitung.ekspresi){
+    var v=evalAngka(s.hitung.ekspresi,{});
+    if(Number.isFinite(v)&&(!Number.isFinite(s.hitung.jawaban)||Math.abs(v-s.hitung.jawaban)>Math.max(1e-6,Math.abs(v)*0.005))){
+      if(Number.isFinite(s.hitung.jawaban))note.push('Jawaban dari AI ('+fmt(s.hitung.jawaban)+') tidak cocok dengan hitungannya, jadi diganti dengan hasil hitungan aplikasi: '+fmt(v)+'.');
+      s.hitung.jawaban=v;}
+  }
+  if(s.variasi.length||s.hitung.angka)s.hitung.jawaban=null;
+  var errs=check(s);
+  if(!errs.length){
+    for(var k=0;k<6;k++){var inst=instanceOf(s);if(!Number.isFinite(inst.hitung.jawaban)){errs.push('Jawaban tidak bisa dihitung untuk salah satu variasi angka.');break;}
+      if(Math.abs(inst.hitung.jawaban*100-Math.round(inst.hitung.jawaban*100))>1e-6){errs.push('Ada variasi angka yang jawabannya tidak bersih ('+fmt(inst.hitung.jawaban)+'). Atur variasi supaya jawaban paling banyak 2 angka desimal.');break;}}
+  }
+  return {s:s,errs:errs,note:note,added:false};
+}
+function aiAsk(text,auto){
+  if(aiBusy)return;
+  aiErr=null;aiBusy=true;
+  aiChat.push({role:'user',content:text,auto:!!auto});
+  render();
+  var pesan=aiChat.slice(-8).map(function(m){return {role:m.role,content:m.content};});
+  apiCall('/ai',{kode:activeKode||'UTAMA',pin:adminPin||'',pesan:pesan,konteks:aiKonteks()}).then(function(res){
+    aiBusy=false;
+    if(!res.ok){aiErr=res.status===0?'Tidak ada internet. Coba lagi setelah tersambung.':((res.j&&res.j.pesan)||'AI belum bisa menjawab. Coba lagi.');
+      if(res.status===401){adminOK=false;loginErr='PIN sudah berubah. Masuk lagi dengan PIN terbaru.';}
+      render();return;}
+    if(typeof res.j.sisa==='number')aiSisa=res.j.sisa;
+    var ex=aiExtract(res.j.balasan),msg={role:'assistant',content:res.j.balasan,teks:ex.teks,soal:(ex.list||[]).slice(0,3).map(aiCheck),rusak:ex.rusak};
+    aiChat.push(msg);
+    var bad=msg.soal.filter(function(x){return x.errs.length;});
+    if(!auto&&(ex.rusak||bad.length)){
+      var why=ex.rusak?['Blok JSON tidak bisa dibaca. Pastikan JSON valid tanpa komentar.']:[];
+      bad.forEach(function(x){why=why.concat(x.errs.map(function(e){return '"'+(x.s.judul||'soal')+'": '+e;}));});
+      msg.memperbaiki=true;render();
+      aiAsk('Soal belum lolos pemeriksaan aplikasi:\n- '+why.slice(0,12).join('\n- ')+'\nPerbaiki semua poin itu dan kirim ulang JSON lengkap.',true);
+      return;}
+    render();
+  });
+}
+function aiSoalHtml(x,mi,si){
+  var s=x.s,ok=!x.errs.length,inst=ok?instanceOf(s):s,f=s.rumus.filter(function(r){return r.benar;})[0];
+  var h='<div class="ai-soal'+(ok?'':' bad')+'"><div class="mh"><b>'+esc(s.judul||'Tanpa judul')+'</b><span class="pill">'+esc(s.topik||'-')+'</span></div>'
+    +'<p class="ai-cerita">'+esc(inst.cerita)+'</p>'
+    +'<p class="mut" style="margin:6px 0 0">Rumus: <b class="mono">'+esc(f?f.f:'-')+'</b>'+(ok?' · Contoh jawaban: <b>'+fmt(inst.hitung.jawaban)+' '+esc(s.hitung.satuan)+'</b>':'')+(s.variasi.length?' · angka berubah tiap dibuka':'')+'</p>';
+  if(s.pengecoh.length)h+='<p class="mut" style="margin:4px 0 0">Pengecoh: '+s.pengecoh.map(function(d){return esc(d.teks);}).join(', ')+'</p>';
+  x.note.forEach(function(n){h+=msgHtml({t:'info',x:n});});
+  if(!ok)h+='<div class="fb bad" role="status"><b>Belum lolos pemeriksaan</b><ul class="ai-err">'+x.errs.slice(0,6).map(function(e){return '<li>'+esc(e)+'</li>';}).join('')+'</ul></div>'
+    +'<div class="row"><button class="btn sm" data-act="ai-fix" data-v="'+mi+':'+si+'">Minta AI memperbaiki</button><button class="btn ghost sm" data-act="ai-edit" data-v="'+mi+':'+si+'">Perbaiki sendiri di formulir</button></div>';
+  else if(x.added)h+='<div class="row"><span class="pill hot">Sudah ditambahkan</span></div>';
+  else h+='<div class="row"><button class="btn sm" data-act="ai-add-kirim" data-v="'+mi+':'+si+'"'+(sending?' disabled':'')+'>Tambahkan &amp; kirim ke siswa</button><button class="btn ghost sm" data-act="ai-try" data-v="'+mi+':'+si+'">Coba soal ini</button><button class="btn ghost sm" data-act="ai-add" data-v="'+mi+':'+si+'">Tambahkan saja</button><button class="btn ghost sm" data-act="ai-edit" data-v="'+mi+':'+si+'">Ubah dulu</button></div>';
+  return h+'</div>';
+}
+function aiHtml(){
+  var h='<section class="card"><div class="sh"><h2>Buat soal dengan AI</h2>'+(aiSisa!=null?'<span class="stt">sisa '+aiSisa+' hari ini</span>':'')+'</div>'
+    +'<p class="mut">Ceritakan soal yang kamu mau, seperti mengobrol. AI sudah paham cara kerja aplikasi, materi kelas 9, dan soal yang sudah ada. Setiap soal diperiksa dan dihitung ulang oleh aplikasi sebelum kamu tambahkan.</p></section>';
+  var vis=aiChat.filter(function(m){return !m.auto;});
+  if(!aiChat.length){
+    h+='<p class="lbl" style="margin-top:14px">Contoh permintaan</p><div class="ai-saran">'+AISARAN.map(function(t,i){return '<button class="chip" data-act="ai-saran" data-v="'+i+'">'+esc(t)+'</button>';}).join('')+'</div>';
+  }
+  h+='<div class="ai-chat">';
+  aiChat.forEach(function(m,mi){
+    if(m.role==='user'){if(!m.auto)h+='<div class="ai-msg me"><p>'+esc(m.content).replace(/\n/g,'<br>')+'</p></div>';return;}
+    if(m.memperbaiki)return;
+    h+='<div class="ai-msg ai">'+(m.teks?'<p>'+esc(m.teks).replace(/\n/g,'<br>')+'</p>':'')
+      +(m.rusak?msgHtml({t:'bad',x:'Balasan AI tidak bisa dibaca sebagai soal. Coba minta lagi.'}):'')
+      +m.soal.map(function(x,si){return aiSoalHtml(x,mi,si);}).join('')+'</div>';
+  });
+  if(aiBusy)h+='<div class="ai-msg ai"><p class="mut">'+(aiChat.length&&aiChat[aiChat.length-1].auto?'Memperbaiki soal supaya lolos pemeriksaan…':'AI sedang menyusun soal… (biasanya 10–40 detik)')+'</p></div>';
+  h+='</div>'+(aiErr?msgHtml({t:'bad',x:aiErr}):'');
+  h+='<div class="ai-in"><textarea class="in" id="ai-in" rows="3" placeholder="Contoh: buatkan soal paralel dua lampu, tingkat sedang, tanpa pengecoh">'+esc(aiInput)+'</textarea>'
+    +'<div class="row"><button class="btn" data-act="ai-send" data-fk="ai-send"'+(aiBusy?' disabled':'')+'>Kirim</button>'
+    +(aiChat.length?'<button class="btn ghost" data-act="ai-reset" data-fk="ai-reset"'+(aiBusy?' disabled':'')+'>Mulai obrolan baru</button>':'')+'</div></div>';
+  return h;
+}
+function aiPick(v){var p=String(v).split(':'),m=aiChat[+p[0]];return m&&m.soal?m.soal[+p[1]]:null;}
+function aiAddOne(x){if(!x||x.added||x.errs.length)return false;var s=JSON.parse(JSON.stringify(x.s));s.id=freshId();data.push(s);x.added=true;persist();return true;}
+var AIACT={
+  'ai-saran':function(v){aiInput=AISARAN[+v]||'';fk='ai-send';},
+  'ai-send':function(){var t=aiInput.trim();if(!t){aiErr='Tulis dulu soal yang kamu mau.';return;}aiInput='';aiAsk(t,false);return 'async';},
+  'ai-reset':function(){aiChat=[];aiErr=null;aiInput='';},
+  'ai-fix':function(v){var x=aiPick(v);if(!x)return;aiAsk('Soal "'+(x.s.judul||'')+'" belum lolos pemeriksaan aplikasi:\n- '+x.errs.slice(0,10).join('\n- ')+'\nPerbaiki dan kirim ulang JSON lengkap.',false);return 'async';},
+  'ai-try':function(v){var x=aiPick(v);if(!x)return;startPlay('__prev',JSON.parse(JSON.stringify(x.s)));previewFrom='ai';window.scrollTo(0,0);fk=null;},
+  'ai-edit':function(v){var x=aiPick(v);if(!x)return;D=toDraft(x.s);editId=null;formErr=x.errs.length?x.errs:null;adminTab='edit';fk=null;window.scrollTo(0,0);},
+  'ai-add':function(v){if(aiAddOne(aiPick(v)))notice={t:'ok',x:'Soal ditambahkan. Ketuk Kirim ke siswa kalau sudah siap.'};},
+  'ai-add-kirim':function(v){if(aiAddOne(aiPick(v))){kirimNow();return 'async';}}
+};
 var kk={kode:'',nama:'',pin:'',pin2:''},kelasData=null,kelasBusy=false,kelasMsg=null,kelasPinFor=null;
 function kelasLoad(){
   kelasBusy=true;
@@ -1907,6 +2038,7 @@ function adminHtml(){
   var h=toolbar()+(adminTab==='edit'||adminTab==='tampil'?'':kirimHtml())+noticeHtml();
   if(adminTab==='edit')return h+formHtml();
   if(adminTab==='kelas')return h+kelasHtml();
+  if(adminTab==='ai')return h+aiHtml();
   if(adminTab==='import')return h+importHtml();
   if(adminTab==='export')return h+exportHtml();
   if(adminTab==='set')return h+setHtml();
@@ -2023,20 +2155,11 @@ document.addEventListener('click',function(e){
         render();});
       return;}
     if(pinOk(pin)){adminOK=true;loginErr=false;fk=null;}else{loginErr=true;fk='login';}}
-  else if(a==='a-kirim'){if(sending||!apiBase())return;sending=true;notice=null;render();
-    var kd=activeKode;
-    apiCall('/simpan',{kode:kd||'UTAMA',pin:adminPin||'',soal:data,kunci:kunci}).then(function(res){sending=false;
-      if(res.ok){var bk={kode:kd,rev:res.j.rev,nama:bankInfo?bankInfo.nama:'',kunci:kunci.slice(),soal:data};store.set(BANKKEY,JSON.stringify(bk));store.del(KEY);
-        dataRev=res.j.rev;source=kd?'kelas':'server';bankInfo={kode:kd,nama:bk.nama,rev:bk.rev};
-        notice={t:'ok',x:'Terkirim. Siswa mendapat soal terbaru saat membuka aplikasi dengan internet.'};}
-      else if(res.status===0)notice={t:'bad',x:'Tidak ada internet. Perubahan tetap tersimpan di HP ini. Coba kirim lagi nanti.'};
-      else if(res.status===401){adminOK=false;loginErr='PIN sudah berubah. Masuk lagi dengan PIN terbaru, lalu kirim lagi.';view='admin';notice=null;}
-      else notice={t:'bad',x:(res.j&&res.j.pesan)||'Gagal mengirim. Coba lagi.'};
-      render();});
-    return;}
+  else if(a==='a-kirim'){kirimNow();return;}
   else if(a==='a-out'){adminOK=false;adminPin=null;adminRole=null;view='home';}
   else if(a==='a-tab'){adminTab=v;confirmKey=null;D=null;editId=null;formErr=null;if(v==='kelas'){kelasData=null;kelasPinFor=null;kelasMsg=null;kelasLoad();}}
   else if(Object.prototype.hasOwnProperty.call(KACT,a)){if(KACT[a](v)==='async')return;}
+  else if(Object.prototype.hasOwnProperty.call(AIACT,a)){if(AIACT[a](v)==='async')return;}
   else if(a==='a-kunci'){var ki=kunci.indexOf(v);if(ki>=0)kunci.splice(ki,1);else kunci.push(v);var okk=persist();notice={t:okk?'ok':'bad',x:(ki>=0?v+' dibuka':v+' dikunci')+' di HP ini. '+sendHint()};}
   else if(a==='a-new'){D=blank();editId=null;formErr=null;adminTab='edit';fk=null;}
   else if(a==='a-edit'){var s0=data.find(function(s){return s.id===v;});D=toDraft(s0);editId=v;formErr=null;adminTab='edit';fk=null;window.scrollTo(0,0);}
@@ -2068,7 +2191,7 @@ document.addEventListener('click',function(e){
     else{formErr=null;sp.id='__prev';startPlay('__prev',sp);previewFrom='edit';window.scrollTo(0,0);fk=null;}
   }
   else if(a==='a-try'){startPlay('__prev',data.find(function(s){return s.id===v;}));previewFrom='list';window.scrollTo(0,0);fk=null;}
-  else if(a==='a-back'){view='admin';adminTab=previewFrom==='edit'?'edit':'list';previewFrom=null;fk=null;}
+  else if(a==='a-back'){view='admin';adminTab=previewFrom==='edit'?'edit':(previewFrom==='ai'?'ai':'list');previewFrom=null;fk=null;}
   else if(a==='a-copy')copyExport();
   else if(a==='a-download')download();
   else if(a==='a-imp')doImport();
@@ -2094,6 +2217,7 @@ document.addEventListener('input',function(e){
   else if(t.id==='imp'){impText=t.value;confirmKey=null;}
   else if(t.id==='kv'&&konv){konv.input=t.value;}
   else if(t.id==='kr-text'&&karang){karang.text=t.value;}
+  else if(t.id==='ai-in'){aiInput=t.value;}
   else if(t.id==='kk-kode'){kk.kode=t.value;}else if(t.id==='kk-nama'){kk.nama=t.value;}else if(t.id==='kk-pin'){kk.pin=t.value;}else if(t.id==='kk-pin2'){kk.pin2=t.value;}
   else if(t.id==='kd'){kdInput=t.value;kdMsg=null;}
   else if(t.id==='kr-ans'&&karang){karang.ans=t.value;}
