@@ -592,25 +592,62 @@ var tingkat=(function(){var v=store.get('cjs.tingkat');return ['mudah','menengah
 var kelasSel=(function(){var v=store.get('cjs.kelas');return ['7','8','9'].indexOf(v)>=0?v:'9';})();
 
 var kunci=[],dataRev=0;
+/* ---------- Server soal (Cloudflare) ---------- */
+var API_URL="https://taktik-api.taktik-ipa.workers.dev",apiFile='',BANKKEY='cjs.bank',KODEKEY='cjs.kode';
+var kodeKelas=String(store.get(KODEKEY)||'').toUpperCase(),activeKode='',bankInfo=null,kodeErr=null,lastLoad=0;
+var adminPin=null,adminRole=null,sending=false,loginBusy=false;
+function apiBase(){var u=(API_URL.indexOf('__')<0?API_URL:'')||apiFile;return u?u.replace(/\/+$/,''):'';}
+function readApi(j){if(j&&!Array.isArray(j)&&typeof j.api==='string'&&/^https:\/\/[^\s"'<>]+$/.test(j.api))apiFile=j.api;}
+function normKode(v){return String(v==null?'':v).trim().toUpperCase().replace(/\s+/g,'-');}
+function kodeOk(v){return /^[A-Z0-9-]{3,20}$/.test(v)&&v!=='UTAMA';}
+function apiCall(path,body){
+  var o={method:body?'POST':'GET',cache:'no-store'};
+  if(body){o.headers={'Content-Type':'application/json'};o.body=JSON.stringify(body);}
+  var ctl=null;try{ctl=new AbortController();o.signal=ctl.signal;}catch(e){}
+  var tm=ctl?setTimeout(function(){try{ctl.abort();}catch(e){}},15000):0;
+  return fetch(apiBase()+path,o).then(function(r){clearTimeout(tm);return r.json().catch(function(){return null;}).then(function(j){return {ok:r.ok&&!!j,status:r.status,j:j};});},
+    function(){clearTimeout(tm);return {ok:false,status:0,j:null};});
+}
+function sendHint(){return apiBase()?'Ketuk Kirim ke siswa supaya berlaku di HP siswa.':'Upload soal.json lewat Ekspor supaya berlaku di HP siswa.';}
+function bankLabel(){return activeKode?'Kelas '+activeKode+(bankInfo&&bankInfo.nama?' · '+bankInfo.nama:''):'Soal utama';}
 function readMeta(j){if(!j||Array.isArray(j))return;kunci=Array.isArray(j.kunci)?j.kunci.filter(function(x){return typeof x==='string';}):[];dataRev=+j.rev||0;}
 function isLocked(t){return kunci.indexOf(t)>=0;}
 function persist(){
   dataRev=Date.now();
-  var ok=store.set(KEY,JSON.stringify({versi:1,rev:dataRev,kunci:kunci,soal:data}));
+  var ok=store.set(KEY,JSON.stringify({versi:1,rev:dataRev,kode:activeKode,kunci:kunci,soal:data}));
   if(ok)source='perangkat';
   return ok;
 }
 function saveDone(){store.set(DONEKEY,JSON.stringify(done));}
 function readList(j){var l=Array.isArray(j)?j:(j&&Array.isArray(j.soal)?j.soal:null);return l?l.map(norm):null;}
 async function load(skipLocal){
-  var list=null,seed=null,file=null,local=null;
-  try{seed=JSON.parse($('#seed').textContent);readPin(seed);}catch(e){seed=null;}
-  try{var r=await fetch('soal.json',{cache:'no-cache'});if(r.ok){file=await r.json();readPin(file);}}catch(e){file=null;}
+  var list=null,seed=null,file=null,local=null,bank=null;
+  try{seed=JSON.parse($('#seed').textContent);readPin(seed);readApi(seed);}catch(e){seed=null;}
+  try{var r=await fetch('soal.json',{cache:'no-cache'});if(r.ok){file=await r.json();readPin(file);readApi(file);}}catch(e){file=null;}
+  kodeErr=null;bankInfo=null;activeKode=kodeKelas;lastLoad=Date.now();
+  if(apiBase()){
+    var getBank=async function(k){
+      var res=await apiCall('/bank?kode='+encodeURIComponent(k||'UTAMA'));
+      if(res.ok&&Array.isArray(res.j.soal)){var bk=res.j;bk.kode=k;store.set(BANKKEY,JSON.stringify(bk));return {b:bk};}
+      var c=jget(BANKKEY,null);
+      if(res.status===404){if(c&&c.kode===k)store.del(BANKKEY);return {hilang:true};}
+      return {b:(c&&c.kode===k&&Array.isArray(c.soal))?c:null};
+    };
+    var g=await getBank(activeKode);
+    if(g.hilang&&activeKode){kodeErr='Kode kelas '+activeKode+' tidak ditemukan. Sekarang memakai soal utama.';activeKode='';g=await getBank('');}
+    bank=g.b;
+  }
+  var remote=null,remoteSrc=null;
+  if(bank){bankInfo={kode:activeKode,nama:bank.nama||'',rev:+bank.rev||0};
+    if(activeKode||!file||Array.isArray(file)||(+bank.rev||0)>=(+file.rev||0)){remote=bank;remoteSrc=activeKode?'kelas':'server';}}
+  var base=remote||(file&&!Array.isArray(file)?file:null);
   if(!skipLocal){var raw=store.get(KEY);if(raw){try{local=JSON.parse(raw);}catch(e){local=null;}}}
-  /* salinan di HP ini hanya dipakai kalau lebih baru daripada soal.json */
-  if(local&&file&&!Array.isArray(file)&&(+file.rev||0)>=(+local.rev||0)){store.del(KEY);local=null;}
+  /* ubahan di HP ini milik bank lain: abaikan, jangan dihapus */
+  if(local&&String(local.kode||'')!==activeKode)local=null;
+  /* salinan di HP ini hanya dipakai kalau lebih baru daripada sumber online */
+  if(local&&base&&(+base.rev||0)>=(+local.rev||0)){store.del(KEY);local=null;}
   var pick=function(j,src){if(list||!j)return;var l=readList(j);if(l){list=l;source=src;readMeta(j);}};
-  pick(local,'perangkat');pick(file,'soal.json');pick(seed,'bawaan');
+  pick(local,'perangkat');pick(remote,remoteSrc);pick(file,'soal.json');pick(seed,'bawaan');
   data=list||[];
 }
 function newState(p){
@@ -703,6 +740,7 @@ function startPlay(id,s){
 }
 
 /* ---------- Tampilan umum ---------- */
+function msgHtml(m){return m?'<div class="fb '+m.t+'" role="status" aria-live="polite">'+esc(m.x)+'</div>':'';}
 function fbHtml(m){
   if(!m)return '';
   var lab={ok:'Tepat',bad:'Belum cocok',info:'Petunjuk'}[m.t];
@@ -814,7 +852,7 @@ function homeHtml(){
   if(all.length){
     var groups=[],map={};
     all.forEach(function(s){if(!map[s.topik]){map[s.topik]=[];groups.push(s.topik);}map[s.topik].push(s);});
-    h+='<h2 class="sec">Pilih materi</h2>'+(toast?'<div class="fb info toast" role="status">'+esc(toast)+'</div>':'')
+    h+=(kodeErr?'<div class="fb info" role="status">'+esc(kodeErr)+'</div>':'')+'<h2 class="sec">Pilih materi</h2>'+(toast?'<div class="fb info toast" role="status">'+esc(toast)+'</div>':'')
       +'<div class="mats">'+groups.map(function(g){return matCard(g,map[g]);}).join('')+'</div>';
   }
   var nw=weakList().length,qi=function(v,t,sm,badge){return '<button class="item" data-act="go" data-v="'+v+'" data-fk="go-'+v+'"><span class="ti">'+ICON[v]+'</span><span class="it"><b>'+t+'</b><small>'+sm+'</small></span>'+(badge?'<span class="pill hot">'+badge+'</span>':'')+'<span class="chev">'+ICON.chev+'</span></button>';};
@@ -962,6 +1000,7 @@ function reportText(){
   var nd=kelasList().filter(function(s){return done[s.id];}),L=[],top=topLog(5);
   L.push('Laporan latihan TakTik IPA');
   L.push('Nama: '+(siswa.nama||'-')+(siswa.kelas?' ('+siswa.kelas+')':''));
+  if(activeKode)L.push('Kode kelas: '+activeKode);
   L.push('Tanggal: '+new Date().toLocaleDateString('id-ID'));
   L.push('Tingkat: '+TL[tingkat]+' · lancar berturut-turut: '+streak);
   L.push('Soal selesai: '+nd.length+' dari '+kelasList().length);
@@ -1361,6 +1400,15 @@ function aturHtml(){
     +'<label class="f"><span>Nama</span><input class="in" id="nm" value="'+esc(siswa.nama)+'" autocomplete="name"></label>'
     +'<label class="f"><span>Kelas</span><input class="in" id="kl" value="'+esc(siswa.kelas)+'" placeholder="9A" autocomplete="off"></label></div>'
     +'<p class="mut" style="margin:0">Nama dipakai untuk sapaan dan laporan ke guru.</p></section>';
+  if(apiBase()){
+    h+='<section class="card"><div class="sh"><h2>Kode kelas</h2></div>'
+      +'<p class="mut" style="margin:0 0 10px">Soal yang dipakai: <b>'+esc(bankLabel())+'</b></p>'
+      +'<label class="f"><span>Kode dari guru</span><input class="in" id="kd" value="'+esc(kdInput)+'" placeholder="Contoh: BUSARI-9A" autocapitalize="characters" autocomplete="off" spellcheck="false"></label>'
+      +'<div class="row"><button class="btn" data-act="kd-set" data-fk="kd-set"'+(kdBusy?' disabled':'')+'>'+(kdBusy?'Memeriksa…':'Pakai kode')+'</button>'
+      +(kodeKelas?'<button class="btn ghost" data-act="kd-clear" data-fk="kd-clear">Kembali ke soal utama</button>':'')+'</div>'
+      +(kdMsg?msgHtml(kdMsg):(kodeErr?msgHtml({t:'bad',x:kodeErr}):''))
+      +'<p class="mut" style="margin:10px 0 0">Tidak punya kode? Biarkan kosong, kamu tetap memakai soal utama.</p></section>';
+  }
   h+='<section class="card"><div class="sh"><h2>Tampilan</h2></div><p class="lbl">Tema</p>'+chipsHtml([['auto','Ikuti HP'],['light','Terang'],['dark','Gelap']],mode,'set-tema')
     +'<p class="lbl">Ukuran teks</p>'+chipsHtml([['normal','Normal'],['besar','Besar']],fsBig?'besar':'normal','set-teks')+'</section>';
   h+='<section class="card"><div class="sh"><h2>Bantuan</h2></div><div class="list">'
@@ -1404,6 +1452,28 @@ function shareSoal(){
   }catch(e){notice={t:'info',x:'Bagikan berkas tidak didukung di sini. Pakai Unduh soal.json.'};}
 }
 
+
+/* ---------- Kode kelas siswa ---------- */
+var kdInput=kodeKelas,kdMsg=null,kdBusy=false,KDACT={};
+KDACT['kd-set']=function(){
+  var v=normKode(kdInput);
+  if(!kodeOk(v)){kdMsg={t:'bad',x:'Kode kelas 3–20 karakter, hanya huruf, angka, dan tanda hubung.'};return;}
+  kdBusy=true;kdMsg=null;render();
+  apiCall('/bank?kode='+encodeURIComponent(v)).then(function(res){
+    if(res.ok){kodeKelas=v;kdInput=v;store.set(KODEKEY,v);adminOK=false;adminPin=null;
+      return load(false).then(function(){kdBusy=false;kdMsg={t:'ok',x:'Sekarang memakai soal '+bankLabel()+'.'};render();});}
+    kdBusy=false;kdMsg={t:'bad',x:res.status===404?'Kode kelas tidak ditemukan. Periksa lagi ke gurumu.':(res.status===0?'Tidak ada internet. Sambungkan internet lalu coba lagi.':'Kode belum bisa diperiksa. Coba lagi.')};render();});
+  return 'async';
+};
+KDACT['kd-clear']=function(){
+  kodeKelas='';kdInput='';store.del(KODEKEY);adminOK=false;adminPin=null;kdMsg=null;
+  load(false).then(function(){kdMsg={t:'ok',x:'Sekarang memakai soal utama.'};render();});
+};
+/* buka lagi aplikasi: cek soal terbaru dari server */
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState!=='visible'||!apiBase()||adminOK||view!=='home'||Date.now()-lastLoad<120000)return;
+  load(false).then(function(){if(view==='home')render();});
+});
 
 /* ---------- Pesan singkat (materi terkunci) ---------- */
 var toast=null,toastT=0;
@@ -1643,20 +1713,30 @@ var TOOLACT={
 
 /* ---------- Admin ---------- */
 function loginHtml(){
-  return '<section class="card"><div class="sh"><h2>Masuk mode guru</h2></div><p class="mut">Masukkan PIN.</p>'
+  var ctx=apiBase()?'<p class="mut" style="margin:0">Masuk ke: <b>'+esc(bankLabel())+'</b></p>'+(activeKode?'':'<p class="mut" style="margin:6px 0 0">Guru kelas: isi dulu kode kelas di Pengaturan, lalu masuk dengan PIN guru.</p>'):'';
+  return '<section class="card"><div class="sh"><h2>Masuk mode guru</h2></div><p class="mut">Masukkan PIN.</p>'+ctx
     +'<label class="f"><span>PIN</span><input class="in" id="pin" type="password" inputmode="numeric" autocomplete="off" style="max-width:12em"></label>'
-    +(loginErr?'<div class="fb bad" role="status">PIN salah. Coba lagi.</div>':'')
-    +'<div class="row"><button class="btn" data-act="a-login" data-fk="login">Masuk</button><button class="btn ghost" data-act="home">Batal</button></div></section>';
+    +(loginErr?'<div class="fb bad" role="status">'+esc(typeof loginErr==='string'?loginErr:'PIN salah. Coba lagi.')+'</div>':'')
+    +'<div class="row"><button class="btn" data-act="a-login" data-fk="login"'+(loginBusy?' disabled':'')+'>'+(loginBusy?'Memeriksa…':'Masuk')+'</button><button class="btn ghost" data-act="home">Batal</button></div></section>';
 }
 function toolbar(){
   var t=function(id,l){return '<button class="btn ghost sm" data-act="a-tab" data-v="'+id+'" data-fk="tb-'+id+'"'+(adminTab===id?' aria-current="page"':'')+' role="tab">'+l+'</button>';};
-  return '<div class="tabs" role="tablist">'+t('list','Daftar soal')+t('tampil','Tampil di kelas')+t('import','Impor')+t('export','Ekspor')+t('set','Pengaturan')+'</div>';
+  return '<div class="tabs" role="tablist">'+t('list','Daftar soal')+t('tampil','Tampil di kelas')+(apiBase()&&adminRole==='utama'&&!activeKode?t('kelas','Kelas'):'')+t('import','Impor')+t('export',apiBase()?'Cadangan':'Ekspor')+t('set','Pengaturan')+'</div>';
 }
-function srcLabel(){return {perangkat:'perangkat ini (sudah diubah)','soal.json':'berkas soal.json',bawaan:'soal bawaan aplikasi'}[source];}
+function srcLabel(){return {perangkat:'perangkat ini (belum dikirim)','soal.json':'berkas soal.json',bawaan:'soal bawaan aplikasi',server:'server (soal utama)',kelas:'server (kelas '+activeKode+')'}[source];}
+function kirimHtml(){
+  if(!apiBase())return '';
+  var head='<p class="mut" style="margin:10px 0 0">Mengelola: <b>'+esc(bankLabel())+'</b></p>',msg=null;
+  if(source==='perangkat')msg='<b>Belum dikirim</b>Ada perubahan yang baru tersimpan di HP ini.';
+  else if(source!=='server'&&source!=='kelas')msg='<b>Belum ada di server</b>Kirim soal ini sekali supaya semua siswa memakainya.';
+  if(!msg)return head;
+  return head+'<div class="fb info" role="status">'+msg+'<div class="row" style="margin-top:8px"><button class="btn sm" data-act="a-kirim" data-fk="kirim"'+(sending?' disabled':'')+'>'+(sending?'Mengirim…':'Kirim ke siswa')+'</button></div></div>';
+}
 function listHtml(){
   var h='<div class="row"><button class="btn" data-act="a-new" data-fk="new">+ Tambah soal</button></div>';
   h+='<p class="mut" style="margin-top:12px">'+data.length+' soal · sumber data: '+srcLabel()+'</p>';
-  if(source==='perangkat')h+='<div class="fb info" role="status"><b>Belum terkirim</b>Ada perubahan soal yang baru tersimpan di HP ini. Buka <b>Ekspor</b> untuk mengirimnya ke siswa.</div>';
+  if(apiBase()){}
+  else if(source==='perangkat')h+='<div class="fb info" role="status"><b>Belum terkirim</b>Ada perubahan soal yang baru tersimpan di HP ini. Buka <b>Ekspor</b> untuk mengirimnya ke siswa.</div>';
   else if(pinHash!==(filePin||DEFPINHASH))h+='<div class="fb info" role="status"><b>Belum terkirim</b>PIN baru baru berlaku di HP ini. Buka <b>Ekspor</b>, lalu upload soal.json supaya PIN berlaku di semua HP.</div>';
   if(!data.length)h+='<div class="card"><p class="mut">Belum ada soal.</p></div>';
   h+='<div class="list">'+data.map(function(s,i){
@@ -1738,9 +1818,9 @@ function formHtml(){
 }
 function jsonText(){var o={versi:1,rev:Date.now(),kunci:kunci,soal:data};if(pinHash!==DEFPINHASH||filePin){o.pin=pinHash;o.pinAt=pinAt;}return JSON.stringify(o,null,2);}
 function exportHtml(){
-  return '<section class="card"><div class="sh"><h2>Kirim soal ke siswa</h2></div>'
-    +'<ol class="guide"><li>Ketuk <b>Unduh soal.json</b>.</li><li>Buka repositori di GitHub, lalu <b>Add file → Upload files</b>, pilih berkas itu, lalu <b>Commit changes</b>.</li>'
-    +'<li>Pastikan namanya tepat <code>soal.json</code>. Kalau HP menamainya <code>soal (1).json</code>, ganti namanya dulu.</li><li>Tunggu 2–3 menit. Siswa mendapat soal terbaru saat membuka aplikasi.</li></ol>'
+  return '<section class="card"><div class="sh"><h2>'+(apiBase()?'Cadangan soal':'Kirim soal ke siswa')+'</h2></div>'
+    +(apiBase()?'<p class="mut">Simpan salinan semua soal sebagai berkas, untuk cadangan atau dipindah ke tempat lain. Untuk mengirim ke siswa, pakai tombol <b>Kirim ke siswa</b>.</p>':'<ol class="guide"><li>Ketuk <b>Unduh soal.json</b>.</li><li>Buka repositori di GitHub, lalu <b>Add file → Upload files</b>, pilih berkas itu, lalu <b>Commit changes</b>.</li>'
+    +'<li>Pastikan namanya tepat <code>soal.json</code>. Kalau HP menamainya <code>soal (1).json</code>, ganti namanya dulu.</li><li>Tunggu 2–3 menit. Siswa mendapat soal terbaru saat membuka aplikasi.</li></ol>')
     +'<div class="row"><button class="btn" data-act="a-download" data-fk="dl">Unduh soal.json</button>'
     +(canShareFile()?'<button class="btn ghost" data-act="a-share" data-fk="share">Bagikan berkas</button>':'')
     +'<button class="btn ghost" data-act="a-copy" data-fk="copy">Salin teks</button></div>'
@@ -1758,19 +1838,75 @@ function importHtml(){
 }
 function setHtml(){
   var tops=[];data.forEach(function(s){if(s.topik&&tops.indexOf(s.topik)<0)tops.push(s.topik);});
-  var h='<section class="card"><div class="sh"><h2>Kunci materi</h2></div><p class="mut">Materi yang dikunci tidak bisa dibuka siswa. Setelah mengubah, buka <b>Ekspor</b> lalu upload soal.json supaya berlaku di HP siswa.</p><div class="list">'
+  var h='<section class="card"><div class="sh"><h2>Kunci materi</h2></div><p class="mut">Materi yang dikunci tidak bisa dibuka siswa. '+esc(sendHint())+'</p><div class="list">'
     +tops.map(function(t){var L=isLocked(t);return '<button class="item" data-act="a-kunci" data-v="'+esc(t)+'" data-fk="kunci-'+esc(t)+'" aria-pressed="'+L+'"><span class="ti">'+(L?ICON.lock:ICON.unlock)+'</span><span class="it"><b>'+esc(t)+'</b><small>'+(L?'Terkunci. Ketuk untuk membuka.':'Terbuka. Ketuk untuk mengunci.')+'</small></span></button>';}).join('')+'</div></section>';
-  h+='<section class="card"><div class="sh"><h2>Ganti PIN</h2></div><label class="f"><span>PIN baru <small>minimal 4 karakter</small></span><input class="in" id="pin1" type="password" inputmode="numeric" autocomplete="off" style="max-width:12em"></label><div class="row"><button class="btn" data-act="a-pin" data-fk="pin">Simpan PIN</button></div>'
-    +'<p class="mut" style="margin-top:10px">PIN disimpan dalam bentuk tersandi di soal.json. Setelah mengganti PIN, buka <b>Ekspor</b> lalu upload soal.json supaya PIN baru berlaku di semua HP. PIN adalah kunci ringan untuk mode guru, bukan pengaman data.</p></section>';
-  h+='<section class="card"><div class="sh"><h2>Data di perangkat ini</h2></div><p class="mut">Soal yang kamu ubah tersimpan di peramban perangkat ini. Buang ubahan untuk kembali ke soal.json atau soal bawaan.</p>';
+  h+='<section class="card"><div class="sh"><h2>'+(apiBase()&&activeKode?'Ganti PIN kelas '+esc(activeKode):'Ganti PIN')+'</h2></div><label class="f"><span>PIN baru <small>minimal 4 karakter</small></span><input class="in" id="pin1" type="password" inputmode="numeric" autocomplete="off" style="max-width:12em"></label><div class="row"><button class="btn" data-act="a-pin" data-fk="pin">Simpan PIN</button></div>'
+    +(apiBase()?'<p class="mut" style="margin-top:10px">PIN disimpan di server dan langsung berlaku di semua HP.</p></section>':'<p class="mut" style="margin-top:10px">PIN disimpan dalam bentuk tersandi di soal.json. Setelah mengganti PIN, buka <b>Ekspor</b> lalu upload soal.json supaya PIN baru berlaku di semua HP. PIN adalah kunci ringan untuk mode guru, bukan pengaman data.</p></section>');
+  h+='<section class="card"><div class="sh"><h2>Data di perangkat ini</h2></div><p class="mut">'+(apiBase()?'Soal yang belum dikirim tersimpan di HP ini. Buang ubahan untuk kembali ke soal yang terakhir dikirim.':'Soal yang kamu ubah tersimpan di peramban perangkat ini. Buang ubahan untuk kembali ke soal.json atau soal bawaan.')+'</p>';
   if(confirmKey==='reset')h+='<div class="fb bad" role="status"><b>Yakin?</b>Semua ubahan di perangkat ini hilang. Ekspor dulu kalau perlu.</div><div class="row"><button class="btn danger" data-act="a-reset-yes" data-fk="reset">Ya, buang ubahan</button><button class="btn ghost" data-act="a-cancel" data-fk="cancel">Batal</button></div>';
   else h+='<div class="row"><button class="btn ghost" data-act="a-reset" data-fk="reset">Buang ubahan di perangkat ini</button><button class="btn ghost" data-act="a-clear-done" data-fk="cleardone">Hapus catatan selesai siswa</button></div>';
   return h+'</section>';
 }
+var kk={kode:'',nama:'',pin:'',pin2:''},kelasData=null,kelasBusy=false,kelasMsg=null,kelasPinFor=null;
+function kelasLoad(){
+  kelasBusy=true;
+  apiCall('/kelas/daftar',{pin:adminPin||''}).then(function(res){kelasBusy=false;
+    if(res.ok)kelasData=res.j.kelas||[];else{kelasData=kelasData||[];kelasMsg={t:'bad',x:res.status===0?'Tidak ada internet. Daftar kelas belum bisa dimuat.':((res.j&&res.j.pesan)||'Daftar kelas belum bisa dimuat.')};}
+    if(view==='admin'&&adminTab==='kelas')render();});
+}
+function tglPendek(t){if(!t)return '-';try{return new Date(t).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});}catch(e){return '-';}}
+function kelasHtml(){
+  var h='<section class="card"><div class="sh"><h2>Buat kelas baru</h2></div>'
+    +'<p class="mut">Soal kelas baru disalin dari soal utama yang sedang terbuka ('+data.length+' soal). Setelah itu guru kelas bebas mengubahnya tanpa mengganggu soal utama.</p>'
+    +'<div class="grid2"><label class="f"><span>Kode kelas <small>huruf, angka, tanda hubung</small></span><input class="in" id="kk-kode" value="'+esc(kk.kode)+'" placeholder="BUSARI-9A" autocapitalize="characters" autocomplete="off" spellcheck="false"></label>'
+    +'<label class="f"><span>Nama guru atau kelas</span><input class="in" id="kk-nama" value="'+esc(kk.nama)+'" placeholder="Bu Sari, 9A" autocomplete="off"></label></div>'
+    +'<label class="f"><span>PIN guru <small>minimal 4 karakter</small></span><input class="in" id="kk-pin" type="password" inputmode="numeric" value="'+esc(kk.pin)+'" autocomplete="off" style="max-width:12em"></label>'
+    +'<div class="row"><button class="btn" data-act="a-kk-buat" data-fk="kk-buat"'+(kelasBusy?' disabled':'')+'>Buat kelas</button></div></section>';
+  h+=msgHtml(kelasMsg);
+  h+='<h2 class="sec">Daftar kelas</h2>';
+  if(kelasData===null)h+='<div class="card"><p class="mut">Memuat daftar kelas…</p></div>';
+  else if(!kelasData.length)h+='<div class="card empty"><p><b>Belum ada kelas.</b></p><p class="mut">Buat kelas pertama di atas, lalu bagikan kodenya ke guru dan siswanya.</p></div>';
+  else h+='<div class="list">'+kelasData.map(function(k){
+    var c=esc(k.kode),row;
+    if(confirmKey==='kdel:'+k.kode)row='<span class="mut" style="margin:0">Hapus kelas ini beserta semua soalnya?</span><button class="btn danger sm" data-act="a-kk-hapus-ya" data-v="'+c+'">Ya, hapus</button><button class="btn ghost sm" data-act="a-cancel">Batal</button>';
+    else if(kelasPinFor===k.kode)row='<input class="in" id="kk-pin2" type="password" inputmode="numeric" placeholder="PIN baru" value="'+esc(kk.pin2)+'" autocomplete="off" style="max-width:9em"><button class="btn sm" data-act="a-kk-pin-ya" data-v="'+c+'">Simpan PIN</button><button class="btn ghost sm" data-act="a-kk-pin-batal">Batal</button>';
+    else row='<button class="btn ghost sm" data-act="a-kk-pin" data-v="'+c+'">Ganti PIN guru</button><button class="btn ghost sm" data-act="a-kk-hapus" data-v="'+c+'">Hapus</button>';
+    return '<div class="mis"><div class="mh"><b class="mono">'+c+'</b><span class="mut" style="margin:0">'+(+k.n||0)+' soal</span></div><p class="mut" style="margin:2px 0 0">'+esc(k.nama||'Tanpa nama')+' · diperbarui '+esc(tglPendek(k.rev))+'</p><div class="row" style="margin-top:8px">'+row+'</div></div>';
+  }).join('')+'</div>';
+  h+='<section class="card" style="margin-top:14px"><div class="sh"><h2>Cara memakai kode kelas</h2></div><ol class="guide">'
+    +'<li>Bagikan kode kelas ke guru dan siswanya.</li><li>Siswa: buka <b>Pengaturan → Kode kelas</b>, isi kodenya, lalu ketuk <b>Pakai kode</b>.</li>'
+    +'<li>Guru: isi kode yang sama di Pengaturan, lalu <b>Masuk mode guru</b> dengan PIN guru.</li><li>Siswa tanpa kode tetap memakai soal utama.</li></ol></section>';
+  return h;
+}
+var KACT={
+  'a-kk-buat':function(){
+    var kode=normKode(kk.kode);
+    if(!kodeOk(kode)){kelasMsg={t:'bad',x:'Kode kelas 3–20 karakter, hanya huruf, angka, dan tanda hubung.'};return;}
+    if(kk.pin.trim().length<4){kelasMsg={t:'bad',x:'PIN guru minimal 4 karakter.'};return;}
+    kelasBusy=true;kelasMsg={t:'info',x:'Membuat kelas…'};render();
+    apiCall('/kelas/buat',{pin:adminPin||'',target:kode,nama:kk.nama.trim(),pinGuru:kk.pin,soal:data,kunci:kunci}).then(function(res){kelasBusy=false;
+      if(res.ok){kelasMsg={t:'ok',x:'Kelas '+kode+' dibuat. Bagikan kode '+kode+' dan PIN gurunya.'};kk={kode:'',nama:'',pin:'',pin2:''};kelasLoad();}
+      else kelasMsg={t:'bad',x:res.status===0?'Tidak ada internet. Kelas belum dibuat.':((res.j&&res.j.pesan)||'Kelas belum dibuat.')};
+      render();});
+    return 'async';},
+  'a-kk-pin':function(v){kelasPinFor=v;kk.pin2='';confirmKey=null;fk=null;},
+  'a-kk-pin-batal':function(){kelasPinFor=null;kk.pin2='';},
+  'a-kk-pin-ya':function(v){
+    if(kk.pin2.trim().length<4){kelasMsg={t:'bad',x:'PIN guru minimal 4 karakter.'};return;}
+    var np=kk.pin2;kk.pin2='';kelasPinFor=null;
+    apiCall('/kelas/pin',{pin:adminPin||'',target:v,pinGuru:np}).then(function(res){
+      kelasMsg=res.ok?{t:'ok',x:'PIN guru kelas '+v+' sudah diganti.'}:{t:'bad',x:res.status===0?'Tidak ada internet. PIN belum diganti.':((res.j&&res.j.pesan)||'PIN belum diganti.')};render();});},
+  'a-kk-hapus':function(v){confirmKey='kdel:'+v;kelasPinFor=null;},
+  'a-kk-hapus-ya':function(v){confirmKey=null;
+    apiCall('/kelas/hapus',{pin:adminPin||'',target:v}).then(function(res){
+      kelasMsg=res.ok?{t:'ok',x:'Kelas '+v+' dihapus.'}:{t:'bad',x:res.status===0?'Tidak ada internet. Kelas belum dihapus.':((res.j&&res.j.pesan)||'Kelas belum dihapus.')};
+      if(res.ok)kelasLoad();render();});}
+};
 function adminHtml(){
   if(!adminOK)return loginHtml();
-  var h=toolbar()+noticeHtml();
+  var h=toolbar()+(adminTab==='edit'||adminTab==='tampil'?'':kirimHtml())+noticeHtml();
   if(adminTab==='edit')return h+formHtml();
+  if(adminTab==='kelas')return h+kelasHtml();
   if(adminTab==='import')return h+importHtml();
   if(adminTab==='export')return h+exportHtml();
   if(adminTab==='set')return h+setHtml();
@@ -1865,7 +2001,8 @@ document.addEventListener('click',function(e){
   if(a==='a-mode'){impMode=v;confirmKey=null;return;}
   notice=notice&&a==='a-copy'?notice:null;
   if(a==='home'){view='home';previewFrom=null;sel=null;exam=null;confirmKey=null;}
-  else if(Object.prototype.hasOwnProperty.call(TOOLACT,a))TOOLACT[a](v);
+  else if(Object.prototype.hasOwnProperty.call(TOOLACT,a)){if(TOOLACT[a](v)==='async')return;}
+  else if(Object.prototype.hasOwnProperty.call(KDACT,a)){if(KDACT[a](v)==='async')return;}
   else if(Object.prototype.hasOwnProperty.call(PACT,a))PACT[a](v);
   else if(a==='play'){exam=null;playFrom=(view==='materi'||view==='ulang')?view:'home';startPlay(v,data.find(function(s){return s.id===v;}));previewFrom=null;fk=null;window.scrollTo(0,0);}
   else if(a==='set-tingkat'){if(tingkat!==v){streak=0;store.set(STRKEY,'0');levelUp=false;}tingkat=v;store.set('cjs.tingkat',v);}
@@ -1877,10 +2014,30 @@ document.addEventListener('click',function(e){
   else if(a==='again'){delete done[cur];saveDone();startPlay(cur,SRC[cur]);fk=null;window.scrollTo(0,0);}
   else if(a==='next'){var n=nextUnsolvedId();if(n){startPlay(n,data.find(function(s){return s.id===n;}));fk=null;window.scrollTo(0,0);}else view='home';}
   else if(a==='a-open'){view='admin';adminTab='list';loginErr=false;confirmKey=null;fk=adminOK?null:'login';}
-  else if(a==='a-login'){var pv=$('#pin');if(pv&&pinOk(pv.value)){adminOK=true;loginErr=false;fk=null;}else{loginErr=true;fk='login';}}
-  else if(a==='a-out'){adminOK=false;view='home';}
-  else if(a==='a-tab'){adminTab=v;confirmKey=null;D=null;editId=null;formErr=null;}
-  else if(a==='a-kunci'){var ki=kunci.indexOf(v);if(ki>=0)kunci.splice(ki,1);else kunci.push(v);var okk=persist();notice={t:okk?'ok':'bad',x:(ki>=0?v+' dibuka':v+' dikunci')+' di HP ini. Upload soal.json lewat Ekspor supaya berlaku di HP siswa.'};}
+  else if(a==='a-login'){var pv=$('#pin'),pin=pv?pv.value:'';
+    if(apiBase()){if(loginBusy)return;loginBusy=true;loginErr=false;render();
+      apiCall('/login',{kode:activeKode||'UTAMA',pin:pin}).then(function(res){loginBusy=false;
+        if(res.ok){adminOK=true;adminPin=pin;adminRole=res.j.peran;loginErr=false;fk=null;notice=null;}
+        else if(res.status===0){if(!activeKode&&pinOk(pin)){adminOK=true;adminPin=pin;adminRole='offline';notice={t:'info',x:'Tidak ada internet. Kamu bisa mengubah soal, tetapi baru bisa mengirim ke siswa setelah ada internet.'};}else{loginErr='Tidak ada internet. Sambungkan internet lalu coba lagi.';fk='login';}}
+        else{loginErr=(res.j&&res.j.pesan)||'PIN salah. Coba lagi.';fk='login';}
+        render();});
+      return;}
+    if(pinOk(pin)){adminOK=true;loginErr=false;fk=null;}else{loginErr=true;fk='login';}}
+  else if(a==='a-kirim'){if(sending||!apiBase())return;sending=true;notice=null;render();
+    var kd=activeKode;
+    apiCall('/simpan',{kode:kd||'UTAMA',pin:adminPin||'',soal:data,kunci:kunci}).then(function(res){sending=false;
+      if(res.ok){var bk={kode:kd,rev:res.j.rev,nama:bankInfo?bankInfo.nama:'',kunci:kunci.slice(),soal:data};store.set(BANKKEY,JSON.stringify(bk));store.del(KEY);
+        dataRev=res.j.rev;source=kd?'kelas':'server';bankInfo={kode:kd,nama:bk.nama,rev:bk.rev};
+        notice={t:'ok',x:'Terkirim. Siswa mendapat soal terbaru saat membuka aplikasi dengan internet.'};}
+      else if(res.status===0)notice={t:'bad',x:'Tidak ada internet. Perubahan tetap tersimpan di HP ini. Coba kirim lagi nanti.'};
+      else if(res.status===401){adminOK=false;loginErr='PIN sudah berubah. Masuk lagi dengan PIN terbaru, lalu kirim lagi.';view='admin';notice=null;}
+      else notice={t:'bad',x:(res.j&&res.j.pesan)||'Gagal mengirim. Coba lagi.'};
+      render();});
+    return;}
+  else if(a==='a-out'){adminOK=false;adminPin=null;adminRole=null;view='home';}
+  else if(a==='a-tab'){adminTab=v;confirmKey=null;D=null;editId=null;formErr=null;if(v==='kelas'){kelasData=null;kelasPinFor=null;kelasMsg=null;kelasLoad();}}
+  else if(Object.prototype.hasOwnProperty.call(KACT,a)){if(KACT[a](v)==='async')return;}
+  else if(a==='a-kunci'){var ki=kunci.indexOf(v);if(ki>=0)kunci.splice(ki,1);else kunci.push(v);var okk=persist();notice={t:okk?'ok':'bad',x:(ki>=0?v+' dibuka':v+' dikunci')+' di HP ini. '+sendHint()};}
   else if(a==='a-new'){D=blank();editId=null;formErr=null;adminTab='edit';fk=null;}
   else if(a==='a-edit'){var s0=data.find(function(s){return s.id===v;});D=toDraft(s0);editId=v;formErr=null;adminTab='edit';fk=null;window.scrollTo(0,0);}
   else if(a==='a-dup'){var s1=data.find(function(s){return s.id===v;});var c=JSON.parse(JSON.stringify(s1));c.id=freshId();c.judul=c.judul+' (salinan)';data.splice(data.indexOf(s1)+1,0,c);persist();notice={t:'ok',x:'Soal digandakan. Salinannya ada tepat di bawah.'};}
@@ -1915,6 +2072,15 @@ document.addEventListener('click',function(e){
   else if(a==='a-copy')copyExport();
   else if(a==='a-download')download();
   else if(a==='a-imp')doImport();
+  else if(a==='a-pin'&&apiBase()){var np2=$('#pin1'),nv=np2?np2.value:'';
+    if(nv.trim().length<4){notice={t:'bad',x:'PIN minimal 4 karakter.'};}
+    else{np2.value='';notice={t:'info',x:'Menyimpan PIN…'};render();
+      apiCall('/pin',{kode:activeKode||'UTAMA',pin:adminPin||'',baru:nv}).then(function(res){
+        if(res.ok){adminPin=nv;notice={t:'ok',x:'PIN baru tersimpan dan langsung berlaku di semua HP.'};}
+        else if(res.status===0)notice={t:'bad',x:'Tidak ada internet. PIN belum diganti.'};
+        else notice={t:'bad',x:(res.j&&res.j.pesan)||'PIN belum diganti. Coba lagi.'};
+        render();});
+      return;}}
   else if(a==='a-pin'){var np=$('#pin1');if(np&&np.value.trim().length>=4){pinHash=pinOf(np.value);pinAt=Date.now();store.set(PINH_KEY,JSON.stringify({h:pinHash,t:pinAt}));np.value='';notice={t:'ok',x:'PIN baru tersimpan di HP ini. Supaya berlaku di semua HP, buka Ekspor lalu upload soal.json ke GitHub.'};}else{notice={t:'bad',x:'PIN minimal 4 karakter.'};}}
   else if(a==='a-reset'){confirmKey='reset';}
   else if(a==='a-reset-yes'){store.del(KEY);confirmKey=null;load(true).then(function(){notice={t:'ok',x:'Ubahan dibuang. Sumber data sekarang: '+srcLabel()+'.'};render();});return;}
@@ -1928,6 +2094,8 @@ document.addEventListener('input',function(e){
   else if(t.id==='imp'){impText=t.value;confirmKey=null;}
   else if(t.id==='kv'&&konv){konv.input=t.value;}
   else if(t.id==='kr-text'&&karang){karang.text=t.value;}
+  else if(t.id==='kk-kode'){kk.kode=t.value;}else if(t.id==='kk-nama'){kk.nama=t.value;}else if(t.id==='kk-pin'){kk.pin=t.value;}else if(t.id==='kk-pin2'){kk.pin2=t.value;}
+  else if(t.id==='kd'){kdInput=t.value;kdMsg=null;}
   else if(t.id==='kr-ans'&&karang){karang.ans=t.value;}
   else if(t.id==='nm'||t.id==='kl'){
     siswa[t.id==='nm'?'nama':'kelas']=t.value;store.set(SISKEY,JSON.stringify(siswa));

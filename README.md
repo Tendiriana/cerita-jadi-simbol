@@ -51,6 +51,17 @@ Alamat web harus diawali `https://` supaya bisa dipasang sebagai aplikasi. Kedua
 
 PIN disimpan tersandi di soal.json, bukan angka aslinya. PIN adalah kunci ringan untuk mode guru, bukan pengaman data, karena aplikasi berjalan sepenuhnya di peramban.
 
+## Server soal dan kode kelas
+
+Soal dikirim lewat server Cloudflare (`server/worker.js`), jadi guru tidak perlu mengunduh atau mengupload berkas.
+
+- **Pengelola utama**: masuk mode guru dengan PIN utama, ubah soal, lalu ketuk **Kirim ke siswa**. Tab **Kelas** dipakai untuk membuat kode kelas guru lain, mengganti PIN guru, dan menghapus kelas.
+- **Guru kelas**: isi kode kelas di **Pengaturan → Kode kelas**, lalu masuk mode guru dengan PIN guru. Perubahan guru kelas tidak mengubah soal utama.
+- **Siswa**: isi kode kelas dari guru di Pengaturan. Tanpa kode, siswa memakai soal utama. Soal terakhir tetap tersimpan untuk dipakai tanpa internet.
+- PIN dicek di server. Setelah 10 kali PIN salah, percobaan dikunci 15 menit.
+
+Pemasangan server: Worker `taktik-api` dengan binding KV bernama `DB` dan secret `ADMIN_PIN`. Alamat server ditulis di `server/api.txt` saat membangun aplikasi.
+
 ## Tingkat bantuan (untuk siswa)
 
 Di halaman utama, siswa memilih tingkat:
