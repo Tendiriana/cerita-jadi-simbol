@@ -1,6 +1,6 @@
 {
-  "name": "Cerita Jadi Simbol",
-  "short_name": "Cerita Simbol",
+  "name": "TakTik IPA",
+  "short_name": "TakTik IPA",
   "description": "Latihan soal cerita IPA SMP: ubah kalimat soal menjadi besaran, pilih rumus, lalu hitung.",
   "lang": "id",
   "start_url": "./",
