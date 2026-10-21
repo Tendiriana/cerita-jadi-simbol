@@ -1,4 +1,4 @@
-# Cerita Jadi Simbol
+# TakTik IPA
 
 Latihan soal cerita IPA SMP. Siswa mengubah kalimat soal menjadi besaran, mengenali materinya, memilih rumus, lalu menghitung. Guru mengelola soal lewat **Pengaturan → Masuk mode guru**.
 

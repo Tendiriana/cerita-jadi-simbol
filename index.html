@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Cerita Jadi Simbol</title>
+<title>TakTik IPA</title>
 <meta name="theme-color" content="#F3F5F8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1318" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
@@ -765,7 +765,7 @@ function topHtml(){
   }
   if(view==='home'){
     var nm=(siswa.nama||'').trim().split(/\s+/)[0];
-    return '<div class="bar">'+brandHtml(nm?'Halo, '+esc(nm):'Cerita Jadi Simbol',nm?'Siap latihan hari ini?':'Latihan soal cerita IPA SMP')+'<div class="ab">'+themeBtnHtml()
+    return '<div class="bar">'+brandHtml(nm?'Halo, '+esc(nm):'TakTik IPA',nm?'Siap latihan hari ini?':'Latihan soal cerita IPA SMP')+'<div class="ab">'+themeBtnHtml()
       +'<button class="btn ghost sm icon-btn" data-act="go" data-v="atur" data-fk="top" aria-label="Pengaturan" title="Pengaturan">'+ICON.gear+'</button></div></div>';
   }
   if(view==='intro'||view==='tampil')return '';
@@ -960,7 +960,7 @@ function levelUpHtml(){
 function examLine(r){return r.lancar+' lancar, '+r.salah+' selesai dengan salah, '+r.lewat+' dilewati (dari '+r.n+' soal), waktu '+fmtTime(r.ms)+', '+r.tgl;}
 function reportText(){
   var nd=kelasList().filter(function(s){return done[s.id];}),L=[],top=topLog(5);
-  L.push('Laporan latihan Cerita Jadi Simbol');
+  L.push('Laporan latihan TakTik IPA');
   L.push('Nama: '+(siswa.nama||'-')+(siswa.kelas?' ('+siswa.kelas+')':''));
   L.push('Tanggal: '+new Date().toLocaleDateString('id-ID'));
   L.push('Tingkat: '+TL[tingkat]+' · lancar berturut-turut: '+streak);
