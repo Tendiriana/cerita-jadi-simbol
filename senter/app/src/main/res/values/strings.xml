@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Senter</string>
+    <string name="on">SENTER MENYALA</string>
+    <string name="off">SENTER MATI</string>
+    <string name="hint">Ketuk lingkaran untuk menyalakan</string>
+    <string name="no_flash">HP ini tidak punya lampu senter</string>
+    <string name="error">Tidak bisa mengakses senter</string>
+    <string name="toggle_desc">Tombol nyalakan atau matikan senter</string>
+</resources>

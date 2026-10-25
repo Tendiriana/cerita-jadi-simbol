@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Senter" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:statusBarColor">#070708</item>
+        <item name="android:navigationBarColor">#070708</item>
+        <item name="android:windowBackground">#070708</item>
+    </style>
+</resources>
