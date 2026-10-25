@@ -7,6 +7,9 @@ on:
       - '.github/workflows/senter.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,9 +32,23 @@ jobs:
         working-directory: senter
         run: gradle assembleDebug --no-daemon --stacktrace
 
-      - name: Upload APK
+      - name: Rename APK
+        run: cp senter/app/build/outputs/apk/debug/app-debug.apk Senter.apk
+
+      - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
         with:
           name: senter-apk
-          path: senter/app/build/outputs/apk/debug/app-debug.apk
+          path: Senter.apk
           if-no-files-found: error
+
+      - name: Publish APK to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: senter
+          name: Senter (APK terbaru)
+          body: |
+            Aplikasi Senter — satu tombol untuk menyalakan/mematikan lampu senter.
+            Unduh **Senter.apk** di bawah, lalu pasang di HP Android
+            (izinkan "instal dari sumber tak dikenal").
+          files: Senter.apk
