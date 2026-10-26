@@ -571,6 +571,10 @@ class MainActivity : AppCompatActivity() {
             lc == "board" || lc == "page2" || lc == "widget" || lc == "widgets" -> openPage2()
             lc == "senter" || lc == "torch" || lc == "flash" -> toggleTorch()
             lc == "dnd" -> toggleDnd()
+            lc == "notif" || lc == "notifikasi" || lc == "notifications" -> {
+                if (!notifAccessGranted()) openSys(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+                else toast("notif aktif: " + NotifListener.count)
+            }
             lc == "hide apps" || lc == "vault" || lc == ".vault" -> openDrawer(true)
             lc.startsWith("hide ") -> hideApp(c.substring(5))
             lc.startsWith("unhide ") -> unhideApp(c.substring(7))
@@ -945,6 +949,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun canWrite(): Boolean = try { Settings.System.canWrite(this) } catch (e: Exception) { false }
 
+    private fun notifAccessGranted(): Boolean = try {
+        val flat = Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
+        flat != null && flat.contains(packageName)
+    } catch (e: Exception) { false }
+
     private fun requestWrite() {
         try {
             startActivity(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:$packageName")))
@@ -1235,7 +1244,8 @@ class MainActivity : AppCompatActivity() {
         val bat = batteryPct()
         val charging = batteryCharging()
         val boltL = if (charging) " ⚡" else ""
-        statusL.text = hh + ssv
+        val notif = if (notifAccessGranted() && NotifListener.count > 0) "  ✉" + NotifListener.count else ""
+        statusL.text = hh + ssv + notif
         statusR.text = type.first + "  " + type.second + ":up  " + barAscii(bat, 10) + " " + bat + "%" + boltL
 
         sysCpu.text = "CPU " + cpuInfo()

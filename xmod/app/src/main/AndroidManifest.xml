@@ -45,6 +45,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Menghitung jumlah notifikasi untuk lencana (aktif manual di Setelan). -->
+        <service
+            android:name=".NotifListener"
+            android:exported="true"
+            android:label="X-Mod Notif"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
