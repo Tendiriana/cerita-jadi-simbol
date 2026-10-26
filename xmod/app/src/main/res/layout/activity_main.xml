@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="8dp">
+
+    <!-- Terminal header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/term_bg"
+        android:padding="14dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/prompt_host"
+                android:fontFamily="monospace"
+                android:textColor="@color/amber"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/set_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/set_default"
+                android:fontFamily="monospace"
+                android:textColor="@color/muted"
+                android:textSize="11sp"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:textColor="@color/bright"
+            android:textSize="48sp"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="—"
+            android:fontFamily="monospace"
+            android:textColor="@color/muted"
+            android:textSize="12sp"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:id="@+id/sys"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&gt; memuat…"
+            android:fontFamily="monospace"
+            android:textColor="@color/dim"
+            android:textSize="11sp"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <!-- Terminal search -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/search_bg"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_marginTop="14dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/grep"
+            android:fontFamily="monospace"
+            android:textColor="@color/amber"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/search_hint"
+            android:textColorHint="@color/dim"
+            android:textColor="@color/text"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:background="@null"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:paddingStart="8dp" />
+    </LinearLayout>
+
+    <!-- Section label -->
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[ ALL APPS ]"
+        android:fontFamily="monospace"
+        android:textColor="@color/amber"
+        android:textSize="11sp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="10dp" />
+
+    <!-- App grid -->
+    <GridView
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:numColumns="4"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="14dp"
+        android:horizontalSpacing="10dp"
+        android:scrollbars="none"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
+
+</LinearLayout>

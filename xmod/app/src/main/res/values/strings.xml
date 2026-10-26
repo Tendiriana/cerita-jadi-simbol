@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">X-Mod Launcher</string>
+    <string name="prompt_host">x-mod@s24:~</string>
+    <string name="set_default">&gt; set default</string>
+    <string name="grep">grep&gt;</string>
+    <string name="search_hint">cari aplikasi…</string>
+</resources>
