@@ -3,7 +3,9 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg">
+    android:background="@color/bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <!-- ===== Foto "wallpaper" di bagian bawah ===== -->
     <FrameLayout
@@ -69,6 +71,20 @@
                 android:textColor="@color/muted"
                 android:textSize="10sp" />
         </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/content_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
         <!-- Header: status live + optimizer -->
         <FrameLayout
@@ -429,10 +445,8 @@
                 android:textSize="10sp" />
         </FrameLayout>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            </LinearLayout>
+        </ScrollView>
 
         <!-- Baris saran aplikasi saat mengetik perintah -->
         <HorizontalScrollView

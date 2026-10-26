@@ -264,12 +264,18 @@ class MainActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
             override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
         })
+        // saat kolom perintah fokus: sembunyikan dock biar menempel rapi di atas keyboard
+        cmdInput.onFocusChangeListener = View.OnFocusChangeListener { _, has ->
+            findViewById<View>(R.id.dock).visibility = if (has) View.GONE else View.VISIBLE
+            if (!has) suggestScroll.visibility = View.GONE
+        }
         cmdInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE) {
                 val f = firstSuggestion
                 if (f != null) f.invoke() else runCommand(cmdInput.text.toString())
                 cmdInput.setText("")
                 hideKeyboard(cmdInput)
+                cmdInput.clearFocus()
                 buildSuggestions("")
                 true
             } else false
@@ -318,7 +324,7 @@ class MainActivity : AppCompatActivity() {
             lp.marginEnd = gap
             chip.layoutParams = lp
             chip.setOnClickListener {
-                act(); cmdInput.setText(""); hideKeyboard(cmdInput); buildSuggestions("")
+                act(); cmdInput.setText(""); hideKeyboard(cmdInput); cmdInput.clearFocus(); buildSuggestions("")
             }
             suggestRow.addView(chip)
         }
