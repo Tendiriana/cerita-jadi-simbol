@@ -70,7 +70,7 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Header: status --live + optimizer -->
+        <!-- Header: status live + optimizer -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
