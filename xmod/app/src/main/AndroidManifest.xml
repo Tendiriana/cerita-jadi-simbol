@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- Getar halus saat aksi (boot, optimize, perintah). -->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Panel kontrol: kecerahan & rotasi (izin khusus, diberikan manual sekali). -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- Panel kontrol: mode Jangan Ganggu (izin khusus, diberikan manual sekali). -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <!-- Melihat daftar aplikasi yang bisa diluncurkan (Android 11+). -->
     <queries>

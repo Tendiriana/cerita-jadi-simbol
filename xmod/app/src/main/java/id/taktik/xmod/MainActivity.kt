@@ -1,14 +1,18 @@
 package id.taktik.xmod
 
 import android.app.ActivityManager
+import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
+import android.content.res.ColorStateList
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.TrafficStats
@@ -27,13 +31,18 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.GridLayout
 import android.widget.GridView
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import android.Manifest
@@ -106,6 +115,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var termOverlay: View
     private lateinit var termTitle: TextView
     private lateinit var termOut: TextView
+    private lateinit var quickOverlay: View
+    private lateinit var quickCard: View
+    private lateinit var qsBrightness: SeekBar
+    private var cameraManager: CameraManager? = null
+    private var torchId: String? = null
+    private var torchOn = false
+    private var brightnessPrompted = false
+    private var openGesture: GestureDetector? = null
+    private var senterTile: LinearLayout? = null
+    private var senterName: TextView? = null
+    private var senterState: TextView? = null
+    private var rotasiTile: LinearLayout? = null
+    private var rotasiName: TextView? = null
+    private var rotasiState: TextView? = null
+    private var dndTile: LinearLayout? = null
+    private var dndName: TextView? = null
+    private var dndState: TextView? = null
 
     private val PREF_PHOTO = "photo_uri"
     private val PREF_MODE = "photo_mode"
@@ -130,6 +156,7 @@ class MainActivity : AppCompatActivity() {
         setupDock()
         setupDrawer()
         setupOptimize()
+        setupQuickPanel()
         applyAccentColors()
 
         tick()
@@ -178,6 +205,9 @@ class MainActivity : AppCompatActivity() {
         termOverlay = findViewById(R.id.term_overlay)
         termTitle = findViewById(R.id.term_title)
         termOut = findViewById(R.id.term_out)
+        quickOverlay = findViewById(R.id.quick_overlay)
+        quickCard = findViewById(R.id.quick_card)
+        qsBrightness = findViewById(R.id.qs_brightness)
 
         hostLine.text = getString(R.string.host_line)
         cmdLine.text = getString(R.string.cmd_line)
@@ -497,6 +527,9 @@ class MainActivity : AppCompatActivity() {
     private fun handleCommand(lc: String, c: String): Boolean {
         when {
             lc == "apps" || lc == "app" || lc == "ls" || lc == "drawer" || lc == "menu" -> openDrawer(false)
+            lc == "panel" || lc == "qs" || lc == "kontrol" || lc == "control" -> openQuick()
+            lc == "senter" || lc == "torch" || lc == "flash" -> toggleTorch()
+            lc == "dnd" -> toggleDnd()
             lc == "hide apps" || lc == "vault" || lc == ".vault" -> openDrawer(true)
             lc.startsWith("hide ") -> hideApp(c.substring(5))
             lc.startsWith("unhide ") -> unhideApp(c.substring(7))
@@ -703,6 +736,199 @@ class MainActivity : AppCompatActivity() {
         hidden.remove(a.packageName); saveHidden()
         if (drawer.visibility == View.VISIBLE) filter(findViewById<EditText>(R.id.search).text?.toString() ?: "")
         toast("ditampilkan: ${a.label}")
+    }
+
+    // ---------- Panel kontrol (quick settings X-Mod) ----------
+    private fun setupQuickPanel() {
+        quickOverlay.setOnClickListener { closeQuick() }
+        try {
+            qsBrightness.progress = if (canWrite())
+                Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, 128) else 128
+        } catch (e: Exception) { }
+        qsBrightness.progressTintList = ColorStateList.valueOf(accent)
+        qsBrightness.thumbTintList = ColorStateList.valueOf(accent)
+        qsBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(sb: SeekBar?, p: Int, fromUser: Boolean) { if (fromUser) applyBrightness(p) }
+            override fun onStartTrackingTouch(sb: SeekBar?) {}
+            override fun onStopTrackingTouch(sb: SeekBar?) {}
+        })
+
+        try {
+            cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            torchId = findFlashCamera()
+            cameraManager?.registerTorchCallback(object : CameraManager.TorchCallback() {
+                override fun onTorchModeChanged(id: String, enabled: Boolean) {
+                    if (id == torchId) { torchOn = enabled; refreshQuickStates() }
+                }
+            }, null)
+        } catch (e: Exception) { }
+
+        val grid = findViewById<GridLayout>(R.id.quick_tiles)
+        grid.removeAllViews()
+        val t1 = gridTile(grid, "SENTER", "off") { toggleTorch() }
+        senterTile = t1[0] as LinearLayout; senterName = t1[1] as TextView; senterState = t1[2] as TextView
+        val t2 = gridTile(grid, "ROTASI", "—") { toggleRotation() }
+        rotasiTile = t2[0] as LinearLayout; rotasiName = t2[1] as TextView; rotasiState = t2[2] as TextView
+        val t3 = gridTile(grid, "DND", "off") { toggleDnd() }
+        dndTile = t3[0] as LinearLayout; dndName = t3[1] as TextView; dndState = t3[2] as TextView
+        gridTile(grid, "WIFI", "›") { openSysPanel("android.settings.panel.action.WIFI", Settings.ACTION_WIFI_SETTINGS) }
+        gridTile(grid, "BLUETOOTH", "›") { openSys(Settings.ACTION_BLUETOOTH_SETTINGS) }
+        gridTile(grid, "DATA", "›") { openSysPanel("android.settings.panel.action.INTERNET_CONNECTIVITY", Settings.ACTION_WIRELESS_SETTINGS) }
+        gridTile(grid, "PESAWAT", "›") { openSys(Settings.ACTION_AIRPLANE_MODE_SETTINGS) }
+        gridTile(grid, "LOKASI", "›") { openSys(Settings.ACTION_LOCATION_SOURCE_SETTINGS) }
+        gridTile(grid, "SETELAN", "›") { openSys(Settings.ACTION_SETTINGS) }
+
+        val closeGd = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float): Boolean {
+                if (e1 != null && e2.y - e1.y < -60 && vy < -800) { closeQuick(); return true }
+                return false
+            }
+        })
+        quickCard.setOnTouchListener { _, ev -> closeGd.onTouchEvent(ev); false }
+
+        openGesture = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float): Boolean {
+                if (e1 == null || anyOverlayOpen()) return false
+                val h = resources.displayMetrics.heightPixels
+                if (e1.y < h * 0.18f && e2.y - e1.y > 80 && vy > 1400) { openQuick(); return true }
+                return false
+            }
+        })
+    }
+
+    private fun gridTile(grid: GridLayout, name: String, state: String, onClick: () -> Unit): Array<Any> {
+        val tile = LinearLayout(this)
+        tile.orientation = LinearLayout.VERTICAL
+        tile.gravity = android.view.Gravity.CENTER
+        tile.background = getDrawable(R.drawable.qs_tile_off)
+        tile.setPadding(dp(8), dp(13), dp(8), dp(13))
+        val nameTv = TextView(this).apply {
+            text = name; setTextColor(0xFFD8D6CC.toInt()); textSize = 11f; typeface = android.graphics.Typeface.MONOSPACE
+        }
+        val stTv = TextView(this).apply {
+            text = state; setTextColor(0xFF8A8A7E.toInt()); textSize = 9f; typeface = android.graphics.Typeface.MONOSPACE
+        }
+        tile.addView(nameTv); tile.addView(stTv)
+        val lp = GridLayout.LayoutParams()
+        lp.width = 0
+        lp.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+        lp.setMargins(dp(4), dp(4), dp(4), dp(4))
+        tile.layoutParams = lp
+        tile.setOnClickListener { haptic(); onClick() }
+        grid.addView(tile)
+        return arrayOf(tile, nameTv, stTv)
+    }
+
+    private fun anyOverlayOpen(): Boolean =
+        drawer.visibility == View.VISIBLE || optOverlay.visibility == View.VISIBLE ||
+        termOverlay.visibility == View.VISIBLE || bootOverlay.visibility == View.VISIBLE ||
+        quickOverlay.visibility == View.VISIBLE
+
+    private fun openQuick() {
+        quickOverlay.visibility = View.VISIBLE
+        findViewById<TextView>(R.id.quick_clock).text = SimpleDateFormat("HH:mm", ID).format(Date())
+        try { if (canWrite()) qsBrightness.progress = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, 128) } catch (e: Exception) {}
+        refreshQuickStates()
+        haptic(); glitch.trigger()
+        quickCard.translationY = -40f; quickCard.alpha = 0f
+        quickCard.animate().translationY(0f).alpha(1f).setDuration(180).start()
+    }
+
+    private fun closeQuick() {
+        quickCard.animate().translationY(-30f).alpha(0f).setDuration(140).withEndAction {
+            quickOverlay.visibility = View.GONE
+            quickCard.translationY = 0f; quickCard.alpha = 1f
+        }.start()
+    }
+
+    private fun refreshQuickStates() {
+        senterState?.text = if (torchOn) "on" else "off"
+        setTileOn(senterTile, senterName, torchOn)
+        val auto = try { Settings.System.getInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0) == 1 } catch (e: Exception) { true }
+        rotasiState?.text = if (auto) "auto" else "lock"
+        setTileOn(rotasiTile, rotasiName, !auto)
+        val dndOn = try {
+            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            nm.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_ALL
+        } catch (e: Exception) { false }
+        dndState?.text = if (dndOn) "on" else "off"
+        setTileOn(dndTile, dndName, dndOn)
+    }
+
+    private fun setTileOn(tile: LinearLayout?, name: TextView?, on: Boolean) {
+        tile?.background = getDrawable(if (on) R.drawable.qs_tile_on else R.drawable.qs_tile_off)
+        name?.setTextColor(if (on) accent else 0xFFD8D6CC.toInt())
+    }
+
+    private fun findFlashCamera(): String? = try {
+        cameraManager?.cameraIdList?.firstOrNull {
+            cameraManager!!.getCameraCharacteristics(it).get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+        }
+    } catch (e: Exception) { null }
+
+    private fun toggleTorch() {
+        val id = torchId
+        if (id == null) { toast("HP ini tak punya senter"); return }
+        try { cameraManager?.setTorchMode(id, !torchOn) } catch (e: Exception) { toast("senter gagal") }
+    }
+
+    private fun canWrite(): Boolean = try { Settings.System.canWrite(this) } catch (e: Exception) { false }
+
+    private fun requestWrite() {
+        try {
+            startActivity(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:$packageName")))
+        } catch (e: Exception) { }
+    }
+
+    private fun toggleRotation() {
+        if (!canWrite()) { toast("beri izin ubah setelan sistem"); requestWrite(); return }
+        try {
+            val cur = Settings.System.getInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0)
+            Settings.System.putInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION, if (cur == 1) 0 else 1)
+        } catch (e: Exception) { }
+        refreshQuickStates()
+    }
+
+    private fun toggleDnd() {
+        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (!nm.isNotificationPolicyAccessGranted) {
+            openSys(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS); return
+        }
+        try {
+            val isOn = nm.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_ALL
+            nm.setInterruptionFilter(if (isOn) NotificationManager.INTERRUPTION_FILTER_ALL else NotificationManager.INTERRUPTION_FILTER_PRIORITY)
+        } catch (e: Exception) { }
+        refreshQuickStates()
+    }
+
+    private fun applyBrightness(p: Int) {
+        val v = p.coerceIn(5, 255)
+        if (canWrite()) {
+            try {
+                Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL)
+                Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, v)
+            } catch (e: Exception) { }
+        } else {
+            val lp = window.attributes; lp.screenBrightness = v / 255f; window.attributes = lp
+            if (!brightnessPrompted) { brightnessPrompted = true; toast("beri izin ubah setelan untuk kecerahan sistem"); requestWrite() }
+        }
+    }
+
+    private fun openSys(action: String) {
+        try { startActivity(Intent(action).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+        catch (e: Exception) { openSettings(Settings.ACTION_SETTINGS) }
+        closeQuick()
+    }
+
+    private fun openSysPanel(panelAction: String, fallback: String) {
+        try { startActivity(Intent(panelAction)) }
+        catch (e: Exception) { try { startActivity(Intent(fallback).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } catch (_: Exception) {} }
+        closeQuick()
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        try { openGesture?.onTouchEvent(ev) } catch (e: Exception) { }
+        return super.dispatchTouchEvent(ev)
     }
 
     // ---------- Optimize ----------
@@ -963,6 +1189,7 @@ class MainActivity : AppCompatActivity() {
     @Deprecated("Launcher tetap di home")
     override fun onBackPressed() {
         when {
+            quickOverlay.visibility == View.VISIBLE -> closeQuick()
             termOverlay.visibility == View.VISIBLE -> closeTerminal()
             optOverlay.visibility == View.VISIBLE -> optOverlay.visibility = View.GONE
             drawer.visibility == View.VISIBLE -> closeDrawer()

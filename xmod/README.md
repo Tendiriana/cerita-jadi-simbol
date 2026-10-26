@@ -24,7 +24,13 @@ Launcher Android bergaya terminal premium klasik (amber). Versi 0.2.
 - **Easter egg**: salah perintah 3× → layar peringatan.
 - **OPTIMIZE**: animasi scan, bersihkan cache X-Mod, lalu buka **Device Care Samsung**.
 
-Tambahan vibe: boot sequence, efek ketik, getar halus, hujan kode, glitch,
+## Panel kontrol (0.4)
+Usap ke bawah di home (atau ketik `panel`) → panel amber:
+- **Senter** (langsung), **kecerahan** (slider), **rotasi**, **DND** (toggle).
+- Ubin **WiFi / Bluetooth / Data / Pesawat / Lokasi / Setelan** membuka panel sistem.
+- Rotasi & kecerahan butuh izin "ubah setelan sistem"; DND butuh "akses Jangan Ganggu" — diberikan manual sekali saat pertama dipakai.
+
+Tambahan vibe: boot sequence, efek ketik, getar halus, glitch,
 status charging (baterai ⚡ beranimasi).
 
 ## Update (tanpa uninstall)
