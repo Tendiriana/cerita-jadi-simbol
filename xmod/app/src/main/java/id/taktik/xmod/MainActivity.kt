@@ -3,6 +3,8 @@ package id.taktik.xmod
 import android.app.ActivityManager
 import android.app.NotificationManager
 import android.app.WallpaperManager
+import android.appwidget.AppWidgetHost
+import android.appwidget.AppWidgetManager
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
@@ -43,6 +45,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.GridLayout
 import android.widget.GridView
 import android.widget.ImageView
@@ -128,7 +131,17 @@ class MainActivity : AppCompatActivity() {
     private var torchId: String? = null
     private var torchOn = false
     private var brightnessPrompted = false
-    private var openGesture: GestureDetector? = null
+    private var pageGesture: GestureDetector? = null
+    private var widgetHost: AppWidgetHost? = null
+    private var widgetManager: AppWidgetManager? = null
+    private var pendingWidgetId = -1
+    private lateinit var page2Overlay: View
+    private lateinit var widgetContainer: LinearLayout
+    private lateinit var netBox: View
+    private val HOST_ID = 0x58
+    private val REQ_PICK = 10
+    private val REQ_CONFIG = 11
+    private val PREF_WIDGETS = "widgets"
     private var senterTile: LinearLayout? = null
     private var senterName: TextView? = null
     private var senterState: TextView? = null
@@ -164,6 +177,7 @@ class MainActivity : AppCompatActivity() {
         setupDrawer()
         setupOptimize()
         setupQuickPanel()
+        setupWidgets()
         applyAccentColors()
 
         tick()
@@ -395,6 +409,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(req: Int, res: Int, data: Intent?) {
         super.onActivityResult(req, res, data)
+        if (req == REQ_PICK) {
+            val id = data?.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1) ?: -1
+            if (res == RESULT_OK && id != -1) configureOrAdd(id)
+            else if (id != -1) widgetHost?.deleteAppWidgetId(id)
+            return
+        }
+        if (req == REQ_CONFIG) {
+            val id = pendingWidgetId; pendingWidgetId = -1
+            if (res == RESULT_OK && id != -1) addWidgetView(id, true)
+            else if (id != -1) widgetHost?.deleteAppWidgetId(id)
+            return
+        }
         if (req == PICK_PHOTO && res == RESULT_OK) {
             val uri = data?.data ?: return
             try { contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) } catch (e: Exception) {}
@@ -541,6 +567,7 @@ class MainActivity : AppCompatActivity() {
         when {
             lc == "apps" || lc == "app" || lc == "ls" || lc == "drawer" || lc == "menu" -> openDrawer(false)
             lc == "panel" || lc == "qs" || lc == "kontrol" || lc == "control" -> openQuick()
+            lc == "board" || lc == "page2" || lc == "widget" || lc == "widgets" -> openPage2()
             lc == "senter" || lc == "torch" || lc == "flash" -> toggleTorch()
             lc == "dnd" -> toggleDnd()
             lc == "hide apps" || lc == "vault" || lc == ".vault" -> openDrawer(true)
@@ -843,7 +870,7 @@ class MainActivity : AppCompatActivity() {
     private fun anyOverlayOpen(): Boolean =
         drawer.visibility == View.VISIBLE || optOverlay.visibility == View.VISIBLE ||
         termOverlay.visibility == View.VISIBLE || bootOverlay.visibility == View.VISIBLE ||
-        quickOverlay.visibility == View.VISIBLE
+        quickOverlay.visibility == View.VISIBLE || page2Overlay.visibility == View.VISIBLE
 
     private fun openQuick() {
         quickOverlay.visibility = View.VISIBLE
@@ -948,8 +975,118 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        try { openGesture?.onTouchEvent(ev) } catch (e: Exception) { }
+        try { pageGesture?.onTouchEvent(ev) } catch (e: Exception) { }
         return super.dispatchTouchEvent(ev)
+    }
+
+    // ---------- Halaman rahasia (board) + widget ----------
+    private fun setupWidgets() {
+        page2Overlay = findViewById(R.id.page2_overlay)
+        widgetContainer = findViewById(R.id.page2_widgets)
+        netBox = findViewById(R.id.net_box)
+        widgetManager = AppWidgetManager.getInstance(this)
+        widgetHost = AppWidgetHost(this, HOST_ID)
+        try { widgetHost?.startListening() } catch (e: Exception) { }
+
+        findViewById<View>(R.id.page2_add).setOnClickListener { haptic(); addWidget() }
+        findViewById<View>(R.id.page2_vault).setOnClickListener { openDrawer(true) }
+        findViewById<View>(R.id.page2_back).setOnClickListener { closePage2() }
+        restoreWidgets()
+
+        pageGesture = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float): Boolean {
+                if (e1 == null) return false
+                val dx = e2.x - e1.x; val dy = e2.y - e1.y
+                if (Math.abs(dx) < Math.abs(dy)) return false
+                if (page2Overlay.visibility == View.VISIBLE) {
+                    if (dx > 100 && vx > 800) { closePage2(); return true }
+                    return false
+                }
+                if (anyOverlayOpen()) return false
+                val loc = IntArray(2); netBox.getLocationInWindow(loc)
+                val l = loc[0].toFloat(); val t = loc[1].toFloat()
+                val r = l + netBox.width; val b = t + netBox.height
+                if (e1.x in l..r && e1.y in t..b && dx < -100 && vx < -800) { openPage2(); return true }
+                return false
+            }
+        })
+    }
+
+    private fun openPage2() {
+        page2Overlay.visibility = View.VISIBLE
+        haptic(); glitch.trigger()
+        val w = resources.displayMetrics.widthPixels.toFloat()
+        page2Overlay.translationX = w
+        page2Overlay.animate().translationX(0f).setDuration(200).start()
+    }
+
+    private fun closePage2() {
+        val w = resources.displayMetrics.widthPixels.toFloat()
+        page2Overlay.animate().translationX(w).setDuration(170).withEndAction {
+            page2Overlay.visibility = View.GONE; page2Overlay.translationX = 0f
+        }.start()
+    }
+
+    private fun widgetIds(): List<Int> =
+        (prefs.getString(PREF_WIDGETS, "") ?: "").split(",").mapNotNull { it.trim().toIntOrNull() }
+
+    private fun saveWidgetId(id: Int) {
+        val ids = widgetIds().toMutableList()
+        if (!ids.contains(id)) ids.add(id)
+        prefs.edit().putString(PREF_WIDGETS, ids.joinToString(",")).apply()
+    }
+
+    private fun restoreWidgets() {
+        for (id in widgetIds()) addWidgetView(id, false)
+    }
+
+    private fun addWidget() {
+        val host = widgetHost ?: return
+        val id = host.allocateAppWidgetId()
+        try {
+            val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+            startActivityForResult(intent, REQ_PICK)
+        } catch (e: Exception) { host.deleteAppWidgetId(id); toast("tak bisa buka pemilih widget") }
+    }
+
+    private fun configureOrAdd(id: Int) {
+        val info = widgetManager?.getAppWidgetInfo(id)
+        if (info?.configure != null) {
+            pendingWidgetId = id
+            try {
+                val i = Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE)
+                i.component = info.configure
+                i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+                startActivityForResult(i, REQ_CONFIG)
+            } catch (e: Exception) { addWidgetView(id, true) }
+        } else addWidgetView(id, true)
+    }
+
+    private fun addWidgetView(id: Int, save: Boolean) {
+        val info = widgetManager?.getAppWidgetInfo(id) ?: return
+        val host = widgetHost ?: return
+        val view = try { host.createView(applicationContext, id, info) } catch (e: Exception) { return }
+        view.setAppWidget(id, info)
+        view.minimumHeight = dp(80)
+        val wrap = FrameLayout(this)
+        wrap.background = getDrawable(R.drawable.box_bg)
+        wrap.setPadding(dp(6), dp(6), dp(6), dp(6))
+        val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        lp.setMargins(0, dp(8), 0, 0)
+        wrap.layoutParams = lp
+        wrap.addView(view)
+        wrap.setOnLongClickListener { removeWidget(id, wrap); true }
+        widgetContainer.addView(wrap)
+        if (save) { saveWidgetId(id); toast("widget ditambah") }
+    }
+
+    private fun removeWidget(id: Int, wrap: View) {
+        try { widgetHost?.deleteAppWidgetId(id) } catch (e: Exception) { }
+        widgetContainer.removeView(wrap)
+        val ids = widgetIds().toMutableList(); ids.remove(id)
+        prefs.edit().putString(PREF_WIDGETS, ids.joinToString(",")).apply()
+        haptic(); toast("widget dihapus")
     }
 
     // ---------- Optimize ----------
@@ -1245,7 +1382,11 @@ class MainActivity : AppCompatActivity() {
     private fun toast(s: String) = Toast.makeText(this, s, Toast.LENGTH_SHORT).show()
 
     override fun onResume() { super.onResume(); applyPhoto(); tick() }
-    override fun onDestroy() { super.onDestroy(); ui.removeCallbacksAndMessages(null) }
+    override fun onDestroy() {
+        super.onDestroy()
+        ui.removeCallbacksAndMessages(null)
+        try { widgetHost?.stopListening() } catch (e: Exception) { }
+    }
 
     @Deprecated("Launcher tetap di home")
     override fun onBackPressed() {
@@ -1254,6 +1395,7 @@ class MainActivity : AppCompatActivity() {
             termOverlay.visibility == View.VISIBLE -> closeTerminal()
             optOverlay.visibility == View.VISIBLE -> optOverlay.visibility = View.GONE
             drawer.visibility == View.VISIBLE -> closeDrawer()
+            page2Overlay.visibility == View.VISIBLE -> closePage2()
             else -> { }
         }
     }
