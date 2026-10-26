@@ -29,6 +29,8 @@ class SparklineView @JvmOverloads constructor(
     }
     private val path = Path()
 
+    fun setAccent(c: Int) { line.color = c; invalidate() }
+
     private fun dp(v: Float) = v * resources.displayMetrics.density
 
     /** Dorong nilai baru (0..1), geser ke kiri. */

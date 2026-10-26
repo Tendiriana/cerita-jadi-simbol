@@ -16,6 +16,8 @@ class HudBracketsView @JvmOverloads constructor(
         style = Paint.Style.STROKE
         strokeWidth = dp(1f)
     }
+
+    fun setAccent(c: Int) { paint.color = c; invalidate() }
     private val inset = dp(14f)
     private val topPad = dp(52f)
     private val botPad = dp(150f)

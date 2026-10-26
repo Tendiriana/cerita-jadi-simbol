@@ -12,12 +12,20 @@ Launcher Android bergaya terminal premium klasik (amber). Versi 0.2.
 - **Dock**: WhatsApp, Chrome, Claude, Gaming Hub (ikon sketsa amber).
 
 ## Cara pakai (sengaja tanpa petunjuk, biar bersih & rumit)
-- **Buka laci aplikasi**: tekan lama baris `x-mod㉿s24` (atau ketik `apps` di prompt).
-- **Prompt rahasia** `x-mod:~$` — ketik perintah, mis. `wa`, `chrome`, `claude`, `game`,
-  `cam`, `opt`, `foto`, `setelan`, atau nama aplikasi apa pun. Perintah tak dikenal → `command not found`.
-- **Ganti foto**: ketik `foto`.
-- **OPTIMIZE**: animasi scan terminal, membersihkan cache X-Mod sendiri, lalu
-  membuka **Device Care Samsung** untuk pembersihan dalam.
+- **Buka laci aplikasi**: tekan lama baris `x-mod㉿s24` (atau ketik `apps`).
+- **Ganti launcher default**: tekan lama `[ session:active ]` (kanan atas).
+- **Prompt rahasia** `x-mod:~$` — ketik perintah. Muncul chip saran; `↺` = riwayat.
+- **Perintah**: `help`, `neofetch`, `ps`, `whoami`, `date`, `uname`, `echo`, `clear`,
+  `apps`, `opt`, `foto`, `cam`, `setelan`, `default`, atau nama aplikasi.
+- **Tema**: `theme amber | green | red`.
+- **Boot**: `boot on` / `boot off`.
+- **App vault (sembunyikan aplikasi)**: `hide apps` membuka vault; `hide <app>` /
+  `unhide <app>`, atau tekan lama ikon di laci (sembunyikan) / di vault (tampilkan).
+- **Easter egg**: salah perintah 3× → layar peringatan.
+- **OPTIMIZE**: animasi scan, bersihkan cache X-Mod, lalu buka **Device Care Samsung**.
+
+Tambahan vibe: boot sequence, efek ketik, getar halus, hujan kode, glitch,
+status charging (baterai ⚡ beranimasi).
 
 ## Update (tanpa uninstall)
 Semua build ditandatangani dengan **kunci tetap**, jadi versi baru langsung

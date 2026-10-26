@@ -2,6 +2,8 @@
 <resources>
     <color name="bg">#0A0A0B</color>
     <color name="amber">#E8B24A</color>
+    <color name="green">#46D17A</color>
+    <color name="red">#E5484D</color>
     <color name="bright">#F2EFE2</color>
     <color name="text">#D8D6CC</color>
     <color name="label">#9A9A8E</color>

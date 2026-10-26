@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Menampilkan generasi jaringan seluler (4G/5G) di status bar X-Mod. -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- Getar halus saat aksi (boot, optimize, perintah). -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Melihat daftar aplikasi yang bisa diluncurkan (Android 11+). -->
     <queries>
