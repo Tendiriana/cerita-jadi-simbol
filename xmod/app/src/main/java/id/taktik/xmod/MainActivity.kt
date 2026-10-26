@@ -67,7 +67,6 @@ class MainActivity : AppCompatActivity() {
 
     // views
     private lateinit var photo: ImageView
-    private lateinit var rain: MatrixRainView
     private lateinit var glitch: GlitchView
     private lateinit var statusL: TextView
     private lateinit var statusR: TextView
@@ -141,7 +140,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun bind() {
         photo = findViewById(R.id.photo)
-        rain = findViewById(R.id.rain)
         glitch = findViewById(R.id.glitch)
         statusL = findViewById(R.id.status_left)
         statusR = findViewById(R.id.status_right)
@@ -205,7 +203,6 @@ class MainActivity : AppCompatActivity() {
         cmdBlock.setBackgroundColor(c)
         findViewById<HudBracketsView>(R.id.photo_brackets).setAccent(c)
         spark.setAccent(c)
-        rain.rainColor = c
         glitch.tint = c
     }
 
