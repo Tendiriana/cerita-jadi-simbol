@@ -31,7 +31,14 @@ import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.os.Build
+import android.telephony.TelephonyManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -86,6 +93,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         prefs = getSharedPreferences("xmod", Context.MODE_PRIVATE)
+        hideSystemBars()
+        requestPhonePermission()
 
         bind()
         setupPhoto()
@@ -166,11 +175,21 @@ class MainActivity : AppCompatActivity() {
         photo.scaleType = ImageView.ScaleType.CENTER_CROP
 
         val uriStr = prefs.getString(PREF_PHOTO, null)
-        if (uriStr != null) {
-            try { photo.setImageURI(Uri.parse(uriStr)) } catch (e: Exception) { photo.setImageDrawable(null) }
-        } else {
-            photo.setImageDrawable(null)
-        }
+        val bmp = if (uriStr != null) loadBitmap(Uri.parse(uriStr)) else null
+        if (bmp != null) photo.setImageBitmap(bmp) else photo.setImageDrawable(null)
+    }
+
+    private fun loadBitmap(uri: Uri): android.graphics.Bitmap? {
+        return try {
+            val o = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, o) }
+            val reqW = resources.displayMetrics.widthPixels.coerceAtLeast(720)
+            val reqH = (resources.displayMetrics.density * 440f).toInt()
+            var sample = 1
+            while (o.outWidth / sample > reqW * 2 || o.outHeight / sample > reqH * 2) sample *= 2
+            val o2 = BitmapFactory.Options().apply { inSampleSize = sample }
+            contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, o2) }
+        } catch (e: Exception) { null }
     }
 
     private fun pickPhoto() {
@@ -205,7 +224,32 @@ class MainActivity : AppCompatActivity() {
         hostLine.setOnLongClickListener { openDrawer(); true }
         cmdLine.setOnLongClickListener { openDrawer(); true }
 
+        // pintasan tersembunyi: tekan lama [ session:active ] → pengaturan launcher default
+        legendSession.setOnLongClickListener { openSettings(Settings.ACTION_HOME_SETTINGS); true }
+
         findViewById<View>(R.id.opt_btn).setOnClickListener { startOptimize() }
+    }
+
+    private fun hideSystemBars() {
+        try {
+            val c = WindowInsetsControllerCompat(window, window.decorView)
+            c.hide(WindowInsetsCompat.Type.statusBars())
+            c.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } catch (e: Exception) { }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) hideSystemBars()
+    }
+
+    private fun requestPhonePermission() {
+        try {
+            if (Build.VERSION.SDK_INT >= 23 &&
+                checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), 9)
+            }
+        } catch (e: Exception) { }
     }
 
     // ---------- Prompt tersembunyi ----------
@@ -495,10 +539,28 @@ class MainActivity : AppCompatActivity() {
             when {
                 caps == null -> "OFF" to "net"
                 caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> "WIFI" to "wlan0"
-                caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> "CELL" to "rmnet0"
+                caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> cellGen() to "rmnet0"
                 else -> "NET" to "net0"
             }
         } catch (e: Exception) { "NET" to "net0" }
+    }
+
+    private fun cellGen(): String {
+        return try {
+            val tm = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            val t = if (Build.VERSION.SDK_INT >= 24) tm.dataNetworkType else @Suppress("DEPRECATION") tm.networkType
+            when (t) {
+                TelephonyManager.NETWORK_TYPE_NR -> "5G"
+                TelephonyManager.NETWORK_TYPE_LTE -> "4G"
+                TelephonyManager.NETWORK_TYPE_HSPAP, TelephonyManager.NETWORK_TYPE_HSPA,
+                TelephonyManager.NETWORK_TYPE_HSUPA, TelephonyManager.NETWORK_TYPE_HSDPA,
+                TelephonyManager.NETWORK_TYPE_UMTS, TelephonyManager.NETWORK_TYPE_EVDO_0,
+                TelephonyManager.NETWORK_TYPE_EVDO_A, TelephonyManager.NETWORK_TYPE_EVDO_B -> "3G"
+                TelephonyManager.NETWORK_TYPE_EDGE, TelephonyManager.NETWORK_TYPE_GPRS,
+                TelephonyManager.NETWORK_TYPE_CDMA, TelephonyManager.NETWORK_TYPE_1xRTT -> "2G"
+                else -> "LTE"
+            }
+        } catch (e: SecurityException) { "CELL" } catch (e: Exception) { "CELL" }
     }
     private fun netTraffic(delta: Long): String {
         val kb = delta / 1024.0

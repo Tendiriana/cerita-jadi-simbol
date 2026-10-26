@@ -43,7 +43,7 @@
         android:orientation="vertical"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:paddingTop="10dp"
+        android:paddingTop="22dp"
         android:paddingBottom="14dp">
 
         <!-- Status bar X-Mod -->
