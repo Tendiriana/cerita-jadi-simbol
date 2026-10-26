@@ -27,6 +27,7 @@ import android.net.TrafficStats
 import android.net.Uri
 import android.os.BatteryManager
 import android.os.Build
+import android.os.Bundle as OsBundle
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -814,12 +815,14 @@ class MainActivity : AppCompatActivity() {
         rotasiTile = t2[0] as LinearLayout; rotasiName = t2[1] as TextView; rotasiState = t2[2] as TextView
         val t3 = gridTile(grid, "DND", "off") { toggleDnd() }
         dndTile = t3[0] as LinearLayout; dndName = t3[1] as TextView; dndState = t3[2] as TextView
+        addSection(grid, "── koneksi ──")
         gridTile(grid, "WIFI", "›") { openSysPanel("android.settings.panel.action.WIFI", Settings.ACTION_WIFI_SETTINGS) }
         gridTile(grid, "BLUETOOTH", "›") { openSys(Settings.ACTION_BLUETOOTH_SETTINGS) }
         gridTile(grid, "DATA", "›") { openSysPanel("android.settings.panel.action.INTERNET_CONNECTIVITY", Settings.ACTION_WIRELESS_SETTINGS) }
         gridTile(grid, "HOTSPOT", "›") { openTether() }
         gridTile(grid, "PESAWAT", "›") { openSys(Settings.ACTION_AIRPLANE_MODE_SETTINGS) }
         gridTile(grid, "LOKASI", "›") { openSys(Settings.ACTION_LOCATION_SOURCE_SETTINGS) }
+        addSection(grid, "── sistem ──")
         gridTile(grid, "NFC", "›") { openSys(Settings.ACTION_NFC_SETTINGS) }
         gridTile(grid, "HEMAT", "›") { openSys(Settings.ACTION_BATTERY_SAVER_SETTINGS) }
         gridTile(grid, "SUARA", "›") { openSys(Settings.ACTION_SOUND_SETTINGS) }
@@ -847,14 +850,19 @@ class MainActivity : AppCompatActivity() {
     private fun gridTile(grid: GridLayout, name: String, state: String, onClick: () -> Unit): Array<Any> {
         val tile = LinearLayout(this)
         tile.orientation = LinearLayout.VERTICAL
-        tile.gravity = android.view.Gravity.CENTER
+        tile.gravity = android.view.Gravity.START
         tile.background = getDrawable(R.drawable.qs_tile_off)
-        tile.setPadding(dp(8), dp(13), dp(8), dp(13))
+        tile.minimumHeight = dp(64)
+        tile.setPadding(dp(13), dp(12), dp(12), dp(12))
         val nameTv = TextView(this).apply {
-            text = name; setTextColor(0xFFD8D6CC.toInt()); textSize = 11f; typeface = android.graphics.Typeface.MONOSPACE
+            text = name; setTextColor(0xFFF2EFE2.toInt()); textSize = 12.5f
+            typeface = android.graphics.Typeface.MONOSPACE; letterSpacing = 0.02f
         }
         val stTv = TextView(this).apply {
-            text = state; setTextColor(0xFF8A8A7E.toInt()); textSize = 9f; typeface = android.graphics.Typeface.MONOSPACE
+            text = state; setTextColor(0xFF8A8A7E.toInt()); textSize = 9.5f
+            typeface = android.graphics.Typeface.MONOSPACE
+            val p = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            p.topMargin = dp(5); layoutParams = p
         }
         tile.addView(nameTv); tile.addView(stTv)
         val lp = GridLayout.LayoutParams()
@@ -865,6 +873,21 @@ class MainActivity : AppCompatActivity() {
         tile.setOnClickListener { haptic(); onClick() }
         grid.addView(tile)
         return arrayOf(tile, nameTv, stTv)
+    }
+
+    private fun addSection(grid: GridLayout, text: String) {
+        val tv = TextView(this)
+        tv.text = text
+        tv.setTextColor(0xFF6E6E64.toInt())
+        tv.textSize = 9f
+        tv.typeface = android.graphics.Typeface.MONOSPACE
+        tv.letterSpacing = 0.1f
+        val lp = GridLayout.LayoutParams()
+        lp.width = 0
+        lp.columnSpec = GridLayout.spec(0, 3, 1f)
+        lp.setMargins(dp(4), dp(12), dp(4), dp(2))
+        tv.layoutParams = lp
+        grid.addView(tv)
     }
 
     private fun anyOverlayOpen(): Boolean =
@@ -905,7 +928,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setTileOn(tile: LinearLayout?, name: TextView?, on: Boolean) {
         tile?.background = getDrawable(if (on) R.drawable.qs_tile_on else R.drawable.qs_tile_off)
-        name?.setTextColor(if (on) accent else 0xFFD8D6CC.toInt())
+        name?.setTextColor(if (on) accent else 0xFFF2EFE2.toInt())
     }
 
     private fun findFlashCamera(): String? = try {
@@ -1068,7 +1091,26 @@ class MainActivity : AppCompatActivity() {
         val host = widgetHost ?: return
         val view = try { host.createView(applicationContext, id, info) } catch (e: Exception) { return }
         view.setAppWidget(id, info)
-        view.minimumHeight = dp(80)
+
+        // Beri tahu widget ukuran sebenarnya supaya tidak gagal render / error.
+        val dm = resources.displayMetrics
+        val wdp = ((dm.widthPixels / dm.density) - 44f).toInt().coerceAtLeast(120)
+        val minHpx = Math.max(info.minHeight, dp(90))
+        val hdp = (minHpx / dm.density).toInt().coerceIn(90, 420)
+        val hpx = (hdp * dm.density).toInt()
+        try {
+            val opts = OsBundle()
+            opts.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, wdp)
+            opts.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, wdp)
+            opts.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, hdp)
+            opts.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, hdp)
+            widgetManager?.updateAppWidgetOptions(id, opts)
+            view.updateAppWidgetOptions(opts)
+        } catch (e: Exception) { }
+
+        view.minimumHeight = hpx
+        view.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, hpx)
+
         val wrap = FrameLayout(this)
         wrap.background = getDrawable(R.drawable.box_bg)
         wrap.setPadding(dp(6), dp(6), dp(6), dp(6))
@@ -1381,7 +1423,10 @@ class MainActivity : AppCompatActivity() {
     }
     private fun toast(s: String) = Toast.makeText(this, s, Toast.LENGTH_SHORT).show()
 
-    override fun onResume() { super.onResume(); applyPhoto(); tick() }
+    override fun onResume() {
+        super.onResume(); applyPhoto(); tick()
+        try { widgetHost?.startListening() } catch (e: Exception) { }
+    }
     override fun onDestroy() {
         super.onDestroy()
         ui.removeCallbacksAndMessages(null)
