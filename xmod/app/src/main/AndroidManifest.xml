@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Status bar & grafik jaringan (baca status koneksi, tanpa akses internet). -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Menampilkan generasi jaringan seluler (4G/5G) di status bar X-Mod. -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- Getar halus saat aksi (boot, optimize, perintah). -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Panel kontrol: kecerahan & rotasi (izin khusus, diberikan manual sekali). -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- Panel kontrol: mode Jangan Ganggu (izin khusus, diberikan manual sekali). -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <!-- Mengatur wallpaper sistem agar recents/lockscreen ikut gelap. -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
+    <!-- Melihat daftar aplikasi yang bisa diluncurkan (Android 11+). -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.XMod">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Menghitung jumlah notifikasi untuk lencana (aktif manual di Setelan). -->
+        <service
+            android:name=".NotifListener"
+            android:exported="true"
+            android:label="X-Mod Notif"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

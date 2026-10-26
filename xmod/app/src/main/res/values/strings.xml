@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">X-Mod Launcher</string>
+    <string name="host_line">┌──(x-mod㉿s24)-[~]</string>
+    <string name="cmd_line">└─$ status --live</string>
+    <string name="prompt">x-mod:~$</string>
+    <string name="grep">grep&gt;</string>
+    <string name="search_hint">cari aplikasi…</string>
+    <string name="optimize">⚡ OPTIMIZE</string>
+    <string name="apps_path">~/apps</string>
+    <string name="close">[ tutup ]</string>
+    <string name="deep_clean">deep clean ›</string>
+</resources>

@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+// Nomor build dari GitHub Actions; naik otomatis tiap build supaya update bisa menimpa versi lama.
+def runNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "0").toInteger()
+
+android {
+    namespace 'id.taktik.xmod'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "id.taktik.xmod"
+        minSdk 26
+        targetSdk 34
+        versionCode 100 + runNumber
+        versionName "0.2." + runNumber
+    }
+
+    // Kunci tetap: semua build ditandatangani sama, jadi update tidak perlu uninstall.
+    signingConfigs {
+        xmod {
+            storeFile rootProject.file("keystore/xmod.jks")
+            storePassword "xmodlauncher"
+            keyAlias "xmod"
+            keyPassword "xmodlauncher"
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.xmod
+        }
+        release {
+            signingConfig signingConfigs.xmod
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        buildConfig true
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+}
