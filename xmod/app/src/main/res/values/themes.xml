@@ -5,8 +5,11 @@
         <item name="android:statusBarColor">@color/bg</item>
         <item name="android:navigationBarColor">@color/bg</item>
         <item name="android:windowShowWallpaper">false</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:fontFamily">@font/jetbrains_mono</item>
+        <item name="fontFamily">@font/jetbrains_mono</item>
         <item name="colorAccent">@color/amber</item>
-        <item name="android:colorControlActivated">@color/amber</item>
+        <item name="colorControlActivated">@color/amber</item>
         <item name="android:textColorHighlight">#4DE8B24A</item>
     </style>
 </resources>

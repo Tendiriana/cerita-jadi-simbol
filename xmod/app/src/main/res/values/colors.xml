@@ -7,6 +7,9 @@
     <color name="label">#9A9A8E</color>
     <color name="muted">#8A8A7E</color>
     <color name="dim">#6E6E64</color>
+    <color name="off">#3A3420</color>
     <color name="border">#2E2A1C</color>
+    <color name="border_hi">#3A3420</color>
     <color name="tile">#121210</color>
+    <color name="ok">#7FC98A</color>
 </resources>
