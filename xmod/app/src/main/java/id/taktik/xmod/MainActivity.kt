@@ -408,6 +408,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupHeader() {
         hostLine.setOnLongClickListener { openDrawer(false); true }
         cmdLine.setOnLongClickListener { openDrawer(false); true }
+        // ketuk [ session:active ] → panel kontrol; tekan lama → pengaturan launcher default
+        legendSession.setOnClickListener { openQuick() }
         legendSession.setOnLongClickListener { haptic(); openSettings(Settings.ACTION_HOME_SETTINGS); true }
         findViewById<View>(R.id.opt_btn).setOnClickListener { startOptimize() }
     }
@@ -788,8 +790,13 @@ class MainActivity : AppCompatActivity() {
         gridTile(grid, "WIFI", "›") { openSysPanel("android.settings.panel.action.WIFI", Settings.ACTION_WIFI_SETTINGS) }
         gridTile(grid, "BLUETOOTH", "›") { openSys(Settings.ACTION_BLUETOOTH_SETTINGS) }
         gridTile(grid, "DATA", "›") { openSysPanel("android.settings.panel.action.INTERNET_CONNECTIVITY", Settings.ACTION_WIRELESS_SETTINGS) }
+        gridTile(grid, "HOTSPOT", "›") { openTether() }
         gridTile(grid, "PESAWAT", "›") { openSys(Settings.ACTION_AIRPLANE_MODE_SETTINGS) }
         gridTile(grid, "LOKASI", "›") { openSys(Settings.ACTION_LOCATION_SOURCE_SETTINGS) }
+        gridTile(grid, "NFC", "›") { openSys(Settings.ACTION_NFC_SETTINGS) }
+        gridTile(grid, "HEMAT", "›") { openSys(Settings.ACTION_BATTERY_SAVER_SETTINGS) }
+        gridTile(grid, "SUARA", "›") { openSys(Settings.ACTION_SOUND_SETTINGS) }
+        gridTile(grid, "TAMPILAN", "›") { openSys(Settings.ACTION_DISPLAY_SETTINGS) }
         gridTile(grid, "SETELAN", "›") { openSys(Settings.ACTION_SETTINGS) }
 
         val closeGd = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
@@ -799,21 +806,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
         quickCard.setOnTouchListener { _, ev -> closeGd.onTouchEvent(ev); false }
+        // Panel dibuka dengan ketuk [ session:active ] atau perintah `panel` (tanpa usap, biar tak bentrok gestur sistem).
+    }
 
-        openGesture = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onFling(e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float): Boolean {
-                if (e1 == null || anyOverlayOpen()) return false
-                // Hanya dari area [ session:active ] sampai tombol OPTIMIZE (kolom kanan header).
-                val loc = IntArray(2)
-                legendSession.getLocationInWindow(loc); val top = loc[1]
-                val opt = findViewById<View>(R.id.opt_btn); opt.getLocationInWindow(loc)
-                val bottom = loc[1] + opt.height
-                val left = resources.displayMetrics.widthPixels * 0.45f
-                if (e1.x >= left && e1.y >= top - 24 && e1.y <= bottom + 24 &&
-                    e2.y - e1.y > 55 && vy > 700) { openQuick(); return true }
-                return false
-            }
-        })
+    private fun openTether() {
+        try {
+            startActivity(Intent().setComponent(ComponentName("com.android.settings", "com.android.settings.TetherSettings"))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            closeQuick()
+        } catch (e: Exception) { openSys(Settings.ACTION_WIRELESS_SETTINGS) }
     }
 
     private fun gridTile(grid: GridLayout, name: String, state: String, onClick: () -> Unit): Array<Any> {
