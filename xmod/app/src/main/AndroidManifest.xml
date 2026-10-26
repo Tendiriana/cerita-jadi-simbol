@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- Panel kontrol: mode Jangan Ganggu (izin khusus, diberikan manual sekali). -->
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <!-- Mengatur wallpaper sistem agar recents/lockscreen ikut gelap. -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <!-- Melihat daftar aplikasi yang bisa diluncurkan (Android 11+). -->
     <queries>

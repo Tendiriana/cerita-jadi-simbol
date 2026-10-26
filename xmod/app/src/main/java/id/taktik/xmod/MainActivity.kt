@@ -2,6 +2,7 @@ package id.taktik.xmod
 
 import android.app.ActivityManager
 import android.app.NotificationManager
+import android.app.WallpaperManager
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
@@ -9,8 +10,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
+import android.graphics.RadialGradient
+import android.graphics.Shader
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.net.ConnectivityManager
@@ -138,6 +144,7 @@ class MainActivity : AppCompatActivity() {
     private val PREF_THEME = "theme"
     private val PREF_HIDDEN = "hidden"
     private val PREF_BOOT = "boot"
+    private val PREF_NAV = "nav"
     private val PICK_PHOTO = 7
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -405,10 +412,14 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.opt_btn).setOnClickListener { startOptimize() }
     }
 
+    private fun navHidden(): Boolean = prefs.getString(PREF_NAV, "hide") == "hide"
+
     private fun hideSystemBars() {
         try {
             val c = WindowInsetsControllerCompat(window, window.decorView)
             c.hide(WindowInsetsCompat.Type.statusBars())
+            if (navHidden()) c.hide(WindowInsetsCompat.Type.navigationBars())
+            else c.show(WindowInsetsCompat.Type.navigationBars())
             c.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } catch (e: Exception) { }
     }
@@ -534,6 +545,9 @@ class MainActivity : AppCompatActivity() {
             lc.startsWith("hide ") -> hideApp(c.substring(5))
             lc.startsWith("unhide ") -> unhideApp(c.substring(7))
             lc.startsWith("theme") -> setTheme(lc.removePrefix("theme").trim())
+            lc.startsWith("wall") -> setWall(lc.removePrefix("wall").trim())
+            lc == "nav show" || lc == "navbar on" -> { prefs.edit().putString(PREF_NAV, "show").apply(); hideSystemBars(); toast("navbar: tampil") }
+            lc == "nav hide" || lc == "navbar off" || lc == "nav" -> { prefs.edit().putString(PREF_NAV, "hide").apply(); hideSystemBars(); toast("navbar: sembunyi") }
             lc == "boot on" -> { prefs.edit().putString(PREF_BOOT, "1").apply(); toast("boot: on") }
             lc == "boot off" -> { prefs.edit().putString(PREF_BOOT, "0").apply(); toast("boot: off") }
             lc == "boot" -> showBoot()
@@ -789,8 +803,14 @@ class MainActivity : AppCompatActivity() {
         openGesture = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onFling(e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float): Boolean {
                 if (e1 == null || anyOverlayOpen()) return false
-                val h = resources.displayMetrics.heightPixels
-                if (e1.y < h * 0.18f && e2.y - e1.y > 80 && vy > 1400) { openQuick(); return true }
+                // Hanya dari area [ session:active ] sampai tombol OPTIMIZE (kolom kanan header).
+                val loc = IntArray(2)
+                legendSession.getLocationInWindow(loc); val top = loc[1]
+                val opt = findViewById<View>(R.id.opt_btn); opt.getLocationInWindow(loc)
+                val bottom = loc[1] + opt.height
+                val left = resources.displayMetrics.widthPixels * 0.45f
+                if (e1.x >= left && e1.y >= top - 24 && e1.y <= bottom + 24 &&
+                    e2.y - e1.y > 55 && vy > 700) { openQuick(); return true }
                 return false
             }
         })
@@ -1171,6 +1191,46 @@ class MainActivity : AppCompatActivity() {
     }
     private fun openSettings(action: String) {
         try { startActivity(Intent(action)) } catch (e: Exception) { try { startActivity(Intent(Settings.ACTION_SETTINGS)) } catch (_: Exception) {} }
+    }
+
+    private fun setWall(kind: String) {
+        try {
+            val wm = WallpaperManager.getInstance(this)
+            val b = when {
+                kind.startsWith("fo") || kind.startsWith("img") -> {
+                    val u = prefs.getString(PREF_PHOTO, null)
+                    if (u != null) loadBitmap(Uri.parse(u)) else null
+                }
+                kind.startsWith("am") -> amberWall()
+                else -> solidWall(0xFF0A0A0B.toInt())
+            } ?: solidWall(0xFF0A0A0B.toInt())
+            wm.setBitmap(b)
+            toast("wallpaper sistem diubah")
+        } catch (e: Exception) { toast("gagal set wallpaper") }
+    }
+
+    private fun solidWall(color: Int): Bitmap {
+        val w = resources.displayMetrics.widthPixels
+        val h = resources.displayMetrics.heightPixels
+        val b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        Canvas(b).drawColor(color)
+        return b
+    }
+
+    private fun amberWall(): Bitmap {
+        val w = resources.displayMetrics.widthPixels
+        val h = resources.displayMetrics.heightPixels
+        val b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val c = Canvas(b)
+        c.drawColor(0xFF0A0A0B.toInt())
+        val p = Paint(Paint.ANTI_ALIAS_FLAG)
+        p.shader = RadialGradient(
+            w * 0.5f, h * 0.30f, h * 0.55f,
+            intArrayOf((accent and 0x00FFFFFF) or 0x40000000, 0x00000000),
+            floatArrayOf(0f, 1f), Shader.TileMode.CLAMP
+        )
+        c.drawRect(0f, 0f, w.toFloat(), h.toFloat(), p)
+        return b
     }
 
     private fun dirSize(f: File): Long = try {
