@@ -82,6 +82,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var logCursor: View
     private lateinit var cmdInput: EditText
     private lateinit var cmdBlock: View
+    private lateinit var suggestScroll: View
+    private lateinit var suggestRow: android.widget.LinearLayout
+    private var firstSuggestion: (() -> Unit)? = null
     private lateinit var drawer: View
     private lateinit var optOverlay: View
 
@@ -134,6 +137,8 @@ class MainActivity : AppCompatActivity() {
         logCursor = findViewById(R.id.log_cursor)
         cmdInput = findViewById(R.id.cmd_input)
         cmdBlock = findViewById(R.id.cmd_block)
+        suggestScroll = findViewById(R.id.suggest_scroll)
+        suggestRow = findViewById(R.id.suggest_row)
         drawer = findViewById(R.id.drawer)
         optOverlay = findViewById(R.id.opt_overlay)
 
@@ -254,15 +259,72 @@ class MainActivity : AppCompatActivity() {
 
     // ---------- Prompt tersembunyi ----------
     private fun setupCommand() {
+        cmdInput.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) { buildSuggestions(s?.toString() ?: "") }
+            override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+        })
         cmdInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE) {
-                runCommand(cmdInput.text.toString())
+                val f = firstSuggestion
+                if (f != null) f.invoke() else runCommand(cmdInput.text.toString())
                 cmdInput.setText("")
                 hideKeyboard(cmdInput)
+                buildSuggestions("")
                 true
             } else false
         }
     }
+
+    private fun buildSuggestions(q0: String) {
+        suggestRow.removeAllViews()
+        firstSuggestion = null
+        val q = q0.trim().lowercase(ID)
+        if (q.isEmpty()) { suggestScroll.visibility = View.GONE; return }
+
+        val out = ArrayList<Pair<String, () -> Unit>>()
+        // perintah bawaan
+        val kw = listOf<Pair<String, () -> Unit>>(
+            "apps" to { openDrawer() },
+            "optimize" to { startOptimize() },
+            "foto" to { pickPhoto() },
+            "setelan" to { openSettings(Settings.ACTION_SETTINGS) },
+            "default" to { openSettings(Settings.ACTION_HOME_SETTINGS) }
+        )
+        for ((k, act) in kw) if (k.startsWith(q)) out.add("·$k" to act)
+        // aplikasi: yang diawali query dulu, lalu yang mengandung
+        val starts = allApps.filter { it.label.lowercase(ID).startsWith(q) }
+        val contains = allApps.filter { val l = it.label.lowercase(ID); l.contains(q) && !l.startsWith(q) }
+        for (a in starts) out.add(a.label to { launchApp(a) })
+        for (a in contains) out.add(a.label to { launchApp(a) })
+
+        if (out.isEmpty()) { suggestScroll.visibility = View.GONE; return }
+        firstSuggestion = out[0].second
+        suggestScroll.visibility = View.VISIBLE
+
+        val padH = dp(12); val padV = dp(7); val gap = dp(8)
+        for ((label, act) in out.take(14)) {
+            val chip = TextView(this)
+            chip.text = label
+            chip.setTextColor(accent)
+            chip.textSize = 12f
+            chip.typeface = android.graphics.Typeface.MONOSPACE
+            chip.maxLines = 1
+            chip.background = getDrawable(R.drawable.chip_bg)
+            chip.setPadding(padH, padV, padH, padV)
+            val lp = android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT)
+            lp.marginEnd = gap
+            chip.layoutParams = lp
+            chip.setOnClickListener {
+                act(); cmdInput.setText(""); hideKeyboard(cmdInput); buildSuggestions("")
+            }
+            suggestRow.addView(chip)
+        }
+    }
+
+    private fun dp(v: Int) = (resources.displayMetrics.density * v).toInt()
 
     private fun runCommand(raw: String) {
         val c = raw.trim().lowercase(ID)

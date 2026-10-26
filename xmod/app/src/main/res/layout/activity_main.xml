@@ -434,6 +434,22 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+        <!-- Baris saran aplikasi saat mengetik perintah -->
+        <HorizontalScrollView
+            android:id="@+id/suggest_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/suggest_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
         <!-- Prompt tersembunyi: tanpa petunjuk -->
         <LinearLayout
             android:id="@+id/cmd_bar"
