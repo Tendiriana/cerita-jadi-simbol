@@ -20,6 +20,8 @@ import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
@@ -41,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private var ttsReady = false
     private var fileCallback: ValueCallback<Array<Uri>>? = null
     private var memakaiSalinan = false
+    private var halamanSiap = false
 
     private val appHost: String = Uri.parse(BuildConfig.APP_URL).host ?: ""
 
@@ -57,9 +60,14 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Halaman pembuka: logo di atas warna TakTik, tampil sampai halaman pertama selesai dimuat
+        // (paling lama 3 detik, supaya HP yang lambat tidak tertahan).
+        installSplashScreen().setKeepOnScreenCondition { !halamanSiap }
         super.onCreate(savedInstanceState)
         web = WebView(this)
+        web.setBackgroundColor(ContextCompat.getColor(this, R.color.bg))
         setContentView(web)
+        web.postDelayed({ halamanSiap = true }, 3000)
 
         web.settings.apply {
             javaScriptEnabled = true
@@ -86,6 +94,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                 assetLoader.shouldInterceptRequest(request.url)
+
+            override fun onPageFinished(view: WebView, url: String?) {
+                halamanSiap = true
+            }
 
             override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
                 if (!WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) view.evaluateJavascript(TTS_SHIM, null)

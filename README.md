@@ -83,6 +83,7 @@ https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik
 - APK membuka versi web, jadi perubahan `index.html` atau `soal.json` langsung sampai tanpa APK baru.
 - APK baru hanya dibuat kalau folder `taktik/` atau workflow-nya berubah. Bisa juga dibuat manual: tab **Actions** → **Build TakTik IPA APK** → **Run workflow**.
 - Di **Pengaturan → Aplikasi**, *Versi* adalah versi isi aplikasi (selalu terbaru), sedangkan *Aplikasi Android* adalah versi APK.
+- Saat dibuka, APK menampilkan halaman pembuka berlogo TakTik IPA sampai halaman pertama siap (paling lama 3 detik).
 - APK ditandatangani kunci dari secret `TAKTIK_KEYSTORE` dan `TAKTIK_KEY_PASSWORD`. Selama kuncinya sama, APK baru bisa dipasang menimpa yang lama tanpa uninstall. Simpan cadangan kuncinya.
 
 ### Alternatif APK lewat PWABuilder (opsional)
@@ -129,6 +130,9 @@ Untuk membuat soal yang perlu konversi satuan, pilih satuan lain di samping angk
    - tampilkan skor ke siswa setelah selesai.
 3. Ketuk **Buat & bagikan**. Muncul **kode ujian** 6 huruf. Bagikan lewat WhatsApp atau tulis di papan.
 4. Siswa membuka menu **Ujian** di bawah layar, mengisi kode dan nama, lalu mengerjakan. Selama ujian berlangsung, beranda menampilkan kartu **Lanjutkan ujian**. Waktu setiap siswa berjalan sejak ia mengetuk Mulai ujian.
+   - Jam hitung mundur selalu terlihat di atas layar. Jam berubah kuning saat sisa 5 menit dan merah saat sisa 1 menit, disertai pemberitahuan dan getar.
+   - Deretan nomor soal menunjukkan soal yang sudah benar (✓), dilewati (kuning), dan yang sedang dikerjakan.
+   - Kalau guru membolehkan melewati soal, setelah soal terakhir siswa masuk ke halaman **Periksa sebelum dikumpulkan**. Ketuk nomor kuning untuk mengerjakan soal yang dilewati, lalu ketuk **Kumpulkan jawaban**.
 5. Jawaban tersimpan setiap kali satu soal selesai. Jawaban terkumpul otomatis saat waktu habis, saat siswa mengakhiri ujian, atau saat guru menekan **Tutup ujian**. Kalau HP siswa tertutup, ujian bisa dilanjutkan.
 6. Daftar siswa diperbarui setiap 15 detik. Ketuk nama siswa untuk melihat jawabannya per soal (jawaban siswa, kunci, jumlah kesalahan, waktu) dan memberi **nilai akhir**. Nilai saran sudah dihitung otomatis.
 7. **⬇ Unduh nilai (Excel)** menyimpan berkas CSV yang bisa dibuka di Excel atau Google Sheets. Di aplikasi Android, daftar nilai disalin sebagai gantinya. **Salin daftar nilai** untuk ditempel ke WhatsApp. **Hapus lembar kerja** membuat siswa itu boleh mengulang.
@@ -211,6 +215,7 @@ Di halaman utama, siswa memilih tingkat:
 - Kelas dipilih sekali di layar pengenalan. Kelas bisa diganti lewat tombol **Kelas ▾** di kartu kemajuan, atau di Pengaturan.
 - Tingkat bantuan dipilih di kartu kemajuan beranda.
 - Langkah soal yang sudah selesai diringkas menjadi satu baris. Ketuk **Lihat** untuk membukanya lagi.
+- Setiap soal punya gambar kecil sesuai benda di ceritanya (sepeda, setrika, panel surya, dan sebagainya). Gambar dipilih otomatis dari judul dan cerita, jadi soal buatan guru juga ikut bergambar. Gambar tidak menunjukkan nama materi, supaya langkah Kenali materi tetap menantang.
 - Setiap soal yang selesai diberi bintang: ⭐⭐⭐ tanpa salah, ⭐⭐ untuk 1–2 kesalahan, ⭐ untuk lebih dari itu.
 
 ## Langkah latihan
