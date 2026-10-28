@@ -131,7 +131,11 @@ Untuk membuat soal yang perlu konversi satuan, pilih satuan lain di samping angk
 4. Siswa membuka menu **Ujian** di bawah layar, mengisi kode dan nama, lalu mengerjakan. Selama ujian berlangsung, beranda menampilkan kartu **Lanjutkan ujian**. Waktu setiap siswa berjalan sejak ia mengetuk Mulai ujian.
 5. Jawaban tersimpan setiap kali satu soal selesai. Jawaban terkumpul otomatis saat waktu habis, saat siswa mengakhiri ujian, atau saat guru menekan **Tutup ujian**. Kalau HP siswa tertutup, ujian bisa dilanjutkan.
 6. Daftar siswa diperbarui setiap 15 detik. Ketuk nama siswa untuk melihat jawabannya per soal (jawaban siswa, kunci, jumlah kesalahan, waktu) dan memberi **nilai akhir**. Nilai saran sudah dihitung otomatis.
-7. **Salin daftar nilai** untuk ditempel ke WhatsApp atau Excel. **Hapus lembar kerja** membuat siswa itu boleh mengulang.
+7. **⬇ Unduh nilai (Excel)** menyimpan berkas CSV yang bisa dibuka di Excel atau Google Sheets. Di aplikasi Android, daftar nilai disalin sebagai gantinya. **Salin daftar nilai** untuk ditempel ke WhatsApp. **Hapus lembar kerja** membuat siswa itu boleh mengulang.
+8. **📊 Analisis soal** mengurutkan soal dari yang paling sulit: persentase benar, jumlah siswa yang melewati, dan rata-rata kesalahan. Soal yang dijawab benar oleh kurang dari separuh siswa ditandai **Perlu dibahas ulang**.
+9. Siswa melihat **nilai dan catatan guru** di menu Ujian → **Riwayat ujianku**.
+
+Setelah memperbarui `index.html` ke versi 2.4, tempel ulang juga isi `server/ujian-worker.js` di Cloudflare supaya riwayat nilai siswa dan analisis soal berfungsi.
 
 Ujian kelas memerlukan **server ujian** (lihat *Server ujian* di bawah).
 
@@ -201,6 +205,13 @@ Di halaman utama, siswa memilih tingkat:
 - **Mudah**: sebagian kotak sudah terisi.
 - **Menengah**: kotak kosong, satuan tampil sebagai petunjuk.
 - **Sulit**: kotak kosong tanpa petunjuk satuan, soal cerita murni.
+
+## Tampilan siswa
+
+- Kelas dipilih sekali di layar pengenalan. Kelas bisa diganti lewat tombol **Kelas ▾** di kartu kemajuan, atau di Pengaturan.
+- Tingkat bantuan dipilih di kartu kemajuan beranda.
+- Langkah soal yang sudah selesai diringkas menjadi satu baris. Ketuk **Lihat** untuk membukanya lagi.
+- Setiap soal yang selesai diberi bintang: ⭐⭐⭐ tanpa salah, ⭐⭐ untuk 1–2 kesalahan, ⭐ untuk lebih dari itu.
 
 ## Langkah latihan
 

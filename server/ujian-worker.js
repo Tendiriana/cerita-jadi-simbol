@@ -138,6 +138,20 @@ async function rute(req, env) {
       .bind(pid, room, nama, token, t, batas, '{}', t).run();
     return json({ pid, token, mulai: t, batas, sekarang: t, judul: u.judul, aturan: a, soal: JSON.parse(u.soal), data: {}, selesai: false, status: u.status });
   }
+  if (p === '/saya') {
+    // siswa melihat nilai dan catatan guru untuk ujian yang pernah diikutinya
+    const daftar = (Array.isArray(b.ujian) ? b.ujian : []).slice(0, 30);
+    const out = [];
+    for (const x of daftar) {
+      const ps = await db.prepare('SELECT p.id, p.nilai, p.catatan, p.selesai, p.data, u.judul, u.status FROM peserta p JOIN ujian u ON u.room = p.room WHERE p.id = ? AND p.room = ? AND p.token = ?')
+        .bind(String(x.pid || ''), normRoom(x.room), String(x.token || '')).first();
+      if (!ps) { out.push({ room: normRoom(x.room), pid: x.pid, hilang: true }); continue; }
+      let d = {};
+      try { d = JSON.parse(ps.data || '{}'); } catch (e) {}
+      out.push({ room: normRoom(x.room), pid: ps.id, judul: ps.judul, status: ps.status, nilai: ps.nilai, catatan: ps.catatan || '', skor: d.skor == null ? null : d.skor, benar: d.benar || 0, jumlah: d.jumlah || 0 });
+    }
+    return json({ ujian: out });
+  }
   if (p === '/jawab') {
     const room = normRoom(b.room);
     const ps = await db.prepare('SELECT * FROM peserta WHERE id = ? AND room = ? AND token = ?').bind(b.pid, room, b.token).first();
@@ -193,7 +207,12 @@ async function rute(req, env) {
     if (!u) return gagal(404, 'Ujian tidak ditemukan.');
     const r = await db.prepare('SELECT * FROM peserta WHERE room = ? ORDER BY mulai').bind(u.room).all();
     return json({ room: u.room, judul: u.judul, kelas: u.kelas, aturan: JSON.parse(u.aturan || '{}'), status: u.status, jumlahSoal: JSON.parse(u.soal || '[]').length,
-      sekarang: t, peserta: (r.results || []).map(x => ringkas(x, u, t)) });
+      sekarang: t, peserta: (r.results || []).map(x => {
+        const o = ringkas(x, u, t);
+        // b.detail: sertakan jawaban per soal untuk analisis soal dan berkas nilai
+        if (b.detail) { try { o.res = (JSON.parse(x.data || '{}').res || []).map(y => ({ id: y.id, judul: y.judul, topik: y.topik, ok: !!y.ok, err: y.err || 0, lewat: !!y.lewat })); } catch (e) { o.res = []; } }
+        return o;
+      }) });
   }
   if (p === '/lembar') {
     const u = await milik(b.room);
