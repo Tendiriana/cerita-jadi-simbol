@@ -100,7 +100,7 @@ function ringkas(p, u, t) {
 async function rute(req, env) {
   const url = new URL(req.url), p = url.pathname.replace(/\/+$/, '') || '/';
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
-  if (req.method === 'GET' && p === '/') return json({ nama: 'taktik-ujian', ok: true, db: !!env.DB, api: !!env.API });
+  if (req.method === 'GET' && p === '/') return json({ nama: 'taktik-ujian', versi: '2.4', ok: true, db: !!env.DB, api: !!env.API });
   if (!env.DB) return gagal(503, 'Database ujian belum dipasang (binding D1 bernama DB).');
   const db = env.DB;
   await siapkan(db);
