@@ -616,7 +616,7 @@ var impText='',impMode='tambah',selectExport=false;
 var tingkat=(function(){var v=store.get('cjs.tingkat');return ['mudah','menengah','sulit'].indexOf(v)>=0?v:'menengah';})();
 var kelasSel=(function(){var v=store.get('cjs.kelas');return ['7','8','9'].indexOf(v)>=0?v:'9';})();
 
-var kunci=[],dataRev=0;
+var kunci=[],dataRev=0,fileBaru=[],ABAIKEY='cjs.abaikan';
 /* ---------- Server soal (Cloudflare) ---------- */
 var API_URL="https://taktik-api.taktik-ipa.workers.dev",apiFile='',BANKKEY='cjs.bank',KODEKEY='cjs.kode';
 var kodeKelas=String(store.get(KODEKEY)||'').toUpperCase(),activeKode='',bankInfo=null,kodeErr=null,lastLoad=0;
@@ -674,6 +674,12 @@ async function load(skipLocal){
   var pick=function(j,src){if(list||!j)return;var l=readList(j);if(l){list=l;source=src;readMeta(j);}};
   pick(local,'perangkat');pick(remote,remoteSrc);pick(file,'soal.json');pick(seed,'bawaan');
   data=list||[];
+  /* soal baru di soal.json (GitHub) yang belum ada di server: ditawarkan ke guru, tidak ditambahkan diam-diam */
+  fileBaru=[];
+  if(source!=='soal.json'&&source!=='bawaan'){
+    var ada={},abai=jget(ABAIKEY,[]);data.forEach(function(x){ada[x.id]=1;});
+    fileBaru=(readList(file)||readList(seed)||[]).filter(function(x){return !ada[x.id]&&abai.indexOf(x.id)<0;});
+  }
 }
 function newState(p){
   var order=p.formulas.map(function(_,i){return i;});
@@ -1833,6 +1839,12 @@ function kirimHtml(){
 function listHtml(){
   var h='<div class="row"><button class="btn" data-act="a-new" data-fk="new">+ Tambah soal</button></div>';
   h+='<p class="mut" style="margin-top:12px">'+data.length+' soal · sumber data: '+srcLabel()+'</p>';
+  if(fileBaru.length){
+    var per={};fileBaru.forEach(function(x){var k='Kelas '+x.kelas+' · '+x.topik;per[k]=(per[k]||0)+1;});
+    h+='<div class="fb info" role="status"><b>Ada '+fileBaru.length+' soal baru</b>Soal ini sudah ada di pembaruan aplikasi, tetapi belum ada di soal yang dipakai siswa: '
+      +esc(Object.keys(per).map(function(k){return k+' ('+per[k]+')';}).join(', '))+'.'
+      +'<div class="row"><button class="btn sm" data-act="a-tarik" data-fk="tarik">Tambahkan '+fileBaru.length+' soal</button><button class="btn ghost sm" data-act="a-abai" data-fk="abai">Abaikan</button></div></div>';
+  }
   if(apiBase()){}
   else if(source==='perangkat')h+='<div class="fb info" role="status"><b>Belum terkirim</b>Ada perubahan soal yang baru tersimpan di HP ini. Buka <b>Ekspor</b> untuk mengirimnya ke siswa.</div>';
   else if(pinHash!==(filePin||DEFPINHASH))h+='<div class="fb info" role="status"><b>Belum terkirim</b>PIN baru baru berlaku di HP ini. Buka <b>Ekspor</b>, lalu upload soal.json supaya PIN berlaku di semua HP.</div>';
@@ -2279,6 +2291,9 @@ document.addEventListener('click',function(e){
         render();});
       return;}}
   else if(a==='a-pin'){var np=$('#pin1');if(np&&np.value.trim().length>=4){pinHash=pinOf(np.value);pinAt=Date.now();store.set(PINH_KEY,JSON.stringify({h:pinHash,t:pinAt}));np.value='';notice={t:'ok',x:'PIN baru tersimpan di HP ini. Supaya berlaku di semua HP, buka Ekspor lalu upload soal.json ke GitHub.'};}else{notice={t:'bad',x:'PIN minimal 4 karakter.'};}}
+  else if(a==='a-tarik'){var nb=fileBaru.length;data=data.concat(fileBaru);fileBaru=[];var okt=persist();
+    notice={t:okt?'ok':'bad',x:okt?nb+' soal baru ditambahkan. '+sendHint():'Soal belum bisa disimpan di HP ini.'};}
+  else if(a==='a-abai'){var ab=jget(ABAIKEY,[]);fileBaru.forEach(function(x){ab.push(x.id);});store.set(ABAIKEY,JSON.stringify(ab));fileBaru=[];}
   else if(a==='a-reset'){confirmKey='reset';}
   else if(a==='a-reset-yes'){store.del(KEY);confirmKey=null;load(true).then(function(){notice={t:'ok',x:'Ubahan dibuang. Sumber data sekarang: '+srcLabel()+'.'};render();});return;}
   else if(a==='a-clear-done'){done={};saveDone();notice={t:'ok',x:'Catatan selesai siswa di perangkat ini dihapus.'};}
@@ -2317,7 +2332,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.0.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.0.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
