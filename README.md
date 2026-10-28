@@ -172,8 +172,9 @@ Soal dikirim lewat server Cloudflare (`server/worker.js`), jadi guru tidak perlu
 1. Dasbor Cloudflare: **Storage & Databases → D1 → Create**, beri nama `taktik-ujian`.
 2. **Workers & Pages → Create → Worker**, beri nama `taktik-ujian`, lalu **Deploy**. Ketuk **Edit code**, tempel seluruh isi `server/ujian-worker.js`, lalu **Deploy**.
 3. Di worker itu: **Settings → Bindings → Add → D1 database**, nama variabel `DB`, pilih database `taktik-ujian`.
-4. Salin alamat worker, misalnya `https://taktik-ujian.<nama>.workers.dev`.
-5. Di aplikasi: mode guru → **Pengaturan kelas → Server tambahan**, tempel alamatnya, lalu ketuk **Periksa & simpan**. Alamat itu ikut terkirim ke semua HP siswa.
+4. Tambah satu binding lagi: **Add → Service binding**, nama variabel `API`, pilih worker `taktik-api` (server soal). Ini wajib, karena Cloudflare tidak mengizinkan satu worker memanggil worker lain di alamat `workers.dev` yang sama, padahal server ujian perlu memeriksa PIN guru ke server soal. Membuka alamat worker harus menampilkan `"db":true,"api":true`.
+5. Salin alamat worker, misalnya `https://taktik-ujian.<nama>.workers.dev`.
+6. Di aplikasi: mode guru → **Pengaturan kelas → Server tambahan**, tempel alamatnya, lalu ketuk **Periksa & simpan**. Alamat itu ikut terkirim ke semua HP siswa.
 
 Tabel database dibuat otomatis saat server pertama kali dipakai. Server AI juga bisa disambungkan lewat kolom yang sama.
 
@@ -184,7 +185,7 @@ Tabel database dibuat otomatis saat server pertama kali dipakai. Server AI juga 
 1. Buat kunci API di console.anthropic.com → **API Keys**, lalu isi saldo (**Billing**). Pemakaian dibayar per permintaan.
 2. Di dasbor Cloudflare: **Workers & Pages → Create → Worker**, beri nama `taktik-ai`, ketuk **Deploy**, lalu **Edit code**. Tempel seluruh isi `server/ai-worker.js` dan ketuk **Deploy**.
 3. Buka **Settings → Variables and Secrets**, tambahkan secret `ANTHROPIC_API_KEY` berisi kunci dari langkah 1.
-4. (Opsional) Tambahkan binding KV bernama `DB` supaya kuota 40 permintaan per hari per kelas berlaku.
+4. Tambahkan **Service binding** bernama `API` ke worker `taktik-api` (wajib, untuk memeriksa PIN guru). (Opsional) Tambahkan binding KV bernama `DB` supaya kuota 40 permintaan per hari per kelas berlaku.
 5. Salin alamat worker, misalnya `https://taktik-ai.<nama>.workers.dev`, lalu tempel di mode guru → **Pengaturan kelas → Server tambahan**.
 
 Model bawaan adalah `claude-opus-5-5` (kualitas terbaik). Untuk biaya lebih murah, isi variabel `CLAUDE_MODEL`, misalnya `claude-sonnet-5-5` atau `claude-haiku-5-5`.

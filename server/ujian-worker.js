@@ -7,6 +7,8 @@
 //   2. Workers & Pages → Create → Worker, beri nama taktik-ujian, tempel berkas ini, Deploy.
 //   3. Worker → Settings → Bindings → Add → D1 database, nama variabel DB, pilih taktik-ujian.
 // Tabel dibuat otomatis saat pertama dipakai.
+//   4. Settings → Bindings → Add → Service binding, nama variabel API, pilih worker taktik-api
+//      (wajib: Cloudflare tidak mengizinkan worker memanggil worker lain di workers.dev yang sama).
 // Variabel opsional: MAIN_API (bawaan https://taktik-api.taktik-ipa.workers.dev).
 
 const CORS = {
@@ -45,15 +47,22 @@ async function siapkan(db) {
 }
 
 async function cekGuru(env, kode, pin) {
+  // Cloudflare menolak worker memanggil worker lain di workers.dev yang sama (error 1042),
+  // jadi server soal dipanggil lewat service binding bernama API kalau ada.
   const api = (env.MAIN_API || 'https://taktik-api.taktik-ipa.workers.dev').replace(/\/+$/, '');
+  const opsi = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kode, pin }) };
+  let r;
   try {
-    const r = await fetch(api + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kode, pin }) });
-    if (r.ok) return null;
-    const j = await r.json().catch(() => null);
-    return gagal(r.status === 429 ? 429 : 401, (j && j.pesan) || 'PIN salah. Masuk lagi dengan PIN terbaru.');
+    r = env.API ? await env.API.fetch(new Request(api + '/login', opsi)) : await fetch(api + '/login', opsi);
   } catch (e) {
     return gagal(502, 'Server soal tidak bisa dihubungi. Coba lagi.');
   }
+  if (r.ok) return null;
+  const j = await r.json().catch(() => null);
+  if (j && j.pesan && (r.status === 401 || r.status === 403 || r.status === 404 || r.status === 429)) return gagal(r.status === 429 ? 429 : 401, j.pesan);
+  return gagal(502, env.API
+    ? 'Server soal menjawab tidak seperti biasa (' + r.status + '). Coba lagi.'
+    : 'Server ini belum tersambung ke server soal. Di Cloudflare tambahkan Service binding bernama API ke worker taktik-api.');
 }
 const normKode = v => String(v == null ? '' : v).trim().toUpperCase().replace(/\s+/g, '-') || 'UTAMA';
 const normRoom = v => String(v == null ? '' : v).trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -85,7 +94,7 @@ function ringkas(p, u, t) {
 async function rute(req, env) {
   const url = new URL(req.url), p = url.pathname.replace(/\/+$/, '') || '/';
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
-  if (req.method === 'GET' && p === '/') return json({ nama: 'taktik-ujian', ok: true, db: !!env.DB });
+  if (req.method === 'GET' && p === '/') return json({ nama: 'taktik-ujian', ok: true, db: !!env.DB, api: !!env.API });
   if (!env.DB) return gagal(503, 'Database ujian belum dipasang (binding D1 bernama DB).');
   const db = env.DB;
   await siapkan(db);
