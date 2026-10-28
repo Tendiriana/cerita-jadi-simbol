@@ -65,16 +65,27 @@ Seperti aplikasi dari Play Store, TakTik IPA memperbarui dirinya sendiri. Siswa 
 
 1. Ubah berkas di GitHub (misalnya `index.html`).
 2. Naikkan nomor versi di **dua** tempat dengan angka yang sama:
-   - `sw.js` : baris `const VERSI = '2.0.0';`
-   - `index.html` : cari `APP_VERSI='2.0.0'`
-   Contoh: `2.0.0` → `2.0.1` untuk perbaikan kecil, `2.1.0` untuk fitur baru.
+   - `sw.js` : baris `const VERSI = '2.1.0';`
+   - `index.html` : cari `APP_VERSI='2.1.0'`
+   Contoh: `2.1.0` → `2.1.1` untuk perbaikan kecil, `2.2.0` untuk fitur baru.
+   Untuk fitur baru, tulis juga ringkasannya di `BARU` (cari `var BARU=` di `index.html`). Isinya tampil sekali di beranda sebagai kotak **Baru di versi ini**.
 3. Commit. Saat siswa membuka aplikasi dengan internet, versi baru langsung terpasang. Kalau siswa sedang mengerjakan soal, muncul tulisan **Versi baru siap** dengan tombol **Perbarui**, jadi pekerjaannya tidak hilang.
 
 Nomor versi yang sedang terpasang terlihat di **Pengaturan → Aplikasi**, beserta tombol **Periksa pembaruan**.
 
 Soal (soal.json atau server) tidak perlu menaikkan versi; soal baru selalu diambil setiap kali aplikasi dibuka.
 
-### Kalau ingin berkas APK untuk Android (opsional)
+### Aplikasi Android (APK)
+
+APK dibuat otomatis oleh GitHub Actions (`.github/workflows/taktik.yml`) dari folder `taktik/`, lalu diterbitkan di Release `taktik`:
+https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk
+
+- APK membuka versi web, jadi perubahan `index.html` atau `soal.json` langsung sampai tanpa APK baru.
+- APK baru hanya dibuat kalau folder `taktik/` atau workflow-nya berubah. Bisa juga dibuat manual: tab **Actions** → **Build TakTik IPA APK** → **Run workflow**.
+- Di **Pengaturan → Aplikasi**, *Versi* adalah versi isi aplikasi (selalu terbaru), sedangkan *Aplikasi Android* adalah versi APK.
+- APK ditandatangani kunci dari secret `TAKTIK_KEYSTORE` dan `TAKTIK_KEY_PASSWORD`. Selama kuncinya sama, APK baru bisa dipasang menimpa yang lama tanpa uninstall. Simpan cadangan kuncinya.
+
+### Alternatif APK lewat PWABuilder (opsional)
 
 Buka pwabuilder.com, masukkan alamat web TakTik IPA, lalu pilih **Android → Generate**. Hasilnya berkas APK/AAB yang membuka alamat web itu sebagai aplikasi. Karena isinya tetap diambil dari web, setiap pembaruan di GitHub langsung sampai ke HP tanpa memasang APK baru. APK yang sama juga bisa diunggah ke Play Store. iPhone tidak bisa memasang APK; pakai cara *Tambahkan ke Layar Utama* di atas.
 
