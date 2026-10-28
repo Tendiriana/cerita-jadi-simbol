@@ -338,6 +338,8 @@ details.fold[open] summary{margin-bottom:10px}
 .ujk-room{text-align:center}.ujk-room .row{justify-content:center}.ujk-big{font-size:2.6rem;font-weight:800;letter-spacing:.18em;margin:6px 0 2px;color:var(--acc)}
 .ujk-code{width:auto!important;padding:0 8px;font-size:.85rem;font-weight:800;letter-spacing:.05em}
 .ujk-n{font-size:1.2rem;font-weight:800;min-width:2.2em;text-align:right}.ujk-n.sar{color:var(--ink2);font-weight:600}
+.item.pilih{padding:0;display:flex;align-items:center;gap:6px;padding-right:10px}.item.pilih.on{border-color:var(--acc);background:var(--acc-soft)}
+.item.pilih .pb{font:inherit;color:var(--ink);flex:1;min-width:0;background:none;border:0;text-align:left;display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer}
 .riw-cat{margin:6px 0 0;padding:8px 10px;border-radius:10px;background:var(--acc-soft);font-size:.95rem}
 .ana-bar{display:block;height:8px;border-radius:99px;background:var(--sunk);overflow:hidden;margin:6px 0 2px}.ana-bar>span{display:block;height:100%;border-radius:99px;background:var(--ok)}
 .ana-bar.mid>span{background:#d9a21b}.ana-bar.bad>span{background:var(--bad)}
@@ -960,7 +962,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -2918,7 +2920,7 @@ document.addEventListener('visibilitychange',function(){if(document.visibilitySt
 
 /* ===== sisi guru ===== */
 var UG={list:null,msg:null,busy:false,room:null,hasil:null,lembar:null,pid:null,f:null,tmr:0};
-function ujkFormBaru(){return {judul:'',kelas:kelasSel,materi:[],n:10,menit:30,tingkat:'sulit',acak:true,lewati:true,lihatNilai:true};}
+function ujkFormBaru(){return {judul:'',kelas:kelasSel,cara:'acak',pilih:[],materi:[],n:10,menit:30,tingkat:'sulit',acak:true,lewati:true,lihatNilai:true};}
 function ujkMuatDaftar(){UG.busy=true;ujkGuru('/daftar').then(function(res){UG.busy=false;UG.list=res.ok?res.j.ujian:[];if(!res.ok)UG.msg={t:'bad',x:ujkErr(res,'Daftar ujian belum bisa dimuat.')};if(view==='admin'&&adminTab==='ujk')render();});}
 function ujkMuatHasil(diam){if(!UG.room)return;ujkGuru('/hasil',{room:UG.room,detail:true}).then(function(res){
   if(res.ok){var lama=UG.hasil;if(lama&&lama.room===res.j.room)res.j.peserta.forEach(function(p){if(!p.res){var q=lama.peserta.filter(function(x){return x.id===p.id;})[0];if(q&&q.res)p.res=q.res;}});UG.hasil=res.j;}else if(!diam)UG.msg={t:'bad',x:ujkErr(res,'Hasil ujian belum bisa dimuat.')};
@@ -2946,13 +2948,14 @@ function ujkDaftarHtml(){
 }
 function ujkBuatHtml(){
   var f=UG.f,tops=[];data.forEach(function(s){if(s.kelas===f.kelas&&tops.indexOf(s.topik)<0)tops.push(s.topik);});
-  var pool=data.filter(function(s){return s.kelas===f.kelas&&f.materi.indexOf(s.topik)>=0;});
+  var pool=f.cara==='pilih'?data.filter(function(s){return f.pilih.indexOf(s.id)>=0;}):data.filter(function(s){return s.kelas===f.kelas&&f.materi.indexOf(s.topik)>=0;});
   var h=guruBar('Buat ujian')+msgHtml(UG.msg)+'<section class="card"><div class="sh"><span class="num">1</span><h2>Soal</h2></div>'
     +'<label class="f"><span>Judul ujian</span><input class="in" id="ug-judul" value="'+esc(f.judul)+'" placeholder="Contoh: Ulangan Harian Listrik 9A" autocomplete="off"></label>'
     +'<p class="lbl">Kelas</p>'+chipsHtml([['7','Kelas 7'],['8','Kelas 8'],['9','Kelas 9']],f.kelas,'ug-kelas')
-    +'<p class="lbl">Materi <small>boleh lebih dari satu</small></p><div class="list">'+(tops.length?tops.map(function(t){var on=f.materi.indexOf(t)>=0,n=data.filter(function(s){return s.kelas===f.kelas&&s.topik===t;}).length;
+    +'<p class="lbl">Cara memilih soal</p>'+chipsHtml([['acak','Acak dari materi'],['pilih','Pilih soal sendiri']],f.cara,'ug-cara')
+    +(f.cara==='pilih'?ujkPilihHtml(f):'<p class="lbl">Materi <small>boleh lebih dari satu</small></p><div class="list">'+(tops.length?tops.map(function(t){var on=f.materi.indexOf(t)>=0,n=data.filter(function(s){return s.kelas===f.kelas&&s.topik===t;}).length;
       return '<button class="item" data-act="ug-mat" data-v="'+esc(t)+'" aria-pressed="'+on+'"><span class="ti">'+(on?'☑️':'⬜')+'</span><span class="it"><b>'+esc(t)+'</b><small>'+n+' soal</small></span></button>';}).join(''):'<p class="mut">Belum ada soal di kelas ini.</p>')+'</div>'
-    +'<p class="lbl">Jumlah soal <small>'+pool.length+' soal tersedia, diambil acak</small></p>'+chipsHtml([['5','5'],['10','10'],['15','15'],['20','20'],['0','Semua']],String(f.n),'ug-n')+'</section>';
+    +'<p class="lbl">Jumlah soal <small>'+pool.length+' soal tersedia, diambil acak</small></p>'+chipsHtml([['5','5'],['10','10'],['15','15'],['20','20'],['0','Semua']],String(f.n),'ug-n'))+'</section>';
   h+='<section class="card"><div class="sh"><span class="num">2</span><h2>Aturan</h2></div>'
     +'<p class="lbl">Lama ujian</p>'+chipsHtml([['15','15 menit'],['30','30 menit'],['45','45 menit'],['60','60 menit'],['90','90 menit']],String(f.menit),'ug-menit')
     +'<p class="lbl">Tingkat bantuan</p>'+chipsHtml(TINGKAT,f.tingkat,'ug-tingkat')
@@ -2961,6 +2964,20 @@ function ujkBuatHtml(){
     +'<label class="chk"><input type="checkbox" id="ug-lihat"'+(f.lihatNilai?' checked':'')+'> <span><b>Tampilkan skor ke siswa setelah selesai</b><small>Kalau dimatikan, siswa hanya melihat "Jawabanmu sudah terkumpul".</small></span></label>'
     +'<p class="mut" style="margin:10px 0 0">Kartu rumus disembunyikan selama ujian. Waktu setiap siswa dihitung sejak ia mengetuk Mulai ujian. Jawaban terkumpul otomatis saat waktu habis atau saat guru menutup ujian.</p></section>';
   return h+'<div class="row"><button class="btn" data-act="ug-buat" data-fk="ug-buat"'+(UG.busy||!pool.length?' disabled':'')+'>'+(UG.busy?'Membuat…':'Buat &amp; bagikan')+'</button><button class="btn ghost" data-act="a-tab" data-v="ujk">Batal</button></div>';
+}
+function ujkPilihHtml(f){
+  var tops=[];data.forEach(function(s){if(s.kelas===f.kelas&&tops.indexOf(s.topik)<0)tops.push(s.topik);});
+  if(!tops.length)return '<p class="mut">Belum ada soal di kelas ini.</p>';
+  var h='<p class="mut" style="margin:6px 0 0"><b>'+f.pilih.length+' soal dipilih</b> (paling banyak 40). Ketuk soal untuk memilih atau membatalkan.</p>';
+  tops.forEach(function(t){
+    var L=data.filter(function(s){return s.kelas===f.kelas&&s.topik===t;}),semua=L.every(function(s){return f.pilih.indexOf(s.id)>=0;});
+    h+='<div class="sh" style="margin:14px 0 6px"><h2>'+esc(t)+'</h2><button class="btn ghost sm" data-act="ug-pilih-mat" data-v="'+esc(t)+'">'+(semua?'Batalkan semua':'Pilih semua')+'</button></div><div class="list">'
+      +L.map(function(s){var on=f.pilih.indexOf(s.id)>=0;
+        return '<div class="item pilih'+(on?' on':'')+'"><button class="pb" data-act="ug-pilih" data-v="'+esc(s.id)+'" aria-pressed="'+on+'"><span class="ti">'+(on?'☑️':'⬜')+'</span><span class="it"><b>'+esc(s.judul)+'</b><small>'+esc(s.cerita.replace(/\{(\w+)\}/g,'…').slice(0,90))+'…</small></span></button>'
+          +'<button class="btn ghost sm" data-act="ug-coba" data-v="'+esc(s.id)+'">Coba</button></div>';
+      }).join('')+'</div>';
+  });
+  return h;
 }
 function ujkTeksBagi(h){return 'Ujian TakTik IPA: '+h.judul+'\nKode ujian: '+h.room+'\nLama: '+h.aturan.menit+' menit\n\nBuka aplikasi TakTik IPA → Ujian dari guru → isi kode dan namamu.\n'+(location.origin+location.pathname);}
 function ujkNilaiTeks(h){return h.judul+' ('+h.room+')\n'+h.peserta.map(function(p,i){return (i+1)+'. '+p.nama+'\t'+(p.nilai!=null?p.nilai:(p.skor!=null?p.skor+' (saran)':'-'))+'\t'+p.benar+'/'+p.jumlah+' benar\t'+p.status;}).join('\n');}
@@ -3009,13 +3026,19 @@ function salinTeks(t,ok){
 }
 var UGACT={
   'ug-baru':function(){UG.f=ujkFormBaru();UG.msg=null;adminTab='ujk-buat';window.scrollTo(0,0);},
-  'ug-kelas':function(v){UG.f.kelas=v;UG.f.materi=[];},
+  'ug-kelas':function(v){UG.f.kelas=v;UG.f.materi=[];UG.f.pilih=[];},
   'ug-mat':function(v){var i=UG.f.materi.indexOf(v);if(i>=0)UG.f.materi.splice(i,1);else UG.f.materi.push(v);},
-  'ug-n':function(v){UG.f.n=+v;},'ug-menit':function(v){UG.f.menit=+v;},'ug-tingkat':function(v){UG.f.tingkat=v;},
+  'ug-n':function(v){UG.f.n=+v;},
+  'ug-cara':function(v){UG.f.cara=v;UG.msg=null;},
+  'ug-pilih':function(v){var P=UG.f.pilih,i=P.indexOf(v);if(i>=0)P.splice(i,1);else if(P.length<40)P.push(v);else UG.msg={t:'bad',x:'Paling banyak 40 soal dalam satu ujian.'};fk=null;},
+  'ug-pilih-mat':function(v){var f=UG.f,L=data.filter(function(s){return s.kelas===f.kelas&&s.topik===v;}).map(function(s){return s.id;}),semua=L.every(function(id){return f.pilih.indexOf(id)>=0;});
+    if(semua)f.pilih=f.pilih.filter(function(id){return L.indexOf(id)<0;});else L.forEach(function(id){if(f.pilih.indexOf(id)<0&&f.pilih.length<40)f.pilih.push(id);});fk=null;},
+  'ug-coba':function(v){var s0=data.find(function(s){return s.id===v;});if(!s0)return;startPlay('__prev',JSON.parse(JSON.stringify(s0)));previewFrom='ujk-buat';window.scrollTo(0,0);fk=null;},'ug-menit':function(v){UG.f.menit=+v;},'ug-tingkat':function(v){UG.f.tingkat=v;},
   'ug-buat':function(){
-    var f=UG.f,pool=shuf(data.filter(function(s){return s.kelas===f.kelas&&f.materi.indexOf(s.topik)>=0;}));
-    if(!pool.length){UG.msg={t:'bad',x:'Pilih minimal satu materi.'};return;}
-    var pilih=f.n?pool.slice(0,f.n):pool,judul=f.judul.trim()||('Ujian '+f.materi.join(', ')+' · Kelas '+f.kelas);
+    var f=UG.f,manual=f.cara==='pilih',pool=manual?f.pilih.map(function(id){return data.find(function(s){return s.id===id;});}).filter(Boolean):shuf(data.filter(function(s){return s.kelas===f.kelas&&f.materi.indexOf(s.topik)>=0;}));
+    if(!pool.length){UG.msg={t:'bad',x:manual?'Pilih minimal satu soal.':'Pilih minimal satu materi.'};return;}
+    var tp=[];pool.forEach(function(s){if(tp.indexOf(s.topik)<0)tp.push(s.topik);});
+    var pilih=manual?pool:(f.n?pool.slice(0,f.n):pool),judul=f.judul.trim()||('Ujian '+tp.join(', ')+' · Kelas '+f.kelas);
     UG.busy=true;UG.msg=null;render();
     ujkGuru('/buat',{judul:judul,kelas:f.kelas,soal:pilih,aturan:{menit:f.menit,tingkat:f.tingkat,acak:f.acak,lewati:f.lewati,lihatNilai:f.lihatNilai}}).then(function(res){UG.busy=false;
       if(!res.ok){UG.msg={t:'bad',x:ujkErr(res,'Ujian belum bisa dibuat.')};render();return;}
@@ -3313,7 +3336,7 @@ document.addEventListener('click',function(e){
     else{formErr=null;sp.id='__prev';startPlay('__prev',sp);previewFrom='edit';window.scrollTo(0,0);fk=null;}
   }
   else if(a==='a-try'){startPlay('__prev',data.find(function(s){return s.id===v;}));previewFrom='list';window.scrollTo(0,0);fk=null;}
-  else if(a==='a-back'){view='admin';adminTab=previewFrom==='edit'?'edit':(previewFrom==='ai'?'ai':(previewFrom==='buat'?'buat':'list'));previewFrom=null;fk=null;}
+  else if(a==='a-back'){view='admin';adminTab=previewFrom==='edit'?'edit':(previewFrom==='ai'?'ai':(previewFrom==='buat'?'buat':(previewFrom==='ujk-buat'?'ujk-buat':'list')));previewFrom=null;fk=null;}
   else if(a==='a-copy')copyExport();
   else if(a==='a-download')download();
   else if(a==='a-imp')doImport();
@@ -3380,7 +3403,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.4.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.5.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
@@ -3421,15 +3444,36 @@ window.__taktikBack=function(){
 var UPDACT={
   'pasang':function(){if(!installEvt)return;var ev=installEvt;installEvt=null;try{ev.prompt();ev.userChoice.then(function(c){if(c&&c.outcome==='accepted')installDone=true;render();});}catch(e){}},
   'pasang-tutup':function(){instHide=true;store.set('cjs.pasang','tutup');},
-  'upd-go':function(){location.reload();return 'async';},
+  'upd-go':function(){if(verWeb){store.del('cjs.updcoba');bukaSegar(verWeb);}else location.reload();return 'async';},
   'upd-cek':function(){
     if(!swReg)return;updMsg={t:'info',x:'Memeriksa…'};
-    swReg.update().then(function(){
+    VERCEK=0;cekVersiWeb();swReg.update().then(function(){
       setTimeout(function(){if(!updReady)updMsg={t:'ok',x:'Aplikasi sudah versi terbaru ('+APP_VERSI+').'};if(view==='atur')render();},1500);
     },function(){updMsg={t:'bad',x:'Belum bisa memeriksa. Pastikan ada internet, lalu coba lagi.'};if(view==='atur')render();});
   }
 };
+/* pemeriksaan versi langsung ke GitHub (melewati salinan CDN) saat aplikasi dibuka lagi */
+function verBaru(a,b){a=String(a).split('.').map(Number);b=String(b).split('.').map(Number);for(var i=0;i<3;i++){if((a[i]||0)!==(b[i]||0))return (a[i]||0)>(b[i]||0);}return false;}
+var VERCEK=0,verWeb=null;
+function bukaSegar(v){
+  /* alamat baru (?v=) memaksa CDN dan service worker lama mengambil halaman terbaru */
+  var t=jget('cjs.updcoba',{});if(t.v===v&&Date.now()-t.t<10*60*1000){updReady=true;render();return;}
+  store.set('cjs.updcoba',JSON.stringify({v:v,t:Date.now()}));
+  location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);
+}
+function cekVersiWeb(){
+  if(!/^https?:$/.test(location.protocol)||location.hostname==='appassets.androidplatform.net'||Date.now()-VERCEK<60000)return;
+  VERCEK=Date.now();
+  fetch('index.html?_v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).then(function(t){
+    var m=t.match(/APP_VERSI='([\d.]+)'/);if(!m||!verBaru(m[1],APP_VERSI))return;
+    verWeb=m[1];try{if(swReg)swReg.update().catch(function(){});}catch(e){}
+    if(safeToReload())bukaSegar(verWeb);else{updReady=true;updMsg=null;render();}
+  }).catch(function(){});
+}
 function swSetup(){
+  try{if(/[?&]v=/.test(location.search))history.replaceState(null,'',location.pathname+location.hash);}catch(e){}
+  setTimeout(cekVersiWeb,4000);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')cekVersiWeb();});
   /* salinan di dalam APK (dibuka saat belum pernah online) tidak memakai service worker */
   if(!('serviceWorker' in navigator)||!/^https?:$/.test(location.protocol)||location.hostname==='appassets.androidplatform.net')return;
   var sw=navigator.serviceWorker,hadCtl=!!sw.controller,reloading=false;
