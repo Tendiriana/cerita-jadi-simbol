@@ -296,6 +296,21 @@ details.fold[open] summary{margin-bottom:10px}
 .upd{display:flex;align-items:center;gap:12px;justify-content:space-between;margin:0 0 14px;padding:12px 14px;border-radius:14px;background:var(--acc-soft);border:1px solid var(--acc)}
 .upd span{font-size:.97rem}
 .baru{border-color:var(--acc)}
+.gbar{display:flex;align-items:center;gap:10px;margin:0 0 12px}.gbar b{font-size:1.15rem;font-weight:800}
+.gbar .btn svg{width:18px;height:18px;vertical-align:-4px}
+.gstat{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;border-radius:12px;margin:0 0 12px;font-weight:600;font-size:.95rem}
+.gstat.ok{background:var(--okbg);color:var(--ink)}.gstat.warn{background:var(--badbg)}.gstat.info{background:var(--infobg)}
+.gtiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.gtile{font:inherit;color:var(--ink);text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 14px;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:var(--shadow);min-height:132px}
+.gtile .gi{font-size:1.8rem;line-height:1}.gtile b{font-size:1.08rem;font-weight:800;margin-top:6px}.gtile small{color:var(--ink2);font-size:.88rem;line-height:1.35}
+.gtile:first-child{background:var(--acc);color:var(--acc-ink);border-color:transparent}.gtile:first-child small{color:inherit;opacity:.85}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:12px 0 0;cursor:pointer}.chk input{width:22px;height:22px;margin:2px 0 0;flex:none;accent-color:var(--acc)}
+.chk span{display:flex;flex-direction:column;gap:2px}.chk small{color:var(--ink2);font-size:.88rem}
+.gcek{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.gcek li{padding:8px 12px;border-radius:10px;font-size:.95rem;border-left:4px solid var(--info);background:var(--infobg)}
+.gcek li.ok{border-left-color:var(--ok);background:var(--okbg)}.gcek li.bad{border-left-color:var(--bad);background:var(--badbg)}
+.linkb{font:inherit;background:none;border:0;padding:0;color:var(--acc);text-decoration:underline;cursor:pointer}
+
 a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 .eq.big{font-size:1.2rem;font-weight:600;margin:2px 0 0}
 .kr-list{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:4px}
@@ -403,7 +418,10 @@ function blank(){return {id:'',kelas:'9',variasi:[],topik:'',judul:'',cerita:'',
 function arr(x){return Array.isArray(x)?x:[];}
 function str(x){return x==null?'':String(x);}
 function norm(s){
-  s=s||{};var h=s.hitung||{};
+  s=s||{};var o=norm0(s);if(s.tpl)o.tpl=str(s.tpl);return o;
+}
+function norm0(s){
+  var h=s.hitung||{};
   return {
     id:str(s.id)||newId(),kelas:str(s.kelas)||'9',
     variasi:arr(s.variasi).map(function(v){v=v||{};return {nama:str(v.nama),
@@ -559,7 +577,7 @@ function instanceOf(s,mode){
     var k=mode==='min'?0:Math.floor(Math.random()*(n+1));
     vals[v.nama]=Math.round((v.min+k*v.langkah)*1000)/1000;
   });
-  var sub=function(t){return String(t==null?'':t).replace(/\{(\w+)\}/g,function(m,k){return Object.prototype.hasOwnProperty.call(vals,k)?fmt(vals[k]):m;});};
+  var sub=function(t){return String(t==null?'':t).replace(/\{(\w+)\}/g,function(m,k){return Object.prototype.hasOwnProperty.call(vals,k)?fmtNum(vals[k]):m;});};
   var o=JSON.parse(JSON.stringify(s));
   o.cerita=sub(o.cerita);
   o.besaran.forEach(function(b){b.teks=sub(b.teks);b.konv=sub(b.konv);b.catatan=sub(b.catatan);b.ket=sub(b.ket);});
@@ -640,12 +658,12 @@ function apiBase(){var u=(API_URL.indexOf('__')<0?API_URL:'')||apiFile;return u?
 function readApi(j){if(j&&!Array.isArray(j)&&typeof j.api==='string'&&/^https:\/\/[^\s"'<>]+$/.test(j.api))apiFile=j.api;}
 function normKode(v){return String(v==null?'':v).trim().toUpperCase().replace(/\s+/g,'-');}
 function kodeOk(v){return /^[A-Z0-9-]{3,20}$/.test(v)&&v!=='UTAMA';}
-function apiCall(path,body,ms){
+function apiCall(path,body,ms,base){
   var o={method:body?'POST':'GET',cache:'no-store'};
   if(body){o.headers={'Content-Type':'application/json'};o.body=JSON.stringify(body);}
   var ctl=null;try{ctl=new AbortController();o.signal=ctl.signal;}catch(e){}
   var habis=false,tm=ctl?setTimeout(function(){habis=true;try{ctl.abort();}catch(e){}},ms||15000):0;
-  return fetch(apiBase()+path,o).then(function(r){clearTimeout(tm);return r.json().catch(function(){return null;}).then(function(j){return {ok:r.ok&&!!j,status:r.status,j:j};});},
+  return fetch((base||apiBase())+path,o).then(function(r){clearTimeout(tm);return r.json().catch(function(){return null;}).then(function(j){return {ok:r.ok&&!!j,status:r.status,j:j};});},
     function(){clearTimeout(tm);return {ok:false,status:0,j:null,lama:habis};});
 }
 function sendHint(){return apiBase()?'Ketuk Kirim ke siswa supaya berlaku di HP siswa.':'Upload soal.json lewat Ekspor supaya berlaku di HP siswa.';}
@@ -892,7 +910,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -1848,6 +1866,7 @@ function loginHtml(){
   var ctx=apiBase()?'<p class="mut" style="margin:0">Masuk ke: <b>'+esc(bankLabel())+'</b></p>'+(activeKode?'':'<p class="mut" style="margin:6px 0 0">Guru kelas: isi dulu kode kelas di Pengaturan, lalu masuk dengan PIN guru.</p>'):'';
   return '<section class="card"><div class="sh"><h2>Masuk mode guru</h2></div><p class="mut">Masukkan PIN.</p>'+ctx
     +'<label class="f"><span>PIN</span><input class="in" id="pin" type="password" inputmode="numeric" autocomplete="off" style="max-width:12em"></label>'
+    +'<label class="chk"><input type="checkbox" id="ingat" checked> <span><b>Ingat saya di HP ini</b><small>Tidak perlu mengetik PIN lagi. Matikan kalau HP ini dipakai siswa.</small></span></label>'
     +(loginErr?'<div class="fb bad" role="status">'+esc(typeof loginErr==='string'?loginErr:'PIN salah. Coba lagi.')+'</div>':'')
     +'<div class="row"><button class="btn" data-act="a-login" data-fk="login"'+(loginBusy?' disabled':'')+'>'+(loginBusy?'Memeriksa…':'Masuk')+'</button><button class="btn ghost" data-act="home">Batal</button></div></section>';
 }
@@ -1856,14 +1875,14 @@ function toolbar(){
   return '<div class="tabs" role="tablist">'+t('list','Daftar soal')+t('tampil','Tampil di kelas')+(apiBase()&&adminRole&&adminRole!=='offline'?t('ai','Buat dengan AI'):'')+(apiBase()&&adminRole==='utama'&&!activeKode?t('kelas','Kelas'):'')+t('import','Impor')+t('export',apiBase()?'Cadangan':'Ekspor')+t('set','Pengaturan')+'</div>';
 }
 function srcLabel(){return {perangkat:'perangkat ini (belum dikirim)','soal.json':'berkas soal.json',bawaan:'soal bawaan aplikasi',server:'server (soal utama)',kelas:'server (kelas '+activeKode+')'}[source];}
-function kirimNow(){if(sending||!apiBase())return;sending=true;notice=null;render();
+function kirimNow(pesan){if(sending||!apiBase())return;sending=true;notice=null;render();
     var kd=activeKode;
     apiCall('/simpan',{kode:kd||'UTAMA',pin:adminPin||'',soal:data,kunci:kunci}).then(function(res){sending=false;
       if(res.ok){var bk={kode:kd,rev:res.j.rev,nama:bankInfo?bankInfo.nama:'',kunci:kunci.slice(),soal:data};store.set(BANKKEY,JSON.stringify(bk));store.del(KEY);
         dataRev=res.j.rev;source=kd?'kelas':'server';bankInfo={kode:kd,nama:bk.nama,rev:bk.rev};
-        notice={t:'ok',x:'Terkirim. Siswa mendapat soal terbaru saat membuka aplikasi dengan internet.'};}
+        notice={t:'ok',x:(pesan?pesan+' ':'')+'Sudah terkirim ke siswa. Siswa mendapat soal terbaru saat membuka aplikasi dengan internet.'};}
       else if(res.status===0)notice={t:'bad',x:'Tidak ada internet. Perubahan tetap tersimpan di HP ini. Coba kirim lagi nanti.'};
-      else if(res.status===401){adminOK=false;loginErr='PIN sudah berubah. Masuk lagi dengan PIN terbaru, lalu kirim lagi.';view='admin';notice=null;}
+      else if(res.status===401){adminOK=false;store.del(GURUKEY);loginErr='PIN sudah berubah. Masuk lagi dengan PIN terbaru, lalu kirim lagi.';view='admin';notice=null;}
       else notice={t:'bad',x:(res.j&&res.j.pesan)||'Gagal mengirim. Coba lagi.'};
       render();});
 }
@@ -1875,8 +1894,11 @@ function kirimHtml(){
   if(!msg)return head;
   return head+'<div class="fb info" role="status">'+msg+'<div class="row" style="margin-top:8px"><button class="btn sm" data-act="a-kirim" data-fk="kirim"'+(sending?' disabled':'')+'>'+(sending?'Mengirim…':'Kirim ke siswa')+'</button></div></div>';
 }
+var listKelas=null;
 function listHtml(){
-  var h='<div class="row"><button class="btn" data-act="a-new" data-fk="new">+ Tambah soal</button></div>';
+  if(!listKelas)listKelas=kelasSel;
+  var h='<div class="row"><button class="btn" data-act="g-buat" data-fk="new">+ Tambah soal</button></div>'
+    +chipsHtml([['7','Kelas 7'],['8','Kelas 8'],['9','Kelas 9'],['semua','Semua']],listKelas,'g-lk');
   h+='<p class="mut" style="margin-top:12px">'+data.length+' soal · sumber data: '+srcLabel()+'</p>';
   if(fileBaru.length){
     var per={};fileBaru.forEach(function(x){var k='Kelas '+x.kelas+' · '+x.topik;per[k]=(per[k]||0)+1;});
@@ -1888,13 +1910,16 @@ function listHtml(){
   else if(source==='perangkat')h+='<div class="fb info" role="status"><b>Belum terkirim</b>Ada perubahan soal yang baru tersimpan di HP ini. Buka <b>Ekspor</b> untuk mengirimnya ke siswa.</div>';
   else if(pinHash!==(filePin||DEFPINHASH))h+='<div class="fb info" role="status"><b>Belum terkirim</b>PIN baru baru berlaku di HP ini. Buka <b>Ekspor</b>, lalu upload soal.json supaya PIN berlaku di semua HP.</div>';
   if(!data.length)h+='<div class="card"><p class="mut">Belum ada soal.</p></div>';
-  h+='<div class="list">'+data.map(function(s,i){
+  var tampil=listKelas==='semua'?data:data.filter(function(s){return s.kelas===listKelas;});
+  if(data.length&&!tampil.length)h+='<div class="card"><p class="mut">Belum ada soal untuk kelas ini. Ketuk Tambah soal.</p></div>';
+  h+='<div class="list">'+tampil.map(function(s){var i=data.indexOf(s);
     var id=esc(s.id),btns;
     if(confirmKey==='del:'+s.id){
       btns='<span class="mut" style="margin:0">Hapus soal ini?</span><button class="btn danger sm" data-act="a-del-yes" data-v="'+id+'" data-fk="del-yes">Ya, hapus</button><button class="btn ghost sm" data-act="a-cancel" data-fk="cancel">Batal</button>';
     }else{
       btns='<button class="btn ghost sm" data-act="a-try" data-v="'+id+'" data-fk="try-'+id+'">Coba</button>'
-        +'<button class="btn sm" data-act="a-edit" data-v="'+id+'" data-fk="edit-'+id+'">Ubah</button>'
+        +'<button class="btn sm" data-act="uc-buka" data-v="'+id+'" data-fk="uc-'+id+'">Ubah cerita</button>'
+        +'<button class="btn ghost sm" data-act="a-edit" data-v="'+id+'" data-fk="edit-'+id+'">Formulir</button>'
         +'<button class="btn ghost sm" data-act="a-dup" data-v="'+id+'" data-fk="dup-'+id+'">Gandakan</button>'
         +'<button class="btn ghost sm" data-act="a-up" data-v="'+id+'" data-fk="up-'+id+'" aria-label="Naikkan"'+(i===0?' disabled':'')+'>↑</button>'
         +'<button class="btn ghost sm" data-act="a-down" data-v="'+id+'" data-fk="down-'+id+'" aria-label="Turunkan"'+(i===data.length-1?' disabled':'')+'>↓</button>'
@@ -1999,7 +2024,7 @@ function setHtml(){
 
 /* ---------- Buat soal dengan AI ---------- */
 var aiChat=[],aiBusy=false,aiInput='',aiErr=null,aiSisa=null;
-var AISARAN=['Buatkan 1 soal Listrik tentang daya rice cooker, ada pengecoh harga.','Buat soal gaya Lorentz dengan konteks kipas angin di kelas.','Buat 2 soal Energi alternatif tentang panel surya di sekolah.','Buat soal hukum Ohm yang perlu konversi mA ke A.'];
+var AISARAN=['Buatkan 3 soal hukum Ohm tentang alat listrik di rumah.','Buat 2 soal massa jenis kelas 7 dengan konteks dapur.','Buat soal tekanan hidrostatis tentang kolam renang sekolah.','Buat 2 soal kelajuan tentang perjalanan ke pasar.'];
 function aiKonteks(){
   var mat=[],jud=[];data.forEach(function(s){if(s.topik&&mat.indexOf(s.topik)<0)mat.push(s.topik);if(s.judul)jud.push(s.judul);});
   return {kelas:kelasSel,materi:mat,kunci:kunci.slice(),judul:jud.slice(0,120)};
@@ -2036,14 +2061,15 @@ function aiAsk(text,auto){
   aiErr=null;aiBusy=true;
   aiChat.push({role:'user',content:text,auto:!!auto});
   render();
-  var pesan=aiChat.slice(-8).map(function(m){return {role:m.role,content:m.content};});
-  apiCall('/ai',{kode:activeKode||'UTAMA',pin:adminPin||'',pesan:pesan,konteks:aiKonteks()},150000).then(function(res){
+  var pesan=aiChat.slice(-8).map(function(m){return {role:m.role,content:m.content};}),fu=pesan.findIndex(function(m){return m.role==='user';});
+  if(fu>=0)pesan[fu]={role:'user',content:aiPesanAwal(pesan[fu].content)};
+  aiUrlPost({kode:activeKode||'UTAMA',pin:adminPin||'',mode:'templat',pesan:pesan,konteks:aiKonteks()},150000).then(function(res){
     aiBusy=false;
     if(!res.ok){aiErr=res.lama?'AI terlalu lama menjawab. Coba kirim lagi, atau minta 1 soal saja.':res.status===0?'Tidak ada internet. Coba lagi setelah tersambung.':((res.j&&res.j.pesan)||'AI belum bisa menjawab. Coba lagi.');
       if(res.status===401){adminOK=false;loginErr='PIN sudah berubah. Masuk lagi dengan PIN terbaru.';}
       render();return;}
     if(typeof res.j.sisa==='number')aiSisa=res.j.sisa;
-    var ex=aiExtract(res.j.balasan),msg={role:'assistant',content:res.j.balasan,teks:ex.teks,soal:(ex.list||[]).slice(0,3).map(aiCheck),rusak:ex.rusak};
+    var ex=aiExtract(res.j.balasan),msg={role:'assistant',content:res.j.balasan,teks:ex.teks,soal:(ex.list||[]).slice(0,3).map(function(raw){return raw&&raw.templat?aiDariTemplat(raw):aiCheck(raw);}),rusak:ex.rusak};
     aiChat.push(msg);
     var bad=msg.soal.filter(function(x){return x.errs.length;});
     if(!auto&&(ex.rusak||bad.length)){
@@ -2065,12 +2091,12 @@ function aiSoalHtml(x,mi,si){
   if(!ok)h+='<div class="fb bad" role="status"><b>Belum lolos pemeriksaan</b><ul class="ai-err">'+x.errs.slice(0,6).map(function(e){return '<li>'+esc(e)+'</li>';}).join('')+'</ul></div>'
     +'<div class="row"><button class="btn sm" data-act="ai-fix" data-v="'+mi+':'+si+'">Minta AI memperbaiki</button><button class="btn ghost sm" data-act="ai-edit" data-v="'+mi+':'+si+'">Perbaiki sendiri di formulir</button></div>';
   else if(x.added)h+='<div class="row"><span class="pill hot">Sudah ditambahkan</span></div>';
-  else h+='<div class="row"><button class="btn sm" data-act="ai-add-kirim" data-v="'+mi+':'+si+'"'+(sending?' disabled':'')+'>Tambahkan &amp; kirim ke siswa</button><button class="btn ghost sm" data-act="ai-try" data-v="'+mi+':'+si+'">Coba soal ini</button><button class="btn ghost sm" data-act="ai-add" data-v="'+mi+':'+si+'">Tambahkan saja</button><button class="btn ghost sm" data-act="ai-edit" data-v="'+mi+':'+si+'">Ubah dulu</button></div>';
+  else h+='<div class="row"><button class="btn sm" data-act="ai-add-kirim" data-v="'+mi+':'+si+'"'+(sending?' disabled':'')+'>Tambahkan &amp; kirim ke siswa</button><button class="btn ghost sm" data-act="ai-try" data-v="'+mi+':'+si+'">Coba soal ini</button><button class="btn ghost sm" data-act="ai-edit" data-v="'+mi+':'+si+'">Ubah dulu</button></div>';
   return h+'</div>';
 }
 function aiHtml(){
   var h='<section class="card"><div class="sh"><h2>Buat soal dengan AI</h2>'+(aiSisa!=null?'<span class="stt">sisa '+aiSisa+' hari ini</span>':'')+'</div>'
-    +'<p class="mut">Ceritakan soal yang kamu mau, seperti mengobrol. AI sudah paham cara kerja aplikasi, materi kelas 9, dan soal yang sudah ada. Setiap soal diperiksa dan dihitung ulang oleh aplikasi sebelum kamu tambahkan.</p></section>';
+    +'<p class="mut">Ceritakan soal yang kamu mau, seperti mengobrol. AI memilih rumus dari daftar rumus aplikasi dan menulis ceritanya. Rumus dan jawaban dirakit serta dihitung oleh aplikasi, jadi tidak bisa salah hitung.</p></section>';
   var vis=aiChat.filter(function(m){return !m.auto;});
   if(!aiChat.length){
     h+='<p class="lbl" style="margin-top:14px">Contoh permintaan</p><div class="ai-saran">'+AISARAN.map(function(t,i){return '<button class="chip" data-act="ai-saran" data-v="'+i+'">'+esc(t)+'</button>';}).join('')+'</div>';
@@ -2078,7 +2104,7 @@ function aiHtml(){
   h+='<div class="ai-chat">';
   aiChat.forEach(function(m,mi){
     if(m.role==='user'){if(!m.auto)h+='<div class="ai-msg me"><p>'+esc(m.content).replace(/\n/g,'<br>')+'</p></div>';return;}
-    if(m.memperbaiki)return;
+    if(m.memperbaiki){var baik=m.soal.map(function(x,si){return x.errs.length?'':aiSoalHtml(x,mi,si);}).join('');if(baik)h+='<div class="ai-msg ai">'+baik+'</div>';return;}
     h+='<div class="ai-msg ai">'+(m.teks?'<p>'+esc(m.teks).replace(/\n/g,'<br>')+'</p>':'')
       +(m.rusak?msgHtml({t:'bad',x:'Balasan AI tidak bisa dibaca sebagai soal. Coba minta lagi.'}):'')
       +m.soal.map(function(x,si){return aiSoalHtml(x,mi,si);}).join('')+'</div>';
@@ -2098,7 +2124,8 @@ var AIACT={
   'ai-reset':function(){aiChat=[];aiErr=null;aiInput='';},
   'ai-fix':function(v){var x=aiPick(v);if(!x)return;aiAsk('Soal "'+(x.s.judul||'')+'" belum lolos pemeriksaan aplikasi:\n- '+x.errs.slice(0,10).join('\n- ')+'\nPerbaiki dan kirim ulang JSON lengkap.',false);return 'async';},
   'ai-try':function(v){var x=aiPick(v);if(!x)return;startPlay('__prev',JSON.parse(JSON.stringify(x.s)));previewFrom='ai';window.scrollTo(0,0);fk=null;},
-  'ai-edit':function(v){var x=aiPick(v);if(!x)return;D=toDraft(x.s);editId=null;formErr=x.errs.length?x.errs:null;adminTab='edit';fk=null;window.scrollTo(0,0);},
+  'ai-edit':function(v){var x=aiPick(v);if(!x)return;
+    if(x.tpl){gBaru();G.kelas=x.tpl.k;gPilih(x.tpl.id);x.tpl.v.forEach(function(w){if(x.nilai[w[0]]!=null)G.nilai[w[0]]=fmt(parseNum(x.nilai[w[0]]));});G.cerita=String(x.raw.cerita||'');G.judul=String(x.raw.judul||'');gCek();adminTab='buat';window.scrollTo(0,0);return;}D=toDraft(x.s);editId=null;formErr=x.errs.length?x.errs:null;adminTab='edit';fk=null;window.scrollTo(0,0);},
   'ai-add':function(v){if(aiAddOne(aiPick(v)))notice={t:'ok',x:'Soal ditambahkan. Ketuk Kirim ke siswa kalau sudah siap.'};},
   'ai-add-kirim':function(v){if(aiAddOne(aiPick(v))){kirimNow();return 'async';}}
 };
@@ -2157,9 +2184,515 @@ var KACT={
       kelasMsg=res.ok?{t:'ok',x:'Kelas '+v+' dihapus.'}:{t:'bad',x:res.status===0?'Tidak ada internet. Kelas belum dihapus.':((res.j&&res.j.pesan)||'Kelas belum dihapus.')};
       if(res.ok)kelasLoad();render();});}
 };
+/* ---------- Templat rumus: guru cukup memilih rumus, mengisi angka, dan menulis cerita ---------- */
+/* v: [kunci, simbol, nama, satuan, contoh]; r: angka acak [nama, min, maks, langkah] atau [nama, 'rumus'];
+   a: rumus jawaban; e: perhitungan yang ditampilkan; x: rumus pengecoh [rumus, alasan]; s: jawaban keliru [rumus, pesan];
+   c: contoh cerita, {kunci} diganti angka contoh */
+var TPL=[
+ /* Kelas 7 · Massa jenis */
+ {id:'mj-rho',k:'7',t:'Massa jenis',n:'Mencari massa jenis',f:'ρ = m ÷ V',w:'Massa jenis adalah massa setiap satu satuan volume.',
+  v:[['m','m','massa','g',60],['V','V','volume','cm³',20]],q:['ρ','massa jenis','g/cm³'],a:'m/V',e:'{m} ÷ {V}',
+  r:[['V',10,50,10],['zk',2,8,1],['m','zk*V']],x:[['ρ = m × V','Massa jenis bukan hasil kali massa dan volume.'],['ρ = V ÷ m','Pembagiannya terbalik: massa dibagi volume.']],
+  s:[['m*V','Itu hasil kali. Massa jenis adalah massa dibagi volume.'],['V/m','Pembagiannya terbalik. Bagi massa dengan volume.']],p:'Bagi massa dengan volume.',
+  c:'Dodi menemukan sebuah batu di halaman sekolah pukul 07.00. Batu itu bermassa {m} g dan volumenya {V} cm³. Berapa massa jenis batu itu?'},
+ {id:'mj-m',k:'7',t:'Massa jenis',n:'Mencari massa dari massa jenis',f:'m = ρ × V',w:'Dari ρ = m ÷ V, massa sama dengan massa jenis dikali volume.',
+  v:[['rho','ρ','massa jenis','g/cm³',0.6],['V','V','volume','cm³',200]],q:['m','massa','g'],a:'rho*V',e:'{rho} × {V}',
+  r:[['rho',0.5,2.5,0.5],['V',100,500,100]],x:[['m = ρ ÷ V','Massa jenis dibagi volume tidak menghasilkan massa.'],['m = V ÷ ρ','Rumus ini untuk mencari volume, bukan massa.']],
+  s:[['V/rho','Itu volume dibagi massa jenis. Massa adalah massa jenis dikali volume.']],p:'Kalikan massa jenis dengan volume.',
+  c:'Sebuah balok kayu berwarna cokelat memiliki massa jenis {rho} g/cm³ dan volume {V} cm³. Berapa massa balok kayu itu?'},
+ {id:'mj-V',k:'7',t:'Massa jenis',n:'Mencari volume dari massa jenis',f:'V = m ÷ ρ',w:'Dari ρ = m ÷ V, volume sama dengan massa dibagi massa jenis.',
+  v:[['m','m','massa','g',54],['rho','ρ','massa jenis','g/cm³',2.7]],q:['V','volume','cm³'],a:'m/rho',e:'{m} ÷ {rho}',
+  r:[['zh',10,50,10],['m','zh*rho']],x:[['V = m × ρ','Massa dikali massa jenis tidak menghasilkan volume.'],['V = ρ ÷ m','Pembagiannya terbalik.']],
+  s:[['m*rho','Itu hasil kali. Volume adalah massa dibagi massa jenis.']],p:'Bagi massa dengan massa jenis.',
+  c:'Pak Budi membeli balok aluminium di toko yang berjarak 2 km dari rumahnya. Massa balok itu {m} g dan massa jenis aluminium {rho} g/cm³. Berapa volume balok aluminium?'},
+ /* Kelas 7 · Suhu dan kalor */
+ {id:'kl-Q',k:'7',t:'Suhu dan kalor',n:'Mencari kalor',f:'Q = m × c × ΔT',w:'Kalor sebanding dengan massa, kalor jenis, dan kenaikan suhu.',
+  v:[['m','m','massa','kg',2],['c','c','kalor jenis','J/kg°C',4200],['dT','ΔT','kenaikan suhu','°C',10]],q:['Q','kalor','J'],a:'m*c*dT',e:'{m} × {c} × {dT}',
+  r:[['m',0.5,3,0.5],['dT',10,50,10]],x:[['Q = m × c','Kenaikan suhu belum dipakai.'],['Q = m ÷ (c × ΔT)','Ketiga besaran dikalikan, tidak dibagi.']],
+  s:[['m*c','Kenaikan suhu belum dikalikan.']],p:'Kalikan massa, kalor jenis, dan kenaikan suhu.',
+  c:'Ibu memanaskan {m} kg air dengan panci merah sehingga suhunya naik {dT} °C. Kalor jenis air {c} J/kg°C. Berapa kalor yang diperlukan?'},
+ {id:'kl-m',k:'7',t:'Suhu dan kalor',n:'Mencari massa dari kalor',f:'m = Q ÷ (c × ΔT)',w:'Dari Q = m × c × ΔT, massa sama dengan kalor dibagi (c × ΔT).',
+  v:[['Q','Q','kalor','J',84000],['c','c','kalor jenis','J/kg°C',4200],['dT','ΔT','kenaikan suhu','°C',10]],q:['m','massa','kg'],a:'Q/(c*dT)',e:'{Q} ÷ ({c} × {dT})',
+  r:[['zh',1,5,1],['dT',10,40,10],['Q','zh*c*dT']],x:[['m = Q × c × ΔT','Kalor dibagi, bukan dikali.'],['m = Q ÷ c','Kenaikan suhu belum dipakai.']],
+  s:[['Q/c','Kenaikan suhu belum dipakai untuk membagi.']],p:'Bagi kalor dengan hasil kali kalor jenis dan kenaikan suhu.',
+  c:'Sebuah pemanas memberikan kalor {Q} J kepada air sehingga suhunya naik {dT} °C. Pemanas itu dibeli seharga Rp150.000. Kalor jenis air {c} J/kg°C. Berapa massa air itu?'},
+ {id:'kl-K',k:'7',t:'Suhu dan kalor',n:'Celsius ke kelvin',f:'T(K) = T(°C) + 273',w:'Skala kelvin bergeser 273 dari skala Celsius.',
+  v:[['C','T','suhu','°C',30]],q:['T(K)','suhu dalam kelvin','K'],a:'C+273',e:'{C} + 273',
+  r:[['C',20,40,2]],x:[['T(K) = T(°C) − 273','Tandanya terbalik.'],['T(K) = T(°C) × 273','Skala hanya bergeser, tidak dikali.']],
+  s:[['C-273','Tandanya terbalik. Tambahkan 273.']],p:'Tambahkan 273.',
+  c:'Termometer di kelas 7B menunjukkan suhu {C} °C. Di kelas itu ada 32 siswa. Berapa suhu kelas itu dalam kelvin?'},
+ {id:'kl-F',k:'7',t:'Suhu dan kalor',n:'Celsius ke Fahrenheit',f:'T(°F) = 9/5 × T(°C) + 32',w:'Satu derajat Celsius sama dengan 9/5 derajat Fahrenheit, lalu ditambah 32.',
+  v:[['C','T','suhu','°C',25]],q:['T(°F)','suhu dalam Fahrenheit','°F'],a:'9/5*C+32',e:'9 ÷ 5 × {C} + 32',
+  r:[['C',20,40,5]],x:[['T(°F) = 5/9 × T(°C) + 32','Perbandingannya terbalik.'],['T(°F) = 9/5 × T(°C)','Belum ditambah 32.']],
+  s:[['9/5*C','Belum ditambah 32.'],['5/9*C+32','Perbandingannya terbalik. Pakai 9/5.']],p:'Kalikan 9/5, lalu tambahkan 32.',
+  c:'Suhu siang hari di kota Bima tercatat {C} °C. Hari itu hari Senin. Berapa suhu itu dalam derajat Fahrenheit?'},
+ /* Kelas 7 · Gerak */
+ {id:'gr-v',k:'7',t:'Gerak',n:'Mencari kelajuan',f:'v = s ÷ t',w:'Kelajuan adalah jarak yang ditempuh setiap satu satuan waktu.',
+  v:[['s','s','jarak','m',300],['t','t','waktu','s',100]],q:['v','kelajuan','m/s'],a:'s/t',e:'{s} ÷ {t}',
+  r:[['t',10,100,10],['zh',2,10,1],['s','zh*t']],x:[['v = s × t','Jarak dikali waktu bukan kelajuan.'],['v = t ÷ s','Pembagiannya terbalik.']],
+  s:[['s*t','Itu jarak dikali waktu. Bagi jarak dengan waktu.'],['t/s','Pembagiannya terbalik.']],p:'Bagi jarak dengan waktu.',
+  c:'Rina bersepeda dengan sepeda biru sejauh {s} m dalam waktu {t} s. Berapa kelajuan Rina?'},
+ {id:'gr-s',k:'7',t:'Gerak',n:'Mencari jarak',f:'s = v × t',w:'Dari v = s ÷ t, jarak sama dengan kelajuan dikali waktu.',
+  v:[['v','v','kelajuan','m/s',5],['t','t','waktu','s',60]],q:['s','jarak','m'],a:'v*t',e:'{v} × {t}',
+  r:[['v',2,10,1],['t',10,60,10]],x:[['s = v ÷ t','Kelajuan dibagi waktu bukan jarak.'],['s = t ÷ v','Waktu dibagi kelajuan bukan jarak.']],
+  s:[['v/t','Itu kelajuan dibagi waktu. Jarak adalah kelajuan dikali waktu.']],p:'Kalikan kelajuan dengan waktu.',
+  c:'Andi berlari dengan kelajuan tetap {v} m/s selama {t} s. Andi memakai kaos bernomor 7. Berapa jarak yang ditempuh Andi?'},
+ {id:'gr-t',k:'7',t:'Gerak',n:'Mencari waktu tempuh',f:'t = s ÷ v',w:'Dari v = s ÷ t, waktu sama dengan jarak dibagi kelajuan.',
+  v:[['s','s','jarak','m',600],['v','v','kelajuan','m/s',2]],q:['t','waktu','s'],a:'s/v',e:'{s} ÷ {v}',
+  r:[['v',1,5,1],['zh',100,500,100],['s','zh*v']],x:[['t = s × v','Jarak dikali kelajuan bukan waktu.'],['t = v ÷ s','Pembagiannya terbalik.']],
+  s:[['s*v','Itu jarak dikali kelajuan. Waktu adalah jarak dibagi kelajuan.']],p:'Bagi jarak dengan kelajuan.',
+  c:'Jarak rumah Sinta ke sekolah {s} m. Sinta berangkat pukul 06.30 dan berjalan dengan kelajuan {v} m/s. Berapa lama Sinta sampai di sekolah?'},
+ {id:'gr-kmj',k:'7',t:'Gerak',n:'km/jam ke m/s',f:'v (m/s) = v (km/jam) ÷ 3,6',w:'1 km/jam = 1.000 m ÷ 3.600 s = 1 ÷ 3,6 m/s.',
+  v:[['v','v','kelajuan','km/jam',72]],q:['v','kelajuan','m/s'],a:'v/3.6',e:'{v} ÷ 3,6',
+  r:[['v',18,108,18]],x:[['v (m/s) = v (km/jam) × 3,6','Terbalik. Dikali 3,6 untuk m/s ke km/jam.'],['v (m/s) = v (km/jam) ÷ 1.000','Jamnya belum diubah ke sekon.']],
+  s:[['v*3.6','Terbalik. Bagi dengan 3,6.']],p:'Bagi dengan 3,6.',
+  c:'Ayah mengendarai motor dengan kelajuan {v} km/jam sambil membawa 5 kg beras. Berapa kelajuan motor dalam m/s?'},
+ /* Kelas 8 · Tekanan */
+ {id:'tk-P',k:'8',t:'Tekanan',n:'Mencari tekanan',f:'P = F ÷ A',w:'Tekanan adalah gaya yang bekerja pada setiap satu satuan luas.',
+  v:[['F','F','gaya','N',300],['A','A','luas bidang tekan','m²',0.5]],q:['P','tekanan','Pa'],a:'F/A',e:'{F} ÷ {A}',
+  r:[['A',0.5,2,0.5],['zh',100,500,100],['F','zh*A']],x:[['P = F × A','Makin luas bidangnya, tekanan makin kecil, jadi bukan dikali.'],['P = A ÷ F','Pembagiannya terbalik.']],
+  s:[['F*A','Itu gaya dikali luas. Tekanan adalah gaya dibagi luas.']],p:'Bagi gaya dengan luas bidang tekan.',
+  c:'Sebuah kotak berisi 12 buku memiliki berat {F} N dan diletakkan di lantai. Luas alas kotak {A} m². Berapa tekanan kotak pada lantai?'},
+ {id:'tk-F',k:'8',t:'Tekanan',n:'Mencari gaya dari tekanan',f:'F = P × A',w:'Dari P = F ÷ A, gaya sama dengan tekanan dikali luas.',
+  v:[['P','P','tekanan','Pa',2000],['A','A','luas bidang tekan','m²',0.05]],q:['F','gaya','N'],a:'P*A',e:'{P} × {A}',
+  r:[['P',1000,5000,1000],['A',0.01,0.05,0.01]],x:[['F = P ÷ A','Tekanan dibagi luas bukan gaya.'],['F = A ÷ P','Luas dibagi tekanan bukan gaya.']],
+  s:[['P/A','Itu tekanan dibagi luas. Gaya adalah tekanan dikali luas.']],p:'Kalikan tekanan dengan luas.',
+  c:'Sepasang sepatu seharga Rp250.000 menekan lantai dengan tekanan {P} Pa. Luas alas sepatu {A} m². Berapa gaya yang diberikan sepatu pada lantai?'},
+ {id:'tk-h',k:'8',t:'Tekanan',n:'Tekanan hidrostatis',f:'Ph = ρ × g × h',w:'Tekanan zat cair bergantung pada massa jenis, gravitasi, dan kedalaman.',
+  v:[['rho','ρ','massa jenis','kg/m³',1000],['g','g','percepatan gravitasi','m/s²',10],['h','h','kedalaman','m',5]],q:['Ph','tekanan hidrostatis','Pa'],a:'rho*g*h',e:'{rho} × {g} × {h}',
+  r:[['h',1,10,1]],x:[['Ph = ρ × g ÷ h','Kedalaman dikali, bukan dibagi.'],['Ph = ρ × h','Gravitasi belum dipakai.']],
+  s:[['rho*h','Percepatan gravitasi belum dikalikan.']],p:'Kalikan massa jenis, gravitasi, dan kedalaman.',
+  c:'Seorang penyelam membawa kamera seharga Rp3.000.000 dan menyelam sampai kedalaman {h} m. Massa jenis air laut {rho} kg/m³ dan percepatan gravitasi {g} m/s². Berapa tekanan hidrostatis yang dialami penyelam?'},
+ {id:'tk-pascal',k:'8',t:'Tekanan',n:'Dongkrak hidrolik (hukum Pascal)',f:'F₂ = F₁ × A₂ ÷ A₁',w:'Hukum Pascal: F₁ ÷ A₁ = F₂ ÷ A₂.',
+  v:[['F1','F₁','gaya pada penampang kecil','N',100],['A1','A₁','luas penampang kecil','m²',0.01],['A2','A₂','luas penampang besar','m²',0.5]],q:['F₂','gaya pada penampang besar','N'],a:'F1*A2/A1',e:'{F1} × {A2} ÷ {A1}',
+  r:[['F1',50,250,50]],x:[['F₂ = F₁ × A₁ ÷ A₂','Perbandingan luasnya terbalik.'],['F₂ = F₁ × A₂','Belum dibagi luas penampang kecil.']],
+  s:[['F1*A1/A2','Perbandingan luasnya terbalik.'],['F1*A2','Belum dibagi luas penampang kecil.']],p:'Kalikan gaya dengan A₂, lalu bagi dengan A₁.',
+  c:'Bengkel Pak Ali memakai dongkrak hidrolik untuk mengangkat mobil putih. Luas penampang kecil {A1} m² dan luas penampang besar {A2} m². Gaya {F1} N diberikan pada penampang kecil. Berapa gaya angkat pada penampang besar?'},
+ /* Kelas 8 · Usaha dan energi */
+ {id:'us-W',k:'8',t:'Usaha dan energi',n:'Mencari usaha',f:'W = F × s',w:'Usaha adalah gaya dikali perpindahan.',
+  v:[['F','F','gaya','N',50],['s','s','perpindahan','m',4]],q:['W','usaha','J'],a:'F*s',e:'{F} × {s}',
+  r:[['F',10,100,10],['s',2,10,1]],x:[['W = F ÷ s','Gaya dibagi perpindahan bukan usaha.'],['W = F + s','Gaya dan perpindahan dikalikan.']],
+  s:[['F/s','Itu gaya dibagi perpindahan. Usaha adalah gaya dikali perpindahan.'],['F+s','Dikalikan, bukan dijumlahkan.']],p:'Kalikan gaya dengan perpindahan.',
+  c:'Doni mendorong meja yang dibeli tahun 2019 dengan gaya {F} N sehingga meja berpindah sejauh {s} m. Berapa usaha yang dilakukan Doni?'},
+ {id:'us-Ep',k:'8',t:'Usaha dan energi',n:'Energi potensial',f:'Ep = m × g × h',w:'Energi potensial bergantung pada massa, gravitasi, dan ketinggian.',
+  v:[['m','m','massa','kg',2],['g','g','percepatan gravitasi','m/s²',10],['h','h','ketinggian','m',8]],q:['Ep','energi potensial','J'],a:'m*g*h',e:'{m} × {g} × {h}',
+  r:[['m',1,5,1],['h',2,10,2]],x:[['Ep = ½ × m × v²','Ini rumus energi kinetik.'],['Ep = m × h','Gravitasi belum dipakai.']],
+  s:[['m*h','Percepatan gravitasi belum dikalikan.']],p:'Kalikan massa, gravitasi, dan ketinggian.',
+  c:'Sebuah kelapa bermassa {m} kg tergantung pada ketinggian {h} m dari tanah. Pohon itu berumur 15 tahun. Percepatan gravitasi {g} m/s². Berapa energi potensial kelapa itu?'},
+ {id:'us-Ek',k:'8',t:'Usaha dan energi',n:'Energi kinetik',f:'Ek = ½ × m × v²',w:'Energi kinetik sebanding dengan massa dan kuadrat kelajuan.',
+  v:[['m','m','massa','kg',60],['v','v','kelajuan','m/s',3]],q:['Ek','energi kinetik','J'],a:'0.5*m*v*v',e:'½ × {m} × {v}²',
+  r:[['m',20,60,10],['v',1,6,1]],x:[['Ek = m × g × h','Ini rumus energi potensial.'],['Ek = ½ × m × v','Kelajuan harus dikuadratkan.']],
+  s:[['0.5*m*v','Kelajuan belum dikuadratkan.'],['m*v*v','Belum dikali ½.']],p:'Kuadratkan kelajuan, lalu kalikan dengan ½ × m.',
+  c:'Kakak mengendarai sepeda dengan kelajuan {v} m/s. Massa kakak dan sepedanya {m} kg. Sepeda itu bernomor 12. Berapa energi kinetik kakak dan sepedanya?'},
+ {id:'us-P',k:'8',t:'Usaha dan energi',n:'Mencari daya',f:'P = W ÷ t',w:'Daya adalah usaha setiap satu sekon.',
+  v:[['W','W','usaha','J',1200],['t','t','waktu','s',20]],q:['P','daya','W'],a:'W/t',e:'{W} ÷ {t}',
+  r:[['t',10,50,10],['zh',10,100,10],['W','zh*t']],x:[['P = W × t','Usaha dikali waktu bukan daya.'],['P = t ÷ W','Pembagiannya terbalik.']],
+  s:[['W*t','Itu usaha dikali waktu. Daya adalah usaha dibagi waktu.']],p:'Bagi usaha dengan waktu.',
+  c:'Seorang pekerja bangunan berumur 35 tahun melakukan usaha {W} J dalam waktu {t} s. Berapa daya pekerja itu?'},
+ {id:'us-tuas',k:'8',t:'Usaha dan energi',n:'Gaya kuasa pada tuas',f:'F = w × lb ÷ lk',w:'Tuas seimbang: w × lb = F × lk.',
+  v:[['w','w','berat beban','N',1000],['lb','lb','lengan beban','m',0.2],['lk','lk','lengan kuasa','m',1]],q:['F','gaya kuasa','N'],a:'w*lb/lk',e:'{w} × {lb} ÷ {lk}',
+  r:[['w',500,1500,250]],x:[['F = w × lk ÷ lb','Lengannya tertukar.'],['F = w ÷ lb','Lengan kuasa belum dipakai.']],
+  s:[['w*lk/lb','Lengannya tertukar.']],p:'Kalikan beban dengan lengan beban, lalu bagi dengan lengan kuasa.',
+  c:'Pak Tani memakai linggis sepanjang 1,2 m untuk mengungkit batu seberat {w} N. Lengan beban {lb} m dan lengan kuasa {lk} m. Berapa gaya kuasa yang diperlukan?'},
+ /* Kelas 8 · Getaran dan gelombang */
+ {id:'gl-f',k:'8',t:'Getaran dan gelombang',n:'Mencari frekuensi',f:'f = n ÷ t',w:'Frekuensi adalah banyaknya getaran setiap sekon.',
+  v:[['n','n','jumlah getaran','kali',30],['t','t','waktu','s',10]],q:['f','frekuensi','Hz'],a:'n/t',e:'{n} ÷ {t}',
+  r:[['t',2,10,2],['zh',1,5,1],['n','zh*t']],x:[['f = t ÷ n','Ini rumus periode.'],['f = n × t','Getaran dibagi waktu, tidak dikali.']],
+  s:[['t/n','Itu periode. Frekuensi adalah n ÷ t.']],p:'Bagi jumlah getaran dengan waktu.',
+  c:'Sebuah bandul dengan tali sepanjang 50 cm bergetar {n} kali dalam waktu {t} s. Berapa frekuensi bandul?'},
+ {id:'gl-T',k:'8',t:'Getaran dan gelombang',n:'Mencari periode',f:'T = t ÷ n',w:'Periode adalah waktu untuk satu kali getaran.',
+  v:[['t','t','waktu','s',20],['n','n','jumlah getaran','kali',40]],q:['T','periode','s'],a:'t/n',e:'{t} ÷ {n}',
+  r:[['n',10,40,10],['zh',0.5,2,0.5],['t','zh*n']],x:[['T = n ÷ t','Ini rumus frekuensi.'],['T = n × t','Waktu dibagi jumlah getaran.']],
+  s:[['n/t','Itu frekuensi. Periode adalah t ÷ n.']],p:'Bagi waktu dengan jumlah getaran.',
+  c:'Adik bermain ayunan bersama 3 temannya. Ayunan itu bergetar {n} kali dalam waktu {t} s. Berapa periode ayunan?'},
+ {id:'gl-v',k:'8',t:'Getaran dan gelombang',n:'Cepat rambat gelombang',f:'v = λ × f',w:'Cepat rambat sama dengan panjang gelombang dikali frekuensi.',
+  v:[['l','λ','panjang gelombang','m',1.5],['f','f','frekuensi','Hz',2]],q:['v','cepat rambat','m/s'],a:'l*f',e:'{l} × {f}',
+  r:[['l',0.5,3,0.5],['f',2,10,2]],x:[['v = λ ÷ f','Dikali, bukan dibagi.'],['v = f ÷ λ','Ini bukan rumus cepat rambat.']],
+  s:[['l/f','Itu dibagi. Cepat rambat adalah λ × f.']],p:'Kalikan panjang gelombang dengan frekuensi.',
+  c:'Sebuah batu dilempar ke kolam pada pagi hari. Gelombang air memiliki panjang gelombang {l} m dan frekuensi {f} Hz. Berapa cepat rambat gelombang itu?'},
+ {id:'gl-l',k:'8',t:'Getaran dan gelombang',n:'Mencari panjang gelombang',f:'λ = v ÷ f',w:'Dari v = λ × f, panjang gelombang sama dengan v ÷ f.',
+  v:[['v','v','cepat rambat','m/s',8],['f','f','frekuensi','Hz',4]],q:['λ','panjang gelombang','m'],a:'v/f',e:'{v} ÷ {f}',
+  r:[['f',2,10,2],['zh',0.5,3,0.5],['v','zh*f']],x:[['λ = v × f','Dikali tidak menghasilkan panjang gelombang.'],['λ = f ÷ v','Pembagiannya terbalik.']],
+  s:[['v*f','Itu dikali. Panjang gelombang adalah v ÷ f.']],p:'Bagi cepat rambat dengan frekuensi.',
+  c:'Dina menggetarkan ujung tali merah dengan frekuensi {f} Hz. Gelombang merambat dengan cepat rambat {v} m/s. Berapa panjang gelombang pada tali?'},
+ {id:'gl-sonar',k:'8',t:'Getaran dan gelombang',n:'Bunyi pantul (kedalaman laut)',f:'d = v × t ÷ 2',w:'Bunyi pergi lalu kembali, jadi jaraknya dibagi 2.',
+  v:[['v','v','cepat rambat bunyi','m/s',1500],['t','t','waktu pantul','s',4]],q:['d','kedalaman','m'],a:'v*t/2',e:'{v} × {t} ÷ 2',
+  r:[['t',2,8,1]],x:[['d = v × t','Itu jarak pergi-pulang.'],['d = v ÷ t','Dikali, bukan dibagi.']],
+  s:[['v*t','Itu jarak pergi-pulang. Bagi 2.']],p:'Kalikan v dan t, lalu bagi 2.',
+  c:'Kapal nelayan yang membawa 25 awak mengirim bunyi ke dasar laut. Bunyi pantulnya diterima setelah {t} s. Cepat rambat bunyi di air laut {v} m/s. Berapa kedalaman laut itu?'},
+ /* Kelas 9 · Listrik */
+ {id:'l-I',k:'9',t:'Listrik',n:'Hukum Ohm: mencari kuat arus',f:'I = V ÷ R',w:'Hukum Ohm: V = I × R, sehingga I = V ÷ R.',
+  v:[['V','V','tegangan','V',220],['R','R','hambatan','Ω',40]],q:['I','kuat arus','A'],a:'V/R',e:'{V} ÷ {R}',
+  r:[['R',10,100,10],['zh',1,5,0.5],['V','zh*R']],x:[['I = V × R','Ini bukan rumus kuat arus.'],['I = R ÷ V','Pembagiannya terbalik.']],
+  s:[['V*R','Itu hasil kali V dan R. Kuat arus adalah V ÷ R.'],['R/V','Pembagiannya terbalik.']],p:'Bagi tegangan dengan hambatan.',
+  c:'Setrika listrik memiliki hambatan {R} Ω dan dihubungkan ke tegangan {V} V. Setrika itu dipakai 30 menit setiap hari. Berapa kuat arus yang mengalir pada setrika?'},
+ {id:'l-V',k:'9',t:'Listrik',n:'Hukum Ohm: mencari tegangan',f:'V = I × R',w:'Hukum Ohm: tegangan sama dengan kuat arus dikali hambatan.',
+  v:[['I','I','kuat arus','A',0.5],['R','R','hambatan','Ω',200]],q:['V','tegangan','V'],a:'I*R',e:'{I} × {R}',
+  r:[['I',0.5,5,0.5],['R',10,100,10]],x:[['V = I ÷ R','Dikali, bukan dibagi.'],['V = R ÷ I','Ini bukan rumus tegangan.']],
+  s:[['I/R','Itu dibagi. Tegangan adalah I × R.']],p:'Kalikan kuat arus dengan hambatan.',
+  c:'Sebuah lampu memiliki hambatan {R} Ω. Arus sebesar {I} A mengalir melalui lampu. Lampu itu dibeli seharga Rp12.000. Berapa tegangan pada lampu?'},
+ {id:'l-R',k:'9',t:'Listrik',n:'Hukum Ohm: mencari hambatan',f:'R = V ÷ I',w:'Dari V = I × R, hambatan sama dengan V ÷ I.',
+  v:[['V','V','tegangan','V',12],['I','I','kuat arus','A',2]],q:['R','hambatan','Ω'],a:'V/I',e:'{V} ÷ {I}',
+  r:[['I',0.5,4,0.5],['zh',2,20,2],['V','zh*I']],x:[['R = V × I','Ini rumus daya, bukan hambatan.'],['R = I ÷ V','Pembagiannya terbalik.']],
+  s:[['V*I','Itu V × I (daya). Hambatan adalah V ÷ I.']],p:'Bagi tegangan dengan kuat arus.',
+  c:'Sebuah senter memakai baterai bertegangan {V} V dan arus {I} A. Senter itu berwarna kuning. Berapa hambatan lampu senter?'},
+ {id:'l-q',k:'9',t:'Listrik',n:'Mencari muatan listrik',f:'q = I × t',w:'Muatan sama dengan kuat arus dikali waktu.',
+  v:[['I','I','kuat arus','A',2],['t','t','waktu','s',60]],q:['q','muatan listrik','C'],a:'I*t',e:'{I} × {t}',
+  r:[['I',1,5,1],['t',10,120,10]],x:[['q = I ÷ t','Dikali, bukan dibagi.'],['q = t ÷ I','Ini bukan rumus muatan.']],
+  s:[['I/t','Itu dibagi. Muatan adalah I × t.']],p:'Kalikan kuat arus dengan waktu.',
+  c:'Arus {I} A mengalir pada kabel setrika selama {t} s. Kabel itu panjangnya 2 m. Berapa muatan listrik yang mengalir?'},
+ {id:'l-Iq',k:'9',t:'Listrik',n:'Mencari kuat arus dari muatan',f:'I = q ÷ t',w:'Kuat arus adalah muatan yang mengalir setiap sekon.',
+  v:[['q','q','muatan listrik','C',120],['t','t','waktu','s',60]],q:['I','kuat arus','A'],a:'q/t',e:'{q} ÷ {t}',
+  r:[['t',10,60,10],['zh',1,5,1],['q','zh*t']],x:[['I = q × t','Dibagi, bukan dikali.'],['I = t ÷ q','Pembagiannya terbalik.']],
+  s:[['q*t','Itu dikali. Kuat arus adalah q ÷ t.']],p:'Bagi muatan dengan waktu.',
+  c:'Muatan {q} C mengalir melalui sebuah kipas angin dalam waktu {t} s. Kipas itu memiliki 3 baling-baling. Berapa kuat arus yang mengalir?'},
+ {id:'l-seri',k:'9',t:'Listrik',n:'Hambatan seri',f:'Rs = R₁ + R₂',w:'Pada rangkaian seri, hambatan dijumlahkan.',
+  v:[['R1','R₁','hambatan pertama','Ω',30],['R2','R₂','hambatan kedua','Ω',20]],q:['Rs','hambatan total','Ω'],a:'R1+R2',e:'{R1} + {R2}',
+  r:[['R1',10,100,10],['R2',10,100,10]],x:[['Rs = R₁ × R₂','Pada seri hambatan dijumlahkan.'],['1/Rs = 1/R₁ + 1/R₂','Ini rumus rangkaian paralel.']],
+  s:[['R1*R2','Itu dikali. Pada seri hambatan dijumlahkan.']],p:'Jumlahkan kedua hambatan.',
+  c:'Dua lampu dengan hambatan {R1} Ω dan {R2} Ω dirangkai seri di rumah Bu Ani pada pukul 18.00. Berapa hambatan total rangkaian?'},
+ {id:'l-paralel',k:'9',t:'Listrik',n:'Hambatan paralel',f:'Rp = R₁ × R₂ ÷ (R₁ + R₂)',w:'Untuk dua hambatan paralel, 1/Rp = 1/R₁ + 1/R₂, atau Rp = R₁ × R₂ ÷ (R₁ + R₂).',
+  v:[['R1','R₁','hambatan pertama','Ω',6],['R2','R₂','hambatan kedua','Ω',3]],q:['Rp','hambatan total','Ω'],a:'R1*R2/(R1+R2)',e:'{R1} × {R2} ÷ ({R1} + {R2})',
+  r:[['zk',1,5,1],['R1','6*zk'],['R2','3*zk']],x:[['Rp = R₁ + R₂','Ini rumus rangkaian seri.'],['Rp = R₁ × R₂','Belum dibagi jumlahnya.']],
+  s:[['R1+R2','Itu rumus seri. Pada paralel, hambatan total lebih kecil.']],p:'Kalikan kedua hambatan, lalu bagi dengan jumlahnya.',
+  c:'Dua resistor {R1} Ω dan {R2} Ω dipasang paralel pada papan rangkaian berwarna hijau. Berapa hambatan pengganti kedua resistor?'},
+ {id:'l-P',k:'9',t:'Listrik',n:'Daya listrik',f:'P = V × I',w:'Daya listrik sama dengan tegangan dikali kuat arus.',
+  v:[['V','V','tegangan','V',220],['I','I','kuat arus','A',2]],q:['P','daya','W'],a:'V*I',e:'{V} × {I}',
+  r:[['V',110,220,110],['I',0.5,5,0.5]],x:[['P = V ÷ I','Ini rumus hambatan.'],['P = I ÷ V','Ini bukan rumus daya.']],
+  s:[['V/I','Itu V ÷ I (hambatan). Daya adalah V × I.']],p:'Kalikan tegangan dengan kuat arus.',
+  c:'Rice cooker dipasang pada tegangan {V} V dan dialiri arus {I} A. Rice cooker itu dibeli seharga Rp400.000. Berapa daya rice cooker?'},
+ {id:'l-E',k:'9',t:'Listrik',n:'Energi listrik',f:'E = P × t',w:'Energi listrik sama dengan daya dikali waktu (dalam sekon).',
+  v:[['P','P','daya','W',100],['t','t','waktu','s',600]],q:['E','energi listrik','J'],a:'P*t',e:'{P} × {t}',
+  r:[['P',50,500,50],['t',60,600,60]],x:[['E = P ÷ t','Ini bukan rumus energi.'],['E = t ÷ P','Ini rumus waktu yang salah.']],
+  s:[['P/t','Itu dibagi. Energi adalah P × t.']],p:'Kalikan daya dengan waktu dalam sekon.',
+  c:'Sebuah televisi berdaya {P} W menyala selama {t} s di ruang tamu yang luasnya 12 m². Berapa energi listrik yang dipakai televisi?'},
+ /* Kelas 9 · Magnet */
+ {id:'m-F',k:'9',t:'Magnet',n:'Gaya Lorentz',f:'F = I × L × B',w:'Gaya Lorentz pada kawat tegak lurus medan magnet (sin 90° = 1).',
+  v:[['I','I','kuat arus','A',2],['L','L','panjang kawat','m',1.5],['B','B','kuat medan magnet','T',0.4]],q:['F','gaya Lorentz','N'],a:'I*L*B',e:'{I} × {L} × {B}',
+  r:[['I',1,5,1],['L',0.5,2,0.5],['B',0.2,1,0.2]],x:[['F = I × L ÷ B','Semua dikalikan.'],['F = I ÷ (L × B)','Ini rumus mencari arus.']],
+  s:[['I*L','Kuat medan magnet belum dikalikan.']],p:'Kalikan arus, panjang kawat, dan kuat medan.',
+  c:'Kawat sepanjang {L} m di dalam kipas angin dialiri arus {I} A dan berada tegak lurus medan magnet {B} T. Kipas itu memiliki 5 tombol. Berapa gaya Lorentz pada kawat?'},
+ {id:'m-I',k:'9',t:'Magnet',n:'Mencari arus dari gaya Lorentz',f:'I = F ÷ (L × B)',w:'Dari F = I × L × B, arus sama dengan F ÷ (L × B).',
+  v:[['F','F','gaya Lorentz','N',4],['L','L','panjang kawat','m',2],['B','B','kuat medan magnet','T',0.5]],q:['I','kuat arus','A'],a:'F/(L*B)',e:'{F} ÷ ({L} × {B})',
+  r:[['L',0.5,2,0.5],['B',0.2,1,0.2],['zh',1,5,1],['F','zh*L*B']],x:[['I = F × L × B','Dibagi, bukan dikali.'],['I = F ÷ L','Kuat medan belum dipakai.']],
+  s:[['F*L*B','Itu dikali. Arus adalah F ÷ (L × B).']],p:'Bagi gaya dengan hasil kali L dan B.',
+  c:'Kawat sepanjang {L} m berada tegak lurus medan magnet {B} T dan mengalami gaya {F} N. Kawat itu dilapisi plastik merah. Berapa kuat arus pada kawat?'},
+ {id:'m-ggl',k:'9',t:'Magnet',n:'GGL induksi',f:'ε = N × ΔΦ ÷ Δt',w:'GGL induksi sebanding dengan jumlah lilitan dan laju perubahan fluks.',
+  v:[['N','N','jumlah lilitan','lilitan',200],['dP','ΔΦ','perubahan fluks','Wb',0.02],['dt','Δt','selang waktu','s',0.1]],q:['ε','GGL induksi','V'],a:'N*dP/dt',e:'{N} × {dP} ÷ {dt}',
+  r:[['N',100,500,100],['dP',0.01,0.05,0.01]],x:[['ε = N × ΔΦ × Δt','Dibagi selang waktu, bukan dikali.'],['ε = ΔΦ ÷ Δt','Jumlah lilitan belum dipakai.']],
+  s:[['dP/dt','Jumlah lilitan belum dikalikan.']],p:'Kalikan lilitan dengan perubahan fluks, lalu bagi selang waktu.',
+  c:'Dinamo sepeda memiliki kumparan {N} lilitan. Fluks magnetiknya berubah {dP} Wb dalam waktu {dt} s. Sepeda itu berwarna hitam. Berapa GGL induksi yang dihasilkan?'},
+ /* Kelas 9 · Energi alternatif */
+ {id:'ea-P',k:'9',t:'Energi alternatif',n:'Daya panel surya',f:'P = V × I',w:'Daya listrik dari pembangkit sama dengan tegangan dikali arus.',
+  v:[['V','V','tegangan','V',24],['I','I','kuat arus','A',3]],q:['P','daya','W'],a:'V*I',e:'{V} × {I}',
+  r:[['V',12,48,12],['I',0.5,5,0.5]],x:[['P = V ÷ I','Ini rumus hambatan.'],['P = I ÷ V','Ini bukan rumus daya.']],
+  s:[['V/I','Itu V ÷ I. Daya adalah V × I.']],p:'Kalikan tegangan dengan arus.',
+  c:'Panel surya di atap sekolah menghasilkan tegangan {V} V dan arus {I} A. Sekolah itu memiliki 18 kelas. Berapa daya panel surya?'},
+ {id:'ea-E',k:'9',t:'Energi alternatif',n:'Energi dari pembangkit',f:'E = P × t',w:'Energi sama dengan daya dikali waktu.',
+  v:[['P','P','daya','W',500],['t','t','waktu','s',120]],q:['E','energi','J'],a:'P*t',e:'{P} × {t}',
+  r:[['P',100,1000,100],['t',60,600,60]],x:[['E = P ÷ t','Dikali, bukan dibagi.'],['E = t ÷ P','Ini bukan rumus energi.']],
+  s:[['P/t','Itu dibagi. Energi adalah P × t.']],p:'Kalikan daya dengan waktu.',
+  c:'Kincir angin di desa nelayan menghasilkan daya {P} W selama {t} s. Kincir itu dibangun tahun 2020. Berapa energi yang dihasilkan?'},
+ {id:'ea-t',k:'9',t:'Energi alternatif',n:'Waktu dari energi dan daya',f:'t = E ÷ P',w:'Dari E = P × t, waktu sama dengan energi dibagi daya.',
+  v:[['E','E','energi','J',6000],['P','P','daya','W',100]],q:['t','waktu','s'],a:'E/P',e:'{E} ÷ {P}',
+  r:[['P',100,500,100],['zh',10,60,10],['E','zh*P']],x:[['t = E × P','Dibagi, bukan dikali.'],['t = P ÷ E','Pembagiannya terbalik.']],
+  s:[['E*P','Itu dikali. Waktu adalah E ÷ P.']],p:'Bagi energi dengan daya.',
+  c:'Baterai lampu taman tenaga surya menyimpan energi {E} J. Lampu itu berdaya {P} W dan berwarna putih. Berapa lama lampu dapat menyala?'},
+ /* Kelas 9 · Pewarisan sifat */
+ {id:'ps-dom',k:'9',t:'Pewarisan sifat',n:'Monohibrid: jumlah dominan (3 : 1)',f:'Jumlah = ¾ × N',w:'Fenotipe F2 monohibrid 3 : 1, jadi dominan ¾ bagian.',
+  v:[['N','N','jumlah keturunan','tanaman',200]],q:['Jumlah','jumlah bersifat dominan','tanaman'],a:'3/4*N',e:'3 ÷ 4 × {N}',
+  r:[['N',40,400,40]],x:[['Jumlah = ¼ × N','Itu bagian resesif.'],['Jumlah = ½ × N','Rasio monohibrid 3 : 1, bukan 1 : 1.']],
+  s:[['N/4','Itu bagian resesif. Dominan ¾.']],p:'Kalikan ¾ dengan jumlah keturunan.',
+  c:'Persilangan ercis ungu (Uu) dengan ercis ungu (Uu) menghasilkan {N} tanaman F2. Kebun itu luasnya 50 m². Berapa tanaman yang berbunga ungu?'},
+ {id:'ps-res',k:'9',t:'Pewarisan sifat',n:'Monohibrid: jumlah resesif (3 : 1)',f:'Jumlah = ¼ × N',w:'Fenotipe F2 monohibrid 3 : 1, jadi resesif ¼ bagian.',
+  v:[['N','N','jumlah keturunan','tanaman',200]],q:['Jumlah','jumlah bersifat resesif','tanaman'],a:'N/4',e:'1 ÷ 4 × {N}',
+  r:[['N',40,400,40]],x:[['Jumlah = ¾ × N','Itu bagian dominan.'],['Jumlah = ½ × N','Rasio monohibrid 3 : 1.']],
+  s:[['3/4*N','Itu bagian dominan. Resesif ¼.']],p:'Kalikan ¼ dengan jumlah keturunan.',
+  c:'Persilangan ercis ungu (Uu) dengan ercis ungu (Uu) menghasilkan {N} tanaman F2 yang ditanam oleh 4 siswa. Berapa tanaman yang berbunga putih?'},
+ {id:'ps-9',k:'9',t:'Pewarisan sifat',n:'Dihibrid: jumlah dominan-dominan (9 : 3 : 3 : 1)',f:'Jumlah = 9/16 × N',w:'Fenotipe F2 dihibrid 9 : 3 : 3 : 1, jadi dominan-dominan 9 dari 16 bagian.',
+  v:[['N','N','jumlah keturunan','tanaman',320]],q:['Jumlah','jumlah dominan-dominan','tanaman'],a:'9/16*N',e:'9 ÷ 16 × {N}',
+  r:[['N',160,800,160]],x:[['Jumlah = 3/16 × N','Itu bagian dominan-resesif.'],['Jumlah = 1/16 × N','Itu bagian resesif-resesif.']],
+  s:[['3/16*N','Itu bagian 3. Dominan-dominan 9 bagian.']],p:'Kalikan 9/16 dengan jumlah keturunan.',
+  c:'Persilangan jagung kuning bulat (KkBb) dengan sesamanya menghasilkan {N} tanaman F2. Panen dilakukan bulan Juni. Berapa tanaman yang berbiji kuning bulat?'},
+ {id:'ps-1',k:'9',t:'Pewarisan sifat',n:'Dihibrid: jumlah resesif-resesif (9 : 3 : 3 : 1)',f:'Jumlah = 1/16 × N',w:'Resesif-resesif hanya 1 dari 16 bagian.',
+  v:[['N','N','jumlah keturunan','tanaman',320]],q:['Jumlah','jumlah resesif-resesif','tanaman'],a:'N/16',e:'1 ÷ 16 × {N}',
+  r:[['N',160,800,160]],x:[['Jumlah = 9/16 × N','Itu bagian dominan-dominan.'],['Jumlah = 3/16 × N','Itu bagian dominan-resesif.']],
+  s:[['9/16*N','Itu bagian dominan-dominan. Resesif-resesif 1 bagian.']],p:'Kalikan 1/16 dengan jumlah keturunan.',
+  c:'Persilangan jagung kuning bulat (KkBb) dengan sesamanya menghasilkan {N} tanaman F2 di lahan milik 2 petani. Berapa tanaman yang berbiji putih keriput?'}
+];
+function tplById(id){for(var i=0;i<TPL.length;i++)if(TPL[i].id===id)return TPL[i];return null;}
+
+/* ---------- Merakit soal dari templat dan cerita guru ---------- */
+var UNITW=['volt','ampere','ohm','watt','joule','sekon','detik','menit','jam','meter','gram','kilogram','liter','hertz','newton','pascal','tesla','weber','coulomb','kali','tanaman','lilitan','derajat','km','cm','mm','kg','g','m','s','v','a','w','j','n','c','hz','pa','t','wb','k','°c','°f','ω','kwh','wh','kw','mw','ma','mj','kj','ml','l','m²','m³','cm²','cm³','m/s','m/s²','km/jam','kg/m³','g/cm³','j/kg°c','%'];
+var STOPW=['dan','yang','di','ke','dari','untuk','dengan','pada','setiap','dalam','selama','sebesar','sejauh','adalah','itu','ini','jika','maka','atau','agar','lalu','sehingga','hingga','sampai','oleh'];
+var NUMRE=/\d+(?:\.\d{3})+(?:,\d+)?|\d{1,2}[.:]\d{2}(?!\d)|\d+(?:,\d+)?/g;
+function numTokens(t){
+  var out=[],m;NUMRE.lastIndex=0;
+  while((m=NUMRE.exec(t))){
+    if(m.index>0&&/[A-Za-z]/.test(t.charAt(m.index-1)))continue;
+    var i=m.index,j=i+m[0].length,raw=m[0],val=/^\d{1,2}[.:]\d{2}$/.test(raw)?NaN:parseNum(raw);
+    if(i>=2&&/Rp\s?$/.test(t.slice(Math.max(0,i-3),i)))i=t.lastIndexOf('Rp',i);
+    var rest=t.slice(j),u=rest.match(/^(\s?)([A-Za-zΩµ°%²³\/]+)/),unit='',uj=j;
+    if(u){var w=u[2].replace(/[.,;:!?]+$/,'');unit=w;uj=j+u[1].length+w.length;}
+    out.push({i:i,j:j,uj:uj,raw:raw,val:val,unit:unit});
+  }
+  return out;
+}
+function isUnitWord(w,sat){var l=String(w||'').toLowerCase();return !!w&&(w===sat||l===String(sat||'').toLowerCase()||UNITW.indexOf(l)>=0);}
+/* mencari kalimat tanya: “Berapa …?” */
+function tanyaSpan(t){
+  var m=t.match(/(Berapa(?:kah)?|Tentukan(?:lah)?|Hitunglah|Hitung)\s+([^?!]*)/i);if(!m)return null;
+  var i=m.index+m[0].length-m[2].length,txt=m[2].replace(/[\s.]+$/,'');
+  return txt?{i:i,j:i+txt.length,txt:txt}:null;
+}
+function rapikanAngka(n){return fmtNum(n);}
+/* o: {tpl, nilai:{kunci:angka}, cerita, judul, acak} → {s, errs, info} */
+function rakitSoal(o){
+  var T=o.tpl,errs=[],info={pakai:[],pengecoh:[],tanya:null},cer=String(o.cerita||'').replace(/\s+/g,' ').trim(),vals={};
+  T.v.forEach(function(v){var x=o.nilai&&o.nilai[v[0]];vals[v[0]]=typeof x==='number'?x:parseNum(x);});
+  T.v.forEach(function(v){if(!Number.isFinite(vals[v[0]])||vals[v[0]]<=0)errs.push('Isi angka '+v[2]+' ('+v[1]+') dengan angka lebih dari 0.');});
+  if(!cer)errs.push('Tulis dulu cerita soalnya.');
+  if(errs.length)return {s:null,errs:errs,info:info};
+  var toks=numTokens(cer),used=[],tq=tanyaSpan(cer);
+  T.v.forEach(function(v){
+    var tk=toks.filter(function(x){return used.indexOf(x)<0&&Math.abs(x.val-vals[v[0]])<1e-9;})[0];
+    if(!tk){errs.push('Angka '+rapikanAngka(vals[v[0]])+' '+v[3]+' ('+v[2]+') belum ada di cerita. Tulis angkanya di cerita, misalnya “'+rapikanAngka(vals[v[0]])+' '+v[3]+'”.');return;}
+    used.push(tk);tk.v=v;tk.useUnit=isUnitWord(tk.unit,v[3]);
+    info.pakai.push({v:v,teks:cer.slice(tk.i,tk.useUnit?tk.uj:tk.j)});
+  });
+  if(!tq)errs.push('Tambahkan kalimat tanya di akhir cerita, misalnya “Berapa '+T.q[1]+' …?”.');
+  else{
+    /* kalimat tanya tidak boleh menutupi angka yang dipakai */
+    used.forEach(function(tk){if(tk.i<tq.j&&tk.i>=tq.i){tq.j=tk.i;tq.txt=cer.slice(tq.i,tq.j).replace(/\s+(jika|kalau|bila|saat|ketika|dengan)?\s*$/i,'').trim();tq.j=tq.i+tq.txt.length;}});
+    if(!tq.txt)errs.push('Kalimat tanya terlalu pendek. Contoh: “Berapa '+T.q[1]+' …?”.');
+    info.tanya=tq.txt;
+  }
+  if(errs.length)return {s:null,errs:errs,info:info};
+  var dec=toks.filter(function(x){return used.indexOf(x)<0&&!(x.i>=tq.i&&x.i<tq.j);}).map(function(x){
+    var w=(x.unit||'').toLowerCase(),end=x.unit&&STOPW.indexOf(w)<0&&x.unit.length<=10?x.uj:x.j;
+    return {i:x.i,j:end,teks:cer.slice(x.i,end)};
+  });
+  info.pengecoh=dec.map(function(d){return d.teks;});
+  /* angka acak: ganti angka di cerita dengan {kunci} */
+  var rnd={};(T.r||[]).forEach(function(r){rnd[r[0]]=1;});
+  var acak=!!o.acak&&T.v.some(function(v){return rnd[v[0]];}),story=cer;
+  if(acak)used.slice().sort(function(a,b){return b.i-a.i;}).forEach(function(tk){if(rnd[tk.v[0]])story=story.slice(0,tk.i)+'{'+tk.v[0]+'}'+story.slice(tk.j);});
+  var tx=function(tk){var num=acak&&rnd[tk.v[0]]?'{'+tk.v[0]+'}':tk.raw;return num+(tk.useUnit?cer.slice(tk.j,tk.uj):'');};
+  var sub=function(t){return t.replace(/\{(\w+)\}/g,function(m,k){return acak?m:fmtNum(vals[k]);});};
+  var s={id:'',kelas:T.k,tpl:T.id,topik:T.t,judul:String(o.judul||'').trim()||T.n,cerita:story,variasi:[],
+    besaran:used.map(function(tk){var v=tk.v;return {teks:tx(tk),sym:v[1],nama:v[2],satuan:v[3],ket:v[2]+', satuannya '+v[3],konv:'',catatan:''};}),
+    pengecoh:dec.map(function(d){return {teks:d.teks,ket:'info yang tidak dipakai menghitung'};}),
+    tanya:{teks:tq.txt},
+    rumus:[{f:T.f,benar:true,alasan:T.w}].concat(T.x.map(function(x){return {f:x[0],benar:false,alasan:x[1]};})),
+    hitung:{diketahui:T.v.map(function(v){return v[1]+' = '+(acak&&rnd[v[0]]?'{'+v[0]+'}':fmtNum(vals[v[0]]))+' '+v[3];}).join(' · '),lhs:T.q[0],ekspresi:sub(T.e),satuan:T.q[2],
+      jawaban:null,angka:'',salah:[],petunjuk:T.p,penjelasan:T.f+'.'}};
+  if(acak){
+    T.v.forEach(function(v){if(!rnd[v[0]])s.variasi.push({nama:v[0],min:vals[v[0]],maks:vals[v[0]],langkah:1,rumus:''});});
+    T.r.forEach(function(r){s.variasi.push(typeof r[1]==='string'?{nama:r[0],min:NaN,maks:NaN,langkah:NaN,rumus:r[1]}:{nama:r[0],min:r[1],maks:r[2],langkah:r[3],rumus:''});});
+    s.hitung.angka=T.a;s.hitung.salah=T.s.map(function(x){return {nilai:NaN,pesan:x[1],rumus:x[0]};});
+  }else{
+    s.hitung.jawaban=evalAngka(T.a,vals);
+    s.hitung.salah=T.s.map(function(x){return {nilai:evalAngka(x[0],vals),pesan:x[1],rumus:''};}).filter(function(x){return Number.isFinite(x.nilai)&&Math.abs(x.nilai-s.hitung.jawaban)>1e-9;});
+  }
+  s=norm(s);s.tpl=T.id;
+  errs=check(s);
+  if(!errs.length){
+    if(acak){for(var k=0;k<8;k++){var ins=instanceOf(s),a=ins.hitung.jawaban;
+      if(!Number.isFinite(a)||Math.abs(a*100-Math.round(a*100))>1e-6){errs.push('Dengan angka acak, sebagian jawaban jadi berkoma panjang. Matikan “Angka acak” atau ganti angka tetapnya.');break;}}}
+    else if(!Number.isFinite(s.hitung.jawaban))errs.push('Jawaban belum bisa dihitung. Periksa angkanya.');
+  }
+  return {s:errs.length?null:s,errs:errs,info:info};
+}
+function tplJawab(T,nilai){var vals={};T.v.forEach(function(v){vals[v[0]]=parseNum(nilai[v[0]]);});return evalAngka(T.a,vals);}
+function tplContoh(T,nilai){return T.c.replace(/\{(\w+)\}/g,function(m,k){var x=parseNum(nilai&&nilai[k]);return Number.isFinite(x)?fmtNum(x):m;});}
+function tplNilaiAwal(T){var o={};T.v.forEach(function(v){o[v[0]]=fmt(v[4]);});return o;}
+function tplRentang(T){return (T.r||[]).filter(function(r){return typeof r[1]!=='string'&&T.v.some(function(v){return v[0]===r[0];});}).map(function(r){
+  var v=T.v.filter(function(x){return x[0]===r[0];})[0];return v[2]+' '+fmtNum(r[1])+'–'+fmtNum(r[2])+' '+v[3];}).join(', ');}
+
+/* ---------- Mode guru yang mudah: menu utama, tambah soal dari rumus, ubah cerita ---------- */
+var GURUKEY='cjs.guru',AI_URL='';
+var G=null,UC=null;
+function bisaKirim(){return apiBase()&&adminRole&&adminRole!=='offline';}
+/* simpan lalu langsung kirim ke siswa */
+function simpanKirim(pesan){
+  var ok=persist();
+  if(!ok){notice={t:'bad',x:'Perubahan tidak bisa disimpan di HP ini.'};return;}
+  if(bisaKirim()){kirimNow(pesan);return 'async';}
+  notice={t:'ok',x:(pesan||'Tersimpan.')+' '+sendHint()};
+}
+function statusHtml(){
+  if(!apiBase())return '';
+  if(sending)return '<div class="gstat info">Mengirim ke siswa…</div>';
+  if(source==='perangkat')return '<div class="gstat warn"><span>Ada perubahan yang belum terkirim ke siswa.</span><button class="btn sm" data-act="a-kirim" data-fk="kirim">Kirim sekarang</button></div>';
+  if(source==='server'||source==='kelas')return '<div class="gstat ok">✓ Semua soal sudah terkirim ke siswa · '+esc(bankLabel())+'</div>';
+  return '<div class="gstat warn"><span>Soal ini belum ada di server.</span><button class="btn sm" data-act="a-kirim" data-fk="kirim">Kirim ke siswa</button></div>';
+}
+function guruBar(judul){
+  return '<div class="gbar"><button class="btn ghost sm" data-act="a-tab" data-v="home" data-fk="g-home">'+ICON.back+' Menu guru</button><b>'+esc(judul)+'</b></div>';
+}
+function tile(v,ic,t,sm){return '<button class="gtile" data-act="'+(v==='buat'?'g-buat':'a-tab')+'" data-v="'+v+'" data-fk="gt-'+v+'"><span class="gi">'+ic+'</span><b>'+t+'</b><small>'+sm+'</small></button>';}
+function guruHomeHtml(){
+  var n=kelasAll().length,h=statusHtml()+noticeHtml();
+  h+='<h2 class="t" style="margin-top:6px">Halo, Bapak/Ibu Guru</h2><p class="mut">Mau melakukan apa hari ini?</p>';
+  if(fileBaru.length)h+='<div class="fb info" role="status"><b>Ada '+fileBaru.length+' soal baru dari pembaruan aplikasi</b>Belum dipakai siswa.<div class="row"><button class="btn sm" data-act="a-tarik" data-fk="tarik">Tambahkan &amp; kirim</button><button class="btn ghost sm" data-act="a-abai">Abaikan</button></div></div>';
+  h+='<div class="gtiles">'
+    +tile('buat','➕','Tambah soal','Pilih rumus, isi angka, tulis cerita')
+    +tile('list','📚','Soal saya',data.length+' soal · ubah, hapus, urutkan')
+    +tile('tampil','📺','Tampil di kelas','Bahas soal di proyektor atau TV')
+    +tile('set','⚙️','Pengaturan kelas','Kunci materi dan ganti PIN')+'</div>';
+  var lain=[];
+  if(apiBase()&&adminRole&&adminRole!=='offline')lain.push(['ai','✨ Ngobrol dengan AI','Minta beberapa soal sekaligus dengan kata-kata biasa']);
+  if(apiBase()&&adminRole==='utama'&&!activeKode)lain.push(['kelas','👥 Kelas guru lain','Buat kode kelas untuk guru lain']);
+  lain.push(['import','📥 Impor soal','Tempel atau buka berkas soal']);
+  lain.push(['export',apiBase()?'💾 Cadangan':'📤 Ekspor','Simpan salinan semua soal']);
+  h+='<h2 class="sec">Lainnya</h2><div class="list">'+lain.map(function(x){return '<button class="item" data-act="a-tab" data-v="'+x[0]+'" data-fk="gl-'+x[0]+'"><span class="it"><b>'+x[1]+'</b><small>'+x[2]+'</small></span><span class="chev">'+ICON.chev+'</span></button>';}).join('')+'</div>';
+  h+='<div class="row" style="margin-top:16px"><button class="btn ghost" data-act="a-out" data-fk="a-out">Keluar dari mode guru</button></div>';
+  return h;
+}
+
+/* --- Tambah soal: 1) pilih rumus 2) isi angka dan cerita 3) simpan & kirim --- */
+function gBaru(){G={kelas:kelasSel,tpl:null,nilai:{},acak:true,cerita:'',judul:'',hasil:null,cek:false,aiBusy:false,aiTema:'',aiErr:null};}
+function gPilih(id){var T=tplById(id);if(!T)return;G.tpl=T;G.nilai=tplNilaiAwal(T);G.cerita='';G.judul='';G.hasil=null;G.cek=false;G.acak=!!(T.r&&T.r.length);}
+function gCek(){if(!G||!G.tpl)return;G.hasil=rakitSoal({tpl:G.tpl,nilai:G.nilai,cerita:G.cerita,judul:G.judul,acak:G.acak});G.cek=true;}
+function buatPilihHtml(){
+  var h=guruBar('Tambah soal')+'<p class="mut">Langkah 1 dari 2 · Pilih rumus yang dipakai soal.</p>'
+    +chipsHtml([['7','Kelas 7'],['8','Kelas 8'],['9','Kelas 9']],G.kelas,'g-kelas');
+  var tops=[];TPL.forEach(function(T){if(T.k===G.kelas&&tops.indexOf(T.t)<0)tops.push(T.t);});
+  tops.forEach(function(t){
+    h+='<h2 class="sec">'+esc(t)+(isLocked(t)?' <span class="pill">terkunci untuk siswa</span>':'')+'</h2><div class="list">'
+      +TPL.filter(function(T){return T.k===G.kelas&&T.t===t;}).map(function(T){
+        return '<button class="item" data-act="g-tpl" data-v="'+T.id+'" data-fk="g-'+T.id+'"><span class="it"><b>'+esc(T.n)+'</b><small class="mono">'+esc(T.f)+'</small></span><span class="chev">'+ICON.chev+'</span></button>';
+      }).join('')+'</div>';
+  });
+  h+='<p class="mut" style="margin-top:14px">Rumus yang dibutuhkan tidak ada? Pakai <button class="linkb" data-act="a-new" data-fk="new">formulir lengkap</button>.</p>';
+  return h;
+}
+function buatIsiHtml(){
+  var T=G.tpl,ans=tplJawab(T,G.nilai),rent=tplRentang(T);
+  var h=guruBar('Tambah soal')+'<p class="mut">Langkah 2 dari 2 · '+esc(T.t)+' · Kelas '+esc(T.k)+'</p>'
+    +'<section class="card"><div class="sh"><h2>'+esc(T.n)+'</h2><button class="btn ghost sm" data-act="g-ganti" data-fk="g-ganti">Ganti rumus</button></div><p class="eq">'+esc(T.f)+'</p></section>';
+  h+='<section class="card"><div class="sh"><span class="num">1</span><h2>Isi angkanya</h2></div><div class="grid2">'
+    +T.v.map(function(v){return '<label class="f"><span>'+esc(v[2])+' ('+esc(v[1])+') <small>'+esc(v[3])+'</small></span><input class="in" data-g="'+v[0]+'" inputmode="decimal" autocomplete="off" value="'+esc(G.nilai[v[0]]||'')+'"></label>';}).join('')+'</div>'
+    +'<p class="mut" style="margin:6px 0 0">Jawabannya: <b id="g-ans">'+esc(T.q[0])+' = '+(Number.isFinite(ans)?fmtNum(ans):'?')+' '+esc(T.q[2])+'</b> (dihitung otomatis)</p>'
+    +(rent?'<label class="chk"><input type="checkbox" id="g-acak"'+(G.acak?' checked':'')+'> <span><b>Angka acak untuk tiap siswa</b><small>Angka di cerita berubah setiap soal dibuka ('+esc(rent)+'), jadi siswa tidak bisa menyalin jawaban teman.</small></span></label>':'')+'</section>';
+  var contoh=tplContoh(T,G.nilai);
+  h+='<section class="card"><div class="sh"><span class="num">2</span><h2>Tulis ceritanya</h2></div>'
+    +'<p class="mut">Tulis seperti di papan tulis. Masukkan semua angka di atas beserta satuannya, dan akhiri dengan pertanyaan “Berapa …?”. Angka lain (harga, jam, jumlah orang) otomatis menjadi pengecoh.</p>'
+    +'<label class="f"><span>Judul soal <small>boleh dikosongkan</small></span><input class="in" id="g-judul" value="'+esc(G.judul)+'" placeholder="'+esc(T.n)+'" autocomplete="off"></label>'
+    +'<label class="f"><span>Cerita</span><textarea class="in" id="g-cerita" rows="5" placeholder="'+esc(contoh)+'">'+esc(G.cerita)+'</textarea></label>'
+    +'<div class="row"><button class="btn ghost sm" data-act="g-contoh" data-fk="g-contoh">Pakai contoh cerita</button>'
+    +(aiAda()?'<button class="btn ghost sm" data-act="g-ai" data-fk="g-ai"'+(G.aiBusy?' disabled':'')+'>'+(G.aiBusy?'AI sedang menulis…':'✨ Tuliskan dengan AI')+'</button>':'')+'</div>'
+    +(aiAda()?'<label class="f" style="margin-top:8px"><span>Tema cerita untuk AI <small>boleh dikosongkan</small></span><input class="in" id="g-tema" value="'+esc(G.aiTema)+'" placeholder="Contoh: kipas angin di masjid, kebun sekolah, pasar ikan" autocomplete="off"></label>':'')
+    +(G.aiErr?msgHtml({t:'bad',x:G.aiErr}):'')
+    +'<div class="row"><button class="btn" data-act="g-cek" data-fk="g-cek">Periksa cerita</button></div>'+cekHtml()+'</section>';
+  var ok=G.cek&&G.hasil&&!G.hasil.errs.length;
+  h+='<section class="card'+(ok?'':' locked')+'"><div class="sh"><span class="num">3</span><h2>Simpan</h2></div>'
+    +(ok?'<div class="row"><button class="btn ghost" data-act="g-coba" data-fk="g-coba">Coba seperti siswa</button><button class="btn" data-act="g-simpan" data-fk="g-simpan"'+(sending?' disabled':'')+'>'+(bisaKirim()?'Simpan &amp; kirim ke siswa':'Simpan')+'</button></div>'
+      :'<p class="mut">Terbuka setelah cerita lolos pemeriksaan.</p>')+'</section>';
+  return h;
+}
+function cekHtml(){
+  if(!G.cek||!G.hasil)return '';
+  var r=G.hasil,i=r.info,L=[];
+  i.pakai.forEach(function(p){L.push('<li class="ok">'+esc(p.v[2])+' ('+esc(p.v[1])+'): <b>'+esc(p.teks)+'</b></li>');});
+  if(i.tanya)L.push('<li class="ok">Ditanya: <b>'+esc(i.tanya)+'</b></li>');
+  if(i.pengecoh.length)L.push('<li class="ok">Pengecoh: <b>'+i.pengecoh.map(esc).join(', ')+'</b></li>');
+  else if(!r.errs.length)L.push('<li class="info">Belum ada pengecoh. Boleh ditambah, misalnya harga atau jam, supaya siswa berlatih memilah.</li>');
+  r.errs.forEach(function(e){L.push('<li class="bad">'+esc(e)+'</li>');});
+  return '<ul class="gcek">'+L.join('')+'</ul>'+(r.errs.length?'':'<div class="fb ok" role="status"><b>Siap</b>Cerita lolos pemeriksaan.</div>');
+}
+function gSimpan(){
+  gCek();if(!G.hasil||G.hasil.errs.length)return;
+  var s=G.hasil.s;s.id=freshId();data.push(s);var judul=s.judul;
+  gBaru();adminTab='home';
+  return simpanKirim('Soal “'+judul+'” ditambahkan.');
+}
+
+/* --- Ubah cerita soal yang sudah ada --- */
+function ucBuka(id){
+  var s=data.find(function(x){return x.id===id;});if(!s)return;
+  var nm=s.variasi.map(function(v){return v.nama;});
+  UC={id:id,teks:s.cerita.replace(/\{(\w+)\}/g,function(m,k){return nm.indexOf(k)>=0?'['+k+']':m;}),judul:s.judul,errs:null};
+  adminTab='cerita';
+}
+function ucHtml(){
+  var s=data.find(function(x){return x.id===UC.id;});if(!s)return guruBar('Ubah cerita')+'<p class="mut">Soal tidak ditemukan.</p>';
+  var keep=s.besaran.map(function(b){return b.teks.replace(/\{(\w+)\}/g,'[$1]');}).concat(s.pengecoh.map(function(d){return d.teks;}));
+  return guruBar('Ubah cerita')+'<section class="card"><div class="sh"><h2>'+esc(s.judul)+'</h2></div>'
+    +'<p class="mut">Ganti cerita dengan konteks sekolah atau daerahmu. Rumus dan jawabannya tidak berubah.</p>'
+    +'<p class="mut" style="margin:6px 0 0">Bagian ini harus tetap ada di cerita: '+keep.map(function(k){return '<b class="mono">'+esc(k)+'</b>';}).join(', ')
+    +' dan pertanyaan “'+esc(s.tanya.teks)+'”.'+(s.variasi.length?' Tanda seperti <b class="mono">[m]</b> adalah angka yang berubah tiap dibuka, jangan dihapus.':'')+'</p>'
+    +'<label class="f"><span>Judul</span><input class="in" id="uc-judul" value="'+esc(UC.judul)+'" autocomplete="off"></label>'
+    +'<label class="f"><span>Cerita</span><textarea class="in" id="uc-teks" rows="6">'+esc(UC.teks)+'</textarea></label>'
+    +(UC.errs&&UC.errs.length?'<ul class="gcek">'+UC.errs.map(function(e){return '<li class="bad">'+esc(e)+'</li>';}).join('')+'</ul>':'')
+    +'<div class="row"><button class="btn" data-act="uc-simpan" data-fk="uc-simpan"'+(sending?' disabled':'')+'>'+(bisaKirim()?'Simpan &amp; kirim ke siswa':'Simpan')+'</button><button class="btn ghost" data-act="a-tab" data-v="list">Batal</button></div></section>';
+}
+function ucSimpan(){
+  var i=data.findIndex(function(x){return x.id===UC.id;});if(i<0)return;
+  var s=JSON.parse(JSON.stringify(data[i])),nm=s.variasi.map(function(v){return v.nama;});
+  s.cerita=UC.teks.replace(/\s+/g,' ').trim().replace(/\[(\w+)\]/g,function(m,k){return nm.indexOf(k)>=0?'{'+k+'}':m;});
+  s.judul=UC.judul.trim()||s.judul;s=norm(s);if(data[i].tpl)s.tpl=data[i].tpl;
+  var e=check(s).map(function(x){return x.replace(/\{(\w+)\}/g,'[$1]').replace('Ketik persis seperti di cerita.','Tulis lagi bagian itu persis sama di cerita.');});
+  if(e.length){UC.errs=e;return;}
+  data[i]=s;UC=null;adminTab='list';
+  return simpanKirim('Cerita “'+s.judul+'” diperbarui.');
+}
+
+/* --- AI: memilih templat, angka, dan menulis cerita; soal dirakit dan dihitung oleh aplikasi --- */
+function aiAda(){return !!(AI_URL||apiBase())&&adminRole&&adminRole!=='offline';}
+function aiKatalog(k){
+  return TPL.filter(function(T){return !k||T.k===k;}).map(function(T){
+    return T.id+' | Kelas '+T.k+' · '+T.t+' | '+T.n+' | '+T.f+' | angka: '+T.v.map(function(v){return v[0]+' = '+v[2]+' ('+v[3]+'), contoh '+fmtNum(v[4]);}).join('; ');
+  }).join('\n');
+}
+var AI_ATURAN='Aturan wajib:\n- Pilih templat dari DAFTAR TEMPLAT (pakai id persis). Jangan membuat rumus sendiri.\n- Isi "nilai" untuk setiap angka templat. Pakai angka yang masuk akal dan jawabannya bulat atau paling banyak 2 angka desimal.\n- "cerita": cerita soal bahasa Indonesia yang dekat dengan kehidupan siswa SMP di Indonesia, 2–4 kalimat. Semua angka dari "nilai" harus tertulis di cerita beserta satuannya, misalnya "220 V". Tambahkan satu pengecoh berupa angka yang tidak dipakai (harga, jam, jumlah orang). Akhiri dengan pertanyaan "Berapa …?".\n- Jangan menulis rumus atau jawaban di cerita.\n- Balas dengan kalimat singkat untuk guru, lalu satu blok ```json berisi {"soal":[{"templat":"id","judul":"...","cerita":"...","nilai":{"kunci":angka},"acak":true}]}. Paling banyak 3 soal.';
+function aiPesanAwal(text,k){return text+'\n\n'+AI_ATURAN+'\n\nDAFTAR TEMPLAT (id | kelas · materi | nama | rumus | angka):\n'+aiKatalog(k);}
+function aiNilai(n){var o={};if(Array.isArray(n))n.forEach(function(x){if(x&&x.k!=null)o[x.k]=x.v;});else if(n&&typeof n==='object')for(var k in n)o[k]=n[k];return o;}
+function aiDariTemplat(raw){
+  var T=tplById(raw.templat),nil=aiNilai(raw.nilai);
+  if(!T)return {s:{judul:raw.judul||'Soal',topik:'',cerita:raw.cerita||'',rumus:[],variasi:[],pengecoh:[],hitung:{}},errs:['Templat “'+raw.templat+'” tidak ada di daftar. Pilih id dari DAFTAR TEMPLAT.'],note:[],added:false,raw:raw};
+  T.v.forEach(function(v){if(nil[v[0]]==null)nil[v[0]]=v[4];});
+  var r=rakitSoal({tpl:T,nilai:nil,cerita:raw.cerita,judul:raw.judul,acak:raw.acak!==false});
+  return {s:r.s||{judul:raw.judul||T.n,topik:T.t,cerita:raw.cerita||'',rumus:[{f:T.f,benar:true}],variasi:[],pengecoh:[],hitung:{satuan:T.q[2]}},errs:r.errs,note:[],added:false,raw:raw,tpl:T,nilai:nil};
+}
+function aiUrlPost(body,ms){return apiCall('/ai',body,ms,AI_URL?AI_URL.replace(/\/+$/,''):'');}
+/* menulis cerita untuk templat yang sedang dipilih guru */
+function gAi(){
+  if(!G||!G.tpl||G.aiBusy)return;
+  var T=G.tpl;G.aiBusy=true;G.aiErr=null;render();
+  var minta='Tulis 1 soal dengan templat '+T.id+' ('+T.n+'). Pakai angka ini: '+T.v.map(function(v){return v[0]+' = '+(G.nilai[v[0]]||v[4])+' '+v[3];}).join(', ')+'.'+(G.aiTema.trim()?' Tema cerita: '+G.aiTema.trim()+'.':'');
+  aiUrlPost({kode:activeKode||'UTAMA',pin:adminPin||'',mode:'templat',pesan:[{role:'user',content:aiPesanAwal(minta,T.k)}],konteks:aiKonteks()},150000).then(function(res){
+    G.aiBusy=false;
+    if(!res.ok){G.aiErr=res.status===0?'Tidak ada internet, atau AI terlalu lama. Coba lagi.':((res.j&&res.j.pesan)||'AI belum bisa menjawab. Coba lagi.');render();return;}
+    var ex=aiExtract(res.j.balasan),it=(ex.list||[])[0];
+    if(!it||!it.cerita){G.aiErr='AI tidak memberi cerita. Coba lagi atau tulis sendiri.';render();return;}
+    G.cerita=String(it.cerita);if(it.judul)G.judul=String(it.judul);
+    var nil=aiNilai(it.nilai);T.v.forEach(function(v){var x=parseNum(nil[v[0]]);if(Number.isFinite(x)&&x>0)G.nilai[v[0]]=fmt(x);});
+    gCek();render();
+  });
+  return 'async';
+}
+var GACT={
+  'g-buat':function(){gBaru();adminTab='buat';window.scrollTo(0,0);},
+  'g-kelas':function(v){G.kelas=v;},
+  'g-lk':function(v){listKelas=v;},
+  'g-tpl':function(v){gPilih(v);window.scrollTo(0,0);fk=null;},
+  'g-ganti':function(){G.tpl=null;G.hasil=null;G.cek=false;window.scrollTo(0,0);},
+  'g-contoh':function(){G.cerita=tplContoh(G.tpl,G.nilai);gCek();},
+  'g-cek':function(){gCek();},
+  'g-ai':function(){return gAi();},
+  'g-coba':function(){gCek();if(!G.hasil||G.hasil.errs.length)return;var s=JSON.parse(JSON.stringify(G.hasil.s));s.id='__prev';startPlay('__prev',s);previewFrom='buat';window.scrollTo(0,0);fk=null;},
+  'g-simpan':function(){return gSimpan();},
+  'uc-buka':function(v){ucBuka(v);window.scrollTo(0,0);fk=null;},
+  'uc-simpan':function(){return ucSimpan();}
+};
 function adminHtml(){
   if(!adminOK)return loginHtml();
-  var h=toolbar()+(adminTab==='edit'||adminTab==='tampil'?'':kirimHtml())+noticeHtml();
+  if(adminTab==='home')return guruHomeHtml();
+  if(adminTab==='buat'){if(!G)gBaru();return noticeHtml()+(G.tpl?buatIsiHtml():buatPilihHtml());}
+  if(adminTab==='cerita'&&UC)return ucHtml();
+  var JT={list:'Soal saya',tampil:'Tampil di kelas',ai:'Ngobrol dengan AI',kelas:'Kelas guru lain',import:'Impor soal',export:apiBase()?'Cadangan':'Ekspor',set:'Pengaturan kelas',edit:'Formulir soal lengkap'};
+  var h=guruBar(JT[adminTab]||'Menu guru')+(adminTab==='edit'||adminTab==='tampil'?'':statusHtml())+noticeHtml();
   if(adminTab==='edit')return h+formHtml();
   if(adminTab==='kelas')return h+kelasHtml();
   if(adminTab==='ai')return h+aiHtml();
@@ -2186,9 +2719,8 @@ function doSave(){
   formErr=null;
   if(editId){var i=data.findIndex(function(x){return x.id===editId;});s.id=editId;if(i>=0)data[i]=s;else data.push(s);}
   else{s.id=freshId();data.push(s);}
-  var ok=persist();
-  notice=ok?{t:'ok',x:'Soal “'+s.judul+'” disimpan.'}:{t:'bad',x:'Soal berubah di layar tetapi tidak bisa disimpan di perangkat ini. Ekspor sekarang agar tidak hilang.'};
   adminTab='list';D=null;editId=null;
+  return simpanKirim('Soal “'+s.judul+'” disimpan.');
 }
 function doImport(){
   var j;
@@ -2260,6 +2792,7 @@ document.addEventListener('click',function(e){
   else if(Object.prototype.hasOwnProperty.call(TOOLACT,a)){if(TOOLACT[a](v)==='async')return;}
   else if(Object.prototype.hasOwnProperty.call(KDACT,a)){if(KDACT[a](v)==='async')return;}
   else if(Object.prototype.hasOwnProperty.call(UPDACT,a)){if(UPDACT[a](v)==='async')return;}
+  else if(Object.prototype.hasOwnProperty.call(GACT,a)){if(GACT[a](v)==='async')return;}
   else if(Object.prototype.hasOwnProperty.call(PACT,a))PACT[a](v);
   else if(a==='play'){exam=null;playFrom=(view==='materi'||view==='ulang')?view:'home';startPlay(v,data.find(function(s){return s.id===v;}));previewFrom=null;fk=null;window.scrollTo(0,0);}
   else if(a==='set-tingkat'){if(tingkat!==v){streak=0;store.set(STRKEY,'0');levelUp=false;}tingkat=v;store.set('cjs.tingkat',v);}
@@ -2270,29 +2803,32 @@ document.addEventListener('click',function(e){
   else if(a==='check')onCheck();
   else if(a==='again'){delete done[cur];saveDone();startPlay(cur,SRC[cur]);fk=null;window.scrollTo(0,0);}
   else if(a==='next'){var n=nextUnsolvedId();if(n){startPlay(n,data.find(function(s){return s.id===n;}));fk=null;window.scrollTo(0,0);}else view='home';}
-  else if(a==='a-open'){view='admin';adminTab='list';loginErr=false;confirmKey=null;fk=adminOK?null:'login';}
-  else if(a==='a-login'){var pv=$('#pin'),pin=pv?pv.value:'';
+  else if(a==='a-open'){view='admin';adminTab='home';loginErr=false;confirmKey=null;
+    var sv=jget(GURUKEY,null);if(!adminOK&&sv&&sv.pin&&String(sv.kode||'')===activeKode){adminOK=true;adminPin=sv.pin;adminRole=sv.peran||'utama';}
+    fk=adminOK?null:'login';}
+  else if(a==='a-login'){var pv=$('#pin'),pin=pv?pv.value:'',ig=$('#ingat'),ingat=!ig||ig.checked;
     if(apiBase()){if(loginBusy)return;loginBusy=true;loginErr=false;render();
       apiCall('/login',{kode:activeKode||'UTAMA',pin:pin}).then(function(res){loginBusy=false;
-        if(res.ok){adminOK=true;adminPin=pin;adminRole=res.j.peran;loginErr=false;fk=null;notice=null;}
+        if(res.ok){adminOK=true;adminPin=pin;adminRole=res.j.peran;loginErr=false;fk=null;notice=null;adminTab='home';
+          if(ingat)store.set(GURUKEY,JSON.stringify({pin:pin,kode:activeKode,peran:adminRole}));else store.del(GURUKEY);}
         else if(res.status===0){if(!activeKode&&pinOk(pin)){adminOK=true;adminPin=pin;adminRole='offline';notice={t:'info',x:'Tidak ada internet. Kamu bisa mengubah soal, tetapi baru bisa mengirim ke siswa setelah ada internet.'};}else{loginErr='Tidak ada internet. Sambungkan internet lalu coba lagi.';fk='login';}}
         else{loginErr=(res.j&&res.j.pesan)||'PIN salah. Coba lagi.';fk='login';}
         render();});
       return;}
     if(pinOk(pin)){adminOK=true;loginErr=false;fk=null;}else{loginErr=true;fk='login';}}
   else if(a==='a-kirim'){kirimNow();return;}
-  else if(a==='a-out'){adminOK=false;adminPin=null;adminRole=null;view='home';}
+  else if(a==='a-out'){adminOK=false;adminPin=null;adminRole=null;store.del(GURUKEY);view='home';G=null;UC=null;}
   else if(a==='a-tab'){adminTab=v;confirmKey=null;D=null;editId=null;formErr=null;if(v==='kelas'){kelasData=null;kelasPinFor=null;kelasMsg=null;kelasLoad();}}
   else if(Object.prototype.hasOwnProperty.call(KACT,a)){if(KACT[a](v)==='async')return;}
   else if(Object.prototype.hasOwnProperty.call(AIACT,a)){if(AIACT[a](v)==='async')return;}
-  else if(a==='a-kunci'){var ki=kunci.indexOf(v);if(ki>=0)kunci.splice(ki,1);else kunci.push(v);var okk=persist();notice={t:okk?'ok':'bad',x:(ki>=0?v+' dibuka':v+' dikunci')+' di HP ini. '+sendHint()};}
+  else if(a==='a-kunci'){var ki=kunci.indexOf(v);if(ki>=0)kunci.splice(ki,1);else kunci.push(v);if(simpanKirim(ki>=0?v+' dibuka untuk siswa.':v+' dikunci untuk siswa.')==='async')return;}
   else if(a==='a-new'){D=blank();editId=null;formErr=null;adminTab='edit';fk=null;}
   else if(a==='a-edit'){var s0=data.find(function(s){return s.id===v;});D=toDraft(s0);editId=v;formErr=null;adminTab='edit';fk=null;window.scrollTo(0,0);}
   else if(a==='a-dup'){var s1=data.find(function(s){return s.id===v;});var c=JSON.parse(JSON.stringify(s1));c.id=freshId();c.judul=c.judul+' (salinan)';data.splice(data.indexOf(s1)+1,0,c);persist();notice={t:'ok',x:'Soal digandakan. Salinannya ada tepat di bawah.'};}
   else if(a==='a-up'){moveItem(v,-1);persist();}
   else if(a==='a-down'){moveItem(v,1);persist();}
   else if(a==='a-del'){confirmKey='del:'+v;fk='del-yes';}
-  else if(a==='a-del-yes'){data=data.filter(function(s){return s.id!==v;});confirmKey=null;var ok=persist();notice={t:ok?'ok':'bad',x:ok?'Soal dihapus.':'Soal dihapus di layar tetapi tidak bisa disimpan di perangkat ini.'};fk=null;}
+  else if(a==='a-del-yes'){data=data.filter(function(s){return s.id!==v;});confirmKey=null;fk=null;if(simpanKirim('Soal dihapus.')==='async')return;}
   else if(a==='a-cancel'){confirmKey=null;}
   else if(a==='a-cancel-edit'){adminTab='list';D=null;editId=null;formErr=null;fk=null;}
   else if(a==='a-add'){
@@ -2309,14 +2845,14 @@ document.addEventListener('click',function(e){
     if(pr[0]==='rumus'&&lst2.length&&!lst2.some(function(r){return r.benar;}))lst2[0].benar=true;
     fk=null;
   }
-  else if(a==='a-save')doSave();
+  else if(a==='a-save'){if(doSave()==='async')return;}
   else if(a==='a-preview'){
     var sp=fromDraft(D),er=check(sp);
     if(er.length){formErr=er;scrollTo='app';}
     else{formErr=null;sp.id='__prev';startPlay('__prev',sp);previewFrom='edit';window.scrollTo(0,0);fk=null;}
   }
   else if(a==='a-try'){startPlay('__prev',data.find(function(s){return s.id===v;}));previewFrom='list';window.scrollTo(0,0);fk=null;}
-  else if(a==='a-back'){view='admin';adminTab=previewFrom==='edit'?'edit':(previewFrom==='ai'?'ai':'list');previewFrom=null;fk=null;}
+  else if(a==='a-back'){view='admin';adminTab=previewFrom==='edit'?'edit':(previewFrom==='ai'?'ai':(previewFrom==='buat'?'buat':'list'));previewFrom=null;fk=null;}
   else if(a==='a-copy')copyExport();
   else if(a==='a-download')download();
   else if(a==='a-imp')doImport();
@@ -2330,8 +2866,7 @@ document.addEventListener('click',function(e){
         render();});
       return;}}
   else if(a==='a-pin'){var np=$('#pin1');if(np&&np.value.trim().length>=4){pinHash=pinOf(np.value);pinAt=Date.now();store.set(PINH_KEY,JSON.stringify({h:pinHash,t:pinAt}));np.value='';notice={t:'ok',x:'PIN baru tersimpan di HP ini. Supaya berlaku di semua HP, buka Ekspor lalu upload soal.json ke GitHub.'};}else{notice={t:'bad',x:'PIN minimal 4 karakter.'};}}
-  else if(a==='a-tarik'){var nb=fileBaru.length;data=data.concat(fileBaru);fileBaru=[];var okt=persist();
-    notice={t:okt?'ok':'bad',x:okt?nb+' soal baru ditambahkan. '+sendHint():'Soal belum bisa disimpan di HP ini.'};}
+  else if(a==='a-tarik'){var nb=fileBaru.length;data=data.concat(fileBaru);fileBaru=[];if(simpanKirim(nb+' soal baru ditambahkan.')==='async')return;}
   else if(a==='a-abai'){var ab=jget(ABAIKEY,[]);fileBaru.forEach(function(x){ab.push(x.id);});store.set(ABAIKEY,JSON.stringify(ab));fileBaru=[];}
   else if(a==='a-reset'){confirmKey='reset';}
   else if(a==='a-reset-yes'){store.del(KEY);confirmKey=null;load(true).then(function(){notice={t:'ok',x:'Ubahan dibuang. Sumber data sekarang: '+srcLabel()+'.'};render();});return;}
@@ -2346,6 +2881,12 @@ document.addEventListener('input',function(e){
   else if(t.id==='kv'&&konv){konv.input=t.value;}
   else if(t.id==='kr-text'&&karang){karang.text=t.value;}
   else if(t.id==='ai-in'){aiInput=t.value;}
+  else if(t.dataset&&t.dataset.g&&G){G.nilai[t.dataset.g]=t.value;G.cek=false;var ga=$('#g-ans');if(ga&&G.tpl){var an=tplJawab(G.tpl,G.nilai);ga.textContent=G.tpl.q[0]+' = '+(Number.isFinite(an)?fmtNum(an):'?')+' '+G.tpl.q[2];}}
+  else if(t.id==='g-cerita'&&G){G.cerita=t.value;G.cek=false;}
+  else if(t.id==='g-judul'&&G){G.judul=t.value;}
+  else if(t.id==='g-tema'&&G){G.aiTema=t.value;}
+  else if(t.id==='uc-teks'&&UC){UC.teks=t.value;UC.errs=null;}
+  else if(t.id==='uc-judul'&&UC){UC.judul=t.value;}
   else if(t.id==='kk-kode'){kk.kode=t.value;}else if(t.id==='kk-nama'){kk.nama=t.value;}else if(t.id==='kk-pin'){kk.pin=t.value;}else if(t.id==='kk-pin2'){kk.pin2=t.value;}
   else if(t.id==='kd'){kdInput=t.value;kdMsg=null;}
   else if(t.id==='kr-ans'&&karang){karang.ans=t.value;}
@@ -2356,6 +2897,7 @@ document.addEventListener('input',function(e){
 });
 document.addEventListener('change',function(e){
   var t=e.target;
+  if(t.id==='g-acak'&&G){G.acak=t.checked;G.cek=false;render();return;}
   if(t.id==='impf'&&t.files&&t.files[0]){
     var fr=new FileReader();
     fr.onload=function(){impText=String(fr.result||'');confirmKey=null;render();};
@@ -2371,7 +2913,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.1.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.2.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}

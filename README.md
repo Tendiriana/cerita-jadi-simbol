@@ -89,14 +89,43 @@ https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik
 
 Buka pwabuilder.com, masukkan alamat web TakTik IPA, lalu pilih **Android → Generate**. Hasilnya berkas APK/AAB yang membuka alamat web itu sebagai aplikasi. Karena isinya tetap diambil dari web, setiap pembaruan di GitHub langsung sampai ke HP tanpa memasang APK baru. APK yang sama juga bisa diunggah ke Play Store. iPhone tidak bisa memasang APK; pakai cara *Tambahkan ke Layar Utama* di atas.
 
-## Mengelola soal (mode admin)
+## Panduan guru (mode guru)
 
-1. Buka **Pengaturan** (ikon roda gigi di beranda), lalu **Masuk mode guru**, dan masukkan PIN guru. PIN bisa diganti di menu Pengaturan mode guru. Setelah diganti, upload soal.json (lewat Ekspor) supaya PIN baru berlaku di semua HP.
-2. Tambah, ubah, gandakan, urutkan, atau hapus soal. Tombol **Coba soal ini** di formulir menampilkan soal seperti yang dilihat siswa sebelum disimpan.
-3. Perubahan tersimpan di peramban perangkat guru. Supaya semua siswa memakai soal terbaru:
-   - Buka **Ekspor**, lalu ketuk **Unduh soal.json** (atau **Bagikan berkas** di HP).
-   - Di GitHub: **Add file → Upload files**, pilih berkas itu, lalu **Commit changes**. Pastikan namanya tepat `soal.json`, bukan `soal (1).json`.
-4. Siswa mendapat soal baru saat membuka aplikasi lagi dengan internet. Salinan lama di HP siswa otomatis diganti kalau soal.json di internet lebih baru.
+Buka **Pengaturan** (ikon roda gigi) → **Masuk mode guru**, lalu masukkan PIN. Centang **Ingat saya di HP ini** supaya tidak perlu mengetik PIN lagi. Matikan centang itu kalau HP-nya juga dipakai siswa.
+
+Menu guru berisi 4 tombol besar:
+
+| Tombol | Kegunaan |
+|---|---|
+| **➕ Tambah soal** | Pilih rumus, isi angka, tulis cerita. Selesai. |
+| **📚 Soal saya** | Daftar soal per kelas: coba, ubah cerita, hapus, urutkan |
+| **📺 Tampil di kelas** | Bahas soal di proyektor atau TV |
+| **⚙️ Pengaturan kelas** | Kunci materi dan ganti PIN |
+
+Di atas layar selalu ada keterangan **✓ Semua soal sudah terkirim ke siswa**. Setiap soal yang disimpan, diubah, atau dihapus **langsung terkirim** ke siswa. Tidak ada langkah kirim yang terpisah.
+
+### Tambah soal (tanpa mengetik rumus)
+
+1. **Pilih rumus.** Pilih kelas, lalu pilih rumusnya, misalnya *Hukum Ohm: mencari kuat arus (I = V ÷ R)*. Tersedia 44 rumus untuk Kelas 7–9.
+2. **Isi angkanya.** Jawabannya langsung dihitung oleh aplikasi. Biarkan **Angka acak untuk tiap siswa** tercentang supaya angka di soal berubah setiap kali dibuka.
+3. **Tulis ceritanya** seperti menulis di papan tulis. Semua angka dari langkah 2 harus ada di cerita beserta satuannya, dan cerita diakhiri pertanyaan "Berapa …?". Angka lain, misalnya harga atau jam, otomatis menjadi pengecoh. Ada tombol **Pakai contoh cerita** dan **✨ Tuliskan dengan AI** kalau sedang sibuk.
+4. Ketuk **Periksa cerita**. Aplikasi menunjukkan angka yang dikenali, kalimat tanya, dan pengecohnya. Kalau ada yang kurang, muncul pesan yang jelas, misalnya "Angka 220 V belum ada di cerita".
+5. Ketuk **Coba seperti siswa** untuk melihat hasilnya, lalu **Simpan & kirim ke siswa**.
+
+Rumusnya tidak ada di daftar? Pakai **formulir lengkap** (tautan di bawah daftar rumus, atau tombol **Formulir** di Soal saya).
+
+### Ubah cerita soal
+
+Di **Soal saya**, ketuk **Ubah cerita** untuk mengganti cerita dengan konteks sekolah atau daerah sendiri. Rumus dan jawabannya tetap sama. Tanda seperti `[m]` adalah angka yang berubah setiap soal dibuka, jadi jangan dihapus.
+
+### AI
+
+AI tidak lagi menulis rumus atau menghitung jawaban. AI hanya **memilih rumus dari daftar aplikasi, memilih angka, dan menulis cerita**. Rumus, pilihan jawaban, dan jawaban dirakit oleh aplikasi, jadi tidak bisa salah. Kalau cerita dari AI belum lolos pemeriksaan, aplikasi meminta AI memperbaikinya secara otomatis.
+
+- Di **Tambah soal**: tombol **✨ Tuliskan dengan AI** menulis cerita untuk rumus yang dipilih. Tema boleh diisi, misalnya "kipas angin di masjid".
+- Di **Lainnya → ✨ Ngobrol dengan AI**: minta beberapa soal sekaligus dengan kata-kata biasa, misalnya "Buat 3 soal hukum Ohm tentang alat listrik di rumah".
+
+Supaya hasil AI bagus, pasang **server AI dengan Claude** (lihat bagian *Server AI* di bawah). Tanpa server AI, aplikasi memakai AI bawaan server soal yang kualitasnya lebih rendah.
 
 **Kunci materi:** di Pengaturan mode guru, ketuk nama materi untuk mengunci atau membukanya. Materi yang dikunci tetap tampil di beranda, tetapi saat diketuk muncul pesan "Soal ini belum bisa dibuka." Upload soal.json lewat Ekspor supaya berlaku di HP siswa.
 
@@ -114,6 +143,18 @@ Soal dikirim lewat server Cloudflare (`server/worker.js`), jadi guru tidak perlu
 - PIN dicek di server. Setelah 10 kali PIN salah, percobaan dikunci 15 menit.
 
 - **Buat dengan AI**: di mode guru, guru menulis permintaan soal seperti mengobrol. AI (Cloudflare Workers AI, gratis dengan kuota harian) menyusun soal lengkap, aplikasi memeriksa dan menghitung ulang jawabannya, lalu guru menekan **Tambahkan & kirim ke siswa**. Batas 40 permintaan per kode kelas per hari.
+
+### Server AI (Claude)
+
+`server/ai-worker.js` adalah server terpisah khusus untuk AI. Server soal yang sudah berjalan tidak perlu diubah, karena PIN guru dicek ke server soal lewat `/login`.
+
+1. Buat kunci API di console.anthropic.com → **API Keys**, lalu isi saldo (**Billing**). Pemakaian dibayar per permintaan.
+2. Di dasbor Cloudflare: **Workers & Pages → Create → Worker**, beri nama `taktik-ai`, ketuk **Deploy**, lalu **Edit code**. Tempel seluruh isi `server/ai-worker.js` dan ketuk **Deploy**.
+3. Buka **Settings → Variables and Secrets**, tambahkan secret `ANTHROPIC_API_KEY` berisi kunci dari langkah 1.
+4. (Opsional) Tambahkan binding KV bernama `DB` supaya kuota 40 permintaan per hari per kelas berlaku.
+5. Salin alamat worker, misalnya `https://taktik-ai.<nama>.workers.dev`, lalu isi di `index.html` pada `AI_URL=''`.
+
+Model bawaan adalah `claude-opus-5-5` (kualitas terbaik). Untuk biaya lebih murah, isi variabel `CLAUDE_MODEL`, misalnya `claude-sonnet-5-5` atau `claude-haiku-5-5`.
 
 Pemasangan server: Worker `taktik-api` dengan binding KV bernama `DB`, binding Workers AI bernama `AI`, dan secret `ADMIN_PIN`. Kodenya ada di `server/worker.js`, pengaturannya di `server/wrangler.toml`. Alamat server ditulis di `index.html` (`API_URL`).
 
