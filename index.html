@@ -960,7 +960,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.4.0':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -2921,7 +2921,7 @@ var UG={list:null,msg:null,busy:false,room:null,hasil:null,lembar:null,pid:null,
 function ujkFormBaru(){return {judul:'',kelas:kelasSel,materi:[],n:10,menit:30,tingkat:'sulit',acak:true,lewati:true,lihatNilai:true};}
 function ujkMuatDaftar(){UG.busy=true;ujkGuru('/daftar').then(function(res){UG.busy=false;UG.list=res.ok?res.j.ujian:[];if(!res.ok)UG.msg={t:'bad',x:ujkErr(res,'Daftar ujian belum bisa dimuat.')};if(view==='admin'&&adminTab==='ujk')render();});}
 function ujkMuatHasil(diam){if(!UG.room)return;ujkGuru('/hasil',{room:UG.room,detail:true}).then(function(res){
-  if(res.ok){UG.hasil=res.j;}else if(!diam)UG.msg={t:'bad',x:ujkErr(res,'Hasil ujian belum bisa dimuat.')};
+  if(res.ok){var lama=UG.hasil;if(lama&&lama.room===res.j.room)res.j.peserta.forEach(function(p){if(!p.res){var q=lama.peserta.filter(function(x){return x.id===p.id;})[0];if(q&&q.res)p.res=q.res;}});UG.hasil=res.j;}else if(!diam)UG.msg={t:'bad',x:ujkErr(res,'Hasil ujian belum bisa dimuat.')};
   if(view==='admin'&&(adminTab==='ujk-room'||adminTab==='ujk-ana'))render();});}
 function ujkAuto(){clearInterval(UG.tmr);UG.tmr=setInterval(function(){if(view==='admin'&&adminTab==='ujk-room'&&document.visibilityState==='visible')ujkMuatHasil(true);else clearInterval(UG.tmr);},15000);}
 function ujkSetupHtml(){
@@ -3090,7 +3090,7 @@ function analisisHtml(){
   var h=UG.hasil;if(!h)return guruBar('Analisis soal')+'<div class="card"><p class="mut">Memuat…</p></div>';
   var A=analisis(h),ada=h.peserta.some(function(p){return p.res;});
   var out=guruBar('Analisis soal')+'<p class="mut">'+esc(h.judul)+' · '+h.peserta.length+' siswa. Soal paling sulit ada di atas.</p>';
-  if(!ada)return out+'<div class="card"><p class="mut">Analisis butuh server ujian versi terbaru. Tempel ulang isi <b class="mono">server/ujian-worker.js</b> di Cloudflare.</p></div>';
+  if(!ada&&h.peserta.length){anaLembar(h);return out+'<div class="card"><p class="mut">Mengumpulkan lembar kerja '+h.peserta.length+' siswa…</p></div>';}
   if(!A.length)return out+'<div class="card"><p class="mut">Belum ada soal yang dikerjakan siswa.</p></div>';
   out+='<div class="list">'+A.map(function(m){var pb=Math.round(m.benar/m.n*100),cls=pb<50?'bad':(pb<75?'mid':'good');
     return '<div class="mis ana"><div class="mh"><b>'+esc(m.judul)+'</b><span class="cnt '+(cls==='good'?'good':'')+'">'+pb+'% benar</span></div>'
@@ -3106,6 +3106,18 @@ UGACT['ug-csv']=function(){
   if(inApk||!unduhTeks(nama,ujkCsv(h),'text/csv;charset=utf-8')){salinTeks(ujkNilaiTeks(h),'Daftar nilai disalin. Tempel di Excel atau WhatsApp.');return 'async';}
   notice={t:'ok',x:'Berkas “'+nama+'” diunduh. Buka dengan Excel atau Google Sheets.'};
 };
+/* server lama tidak mengirim jawaban per soal di /hasil: ambil lembar kerja satu per satu */
+var anaJalan=false;
+function anaLembar(h){
+  if(anaJalan)return;anaJalan=true;var i=0;
+  var lanjut=function(){
+    if(i>=h.peserta.length||UG.hasil!==h){anaJalan=false;if(view==='admin'&&adminTab==='ujk-ana')render();return;}
+    var p=h.peserta[i++];
+    ujkGuru('/lembar',{room:h.room,pid:p.id}).then(function(res){
+      p.res=res.ok&&res.j.data&&Array.isArray(res.j.data.res)?res.j.data.res:[];lanjut();});
+  };
+  lanjut();
+}
 UGACT['ug-analisis']=function(){adminTab='ujk-ana';window.scrollTo(0,0);ujkMuatHasil();};
 /* server tambahan (ujian dan AI) di Pengaturan kelas */
 function serverHtml(){
@@ -3368,7 +3380,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.4.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.4.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
