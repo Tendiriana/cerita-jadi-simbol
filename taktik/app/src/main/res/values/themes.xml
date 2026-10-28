@@ -6,6 +6,12 @@
         <item name="colorPrimary">@color/acc</item>
         <item name="colorAccent">@color/acc</item>
     </style>
+    <!-- Halaman pembuka saat aplikasi dibuka -->
+    <style name="Theme.TakTik.Pembuka" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/ic_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.TakTik</item>
+    </style>
     <color name="bg">#F3F5F8</color>
     <color name="acc">#0F6E6A</color>
     <color name="ic_bg">#0F6E6A</color>
