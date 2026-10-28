@@ -24,7 +24,8 @@ const gagal = (status, pesan) => json({ pesan }, status);
 
 const SISTEM = `Kamu membantu guru IPA SMP di Indonesia (Kurikulum Merdeka) membuat soal cerita hitungan untuk aplikasi TakTik IPA.
 Siswa memilah angka di cerita ke kotak besaran, mencoret angka pengecoh, mengenali materi, memilih rumus, lalu menghitung.
-Aplikasi yang merakit rumus, pilihan jawaban, dan menghitung jawabannya dari templat. Tugasmu hanya memilih templat yang cocok, memilih angka, dan menulis cerita yang bagus.
+Kalau ada templat yang cocok, aplikasi yang merakit rumus, pilihan jawaban, dan menghitung jawabannya; tugasmu memilih templat, angka, dan menulis cerita yang bagus, dan "lengkap" diisi string kosong.
+Kalau tidak ada templat yang cocok, isi "templat" dengan string kosong dan tulis SOAL LENGKAP sebagai teks JSON di "lengkap" (format ada di pesan guru). Hitung jawabannya dengan teliti.
 Ikuti aturan dan DAFTAR TEMPLAT di pesan guru. Pakai bahasa Indonesia yang wajar untuk siswa SMP dan konteks sehari-hari di Indonesia.
 "pesan" berisi satu atau dua kalimat singkat untuk guru. Kalau guru meminta perbaikan, kirim ulang soal yang sudah diperbaiki.`;
 
@@ -39,6 +40,8 @@ const SKEMA = {
         type: 'object',
         properties: {
           templat: { type: 'string' },
+          // soal lengkap dalam teks JSON, hanya kalau tidak ada templat yang cocok
+          lengkap: { type: 'string' },
           judul: { type: 'string' },
           cerita: { type: 'string' },
           acak: { type: 'boolean' },
@@ -52,7 +55,7 @@ const SKEMA = {
             }
           }
         },
-        required: ['templat', 'judul', 'cerita', 'acak', 'nilai'],
+        required: ['templat', 'lengkap', 'judul', 'cerita', 'acak', 'nilai'],
         additionalProperties: false
       }
     }
@@ -104,7 +107,11 @@ async function tanyaClaude(env, riwayat) {
   let o;
   try { o = JSON.parse(teks); } catch (e) { throw new Error('Jawaban AI tidak bisa dibaca. Coba lagi.'); }
   // Format yang sama dengan server lama: kalimat untuk guru + satu blok ```json.
-  return String(o.pesan || 'Ini soalnya.') + '\n```json\n' + JSON.stringify({ soal: (o.soal || []).slice(0, 3) }) + '\n```';
+  const soal = (o.soal || []).slice(0, 3).map(x => {
+    if (x.templat || !x.lengkap) { const { lengkap, ...t } = x; return t; }
+    try { return { templat: '', lengkap: JSON.parse(x.lengkap) }; } catch (e) { return { templat: '', lengkap: null, judul: x.judul, cerita: x.cerita }; }
+  });
+  return String(o.pesan || 'Ini soalnya.') + '\n```json\n' + JSON.stringify({ soal }) + '\n```';
 }
 
 /* Cadangan tanpa kunci Claude: Workers AI gratis (kualitas lebih rendah) */
