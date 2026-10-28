@@ -943,7 +943,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.3.0':['Ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -998,8 +998,8 @@ function materiViewHtml(){
 }
 function navHtml(){
   if(view==='play')return actbarHtml();
-  if(['home','catatan','rumus','ujian','hasil','konversi','materi','kuis','ulang','atur','karang'].indexOf(view)<0)return '';
-  var on=function(v){return view===v||(v==='home'&&['materi','konversi','kuis','ulang','atur','karang'].indexOf(view)>=0)||(v==='ujian'&&view==='hasil');};
+  if(['home','catatan','rumus','ujian','ujk','ujkhasil','konversi','materi','kuis','ulang','atur','karang'].indexOf(view)<0)return '';
+  var on=function(v){return view===v||(v==='home'&&['materi','konversi','kuis','ulang','atur','karang'].indexOf(view)>=0)||(v==='ujian'&&(view==='ujk'||view==='ujkhasil'));};
   var it=function(v,act,label){return '<button class="nav-i'+(on(v)?' on':'')+'" data-act="'+act+'" data-v="'+v+'" data-fk="nav-'+v+'"'+(on(v)?' aria-current="page"':'')+'><span class="nic">'+ICON[v]+'</span>'+label+'</button>';};
   return '<div class="nav-in">'+it('home','home','Beranda')+it('catatan','go','Catatanku')+it('rumus','go','Rumus')+it('ujian','go','Ujian')+'</div>';
 }
@@ -1135,7 +1135,7 @@ function catatanHtml(){
   var top=topLog(8),nd=kelasList().filter(function(s){return done[s.id];}).length;
   var h=backRow()+'<h2 class="t">Catatanku</h2><p class="mut">Catatan ini hanya tersimpan di HP ini.</p>';
   h+='<section class="card"><div class="stats">'+stat(nd+'/'+kelasList().length,'soal selesai')+stat(TL[tingkat],'tingkat sekarang')+stat(streak,'lancar berturut-turut')
-    +stat(lastExam?lastExam.lancar+'/'+lastExam.n:'–','ujian terakhir (lancar)')+'</div></section>';
+    +stat(hariNow().b,'hari beruntun')+'</div></section>';
   h+='<section class="card"><div class="sh"><h2>Kesalahan yang sering muncul</h2></div>';
   if(!top.length)h+='<p class="mut">Belum ada kesalahan tercatat. Kerjakan beberapa soal dulu.</p>';
   else h+='<div class="list">'+top.map(function(o){
@@ -1300,44 +1300,14 @@ function rumusFoldHtml(t){
 /* 5. mode ujian */
 function kelasAll(){return kelasTerkunci(kelasSel)?[]:data.filter(function(s){return s.kelas===kelasSel;});}
 function kelasList(){return kelasAll().filter(function(s){return !isLocked(s.topik);});}
-var examMat=store.get('cjs.uji.mat')||'semua';
-function examTopics(){var L=[];kelasList().forEach(function(s){if(L.indexOf(s.topik)<0)L.push(s.topik);});return L;}
-function examPool(){var tp=examTopics();if(examMat!=='semua'&&tp.indexOf(examMat)<0)examMat='semua';
-  return kelasList().filter(function(s){return examMat==='semua'||s.topik===examMat;});}
-function ujianHtml(){
-  var list=examPool();
-  var h=backRow()+'<h2 class="t">Mode ujian</h2><p class="mut">Soal diambil acak dari Kelas '+esc(kelasSel)+' dengan tingkat '+TL[tingkat]+'. Kartu rumus disembunyikan selama ujian.</p>';
-  if(!list.length)return h+'<div class="card"><p class="mut">Belum ada soal untuk kelas ini.</p></div>';
-  h+='<section class="card"><div class="sh"><h2>Materi</h2></div>'+chipsHtml([['semua','Semua materi']].concat(examTopics().map(function(t){return [t,t];})),examMat,'x-mat')
-    +'<p class="mut" style="margin:10px 0 0">'+list.length+' soal tersedia'+(list.length<examN?', jadi ujian berisi '+list.length+' soal':'')+'.</p></section>';
-  h+='<section class="card"><div class="sh"><h2>Jumlah soal</h2></div>'+chipsHtml([['5','5 soal'],['10','10 soal']],String(examN),'x-n')
-    +'<div class="row"><button class="btn" data-act="x-start" data-fk="x-start">Mulai ujian</button></div></section>';
-  if(lastExam)h+='<p class="sum">Ujian terakhir: '+esc(examLine(lastExam))+'</p>';
-  return h;
-}
-function examStart(){
-  var list=examPool().slice();
-  for(var i=list.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=list[i];list[i]=list[j];list[j]=t;}
-  list=list.slice(0,Math.min(examN,list.length));
-  if(!list.length)return;
-  exam={ids:list.map(function(s){return s.id;}),i:0,start:Date.now(),res:[]};
-  previewFrom=null;startPlay(list[0].id,list[0]);window.scrollTo(0,0);
-}
+function ujianHtml(){return ujkJoinHtml();}
 function examSoal(id){return exam&&exam.src?exam.src[id]:data.find(function(x){return x.id===id;});}
 function examRecord(skip){
   var st=RS[cur],s=examSoal(cur),r={id:cur,judul:s?s.judul:cur,err:st?st.err:0,ok:!skip&&!!(st&&st.solved)};
   if(exam.room&&cp){r.topik=s?s.topik:'';r.lewat=!!skip;r.jawaban=st?String(st.input||''):'';r.benar=cp.calc.ans;r.satuan=cp.calc.unit;r.ms=Date.now()-(exam.tSoal||Date.now());}
   exam.res.push(r);
 }
-function examFinish(){
-  if(exam.room){ujkSelesai(false);return;}
-  var r=exam.res,n=exam.ids.length;
-  exam.ids.slice(r.length).forEach(function(id){var s=data.find(function(x){return x.id===id;});r.push({id:id,judul:s?s.judul:id,err:0,ok:false});});
-  var lancar=r.filter(function(x){return x.ok&&!x.err;}).length,salah=r.filter(function(x){return x.ok&&x.err;}).length;
-  lastExam={n:n,lancar:lancar,salah:salah,lewat:n-lancar-salah,ms:Date.now()-exam.start,tgl:new Date().toLocaleDateString('id-ID'),tingkat:tingkat,kelas:kelasSel,res:r};
-  store.set(UJIKEY,JSON.stringify(lastExam));
-  exam=null;view='hasil';window.scrollTo(0,0);
-}
+function examFinish(){ujkSelesai(false);}
 function examNext(skip){
   examRecord(skip);exam.i++;exam.tSoal=Date.now();
   if(exam.room&&ujkSes){ujkSes.res=exam.res;ujkSes.i=exam.i;ujkSimpanLokal();if(exam.i<exam.ids.length)ujkKirim(false);}
@@ -1353,16 +1323,6 @@ function examBarHtml(){
 function examSolvedHtml(){
   var last=exam.i+1>=exam.ids.length;
   return '<div class="row"><button class="btn" data-act="x-next" data-fk="next">'+(last?'Lihat hasil':'Soal berikutnya')+'</button></div>';
-}
-function hasilHtml(){
-  var r=lastExam;
-  if(!r)return backRow()+'<p class="mut">Belum ada hasil ujian.</p>';
-  var h=backRow()+'<h2 class="t">Hasil ujian</h2><p class="eyebrow">Kelas '+esc(r.kelas)+' · '+esc(TL[r.tingkat]||'')+' · '+esc(r.tgl)+'</p>';
-  h+='<section class="card"><div class="stats">'+stat(r.lancar,'lancar tanpa salah')+stat(r.salah,'selesai dengan salah')+stat(r.lewat,'dilewati')+stat(fmtTime(r.ms),'waktu')+'</div></section>';
-  h+='<section class="card"><div class="sh"><h2>Rincian</h2></div><div class="list">'+r.res.map(function(x,i){
-    return '<div class="mis"><div class="mh"><b>'+(i+1)+'. '+esc(x.judul)+'</b><span class="cnt'+(x.ok&&!x.err?' good':'')+'">'+(x.ok?(x.err?x.err+' salah':'lancar'):'dilewati')+'</span></div></div>';
-  }).join('')+'</div></section>';
-  return h+'<div class="row"><button class="btn" data-act="go" data-v="catatan" data-fk="go-catatan">Lihat Catatanku</button><button class="btn ghost" data-act="go" data-v="ujian">Ujian lagi</button></div>';
 }
 if(typeof setInterval==='function'){
   setInterval(function(){if(!exam||view!=='play')return;var el=document.getElementById('timer');
@@ -1840,7 +1800,7 @@ function toolsHtml(){
     +b('konversi','Latihan konversi','Ubah satuan dengan cepat')
     +'</div></section>';
 }
-var TOOLVIEWS={karang:karangHtml,tampil:presHtml,intro:introHtml,atur:aturHtml,kuis:kuisHtml,ulang:ulangHtml,materi:materiViewHtml,catatan:catatanHtml,rumus:rumusHtml,ujian:ujianHtml,hasil:hasilHtml,konversi:konvHtml};
+var TOOLVIEWS={karang:karangHtml,tampil:presHtml,intro:introHtml,atur:aturHtml,kuis:kuisHtml,ulang:ulangHtml,materi:materiViewHtml,catatan:catatanHtml,rumus:rumusHtml,ujian:ujianHtml,konversi:konvHtml};
 /* ---------- Cara pakai (menu ⋮): isi sesuai siapa yang membuka ---------- */
 var bantuanUntuk='siswa',bantuanDari='home';
 var BANTUAN={
@@ -1848,7 +1808,7 @@ var BANTUAN={
     ['🧩','Cara mengerjakan soal',['Pilih kelas dan materi di beranda, lalu pilih soal.','<b>Langkah 1 · Pilah cerita:</b> sentuh angka di cerita, lalu sentuh kotak besaran yang cocok. Angka yang tidak dipakai menghitung (harga, jam, nama) taruh di kotak <b>Coret</b>. Kalimat pertanyaan taruh di kotak <b>Ditanya</b>.','<b>Langkah 2 · Kenali materi:</b> pilih materi soal itu.','<b>Langkah 3 · Pilih rumus</b> yang cocok. Setiap pilihan ada penjelasannya.','<b>Langkah 4 · Hitung:</b> ketik angkanya saja, misalnya 12,5, lalu ketuk Periksa jawaban.']],
     ['🎚️','Tingkat bantuan',['<b>Mudah:</b> sebagian kotak sudah terisi.','<b>Menengah:</b> satuan tampil sebagai petunjuk.','<b>Sulit:</b> tanpa petunjuk, seperti soal ujian.','Kalau kamu lancar 3 soal berturut-turut, aplikasi menyarankan naik tingkat.']],
     ['🎯','Target harian',['Kerjakan 3 soal setiap hari. Hari beruntun 🔥 bertambah kalau kamu latihan setiap hari.']],
-    ['📝','Ujian dari guru',['Minta <b>kode ujian</b> ke gurumu.','Di beranda, ketuk <b>Ujian dari guru</b>, isi kode dan namamu, lalu ketuk <b>Mulai ujian</b>.','Waktu berjalan mundur di atas layar. Kalau waktu habis, jawabanmu otomatis terkumpul ke guru.','Jawaban tersimpan sendiri setiap kali satu soal selesai. Kalau HP tertutup, buka lagi aplikasinya untuk melanjutkan.']],
+    ['📝','Ujian dari guru',['Minta <b>kode ujian</b> ke gurumu.','Ketuk menu <b>Ujian</b> di bawah layar, isi kode dan namamu, lalu ketuk <b>Mulai ujian</b>.','Waktu berjalan mundur di atas layar. Kalau waktu habis, jawabanmu otomatis terkumpul ke guru.','Jawaban tersimpan sendiri setiap kali satu soal selesai. Kalau HP tertutup, buka lagi aplikasinya untuk melanjutkan.']],
     ['⚡','Latihan cepat',['<b>Buat soal sendiri:</b> tulis cerita dari rumus dan angka yang diberikan.','<b>Ulangi soal yang pernah salah:</b> kerjakan lagi sampai lancar.','<b>Kuis simbol dan satuan</b> dan <b>Latihan konversi:</b> 10 pertanyaan cepat.']],
     ['📒','Catatanku dan laporan',['Catatanku berisi kesalahan yang sering kamu lakukan beserta tipsnya.','Isi nama dan kelas, lalu ketuk <b>Kirim lewat WhatsApp</b> untuk mengirim laporan ke guru.']],
     ['📱','Pasang dan perbarui aplikasi',['Android: ketuk <b>Pasang aplikasi</b> di beranda, atau pasang APK dari gurumu.','iPhone: buka di Safari, ketuk tombol Bagikan, lalu <b>Tambahkan ke Layar Utama</b>.','Aplikasi memperbarui dirinya sendiri saat dibuka dengan internet. Kemajuanmu tetap tersimpan.']]
@@ -1858,7 +1818,7 @@ var BANTUAN={
     ['➕','Tambah soal',['Ketuk <b>Tambah soal</b>, pilih kelas, lalu pilih rumusnya.','Isi angkanya. Jawaban dihitung otomatis. Pilih satuan lain (misalnya g atau menit) kalau siswa perlu berlatih mengubah satuan.','Biarkan <b>Angka acak</b> tercentang supaya angka di soal berbeda untuk setiap siswa.','Tulis cerita seperti di papan tulis. Semua angka harus ada di cerita beserta satuannya, dan cerita diakhiri pertanyaan "Berapa …?". Angka lain otomatis menjadi pengecoh.','Ketuk <b>Periksa cerita</b>, lalu <b>Simpan &amp; kirim ke siswa</b>.']],
     ['✏️','Ubah soal',['Di <b>Soal saya</b>, ketuk <b>Ubah cerita</b> untuk mengganti cerita dengan konteks sekolah sendiri. Rumus dan jawaban tetap.','Tanda seperti [m] adalah angka yang berubah, jadi jangan dihapus.','<b>Formulir</b> untuk mengubah semua bagian soal (untuk guru yang sudah mahir).']],
     ['✨','Membuat soal dengan AI',['Di <b>Tambah soal</b>, ketuk <b>Tuliskan dengan AI</b> untuk menulis cerita dari rumus yang dipilih.','Di <b>Lainnya → Ngobrol dengan AI</b>, minta beberapa soal sekaligus dengan kata-kata biasa.','Soal dari AI diperiksa dan dihitung ulang oleh aplikasi. Ketuk <b>Coba soal ini</b> sebelum mengirim.']],
-    ['📝','Ujian kelas',['Ketuk <b>Ujian kelas</b> → <b>Buat ujian baru</b>. Pilih kelas, materi, jumlah soal, dan lama ujian, lalu atur aturannya.','Ketuk <b>Buat &amp; bagikan</b>. Bagikan <b>kode ujian</b> ke siswa, lewat WhatsApp atau ditulis di papan.','Siswa membuka <b>Ujian dari guru</b>, mengisi kode dan nama, lalu mengerjakan.','Di halaman ujian, guru melihat siapa yang sedang mengerjakan dan yang sudah selesai. Jawaban terkumpul otomatis saat waktu habis.','Ketuk nama siswa untuk melihat jawabannya dan memberi nilai. Nilai saran sudah dihitung otomatis.','Ketuk <b>Tutup ujian</b> kalau sudah selesai. Daftar nilai bisa disalin ke WhatsApp atau Excel.']],
+    ['📝','Ujian kelas',['Ketuk <b>Ujian kelas</b> → <b>Buat ujian baru</b>. Pilih kelas, materi, jumlah soal, dan lama ujian, lalu atur aturannya.','Ketuk <b>Buat &amp; bagikan</b>. Bagikan <b>kode ujian</b> ke siswa, lewat WhatsApp atau ditulis di papan.','Siswa membuka menu <b>Ujian</b> di bawah layar, mengisi kode dan nama, lalu mengerjakan.','Di halaman ujian, guru melihat siapa yang sedang mengerjakan dan yang sudah selesai. Jawaban terkumpul otomatis saat waktu habis.','Ketuk nama siswa untuk melihat jawabannya dan memberi nilai. Nilai saran sudah dihitung otomatis.','Ketuk <b>Tutup ujian</b> kalau sudah selesai. Daftar nilai bisa disalin ke WhatsApp atau Excel.']],
     ['🔒','Kunci kelas dan materi',['Di <b>Pengaturan kelas</b>, ketuk <b>Kunci kelas</b> untuk menutup satu kelas.','Ketuk nama kelas untuk melihat materinya, lalu ketuk materi untuk mengunci atau membukanya.']],
     ['📺','Tampil di kelas',['Untuk proyektor atau TV. Pilih materi, lalu <b>Mulai tampil</b>. Langkah dibuka satu per satu.','Dari laptop: → atau spasi untuk lanjut, ← untuk mundur, N untuk angka baru, T untuk pengatur waktu, F untuk layar penuh.']],
     ['👥','Kelas guru lain',['Pengelola utama bisa membuat <b>kode kelas</b> di Lainnya → Kelas guru lain.','Guru lain mengisi kode itu di Pengaturan, lalu masuk dengan PIN gurunya. Soal kelas itu terpisah dari soal utama.']]
@@ -1888,9 +1848,6 @@ var TOOLACT={
   'rf-topik':function(v){if(KARTU[v])rfTopik=v;},
   fold:function(){foldOpen=!foldOpen;},
   speak:function(){speakToggle();},
-  'x-n':function(v){examN=v==='10'?10:5;},
-  'x-mat':function(v){examMat=v;store.set('cjs.uji.mat',v);},
-  'x-start':function(){examStart();fk=null;},
   'x-skip':function(){if(!exam)return;confirmKey=null;examNext(true);fk=null;},
   'x-next':function(){if(!exam)return;confirmKey=null;examNext(false);fk=null;},
   'x-end':function(){if(!exam)return;if(confirmKey!=='x-end'){confirmKey='x-end';return;}confirmKey=null;examRecord(false);examFinish();fk=null;},
@@ -2868,9 +2825,12 @@ function ujkCardHtml(){
   if(!ujianUrl())return '';
   if(ujkSes&&!ujkSes.selesai)return '<button class="ujk-card" data-act="ujk-lanjut" data-fk="ujk"><span class="ui">📝</span><span class="ut"><b>Lanjutkan ujian</b><small>'+esc(ujkSes.judul)+' · sisa waktu '+fmtTime(Math.max(0,ujkSisa()))+'</small></span><span class="chev">'+ICON.chev+'</span></button>';
   if(ujkSes&&ujkSes.selesai&&ujkSes.kirimAkhir)return '<button class="ujk-card warn" data-act="ujk-hasil" data-fk="ujk"><span class="ui">⏳</span><span class="ut"><b>Jawaban ujian belum terkirim</b><small>Sambungkan internet, lalu ketuk di sini</small></span></button>';
-  return '<button class="ujk-card" data-act="ujk-buka" data-fk="ujk"><span class="ui">📝</span><span class="ut"><b>Ujian dari guru</b><small>Masukkan kode ujian dari gurumu, lalu kerjakan. Jawaban langsung terkumpul ke guru.</small></span><span class="chev">'+ICON.chev+'</span></button>';
+  return '';
 }
 function ujkJoinHtml(){
+  if(!ujianUrl())return '<h2 class="t">Ujian dari guru</h2><div class="card empty"><span class="ti">'+ICON.ujian+'</span><p><b>Belum tersedia</b></p><p class="mut">Gurumu belum menyalakan fitur ujian. Untuk sekarang, berlatihlah dari materi di beranda.</p></div>';
+  if(ujkSes&&!ujkSes.selesai)return '<h2 class="t">Ujian dari guru</h2>'+ujkCardHtml();
+  if(ujkSes&&ujkSes.selesai)return ujkHasilHtml();
   var h='<h2 class="t">Ujian dari guru</h2><p class="mut">Minta kode ujian ke gurumu. Waktu baru berjalan setelah kamu mengetuk Mulai ujian.</p>'
     +'<section class="card"><label class="f"><span>Kode ujian</span><input class="in mono ujk-kode" id="uj-kode" value="'+esc(UJ.kode)+'" placeholder="Contoh: K7MP2A" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="8"></label>'
     +'<label class="f"><span>Nama lengkap</span><input class="in" id="uj-nama" value="'+esc(UJ.nama||siswa.nama||'')+'" autocomplete="name" placeholder="Nama yang dikenali gurumu"></label>';
@@ -2891,11 +2851,11 @@ function ujkHasilHtml(){
     h+='<section class="card"><div class="stats">'+stat(sk,'skor sementara')+stat(r.filter(function(x){return x.ok;}).length+'/'+n,'soal benar')+'</div><p class="mut" style="margin:8px 0 0">Nilai akhir diberikan oleh gurumu.</p></section>';
     h+='<section class="card"><div class="sh"><h2>Rincian</h2></div><div class="list">'+r.map(function(x,i){return '<div class="mis"><div class="mh"><b>'+(i+1)+'. '+esc(x.judul)+'</b><span class="cnt'+(x.ok&&!x.err?' good':'')+'">'+(x.ok?(x.err?x.err+' salah':'benar'):(x.lewat?'dilewati':'belum benar'))+'</span></div></div>';}).join('')+'</div></section>';
   }
-  return h+'<div class="row"><button class="btn ghost" data-act="ujk-tutup-hasil">Kembali ke beranda</button></div>';
+  return h+'<div class="row"><button class="btn ghost" data-act="ujk-tutup-hasil">'+(s.terkirim?'Selesai':'Tutup')+'</button></div>';
 }
 TOOLVIEWS.ujk=ujkJoinHtml;TOOLVIEWS.ujkhasil=ujkHasilHtml;
 var UJKACT={
-  'ujk-buka':function(){UJ={kode:'',nama:siswa.nama||'',info:null,msg:null,busy:false};view='ujk';window.scrollTo(0,0);fk='uj-kode';},
+  'ujk-buka':function(){UJ={kode:'',nama:siswa.nama||'',info:null,msg:null,busy:false};view='ujian';window.scrollTo(0,0);fk='uj-kode';},
   'ujk-ganti':function(){UJ.info=null;UJ.msg=null;fk='uj-kode';},
   'ujk-cek':function(){
     var k=String(UJ.kode||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(k.length<4){UJ.msg={t:'bad',x:'Tulis kode ujian dari gurumu.'};return;}
@@ -2917,7 +2877,7 @@ var UJKACT={
   'ujk-lanjut':function(){if(!ujkSes)return;if(ujkSisa()<=0){ujkSes.res=ujkSes.res||[];ujkSelesai(true);return;}ujkMulaiExam();},
   'ujk-hasil':function(){view='ujkhasil';if(ujkSes&&ujkSes.kirimAkhir)ujkKirim(true);},
   'ujk-kirim-ulang':function(){ujkKirim(true);},
-  'ujk-tutup-hasil':function(){if(ujkSes&&ujkSes.terkirim){ujkSes=null;ujkSimpanLokal();}view='home';window.scrollTo(0,0);}
+  'ujk-tutup-hasil':function(){if(ujkSes&&ujkSes.terkirim){ujkSes=null;ujkSimpanLokal();}UJ={kode:'',nama:siswa.nama||'',info:null,msg:null,busy:false};view='ujian';window.scrollTo(0,0);}
 };
 /* kirim ulang jawaban akhir yang tertunda saat aplikasi dibuka lagi */
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&ujkSes&&ujkSes.selesai&&ujkSes.kirimAkhir)ujkKirim(true);});
@@ -3303,7 +3263,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.3.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.3.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
