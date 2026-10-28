@@ -1,0 +1,68 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+// Nomor build dari GitHub Actions; naik otomatis tiap build supaya APK baru bisa menimpa versi lama.
+def runNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "0").toInteger()
+
+android {
+    namespace 'id.taktik.ipa'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "id.taktik.ipa"
+        minSdk 26
+        targetSdk 34
+        versionCode 100 + runNumber
+        versionName "2.0." + runNumber
+        // Alamat aplikasi web. Isi soal dan tampilan diambil dari sini, jadi pembaruan di GitHub
+        // langsung sampai ke HP tanpa memasang APK baru.
+        buildConfigField "String", "APP_URL", "\"https://tendiriana.github.io/cerita-jadi-simbol/\""
+    }
+
+    // Kunci tetap dari GitHub Secrets (TAKTIK_KEYSTORE dan TAKTIK_KEY_PASSWORD), jadi semua build
+    // ditandatangani sama dan APK baru bisa dipasang menimpa yang lama tanpa uninstall.
+    // Kunci tidak disimpan di repositori. Kalau secret belum diisi, dipakai kunci debug (hanya untuk uji).
+    def ks = rootProject.file("keystore/taktik.jks")
+    def ksPass = System.getenv("TAKTIK_KEY_PASSWORD")
+    signingConfigs {
+        taktik {
+            if (ks.exists() && ksPass) {
+                storeFile ks
+                storePassword ksPass
+                keyAlias "taktik"
+                keyPassword ksPass
+            }
+        }
+    }
+    def signing = (ks.exists() && ksPass) ? signingConfigs.taktik : signingConfigs.debug
+
+    buildTypes {
+        release {
+            signingConfig signing
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        buildConfig true
+    }
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.webkit:webkit:1.11.0'
+}

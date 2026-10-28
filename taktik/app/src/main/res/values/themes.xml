@@ -1,0 +1,12 @@
+<resources>
+    <style name="Theme.TakTik" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimary">@color/acc</item>
+        <item name="colorAccent">@color/acc</item>
+    </style>
+    <color name="bg">#F3F5F8</color>
+    <color name="acc">#0F6E6A</color>
+    <color name="ic_bg">#0F6E6A</color>
+</resources>

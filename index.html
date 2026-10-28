@@ -294,6 +294,7 @@ details.fold[open] summary{margin-bottom:10px}
 .toast{margin:0 0 10px}
 .upd{display:flex;align-items:center;gap:12px;justify-content:space-between;margin:0 0 14px;padding:12px 14px;border-radius:14px;background:var(--acc-soft);border:1px solid var(--acc)}
 .upd span{font-size:.97rem}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 .eq.big{font-size:1.2rem;font-weight:600;margin:2px 0 0}
 .kr-list{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:4px}
 .kr-list b{font-size:1.15rem;margin-right:4px}
@@ -2317,7 +2318,8 @@ document.addEventListener('keydown',function(e){
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
 var APP_VERSI='2.0.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
-function isStandalone(){try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
+var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
+function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installEvt=e;if(booted&&(view==='home'||view==='atur'))render();});
 window.addEventListener('appinstalled',function(){installEvt=null;installDone=true;if(booted&&(view==='home'||view==='atur'))render();});
@@ -2328,10 +2330,12 @@ function installHtml(place){
   else if(isIOS())body='<ol class="guide"><li>Buka alamat ini di <b>Safari</b>.</li><li>Ketuk tombol <b>Bagikan</b> (kotak dengan panah ke atas).</li><li>Pilih <b>Tambahkan ke Layar Utama</b>, lalu <b>Tambah</b>.</li></ol>'+(nanti?'<div class="row">'+nanti+'</div>':'');
   else if(place==='atur')body='<ol class="guide"><li>Buka alamat ini di <b>Chrome</b>.</li><li>Ketuk menu titik tiga di kanan atas.</li><li>Pilih <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b>.</li></ol>';
   else return '';
+  if(!isIOS())body+='<p class="mut" style="margin:10px 0 0">Atau pasang versi APK untuk Android:</p><div class="row"><a class="btn ghost" href="'+APK_URL+'" rel="noopener">Unduh APK</a></div>';
   return '<section class="card"><div class="sh"><h2>Pasang di HP</h2></div>'+body+'</section>';
 }
 function versiHtml(){
-  return '<section class="card"><div class="sh"><h2>Aplikasi</h2><span class="stt">Versi '+APP_VERSI+'</span></div>'
+  var apk='';try{if(inApk)apk=' · APK '+esc(window.TaktikApp.versi());}catch(e){}
+  return '<section class="card"><div class="sh"><h2>Aplikasi</h2><span class="stt">Versi '+APP_VERSI+apk+'</span></div>'
     +'<p class="mut" style="margin:0">Pembaruan berjalan otomatis: setiap kali dibuka dengan internet, aplikasi mengambil versi terbaru. Tidak perlu menghapus atau memasang ulang, dan kemajuan belajarmu tetap tersimpan.</p>'
     +(swReg?'<div class="row"><button class="btn ghost sm" data-act="upd-cek" data-fk="upd-cek">Periksa pembaruan</button></div>':'')+msgHtml(updMsg)+'</section>';
 }
@@ -2341,6 +2345,16 @@ function updHtml(){
 }
 /* aman dimuat ulang: tidak sedang mengerjakan soal, ujian, atau mengubah soal */
 function safeToReload(){return (view==='home'||view==='intro'||view==='atur')&&!adminOK&&!exam;}
+/* tombol Kembali di aplikasi Android: true kalau sudah ditangani di dalam aplikasi */
+window.__taktikBack=function(){
+  if(view==='home')return false;
+  if(view==='intro')return false;
+  if(exam&&view==='play'&&cur!=='__prev')return true;
+  var b=document.querySelector('#top [data-fk="back"]');
+  if(b){b.click();return true;}
+  stopSpeak();view='home';previewFrom=null;sel=null;confirmKey=null;render();window.scrollTo(0,0);
+  return true;
+};
 var UPDACT={
   'pasang':function(){if(!installEvt)return;var ev=installEvt;installEvt=null;try{ev.prompt();ev.userChoice.then(function(c){if(c&&c.outcome==='accepted')installDone=true;render();});}catch(e){}},
   'pasang-tutup':function(){instHide=true;store.set('cjs.pasang','tutup');},
@@ -2353,7 +2367,8 @@ var UPDACT={
   }
 };
 function swSetup(){
-  if(!('serviceWorker' in navigator)||!/^https?:$/.test(location.protocol))return;
+  /* salinan di dalam APK (dibuka saat belum pernah online) tidak memakai service worker */
+  if(!('serviceWorker' in navigator)||!/^https?:$/.test(location.protocol)||location.hostname==='appassets.androidplatform.net')return;
   var sw=navigator.serviceWorker,hadCtl=!!sw.controller,reloading=false;
   try{
     sw.addEventListener('controllerchange',function(){
