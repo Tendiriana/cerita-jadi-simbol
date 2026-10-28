@@ -1,10 +1,28 @@
 # TakTik IPA
 
-Latihan soal cerita IPA SMP. Siswa mengubah kalimat soal menjadi besaran, mengenali materinya, memilih rumus, lalu menghitung. Guru mengelola soal lewat **Pengaturan → Masuk mode guru**.
+Latihan soal cerita IPA SMP kelas 7, 8, dan 9. Siswa mengubah kalimat soal menjadi besaran, mengenali materinya, memilih rumus, lalu menghitung. Guru mengelola soal lewat **Pengaturan → Masuk mode guru**.
 
 ## Isi soal
 
-81 soal kelas 9 yang mengikuti Buku IPA SMP/MTs Kelas IX (Edisi Revisi), Kurikulum Merdeka:
+111 soal yang mengikuti Buku IPA SMP/MTs Kurikulum Merdeka.
+
+**Kelas 7 (15 soal)**
+
+| Materi | Jumlah | Isi |
+|---|---|---|
+| Massa jenis | 5 | ρ = m ÷ V, mencari massa dan volume, konversi liter ke cm³ |
+| Suhu dan kalor | 5 | Q = m × c × ΔT, konversi gram ke kg, Celsius ke kelvin dan Fahrenheit |
+| Gerak | 5 | v = s ÷ t, jarak, waktu, konversi km/jam ke m/s dan menit ke sekon |
+
+**Kelas 8 (15 soal)**
+
+| Materi | Jumlah | Isi |
+|---|---|---|
+| Tekanan | 5 | P = F ÷ A, tekanan hidrostatis Ph = ρ × g × h, dongkrak hidrolik (hukum Pascal) |
+| Usaha dan energi | 5 | W = F × s, Ep = m × g × h, Ek = ½ × m × v², daya, tuas |
+| Getaran dan gelombang | 5 | f = n ÷ t, T = t ÷ n, v = λ × f, bunyi pantul d = v × t ÷ 2 |
+
+**Kelas 9 (81 soal)**
 
 | Materi | Jumlah | Isi |
 |---|---|---|
@@ -13,13 +31,14 @@ Latihan soal cerita IPA SMP. Siswa mengubah kalimat soal menjadi besaran, mengen
 | Energi alternatif | 20 | Sel surya, panel surya, PLTB, PLTA, PLTN, mobil listrik (P = V×I, P = E/t) |
 | Pewarisan sifat | 20 | Monohibrid 3:1 dan 1:2:1, dihibrid 9:3:3:1 (saat ini dikunci) |
 
-60 soal memakai angka acak, jadi angkanya berubah setiap kali dibuka.
+90 soal memakai angka acak, jadi angkanya berubah setiap kali dibuka. Semua soal kelas 7 dan 8 memakai angka acak.
 
 ## Isi paket
 
 - `index.html` : seluruh aplikasi (siswa dan admin)
 - `soal.json` : daftar soal yang dipakai semua siswa
 - `manifest.webmanifest`, `sw.js`, `icon-*.png` : supaya bisa dipasang di layar utama HP dan tetap terbuka saat offline
+- `server/worker.js`, `server/wrangler.toml` : server soal di Cloudflare (lihat bagian Server soal)
 
 ## Memasang di internet (gratis)
 
@@ -31,10 +50,33 @@ Aplikasi ini berkas statis, jadi cukup diunggah ke satu alamat web.
 
 Alamat web harus diawali `https://` supaya bisa dipasang sebagai aplikasi. Kedua layanan di atas sudah memakainya.
 
-## Memasang di HP siswa
+## Memasang di HP siswa (Android dan iPhone)
 
-- **Android (Chrome):** buka alamatnya, ketuk menu titik tiga, pilih *Instal aplikasi* atau *Tambahkan ke layar utama*.
-- **iPhone (Safari):** ketuk tombol bagikan, pilih *Tambahkan ke Layar Utama*.
+TakTik IPA adalah aplikasi web yang bisa dipasang (PWA). Setelah dipasang, ikonnya ada di layar utama, terbuka layar penuh seperti aplikasi biasa, dan tetap bisa dipakai tanpa internet.
+
+- **Android (Chrome):** buka alamatnya. Di beranda aplikasi muncul kotak **Pasang di HP**, ketuk **Pasang aplikasi**. Bisa juga lewat menu titik tiga → *Instal aplikasi*.
+- **iPhone/iPad (Safari):** ketuk tombol bagikan (kotak dengan panah ke atas), pilih *Tambahkan ke Layar Utama*. Petunjuk yang sama tampil di dalam aplikasi.
+
+Cara pasang juga ada di **Pengaturan → Pasang di HP**.
+
+## Memperbarui aplikasi (tanpa uninstall)
+
+Seperti aplikasi dari Play Store, TakTik IPA memperbarui dirinya sendiri. Siswa tidak perlu menghapus atau memasang ulang, dan kemajuan belajar di HP tetap tersimpan.
+
+1. Ubah berkas di GitHub (misalnya `index.html`).
+2. Naikkan nomor versi di **dua** tempat dengan angka yang sama:
+   - `sw.js` : baris `const VERSI = '2.0.0';`
+   - `index.html` : cari `APP_VERSI='2.0.0'`
+   Contoh: `2.0.0` → `2.0.1` untuk perbaikan kecil, `2.1.0` untuk fitur baru.
+3. Commit. Saat siswa membuka aplikasi dengan internet, versi baru langsung terpasang. Kalau siswa sedang mengerjakan soal, muncul tulisan **Versi baru siap** dengan tombol **Perbarui**, jadi pekerjaannya tidak hilang.
+
+Nomor versi yang sedang terpasang terlihat di **Pengaturan → Aplikasi**, beserta tombol **Periksa pembaruan**.
+
+Soal (soal.json atau server) tidak perlu menaikkan versi; soal baru selalu diambil setiap kali aplikasi dibuka.
+
+### Kalau ingin berkas APK untuk Android (opsional)
+
+Buka pwabuilder.com, masukkan alamat web TakTik IPA, lalu pilih **Android → Generate**. Hasilnya berkas APK/AAB yang membuka alamat web itu sebagai aplikasi. Karena isinya tetap diambil dari web, setiap pembaruan di GitHub langsung sampai ke HP tanpa memasang APK baru. APK yang sama juga bisa diunggah ke Play Store. iPhone tidak bisa memasang APK; pakai cara *Tambahkan ke Layar Utama* di atas.
 
 ## Mengelola soal (mode admin)
 
@@ -62,7 +104,9 @@ Soal dikirim lewat server Cloudflare (`server/worker.js`), jadi guru tidak perlu
 
 - **Buat dengan AI**: di mode guru, guru menulis permintaan soal seperti mengobrol. AI (Cloudflare Workers AI, gratis dengan kuota harian) menyusun soal lengkap, aplikasi memeriksa dan menghitung ulang jawabannya, lalu guru menekan **Tambahkan & kirim ke siswa**. Batas 40 permintaan per kode kelas per hari.
 
-Pemasangan server: Worker `taktik-api` dengan binding KV bernama `DB`, binding Workers AI bernama `AI`, dan secret `ADMIN_PIN`. Alamat server ditulis di `server/api.txt` saat membangun aplikasi.
+Pemasangan server: Worker `taktik-api` dengan binding KV bernama `DB`, binding Workers AI bernama `AI`, dan secret `ADMIN_PIN`. Kodenya ada di `server/worker.js`, pengaturannya di `server/wrangler.toml`. Alamat server ditulis di `index.html` (`API_URL`).
+
+`server/worker.js` disusun ulang dari cara aplikasi memanggil server. Kalau server lama masih berjalan normal, tidak perlu dipasang ulang. Memasang kode ini di atas server lama membuat PIN guru kelas yang lama tidak berlaku (cara penyandiannya bisa berbeda), jadi setelah memasang, buat ulang PIN guru lewat tab **Kelas**.
 
 ## Tingkat bantuan (untuk siswa)
 

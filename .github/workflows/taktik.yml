@@ -1,0 +1,78 @@
+name: Build TakTik IPA APK
+
+on:
+  push:
+    paths:
+      - 'taktik/**'
+      - 'index.html'
+      - 'soal.json'
+      - '.github/workflows/taktik.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      # Salinan aplikasi web di dalam APK, dipakai kalau HP belum pernah online.
+      - name: Copy web app into APK assets
+        run: |
+          mkdir -p taktik/app/src/main/assets/www
+          cp index.html soal.json manifest.webmanifest icon-192.png icon-512.png apple-touch-icon.png taktik/app/src/main/assets/www/
+
+      # Kunci tanda tangan dari Settings → Secrets and variables → Actions.
+      - name: Restore signing key
+        env:
+          TAKTIK_KEYSTORE: ${{ secrets.TAKTIK_KEYSTORE }}
+        run: |
+          if [ -n "$TAKTIK_KEYSTORE" ]; then
+            mkdir -p taktik/keystore
+            echo "$TAKTIK_KEYSTORE" | base64 -d > taktik/keystore/taktik.jks
+          else
+            echo "::warning::Secret TAKTIK_KEYSTORE belum diisi. APK ditandatangani kunci debug (hanya untuk uji)."
+          fi
+
+      - name: Build APK
+        working-directory: taktik
+        env:
+          TAKTIK_KEY_PASSWORD: ${{ secrets.TAKTIK_KEY_PASSWORD }}
+        run: gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Rename APK
+        run: cp taktik/app/build/outputs/apk/release/app-release.apk TakTik-IPA.apk
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: taktik-apk
+          path: TakTik-IPA.apk
+          if-no-files-found: error
+
+      - name: Publish APK to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: taktik
+          name: TakTik IPA (APK terbaru)
+          body: |
+            TakTik IPA untuk Android. Unduh **TakTik-IPA.apk** di bawah lalu pasang.
+            Kalau HP meminta izin, izinkan "Instal aplikasi tidak dikenal" untuk browser atau File Manager.
+
+            Isi soal dan tampilan diambil langsung dari web, jadi pembaruan otomatis sampai tanpa memasang ulang.
+            Kalau suatu saat ada APK baru, cukup pasang di atas yang lama (tidak perlu uninstall).
+          files: TakTik-IPA.apk
