@@ -128,7 +128,7 @@ Untuk membuat soal yang perlu konversi satuan, pilih satuan lain di samping angk
    - boleh melewati soal,
    - tampilkan skor ke siswa setelah selesai.
 3. Ketuk **Buat & bagikan**. Muncul **kode ujian** 6 huruf. Bagikan lewat WhatsApp atau tulis di papan.
-4. Siswa membuka **Ujian dari guru** (di beranda, di bawah Latihan cepat), mengisi kode dan nama, lalu mengerjakan. Waktu setiap siswa berjalan sejak ia mengetuk Mulai ujian.
+4. Siswa membuka menu **Ujian** di bawah layar, mengisi kode dan nama, lalu mengerjakan. Selama ujian berlangsung, beranda menampilkan kartu **Lanjutkan ujian**. Waktu setiap siswa berjalan sejak ia mengetuk Mulai ujian.
 5. Jawaban tersimpan setiap kali satu soal selesai. Jawaban terkumpul otomatis saat waktu habis, saat siswa mengakhiri ujian, atau saat guru menekan **Tutup ujian**. Kalau HP siswa tertutup, ujian bisa dilanjutkan.
 6. Daftar siswa diperbarui setiap 15 detik. Ketuk nama siswa untuk melihat jawabannya per soal (jawaban siswa, kunci, jumlah kesalahan, waktu) dan memberi **nilai akhir**. Nilai saran sudah dihitung otomatis.
 7. **Salin daftar nilai** untuk ditempel ke WhatsApp atau Excel. **Hapus lembar kerja** membuat siswa itu boleh mengulang.
@@ -216,7 +216,7 @@ Di halaman utama ada kotak **Alat belajar**:
 - **Laporan ke guru**: siswa mengisi nama dan kelas, lalu menekan **Kirim lewat WhatsApp** atau **Salin teks**. Laporan berisi soal yang selesai, kesalahan teratas, dan hasil ujian terakhir.
 - **Naik tingkat otomatis**: setelah 3 soal lancar berturut-turut (paling banyak 1 kesalahan), aplikasi menyarankan naik tingkat.
 - **Kartu rumus**: rumus dan satuan setiap materi yang terbuka, ditambah daftar konversi. Saat latihan, kartu ini bisa dibuka di bawah langkah 1. Kartu disembunyikan di tingkat Sulit dan saat ujian.
-- **Mode ujian**: 5 atau 10 soal acak dari kelas yang dipilih, dengan pengatur waktu. Siswa bisa melewati soal, dan ringkasan hasil tampil di akhir.
+- **Ujian dari guru** (menu Ujian): masukkan kode ujian dari guru dan nama, lalu kerjakan. Waktu berjalan mundur, dan jawaban terkumpul otomatis ke guru.
 - **Bacakan soal**: tombol suara yang membacakan cerita soal, memakai suara bawaan HP.
 - **Latihan konversi**: 10 soal cepat seperti g→kg, mA→A, menit→s, W→kW, dan cm²→m².
 - **Kuis simbol dan satuan**: 10 pertanyaan cepat tentang simbol dan satuan dari Bab 5.
