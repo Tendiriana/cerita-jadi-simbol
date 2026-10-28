@@ -1,13 +1,20 @@
 {
+  "id": "./",
   "name": "TakTik IPA",
   "short_name": "TakTik IPA",
-  "description": "Latihan soal cerita IPA SMP: ubah kalimat soal menjadi besaran, pilih rumus, lalu hitung.",
+  "description": "Latihan soal cerita IPA SMP kelas 7, 8, dan 9: ubah kalimat soal menjadi besaran, pilih rumus, lalu hitung.",
   "lang": "id",
+  "dir": "ltr",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#F3F5F8",
   "theme_color": "#0F6E6A",
+  "categories": [
+    "education"
+  ],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "icon-192.png",

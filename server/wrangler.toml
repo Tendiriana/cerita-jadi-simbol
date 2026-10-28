@@ -1,0 +1,16 @@
+# Pengaturan Worker TakTik IPA untuk Cloudflare.
+# Pemasangan lewat terminal:
+#   npx wrangler kv namespace create DB      → salin id-nya ke bawah
+#   npx wrangler secret put ADMIN_PIN         → isi PIN pengelola utama
+#   npx wrangler deploy
+# Bisa juga lewat dasbor Cloudflare: tempel isi worker.js, lalu tambahkan binding yang sama.
+name = "taktik-api"
+main = "worker.js"
+compatibility_date = "2025-09-01"
+
+[[kv_namespaces]]
+binding = "DB"
+id = "GANTI_DENGAN_ID_KV"
+
+[ai]
+binding = "AI"

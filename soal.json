@@ -1,6 +1,6 @@
 {
   "versi": 1,
-  "rev": 1792230557398,
+  "rev": 1793187005676,
   "kunci": [
     "Pewarisan sifat"
   ],
@@ -877,7 +877,7 @@
         "jawaban": 0.86,
         "salah": [
           {
-            "nilai": 0.00000172,
+            "nilai": 1.72e-06,
             "pesan": "Itu lupa dibagi luas penampang."
           }
         ],
@@ -7035,6 +7035,2515 @@
         ],
         "petunjuk": "Kalikan bagian rasio (per 16) dengan jumlah tanaman.",
         "penjelasan": "Jumlah = bagian ÷ 16 × N."
+      }
+    },
+    {
+      "id": "k7-mj-batu",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "m",
+          "min": 40,
+          "maks": 120,
+          "langkah": 20,
+          "rumus": ""
+        }
+      ],
+      "topik": "Massa jenis",
+      "judul": "Massa jenis batu",
+      "cerita": "Dodi menemukan sebuah batu di halaman sekolah pukul 07.00. Batu itu bermassa {m} g dan volumenya 20 cm³. Berapa massa jenis batu itu?",
+      "besaran": [
+        {
+          "teks": "{m} g",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "g",
+          "ket": "massa batu, satuannya gram",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "20 cm³",
+          "sym": "V",
+          "nama": "volume",
+          "satuan": "cm³",
+          "ket": "volume batu, satuannya sentimeter kubik",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "pukul 07.00",
+          "ket": "waktu Dodi menemukan batu, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "massa jenis batu itu"
+      },
+      "rumus": [
+        {
+          "f": "ρ = m ÷ V",
+          "benar": true,
+          "alasan": "Massa jenis adalah massa setiap satu satuan volume, jadi massa dibagi volume."
+        },
+        {
+          "f": "ρ = m × V",
+          "benar": false,
+          "alasan": "Massa jenis bukan hasil kali massa dan volume. Satuannya g/cm³, artinya gram dibagi cm³."
+        },
+        {
+          "f": "ρ = V ÷ m",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik. Massa yang dibagi volume, bukan volume dibagi massa."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = {m} g · V = 20 cm³",
+        "lhs": "ρ",
+        "ekspresi": "{m} ÷ 20",
+        "satuan": "g/cm³",
+        "jawaban": null,
+        "angka": "m/20",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu hasil kali massa dan volume. Massa jenis dicari dengan membagi massa dengan volume.",
+            "rumus": "m*20"
+          },
+          {
+            "nilai": null,
+            "pesan": "Pembagiannya terbalik. Bagi massa dengan volume, bukan volume dengan massa.",
+            "rumus": "20/m"
+          }
+        ],
+        "petunjuk": "Bagi massa dengan volume.",
+        "penjelasan": "ρ = m ÷ V."
+      }
+    },
+    {
+      "id": "k7-mj-minyak",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "vol",
+          "min": 100,
+          "maks": 500,
+          "langkah": 100,
+          "rumus": ""
+        },
+        {
+          "nama": "m",
+          "min": null,
+          "maks": null,
+          "langkah": null,
+          "rumus": "vol*0.8"
+        }
+      ],
+      "topik": "Massa jenis",
+      "judul": "Massa jenis minyak goreng",
+      "cerita": "Ibu membeli minyak goreng seharga Rp18.000. Sebanyak {vol} cm³ minyak itu ditimbang dan massanya {m} g. Berapa massa jenis minyak goreng?",
+      "besaran": [
+        {
+          "teks": "{vol} cm³",
+          "sym": "V",
+          "nama": "volume",
+          "satuan": "cm³",
+          "ket": "volume minyak yang ditimbang",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "{m} g",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "g",
+          "ket": "massa minyak, satuannya gram",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp18.000",
+          "ket": "harga minyak, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "massa jenis minyak goreng"
+      },
+      "rumus": [
+        {
+          "f": "ρ = m ÷ V",
+          "benar": true,
+          "alasan": "Massa jenis adalah massa setiap satu satuan volume, jadi massa dibagi volume."
+        },
+        {
+          "f": "ρ = m × V",
+          "benar": false,
+          "alasan": "Massa jenis bukan hasil kali massa dan volume. Satuannya g/cm³, artinya gram dibagi cm³."
+        },
+        {
+          "f": "ρ = V ÷ m",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik. Massa yang dibagi volume, bukan volume dibagi massa."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = {m} g · V = {vol} cm³",
+        "lhs": "ρ",
+        "ekspresi": "{m} ÷ {vol}",
+        "satuan": "g/cm³",
+        "jawaban": null,
+        "angka": "m/vol",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu volume dibagi massa. Yang benar massa dibagi volume.",
+            "rumus": "vol/m"
+          }
+        ],
+        "petunjuk": "Bagi massa dengan volume.",
+        "penjelasan": "ρ = m ÷ V = {m} ÷ {vol} = 0,8 g/cm³. Minyak lebih ringan daripada air (1 g/cm³), karena itu minyak mengapung di atas air."
+      }
+    },
+    {
+      "id": "k7-mj-kayu",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "vol",
+          "min": 100,
+          "maks": 500,
+          "langkah": 50,
+          "rumus": ""
+        }
+      ],
+      "topik": "Massa jenis",
+      "judul": "Massa balok kayu",
+      "cerita": "Sebuah balok kayu berwarna cokelat memiliki volume {vol} cm³. Massa jenis kayu itu 0,6 g/cm³. Berapa massa balok kayu?",
+      "besaran": [
+        {
+          "teks": "{vol} cm³",
+          "sym": "V",
+          "nama": "volume",
+          "satuan": "cm³",
+          "ket": "volume balok kayu",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,6 g/cm³",
+          "sym": "ρ",
+          "nama": "massa jenis",
+          "satuan": "g/cm³",
+          "ket": "massa jenis kayu",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "berwarna cokelat",
+          "ket": "warna kayu, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "massa balok kayu"
+      },
+      "rumus": [
+        {
+          "f": "m = ρ × V",
+          "benar": true,
+          "alasan": "Dari ρ = m ÷ V, massa sama dengan massa jenis dikali volume."
+        },
+        {
+          "f": "m = ρ ÷ V",
+          "benar": false,
+          "alasan": "Kalau massa jenis dibagi volume, hasilnya bukan massa."
+        },
+        {
+          "f": "m = V ÷ ρ",
+          "benar": false,
+          "alasan": "Volume dibagi massa jenis menghasilkan... volume lagi? Bukan. Rumus ini dipakai untuk mencari volume dari massa, bukan sebaliknya."
+        }
+      ],
+      "hitung": {
+        "diketahui": "ρ = 0,6 g/cm³ · V = {vol} cm³",
+        "lhs": "m",
+        "ekspresi": "0,6 × {vol}",
+        "satuan": "g",
+        "jawaban": null,
+        "angka": "0.6*vol",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu volume dibagi massa jenis. Massa dicari dengan mengalikan massa jenis dan volume.",
+            "rumus": "vol/0.6"
+          }
+        ],
+        "petunjuk": "Kalikan massa jenis dengan volume.",
+        "penjelasan": "m = ρ × V."
+      }
+    },
+    {
+      "id": "k7-mj-aluminium",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "k",
+          "min": 10,
+          "maks": 50,
+          "langkah": 10,
+          "rumus": ""
+        },
+        {
+          "nama": "m",
+          "min": null,
+          "maks": null,
+          "langkah": null,
+          "rumus": "k*2.7"
+        }
+      ],
+      "topik": "Massa jenis",
+      "judul": "Volume balok aluminium",
+      "cerita": "Pak Budi membeli sebuah balok aluminium di toko bangunan yang berjarak 2 km dari rumahnya. Massa balok itu {m} g. Massa jenis aluminium 2,7 g/cm³. Berapa volume balok aluminium?",
+      "besaran": [
+        {
+          "teks": "{m} g",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "g",
+          "ket": "massa balok aluminium",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2,7 g/cm³",
+          "sym": "ρ",
+          "nama": "massa jenis",
+          "satuan": "g/cm³",
+          "ket": "massa jenis aluminium",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "2 km",
+          "ket": "jarak toko ke rumah, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "volume balok aluminium"
+      },
+      "rumus": [
+        {
+          "f": "V = m ÷ ρ",
+          "benar": true,
+          "alasan": "Dari ρ = m ÷ V, volume sama dengan massa dibagi massa jenis."
+        },
+        {
+          "f": "V = m × ρ",
+          "benar": false,
+          "alasan": "Massa dikali massa jenis tidak menghasilkan volume."
+        },
+        {
+          "f": "V = ρ ÷ m",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik. Massa yang dibagi massa jenis."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = {m} g · ρ = 2,7 g/cm³",
+        "lhs": "V",
+        "ekspresi": "{m} ÷ 2,7",
+        "satuan": "cm³",
+        "jawaban": null,
+        "angka": "m/2.7",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu hasil kali massa dan massa jenis. Volume dicari dengan membagi massa dengan massa jenis.",
+            "rumus": "m*2.7"
+          }
+        ],
+        "petunjuk": "Bagi massa dengan massa jenis.",
+        "penjelasan": "V = m ÷ ρ."
+      }
+    },
+    {
+      "id": "k7-mj-madu",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "m",
+          "min": 600,
+          "maks": 750,
+          "langkah": 50,
+          "rumus": ""
+        }
+      ],
+      "topik": "Massa jenis",
+      "judul": "Massa jenis madu",
+      "cerita": "Sebotol madu hutan bervolume 0,5 liter memiliki massa {m} g. Madu itu dibeli dari peternak lebah di desa sebelah. Berapa massa jenis madu dalam g/cm³?",
+      "besaran": [
+        {
+          "teks": "0,5 liter",
+          "sym": "V",
+          "nama": "volume",
+          "satuan": "cm³",
+          "ket": "volume madu",
+          "konv": "= 500 cm³",
+          "catatan": "1 liter = 1.000 cm³, jadi 0,5 liter = 500 cm³."
+        },
+        {
+          "teks": "{m} g",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "g",
+          "ket": "massa madu",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "desa sebelah",
+          "ket": "asal madu, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "massa jenis madu dalam g/cm³"
+      },
+      "rumus": [
+        {
+          "f": "ρ = m ÷ V",
+          "benar": true,
+          "alasan": "Massa jenis adalah massa setiap satu satuan volume, jadi massa dibagi volume."
+        },
+        {
+          "f": "ρ = m × V",
+          "benar": false,
+          "alasan": "Massa jenis bukan hasil kali massa dan volume. Satuannya g/cm³, artinya gram dibagi cm³."
+        },
+        {
+          "f": "ρ = V ÷ m",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik. Massa yang dibagi volume, bukan volume dibagi massa."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = {m} g · V = 0,5 liter = 500 cm³",
+        "lhs": "ρ",
+        "ekspresi": "{m} ÷ 500",
+        "satuan": "g/cm³",
+        "jawaban": null,
+        "angka": "m/500",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Ubah dulu liter ke cm³. 0,5 liter = 500 cm³, bukan 0,5.",
+            "rumus": "m/0.5"
+          },
+          {
+            "nilai": null,
+            "pesan": "Itu volume dibagi massa. Yang benar massa dibagi volume.",
+            "rumus": "500/m"
+          }
+        ],
+        "petunjuk": "Ubah 0,5 liter menjadi 500 cm³, lalu bagi massa dengan volume.",
+        "penjelasan": "ρ = m ÷ V."
+      }
+    },
+    {
+      "id": "k7-kl-air",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "m",
+          "min": 1,
+          "maks": 3,
+          "langkah": 0.5,
+          "rumus": ""
+        }
+      ],
+      "topik": "Suhu dan kalor",
+      "judul": "Memanaskan air di panci",
+      "cerita": "Ibu memanaskan {m} kg air memakai panci merah dari suhu 25 °C hingga 75 °C. Kalor jenis air 4.200 J/kg°C. Berapa kalor yang diperlukan?",
+      "besaran": [
+        {
+          "teks": "{m} kg",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa air",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "25 °C",
+          "sym": "T₁",
+          "nama": "suhu awal",
+          "satuan": "°C",
+          "ket": "suhu air sebelum dipanaskan",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "75 °C",
+          "sym": "T₂",
+          "nama": "suhu akhir",
+          "satuan": "°C",
+          "ket": "suhu air setelah dipanaskan",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "4.200 J/kg°C",
+          "sym": "c",
+          "nama": "kalor jenis",
+          "satuan": "J/kg°C",
+          "ket": "kalor jenis air",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "panci merah",
+          "ket": "warna panci, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kalor yang diperlukan"
+      },
+      "rumus": [
+        {
+          "f": "Q = m × c × (T₂ − T₁)",
+          "benar": true,
+          "alasan": "Kenaikan suhu ΔT = suhu akhir − suhu awal = 75 − 25 = 50 °C."
+        },
+        {
+          "f": "Q = m × c × T₂",
+          "benar": false,
+          "alasan": "Yang dipakai kenaikan suhu, bukan suhu akhirnya saja."
+        },
+        {
+          "f": "Q = m × c × (T₂ + T₁)",
+          "benar": false,
+          "alasan": "Suhu tidak dijumlahkan. Kenaikan suhu adalah selisihnya."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = {m} kg · c = 4.200 J/kg°C · ΔT = 75 − 25 = 50 °C",
+        "lhs": "Q",
+        "ekspresi": "{m} × 4.200 × 50",
+        "satuan": "J",
+        "jawaban": null,
+        "angka": "m*4200*50",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu memakai suhu akhir 75 °C. Pakai kenaikan suhunya: 75 − 25 = 50 °C.",
+            "rumus": "m*4200*75"
+          },
+          {
+            "nilai": null,
+            "pesan": "Suhu awal dan akhir dijumlahkan. Pakai selisihnya: 75 − 25 = 50 °C.",
+            "rumus": "m*4200*100"
+          }
+        ],
+        "petunjuk": "Hitung dulu kenaikan suhu: 75 − 25 = 50 °C.",
+        "penjelasan": "Q = m × c × ΔT."
+      }
+    },
+    {
+      "id": "k7-kl-logam",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "dT",
+          "min": 10,
+          "maks": 50,
+          "langkah": 10,
+          "rumus": ""
+        }
+      ],
+      "topik": "Suhu dan kalor",
+      "judul": "Kalor untuk sepotong besi",
+      "cerita": "Di bengkel, sepotong besi bermassa 0,5 kg dipanaskan sehingga suhunya naik {dT} °C. Kalor jenis besi 450 J/kg°C. Bengkel itu buka sejak tahun 2010. Berapa kalor yang diterima besi?",
+      "besaran": [
+        {
+          "teks": "0,5 kg",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa besi",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "{dT} °C",
+          "sym": "ΔT",
+          "nama": "kenaikan suhu",
+          "satuan": "°C",
+          "ket": "kenaikan suhu besi",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "450 J/kg°C",
+          "sym": "c",
+          "nama": "kalor jenis",
+          "satuan": "J/kg°C",
+          "ket": "kalor jenis besi",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "tahun 2010",
+          "ket": "tahun bengkel dibuka, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kalor yang diterima besi"
+      },
+      "rumus": [
+        {
+          "f": "Q = m × c × ΔT",
+          "benar": true,
+          "alasan": "Kalor yang diperlukan sebanding dengan massa, kalor jenis, dan kenaikan suhu."
+        },
+        {
+          "f": "Q = m × c",
+          "benar": false,
+          "alasan": "Kenaikan suhu belum dipakai. Kalor bergantung juga pada berapa derajat suhunya naik."
+        },
+        {
+          "f": "Q = m ÷ (c × ΔT)",
+          "benar": false,
+          "alasan": "Ini bentuk yang salah. Ketiga besaran dikalikan, tidak dibagi."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = 0,5 kg · c = 450 J/kg°C · ΔT = {dT} °C",
+        "lhs": "Q",
+        "ekspresi": "0,5 × 450 × {dT}",
+        "satuan": "J",
+        "jawaban": null,
+        "angka": "0.5*450*dT",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Kenaikan suhu belum dikalikan. Q = m × c × ΔT.",
+            "rumus": "0.5*450"
+          }
+        ],
+        "petunjuk": "Kalikan massa, kalor jenis, dan kenaikan suhu.",
+        "penjelasan": "Q = m × c × ΔT."
+      }
+    },
+    {
+      "id": "k7-kl-gram",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "mg",
+          "min": 200,
+          "maks": 800,
+          "langkah": 200,
+          "rumus": ""
+        },
+        {
+          "nama": "mkg",
+          "min": null,
+          "maks": null,
+          "langkah": null,
+          "rumus": "mg/1000"
+        }
+      ],
+      "topik": "Suhu dan kalor",
+      "judul": "Air minum di gelas",
+      "cerita": "Rani memanaskan {mg} g air minum sehingga suhunya naik 10 °C. Kalor jenis air 4.200 J/kg°C. Gelas yang dipakai Rani bergambar kucing. Berapa kalor yang diperlukan?",
+      "besaran": [
+        {
+          "teks": "{mg} g",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa air",
+          "konv": "= {mkg} kg",
+          "catatan": "Kalor jenis memakai kg, jadi gram diubah ke kilogram: bagi 1.000."
+        },
+        {
+          "teks": "10 °C",
+          "sym": "ΔT",
+          "nama": "kenaikan suhu",
+          "satuan": "°C",
+          "ket": "kenaikan suhu air",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "4.200 J/kg°C",
+          "sym": "c",
+          "nama": "kalor jenis",
+          "satuan": "J/kg°C",
+          "ket": "kalor jenis air",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "bergambar kucing",
+          "ket": "gambar pada gelas, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kalor yang diperlukan"
+      },
+      "rumus": [
+        {
+          "f": "Q = m × c × ΔT",
+          "benar": true,
+          "alasan": "Kalor yang diperlukan sebanding dengan massa, kalor jenis, dan kenaikan suhu."
+        },
+        {
+          "f": "Q = m × c",
+          "benar": false,
+          "alasan": "Kenaikan suhu belum dipakai. Kalor bergantung juga pada berapa derajat suhunya naik."
+        },
+        {
+          "f": "Q = m ÷ (c × ΔT)",
+          "benar": false,
+          "alasan": "Ini bentuk yang salah. Ketiga besaran dikalikan, tidak dibagi."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = {mg} g = {mkg} kg · c = 4.200 J/kg°C · ΔT = 10 °C",
+        "lhs": "Q",
+        "ekspresi": "{mkg} × 4.200 × 10",
+        "satuan": "J",
+        "jawaban": null,
+        "angka": "mkg*4200*10",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Massa masih dalam gram. Ubah dulu ke kilogram: bagi 1.000.",
+            "rumus": "mg*4200*10"
+          }
+        ],
+        "petunjuk": "Ubah gram ke kilogram dulu, lalu kalikan m × c × ΔT.",
+        "penjelasan": "Q = m × c × ΔT."
+      }
+    },
+    {
+      "id": "k7-kl-kelvin",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "C",
+          "min": 24,
+          "maks": 34,
+          "langkah": 2,
+          "rumus": ""
+        }
+      ],
+      "topik": "Suhu dan kalor",
+      "judul": "Suhu kelas dalam kelvin",
+      "cerita": "Termometer di kelas 7B menunjukkan suhu {C} °C. Di kelas itu ada 32 siswa. Berapa suhu kelas itu dalam kelvin?",
+      "besaran": [
+        {
+          "teks": "{C} °C",
+          "sym": "T",
+          "nama": "suhu dalam Celsius",
+          "satuan": "°C",
+          "ket": "suhu yang terbaca di termometer",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "32 siswa",
+          "ket": "jumlah siswa, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "suhu kelas itu dalam kelvin"
+      },
+      "rumus": [
+        {
+          "f": "T(K) = T(°C) + 273",
+          "benar": true,
+          "alasan": "Skala kelvin dimulai 273 angka di bawah nol Celsius, jadi tambahkan 273."
+        },
+        {
+          "f": "T(K) = T(°C) − 273",
+          "benar": false,
+          "alasan": "Tandanya terbalik. Suhu kelvin selalu lebih besar daripada angka Celsius-nya."
+        },
+        {
+          "f": "T(K) = T(°C) × 273",
+          "benar": false,
+          "alasan": "Skala Celsius dan kelvin hanya bergeser, tidak dikali."
+        }
+      ],
+      "hitung": {
+        "diketahui": "T = {C} °C",
+        "lhs": "T(K)",
+        "ekspresi": "{C} + 273",
+        "satuan": "K",
+        "jawaban": null,
+        "angka": "C+273",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Tandanya terbalik. Untuk kelvin, tambahkan 273.",
+            "rumus": "C-273"
+          }
+        ],
+        "petunjuk": "Tambahkan 273 pada angka Celsius.",
+        "penjelasan": "T(K) = T(°C) + 273."
+      }
+    },
+    {
+      "id": "k7-kl-fahrenheit",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "C",
+          "min": 36,
+          "maks": 40,
+          "langkah": 1,
+          "rumus": ""
+        }
+      ],
+      "topik": "Suhu dan kalor",
+      "judul": "Suhu badan dalam Fahrenheit",
+      "cerita": "Saat demam, suhu badan Bima diukur {C} °C. Bima minum obat 3 kali sehari. Berapa suhu itu dalam derajat Fahrenheit?",
+      "besaran": [
+        {
+          "teks": "{C} °C",
+          "sym": "T",
+          "nama": "suhu dalam Celsius",
+          "satuan": "°C",
+          "ket": "suhu badan Bima",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "3 kali sehari",
+          "ket": "aturan minum obat, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "suhu itu dalam derajat Fahrenheit"
+      },
+      "rumus": [
+        {
+          "f": "T(°F) = 9/5 × T(°C) + 32",
+          "benar": true,
+          "alasan": "Satu derajat Celsius sama dengan 9/5 derajat Fahrenheit, lalu tambahkan 32 karena titik beku air 32 °F."
+        },
+        {
+          "f": "T(°F) = 5/9 × T(°C) + 32",
+          "benar": false,
+          "alasan": "Perbandingannya terbalik. Dari Celsius ke Fahrenheit dikali 9/5."
+        },
+        {
+          "f": "T(°F) = 9/5 × T(°C)",
+          "benar": false,
+          "alasan": "Belum ditambah 32."
+        }
+      ],
+      "hitung": {
+        "diketahui": "T = {C} °C",
+        "lhs": "T(°F)",
+        "ekspresi": "9 ÷ 5 × {C} + 32",
+        "satuan": "°F",
+        "jawaban": null,
+        "angka": "9/5*C+32",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Belum ditambah 32.",
+            "rumus": "9/5*C"
+          },
+          {
+            "nilai": null,
+            "pesan": "Perbandingannya terbalik. Pakai 9/5, bukan 5/9.",
+            "rumus": "5/9*C+32"
+          }
+        ],
+        "petunjuk": "Kalikan dengan 9/5 (sama dengan 1,8), lalu tambahkan 32.",
+        "penjelasan": "T(°F) = 9/5 × T(°C) + 32."
+      }
+    },
+    {
+      "id": "k7-gr-sepeda",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "s",
+          "min": 200,
+          "maks": 600,
+          "langkah": 100,
+          "rumus": ""
+        }
+      ],
+      "topik": "Gerak",
+      "judul": "Kelajuan Rina bersepeda",
+      "cerita": "Rina bersepeda dengan sepeda biru sejauh {s} m dalam waktu 100 s. Berapa kelajuan Rina?",
+      "besaran": [
+        {
+          "teks": "{s} m",
+          "sym": "s",
+          "nama": "jarak",
+          "satuan": "m",
+          "ket": "jarak yang ditempuh Rina",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "100 s",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "s",
+          "ket": "waktu tempuh, satuannya sekon",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "sepeda biru",
+          "ket": "warna sepeda, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kelajuan Rina"
+      },
+      "rumus": [
+        {
+          "f": "v = s ÷ t",
+          "benar": true,
+          "alasan": "Kelajuan adalah jarak yang ditempuh setiap satu satuan waktu."
+        },
+        {
+          "f": "v = s × t",
+          "benar": false,
+          "alasan": "Jarak dikali waktu tidak menghasilkan kelajuan. Satuan m/s artinya meter dibagi sekon."
+        },
+        {
+          "f": "v = t ÷ s",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik. Jarak yang dibagi waktu."
+        }
+      ],
+      "hitung": {
+        "diketahui": "s = {s} m · t = 100 s",
+        "lhs": "v",
+        "ekspresi": "{s} ÷ 100",
+        "satuan": "m/s",
+        "jawaban": null,
+        "angka": "s/100",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu jarak dikali waktu. Kelajuan dicari dengan membagi jarak dengan waktu.",
+            "rumus": "s*100"
+          },
+          {
+            "nilai": null,
+            "pesan": "Pembagiannya terbalik. Jarak dibagi waktu.",
+            "rumus": "100/s"
+          }
+        ],
+        "petunjuk": "Bagi jarak dengan waktu.",
+        "penjelasan": "v = s ÷ t."
+      }
+    },
+    {
+      "id": "k7-gr-bus",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "t",
+          "min": 2,
+          "maks": 5,
+          "langkah": 1,
+          "rumus": ""
+        }
+      ],
+      "topik": "Gerak",
+      "judul": "Jarak tempuh bus",
+      "cerita": "Sebuah bus yang membawa 40 penumpang melaju dengan kelajuan tetap 60 km/jam selama {t} jam. Berapa jarak yang ditempuh bus?",
+      "besaran": [
+        {
+          "teks": "60 km/jam",
+          "sym": "v",
+          "nama": "kelajuan",
+          "satuan": "km/jam",
+          "ket": "kelajuan bus",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "{t} jam",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "jam",
+          "ket": "lama perjalanan",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "40 penumpang",
+          "ket": "jumlah penumpang, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "jarak yang ditempuh bus"
+      },
+      "rumus": [
+        {
+          "f": "s = v × t",
+          "benar": true,
+          "alasan": "Dari v = s ÷ t, jarak sama dengan kelajuan dikali waktu."
+        },
+        {
+          "f": "s = v ÷ t",
+          "benar": false,
+          "alasan": "Kelajuan dibagi waktu bukan jarak."
+        },
+        {
+          "f": "s = t ÷ v",
+          "benar": false,
+          "alasan": "Waktu dibagi kelajuan tidak menghasilkan jarak."
+        }
+      ],
+      "hitung": {
+        "diketahui": "v = 60 km/jam · t = {t} jam",
+        "lhs": "s",
+        "ekspresi": "60 × {t}",
+        "satuan": "km",
+        "jawaban": null,
+        "angka": "60*t",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu kelajuan dibagi waktu. Jarak dicari dengan mengalikan kelajuan dan waktu.",
+            "rumus": "60/t"
+          }
+        ],
+        "petunjuk": "Kalikan kelajuan dengan waktu. Satuannya km karena km/jam × jam = km.",
+        "penjelasan": "s = v × t."
+      }
+    },
+    {
+      "id": "k7-gr-jalan",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "t",
+          "min": 200,
+          "maks": 600,
+          "langkah": 100,
+          "rumus": ""
+        },
+        {
+          "nama": "s",
+          "min": null,
+          "maks": null,
+          "langkah": null,
+          "rumus": "t*1.5"
+        }
+      ],
+      "topik": "Gerak",
+      "judul": "Waktu berjalan ke sekolah",
+      "cerita": "Andi berangkat dari rumah pukul 06.30. Jarak rumah ke sekolah {s} m. Andi berjalan dengan kelajuan tetap 1,5 m/s. Berapa lama waktu yang diperlukan Andi untuk sampai di sekolah?",
+      "besaran": [
+        {
+          "teks": "{s} m",
+          "sym": "s",
+          "nama": "jarak",
+          "satuan": "m",
+          "ket": "jarak rumah ke sekolah",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "1,5 m/s",
+          "sym": "v",
+          "nama": "kelajuan",
+          "satuan": "m/s",
+          "ket": "kelajuan Andi berjalan",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "pukul 06.30",
+          "ket": "jam berangkat, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "lama waktu yang diperlukan Andi untuk sampai di sekolah"
+      },
+      "rumus": [
+        {
+          "f": "t = s ÷ v",
+          "benar": true,
+          "alasan": "Dari v = s ÷ t, waktu sama dengan jarak dibagi kelajuan."
+        },
+        {
+          "f": "t = s × v",
+          "benar": false,
+          "alasan": "Jarak dikali kelajuan tidak menghasilkan waktu."
+        },
+        {
+          "f": "t = v ÷ s",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik. Jarak yang dibagi kelajuan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "s = {s} m · v = 1,5 m/s",
+        "lhs": "t",
+        "ekspresi": "{s} ÷ 1,5",
+        "satuan": "s",
+        "jawaban": null,
+        "angka": "s/1.5",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu jarak dikali kelajuan. Waktu dicari dengan membagi jarak dengan kelajuan.",
+            "rumus": "s*1.5"
+          }
+        ],
+        "petunjuk": "Bagi jarak dengan kelajuan.",
+        "penjelasan": "t = s ÷ v."
+      }
+    },
+    {
+      "id": "k7-gr-motor",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "v",
+          "min": 36,
+          "maks": 108,
+          "langkah": 18,
+          "rumus": ""
+        }
+      ],
+      "topik": "Gerak",
+      "judul": "Kelajuan motor dalam m/s",
+      "cerita": "Ayah mengendarai motor dengan kelajuan {v} km/jam menuju pasar. Ayah membawa 5 kg beras. Berapa kelajuan motor dalam m/s?",
+      "besaran": [
+        {
+          "teks": "{v} km/jam",
+          "sym": "v",
+          "nama": "kelajuan",
+          "satuan": "km/jam",
+          "ket": "kelajuan motor",
+          "konv": "",
+          "catatan": "1 km/jam = 1.000 m ÷ 3.600 s, jadi bagi dengan 3,6."
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "5 kg",
+          "ket": "massa beras, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kelajuan motor dalam m/s"
+      },
+      "rumus": [
+        {
+          "f": "v (m/s) = v (km/jam) ÷ 3,6",
+          "benar": true,
+          "alasan": "1 km = 1.000 m dan 1 jam = 3.600 s, jadi 1 km/jam = 1.000 ÷ 3.600 m/s = 1 ÷ 3,6 m/s."
+        },
+        {
+          "f": "v (m/s) = v (km/jam) × 3,6",
+          "benar": false,
+          "alasan": "Terbalik. Dikali 3,6 dipakai untuk mengubah m/s ke km/jam."
+        },
+        {
+          "f": "v (m/s) = v (km/jam) ÷ 1.000",
+          "benar": false,
+          "alasan": "Jamnya belum diubah ke sekon."
+        }
+      ],
+      "hitung": {
+        "diketahui": "v = {v} km/jam",
+        "lhs": "v",
+        "ekspresi": "{v} ÷ 3,6",
+        "satuan": "m/s",
+        "jawaban": null,
+        "angka": "v/3.6",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Terbalik. Dari km/jam ke m/s dibagi 3,6.",
+            "rumus": "v*3.6"
+          },
+          {
+            "nilai": null,
+            "pesan": "Jam belum diubah ke sekon. Bagi dengan 3,6.",
+            "rumus": "v/1000"
+          }
+        ],
+        "petunjuk": "Bagi dengan 3,6.",
+        "penjelasan": "Kelajuan dalam km/jam dibagi 3,6."
+      }
+    },
+    {
+      "id": "k7-gr-pelari",
+      "kelas": "7",
+      "variasi": [
+        {
+          "nama": "s",
+          "min": 240,
+          "maks": 600,
+          "langkah": 120,
+          "rumus": ""
+        }
+      ],
+      "topik": "Gerak",
+      "judul": "Kelajuan pelari",
+      "cerita": "Seorang pelari bernomor punggung 17 menempuh lintasan sejauh {s} m dalam waktu 2 menit. Berapa kelajuan pelari dalam m/s?",
+      "besaran": [
+        {
+          "teks": "{s} m",
+          "sym": "s",
+          "nama": "jarak",
+          "satuan": "m",
+          "ket": "jarak yang ditempuh pelari",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2 menit",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "s",
+          "ket": "waktu tempuh",
+          "konv": "= 120 s",
+          "catatan": "1 menit = 60 s, jadi 2 menit = 120 s."
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "nomor punggung 17",
+          "ket": "nomor pelari, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kelajuan pelari dalam m/s"
+      },
+      "rumus": [
+        {
+          "f": "v = s ÷ t",
+          "benar": true,
+          "alasan": "Kelajuan adalah jarak yang ditempuh setiap satu satuan waktu."
+        },
+        {
+          "f": "v = s × t",
+          "benar": false,
+          "alasan": "Jarak dikali waktu tidak menghasilkan kelajuan. Satuan m/s artinya meter dibagi sekon."
+        },
+        {
+          "f": "v = t ÷ s",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik. Jarak yang dibagi waktu."
+        }
+      ],
+      "hitung": {
+        "diketahui": "s = {s} m · t = 2 menit = 120 s",
+        "lhs": "v",
+        "ekspresi": "{s} ÷ 120",
+        "satuan": "m/s",
+        "jawaban": null,
+        "angka": "s/120",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Waktu masih dalam menit. Ubah dulu ke sekon: 2 menit = 120 s.",
+            "rumus": "s/2"
+          }
+        ],
+        "petunjuk": "Ubah 2 menit menjadi 120 s, lalu bagi jarak dengan waktu.",
+        "penjelasan": "v = s ÷ t."
+      }
+    },
+    {
+      "id": "k8-tk-kotak",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "F",
+          "min": 100,
+          "maks": 500,
+          "langkah": 50,
+          "rumus": ""
+        }
+      ],
+      "topik": "Tekanan",
+      "judul": "Tekanan kotak di lantai",
+      "cerita": "Sebuah kotak berisi 12 buku memiliki berat {F} N dan diletakkan di lantai. Luas alas kotak 0,5 m². Berapa tekanan kotak pada lantai?",
+      "besaran": [
+        {
+          "teks": "{F} N",
+          "sym": "F",
+          "nama": "gaya (berat)",
+          "satuan": "N",
+          "ket": "berat kotak, yaitu gaya yang menekan lantai",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,5 m²",
+          "sym": "A",
+          "nama": "luas bidang tekan",
+          "satuan": "m²",
+          "ket": "luas alas kotak",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "12 buku",
+          "ket": "jumlah buku, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "tekanan kotak pada lantai"
+      },
+      "rumus": [
+        {
+          "f": "P = F ÷ A",
+          "benar": true,
+          "alasan": "Tekanan adalah gaya yang bekerja pada setiap satu satuan luas."
+        },
+        {
+          "f": "P = F × A",
+          "benar": false,
+          "alasan": "Gaya dikali luas bukan tekanan. Makin luas bidangnya, tekanan justru makin kecil."
+        },
+        {
+          "f": "P = A ÷ F",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik. Gaya yang dibagi luas."
+        }
+      ],
+      "hitung": {
+        "diketahui": "F = {F} N · A = 0,5 m²",
+        "lhs": "P",
+        "ekspresi": "{F} ÷ 0,5",
+        "satuan": "Pa",
+        "jawaban": null,
+        "angka": "F/0.5",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu gaya dikali luas. Tekanan dicari dengan membagi gaya dengan luas.",
+            "rumus": "F*0.5"
+          }
+        ],
+        "petunjuk": "Bagi gaya dengan luas bidang tekan. Membagi dengan 0,5 sama dengan mengali 2.",
+        "penjelasan": "P = F ÷ A."
+      }
+    },
+    {
+      "id": "k8-tk-sepatu",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "P",
+          "min": 10000,
+          "maks": 15000,
+          "langkah": 1000,
+          "rumus": ""
+        }
+      ],
+      "topik": "Tekanan",
+      "judul": "Gaya dari sepatu",
+      "cerita": "Sepasang sepatu baru seharga Rp250.000 menekan lantai dengan tekanan {P} Pa. Luas alas kedua sepatu 0,04 m². Berapa gaya yang diberikan sepatu pada lantai?",
+      "besaran": [
+        {
+          "teks": "{P} Pa",
+          "sym": "P",
+          "nama": "tekanan",
+          "satuan": "Pa",
+          "ket": "tekanan sepatu pada lantai",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,04 m²",
+          "sym": "A",
+          "nama": "luas bidang tekan",
+          "satuan": "m²",
+          "ket": "luas alas kedua sepatu",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp250.000",
+          "ket": "harga sepatu, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "gaya yang diberikan sepatu pada lantai"
+      },
+      "rumus": [
+        {
+          "f": "F = P × A",
+          "benar": true,
+          "alasan": "Dari P = F ÷ A, gaya sama dengan tekanan dikali luas."
+        },
+        {
+          "f": "F = P ÷ A",
+          "benar": false,
+          "alasan": "Tekanan dibagi luas tidak menghasilkan gaya."
+        },
+        {
+          "f": "F = A ÷ P",
+          "benar": false,
+          "alasan": "Luas dibagi tekanan tidak menghasilkan gaya."
+        }
+      ],
+      "hitung": {
+        "diketahui": "P = {P} Pa · A = 0,04 m²",
+        "lhs": "F",
+        "ekspresi": "{P} × 0,04",
+        "satuan": "N",
+        "jawaban": null,
+        "angka": "P*0.04",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu tekanan dibagi luas. Gaya dicari dengan mengalikan tekanan dan luas.",
+            "rumus": "P/0.04"
+          }
+        ],
+        "petunjuk": "Kalikan tekanan dengan luas.",
+        "penjelasan": "F = P × A."
+      }
+    },
+    {
+      "id": "k8-tk-penyelam",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "h",
+          "min": 2,
+          "maks": 10,
+          "langkah": 2,
+          "rumus": ""
+        }
+      ],
+      "topik": "Tekanan",
+      "judul": "Tekanan pada penyelam",
+      "cerita": "Seorang penyelam membawa kamera seharga Rp3.000.000 dan menyelam sampai kedalaman {h} m di bawah permukaan laut. Massa jenis air laut 1.000 kg/m³ dan percepatan gravitasi 10 m/s². Berapa tekanan hidrostatis yang dialami penyelam?",
+      "besaran": [
+        {
+          "teks": "{h} m",
+          "sym": "h",
+          "nama": "kedalaman",
+          "satuan": "m",
+          "ket": "kedalaman penyelam dari permukaan",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "1.000 kg/m³",
+          "sym": "ρ",
+          "nama": "massa jenis",
+          "satuan": "kg/m³",
+          "ket": "massa jenis air laut",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "10 m/s²",
+          "sym": "g",
+          "nama": "percepatan gravitasi",
+          "satuan": "m/s²",
+          "ket": "percepatan gravitasi bumi",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "Rp3.000.000",
+          "ket": "harga kamera, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "tekanan hidrostatis yang dialami penyelam"
+      },
+      "rumus": [
+        {
+          "f": "Ph = ρ × g × h",
+          "benar": true,
+          "alasan": "Tekanan hidrostatis bergantung pada massa jenis zat cair, percepatan gravitasi, dan kedalaman."
+        },
+        {
+          "f": "Ph = ρ × g ÷ h",
+          "benar": false,
+          "alasan": "Kedalaman dikali, bukan dibagi. Makin dalam, tekanannya makin besar."
+        },
+        {
+          "f": "Ph = ρ × h",
+          "benar": false,
+          "alasan": "Percepatan gravitasi belum dipakai."
+        }
+      ],
+      "hitung": {
+        "diketahui": "ρ = 1.000 kg/m³ · g = 10 m/s² · h = {h} m",
+        "lhs": "Ph",
+        "ekspresi": "1.000 × 10 × {h}",
+        "satuan": "Pa",
+        "jawaban": null,
+        "angka": "1000*10*h",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Kedalaman dibagi, padahal harus dikali.",
+            "rumus": "1000*10/h"
+          },
+          {
+            "nilai": null,
+            "pesan": "Percepatan gravitasi belum dikalikan.",
+            "rumus": "1000*h"
+          }
+        ],
+        "petunjuk": "Kalikan massa jenis, gravitasi, dan kedalaman.",
+        "penjelasan": "Ph = ρ × g × h."
+      }
+    },
+    {
+      "id": "k8-tk-kolam",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "hcm",
+          "min": 50,
+          "maks": 200,
+          "langkah": 50,
+          "rumus": ""
+        },
+        {
+          "nama": "hm",
+          "min": null,
+          "maks": null,
+          "langkah": null,
+          "rumus": "hcm/100"
+        }
+      ],
+      "topik": "Tekanan",
+      "judul": "Tekanan di dasar kolam ikan",
+      "cerita": "Pak Joko memelihara 50 ekor ikan di kolam. Kedalaman air kolam {hcm} cm. Massa jenis air 1.000 kg/m³ dan percepatan gravitasi 10 m/s². Berapa tekanan hidrostatis di dasar kolam?",
+      "besaran": [
+        {
+          "teks": "{hcm} cm",
+          "sym": "h",
+          "nama": "kedalaman",
+          "satuan": "m",
+          "ket": "kedalaman air kolam",
+          "konv": "= {hm} m",
+          "catatan": "Rumus memakai meter: 1 m = 100 cm, jadi bagi 100."
+        },
+        {
+          "teks": "1.000 kg/m³",
+          "sym": "ρ",
+          "nama": "massa jenis",
+          "satuan": "kg/m³",
+          "ket": "massa jenis air",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "10 m/s²",
+          "sym": "g",
+          "nama": "percepatan gravitasi",
+          "satuan": "m/s²",
+          "ket": "percepatan gravitasi bumi",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "50 ekor ikan",
+          "ket": "jumlah ikan, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "tekanan hidrostatis di dasar kolam"
+      },
+      "rumus": [
+        {
+          "f": "Ph = ρ × g × h",
+          "benar": true,
+          "alasan": "Tekanan hidrostatis bergantung pada massa jenis zat cair, percepatan gravitasi, dan kedalaman."
+        },
+        {
+          "f": "Ph = ρ × g ÷ h",
+          "benar": false,
+          "alasan": "Kedalaman dikali, bukan dibagi. Makin dalam, tekanannya makin besar."
+        },
+        {
+          "f": "Ph = ρ × h",
+          "benar": false,
+          "alasan": "Percepatan gravitasi belum dipakai."
+        }
+      ],
+      "hitung": {
+        "diketahui": "ρ = 1.000 kg/m³ · g = 10 m/s² · h = {hcm} cm = {hm} m",
+        "lhs": "Ph",
+        "ekspresi": "1.000 × 10 × {hm}",
+        "satuan": "Pa",
+        "jawaban": null,
+        "angka": "1000*10*hm",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Kedalaman masih dalam cm. Ubah dulu ke meter: bagi 100.",
+            "rumus": "1000*10*hcm"
+          }
+        ],
+        "petunjuk": "Ubah cm ke m dulu, lalu kalikan ρ × g × h.",
+        "penjelasan": "Ph = ρ × g × h."
+      }
+    },
+    {
+      "id": "k8-tk-dongkrak",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "F1",
+          "min": 50,
+          "maks": 200,
+          "langkah": 50,
+          "rumus": ""
+        }
+      ],
+      "topik": "Tekanan",
+      "judul": "Dongkrak hidrolik di bengkel",
+      "cerita": "Bengkel Pak Ali memakai dongkrak hidrolik untuk mengangkat mobil putih. Luas penampang kecil dongkrak 0,01 m² dan luas penampang besar 0,5 m². Gaya {F1} N diberikan pada penampang kecil. Berapa gaya angkat pada penampang besar?",
+      "besaran": [
+        {
+          "teks": "0,01 m²",
+          "sym": "A₁",
+          "nama": "luas penampang kecil",
+          "satuan": "m²",
+          "ket": "luas penampang kecil",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,5 m²",
+          "sym": "A₂",
+          "nama": "luas penampang besar",
+          "satuan": "m²",
+          "ket": "luas penampang besar",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "{F1} N",
+          "sym": "F₁",
+          "nama": "gaya pada penampang kecil",
+          "satuan": "N",
+          "ket": "gaya yang diberikan",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "mobil putih",
+          "ket": "warna mobil, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "gaya angkat pada penampang besar"
+      },
+      "rumus": [
+        {
+          "f": "F₂ = F₁ × A₂ ÷ A₁",
+          "benar": true,
+          "alasan": "Hukum Pascal: F₁ ÷ A₁ = F₂ ÷ A₂, jadi F₂ = F₁ × A₂ ÷ A₁."
+        },
+        {
+          "f": "F₂ = F₁ × A₁ ÷ A₂",
+          "benar": false,
+          "alasan": "Perbandingan luasnya terbalik. Penampang besar menghasilkan gaya yang lebih besar."
+        },
+        {
+          "f": "F₂ = F₁ × A₂",
+          "benar": false,
+          "alasan": "Belum dibagi luas penampang kecil."
+        }
+      ],
+      "hitung": {
+        "diketahui": "F₁ = {F1} N · A₁ = 0,01 m² · A₂ = 0,5 m²",
+        "lhs": "F₂",
+        "ekspresi": "{F1} × 0,5 ÷ 0,01",
+        "satuan": "N",
+        "jawaban": null,
+        "angka": "F1*0.5/0.01",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Perbandingan luasnya terbalik. Kalikan dengan A₂ lalu bagi dengan A₁.",
+            "rumus": "F1*0.01/0.5"
+          },
+          {
+            "nilai": null,
+            "pesan": "Belum dibagi luas penampang kecil.",
+            "rumus": "F1*0.5"
+          }
+        ],
+        "petunjuk": "Gaya dikali perbandingan luas: A₂ ÷ A₁ = 0,5 ÷ 0,01 = 50.",
+        "penjelasan": "F₂ = F₁ × A₂ ÷ A₁."
+      }
+    },
+    {
+      "id": "k8-us-meja",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "F",
+          "min": 20,
+          "maks": 100,
+          "langkah": 20,
+          "rumus": ""
+        }
+      ],
+      "topik": "Usaha dan energi",
+      "judul": "Usaha mendorong meja",
+      "cerita": "Doni mendorong meja kayu yang dibeli tahun 2019 dengan gaya {F} N sehingga meja berpindah sejauh 3 m. Berapa usaha yang dilakukan Doni?",
+      "besaran": [
+        {
+          "teks": "{F} N",
+          "sym": "F",
+          "nama": "gaya",
+          "satuan": "N",
+          "ket": "gaya dorong Doni",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "3 m",
+          "sym": "s",
+          "nama": "perpindahan",
+          "satuan": "m",
+          "ket": "jarak perpindahan meja",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "tahun 2019",
+          "ket": "tahun meja dibeli, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "usaha yang dilakukan Doni"
+      },
+      "rumus": [
+        {
+          "f": "W = F × s",
+          "benar": true,
+          "alasan": "Usaha adalah gaya dikali perpindahan yang searah gaya."
+        },
+        {
+          "f": "W = F ÷ s",
+          "benar": false,
+          "alasan": "Gaya dibagi perpindahan bukan usaha."
+        },
+        {
+          "f": "W = F + s",
+          "benar": false,
+          "alasan": "Gaya dan perpindahan dikalikan, tidak dijumlahkan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "F = {F} N · s = 3 m",
+        "lhs": "W",
+        "ekspresi": "{F} × 3",
+        "satuan": "J",
+        "jawaban": null,
+        "angka": "F*3",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu gaya dibagi perpindahan. Usaha adalah gaya dikali perpindahan.",
+            "rumus": "F/3"
+          },
+          {
+            "nilai": null,
+            "pesan": "Gaya dan perpindahan dikalikan, tidak dijumlahkan.",
+            "rumus": "F+3"
+          }
+        ],
+        "petunjuk": "Kalikan gaya dengan perpindahan.",
+        "penjelasan": "W = F × s."
+      }
+    },
+    {
+      "id": "k8-us-kelapa",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "m",
+          "min": 1,
+          "maks": 3,
+          "langkah": 0.5,
+          "rumus": ""
+        }
+      ],
+      "topik": "Usaha dan energi",
+      "judul": "Energi potensial buah kelapa",
+      "cerita": "Sebuah kelapa bermassa {m} kg tergantung pada ketinggian 8 m dari tanah. Pohon kelapa itu berumur 15 tahun. Percepatan gravitasi 10 m/s². Berapa energi potensial buah kelapa?",
+      "besaran": [
+        {
+          "teks": "{m} kg",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa buah kelapa",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "8 m",
+          "sym": "h",
+          "nama": "ketinggian",
+          "satuan": "m",
+          "ket": "ketinggian kelapa dari tanah",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "10 m/s²",
+          "sym": "g",
+          "nama": "percepatan gravitasi",
+          "satuan": "m/s²",
+          "ket": "percepatan gravitasi bumi",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "15 tahun",
+          "ket": "umur pohon, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "energi potensial buah kelapa"
+      },
+      "rumus": [
+        {
+          "f": "Ep = m × g × h",
+          "benar": true,
+          "alasan": "Energi potensial gravitasi bergantung pada massa, gravitasi, dan ketinggian."
+        },
+        {
+          "f": "Ep = ½ × m × v²",
+          "benar": false,
+          "alasan": "Ini rumus energi kinetik untuk benda yang bergerak."
+        },
+        {
+          "f": "Ep = m × h",
+          "benar": false,
+          "alasan": "Percepatan gravitasi belum dipakai."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = {m} kg · g = 10 m/s² · h = 8 m",
+        "lhs": "Ep",
+        "ekspresi": "{m} × 10 × 8",
+        "satuan": "J",
+        "jawaban": null,
+        "angka": "m*10*8",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Percepatan gravitasi belum dikalikan.",
+            "rumus": "m*8"
+          }
+        ],
+        "petunjuk": "Kalikan massa, gravitasi, dan ketinggian.",
+        "penjelasan": "Ep = m × g × h."
+      }
+    },
+    {
+      "id": "k8-us-sepeda",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "v",
+          "min": 2,
+          "maks": 6,
+          "langkah": 1,
+          "rumus": ""
+        }
+      ],
+      "topik": "Usaha dan energi",
+      "judul": "Energi kinetik sepeda",
+      "cerita": "Kakak mengendarai sepeda bernomor polisi B 1234 XY dengan kelajuan {v} m/s. Massa kakak dan sepedanya 60 kg. Berapa energi kinetik kakak dan sepedanya?",
+      "besaran": [
+        {
+          "teks": "{v} m/s",
+          "sym": "v",
+          "nama": "kelajuan",
+          "satuan": "m/s",
+          "ket": "kelajuan sepeda",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "60 kg",
+          "sym": "m",
+          "nama": "massa",
+          "satuan": "kg",
+          "ket": "massa kakak dan sepeda",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "B 1234 XY",
+          "ket": "nomor polisi, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "energi kinetik kakak dan sepedanya"
+      },
+      "rumus": [
+        {
+          "f": "Ek = ½ × m × v²",
+          "benar": true,
+          "alasan": "Energi kinetik adalah energi benda yang bergerak, sebanding dengan massa dan kuadrat kelajuan."
+        },
+        {
+          "f": "Ek = m × g × h",
+          "benar": false,
+          "alasan": "Ini rumus energi potensial untuk benda di ketinggian."
+        },
+        {
+          "f": "Ek = ½ × m × v",
+          "benar": false,
+          "alasan": "Kelajuannya harus dikuadratkan."
+        }
+      ],
+      "hitung": {
+        "diketahui": "m = 60 kg · v = {v} m/s",
+        "lhs": "Ek",
+        "ekspresi": "½ × 60 × {v}²",
+        "satuan": "J",
+        "jawaban": null,
+        "angka": "0.5*60*v*v",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Kelajuan belum dikuadratkan.",
+            "rumus": "0.5*60*v"
+          },
+          {
+            "nilai": null,
+            "pesan": "Belum dikali ½.",
+            "rumus": "60*v*v"
+          }
+        ],
+        "petunjuk": "Kuadratkan kelajuan dulu, lalu kalikan dengan ½ × m.",
+        "penjelasan": "Ek = ½ × m × v²."
+      }
+    },
+    {
+      "id": "k8-us-daya",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "W",
+          "min": 400,
+          "maks": 2000,
+          "langkah": 400,
+          "rumus": ""
+        }
+      ],
+      "topik": "Usaha dan energi",
+      "judul": "Daya pekerja bangunan",
+      "cerita": "Seorang pekerja bangunan berumur 35 tahun melakukan usaha {W} J untuk mengangkat semen dalam waktu 20 s. Berapa daya pekerja itu?",
+      "besaran": [
+        {
+          "teks": "{W} J",
+          "sym": "W",
+          "nama": "usaha",
+          "satuan": "J",
+          "ket": "usaha yang dilakukan pekerja",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "20 s",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "s",
+          "ket": "waktu yang diperlukan",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "35 tahun",
+          "ket": "umur pekerja, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "daya pekerja itu"
+      },
+      "rumus": [
+        {
+          "f": "P = W ÷ t",
+          "benar": true,
+          "alasan": "Daya adalah usaha yang dilakukan setiap satu sekon."
+        },
+        {
+          "f": "P = W × t",
+          "benar": false,
+          "alasan": "Usaha dikali waktu bukan daya."
+        },
+        {
+          "f": "P = t ÷ W",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik."
+        }
+      ],
+      "hitung": {
+        "diketahui": "W = {W} J · t = 20 s",
+        "lhs": "P",
+        "ekspresi": "{W} ÷ 20",
+        "satuan": "W",
+        "jawaban": null,
+        "angka": "W/20",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu usaha dikali waktu. Daya adalah usaha dibagi waktu.",
+            "rumus": "W*20"
+          }
+        ],
+        "petunjuk": "Bagi usaha dengan waktu.",
+        "penjelasan": "P = W ÷ t."
+      }
+    },
+    {
+      "id": "k8-us-linggis",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "w",
+          "min": 500,
+          "maks": 1500,
+          "langkah": 250,
+          "rumus": ""
+        }
+      ],
+      "topik": "Usaha dan energi",
+      "judul": "Mengungkit batu dengan linggis",
+      "cerita": "Pak Tani memakai linggis sepanjang 1,2 m untuk mengungkit batu seberat {w} N. Lengan beban 0,2 m dan lengan kuasa 1 m. Berapa gaya kuasa yang diperlukan?",
+      "besaran": [
+        {
+          "teks": "{w} N",
+          "sym": "w",
+          "nama": "berat beban",
+          "satuan": "N",
+          "ket": "berat batu",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "0,2 m",
+          "sym": "lb",
+          "nama": "lengan beban",
+          "satuan": "m",
+          "ket": "jarak beban ke titik tumpu",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "1 m",
+          "sym": "lk",
+          "nama": "lengan kuasa",
+          "satuan": "m",
+          "ket": "jarak kuasa ke titik tumpu",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "1,2 m",
+          "ket": "panjang seluruh linggis, tidak dipakai menghitung. Yang dipakai lengan beban dan lengan kuasa."
+        }
+      ],
+      "tanya": {
+        "teks": "gaya kuasa yang diperlukan"
+      },
+      "rumus": [
+        {
+          "f": "F = w × lb ÷ lk",
+          "benar": true,
+          "alasan": "Tuas seimbang: w × lb = F × lk, jadi F = w × lb ÷ lk."
+        },
+        {
+          "f": "F = w × lk ÷ lb",
+          "benar": false,
+          "alasan": "Lengannya tertukar. Lengan kuasa yang panjang membuat gaya lebih kecil."
+        },
+        {
+          "f": "F = w ÷ lb",
+          "benar": false,
+          "alasan": "Lengan kuasa belum dipakai."
+        }
+      ],
+      "hitung": {
+        "diketahui": "w = {w} N · lb = 0,2 m · lk = 1 m",
+        "lhs": "F",
+        "ekspresi": "{w} × 0,2 ÷ 1",
+        "satuan": "N",
+        "jawaban": null,
+        "angka": "w*0.2/1",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Lengannya tertukar. Kalikan dengan lengan beban, lalu bagi dengan lengan kuasa.",
+            "rumus": "w*1/0.2"
+          }
+        ],
+        "petunjuk": "Kalikan berat beban dengan lengan beban, lalu bagi dengan lengan kuasa.",
+        "penjelasan": "F = w × lb ÷ lk."
+      }
+    },
+    {
+      "id": "k8-gl-bandul",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "n",
+          "min": 20,
+          "maks": 50,
+          "langkah": 10,
+          "rumus": ""
+        }
+      ],
+      "topik": "Getaran dan gelombang",
+      "judul": "Frekuensi bandul",
+      "cerita": "Sebuah bandul dengan tali sepanjang 50 cm berayun sebanyak {n} kali getaran dalam waktu 10 s. Berapa frekuensi bandul?",
+      "besaran": [
+        {
+          "teks": "{n} kali",
+          "sym": "n",
+          "nama": "jumlah getaran",
+          "satuan": "kali",
+          "ket": "banyaknya getaran",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "10 s",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "s",
+          "ket": "waktu berayun",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "50 cm",
+          "ket": "panjang tali, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "frekuensi bandul"
+      },
+      "rumus": [
+        {
+          "f": "f = n ÷ t",
+          "benar": true,
+          "alasan": "Frekuensi adalah banyaknya getaran setiap satu sekon."
+        },
+        {
+          "f": "f = t ÷ n",
+          "benar": false,
+          "alasan": "Ini rumus periode, yaitu waktu untuk satu getaran."
+        },
+        {
+          "f": "f = n × t",
+          "benar": false,
+          "alasan": "Getaran dibagi waktu, tidak dikali."
+        }
+      ],
+      "hitung": {
+        "diketahui": "n = {n} · t = 10 s",
+        "lhs": "f",
+        "ekspresi": "{n} ÷ 10",
+        "satuan": "Hz",
+        "jawaban": null,
+        "angka": "n/10",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu periode (t ÷ n). Frekuensi adalah n ÷ t.",
+            "rumus": "10/n"
+          }
+        ],
+        "petunjuk": "Bagi jumlah getaran dengan waktu.",
+        "penjelasan": "f = n ÷ t."
+      }
+    },
+    {
+      "id": "k8-gl-ayunan",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "t",
+          "min": 10,
+          "maks": 40,
+          "langkah": 10,
+          "rumus": ""
+        }
+      ],
+      "topik": "Getaran dan gelombang",
+      "judul": "Periode ayunan anak",
+      "cerita": "Adik bermain ayunan di taman bermain bersama 3 temannya. Ayunan itu bergetar 20 kali dalam waktu {t} s. Berapa periode ayunan?",
+      "besaran": [
+        {
+          "teks": "20 kali",
+          "sym": "n",
+          "nama": "jumlah getaran",
+          "satuan": "kali",
+          "ket": "banyaknya getaran",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "{t} s",
+          "sym": "t",
+          "nama": "waktu",
+          "satuan": "s",
+          "ket": "waktu berayun",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "3 temannya",
+          "ket": "jumlah teman, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "periode ayunan"
+      },
+      "rumus": [
+        {
+          "f": "T = t ÷ n",
+          "benar": true,
+          "alasan": "Periode adalah waktu yang diperlukan untuk satu kali getaran."
+        },
+        {
+          "f": "T = n ÷ t",
+          "benar": false,
+          "alasan": "Ini rumus frekuensi, bukan periode."
+        },
+        {
+          "f": "T = n × t",
+          "benar": false,
+          "alasan": "Waktu dibagi jumlah getaran, tidak dikali."
+        }
+      ],
+      "hitung": {
+        "diketahui": "n = 20 · t = {t} s",
+        "lhs": "T",
+        "ekspresi": "{t} ÷ 20",
+        "satuan": "s",
+        "jawaban": null,
+        "angka": "t/20",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu frekuensi (n ÷ t). Periode adalah t ÷ n.",
+            "rumus": "20/t"
+          }
+        ],
+        "petunjuk": "Bagi waktu dengan jumlah getaran.",
+        "penjelasan": "T = t ÷ n."
+      }
+    },
+    {
+      "id": "k8-gl-kolam",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "l",
+          "min": 0.5,
+          "maks": 2.5,
+          "langkah": 0.5,
+          "rumus": ""
+        }
+      ],
+      "topik": "Getaran dan gelombang",
+      "judul": "Cepat rambat gelombang di kolam",
+      "cerita": "Sebuah batu dilempar ke kolam pada pagi hari. Gelombang di permukaan air memiliki panjang gelombang {l} m dan frekuensi 2 Hz. Berapa cepat rambat gelombang itu?",
+      "besaran": [
+        {
+          "teks": "{l} m",
+          "sym": "λ",
+          "nama": "panjang gelombang",
+          "satuan": "m",
+          "ket": "panjang satu gelombang",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "2 Hz",
+          "sym": "f",
+          "nama": "frekuensi",
+          "satuan": "Hz",
+          "ket": "frekuensi gelombang",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "pagi hari",
+          "ket": "waktu melempar batu, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "cepat rambat gelombang itu"
+      },
+      "rumus": [
+        {
+          "f": "v = λ × f",
+          "benar": true,
+          "alasan": "Cepat rambat gelombang sama dengan panjang gelombang dikali frekuensi."
+        },
+        {
+          "f": "v = λ ÷ f",
+          "benar": false,
+          "alasan": "Panjang gelombang dikali frekuensi, tidak dibagi."
+        },
+        {
+          "f": "v = f ÷ λ",
+          "benar": false,
+          "alasan": "Ini bukan rumus cepat rambat."
+        }
+      ],
+      "hitung": {
+        "diketahui": "λ = {l} m · f = 2 Hz",
+        "lhs": "v",
+        "ekspresi": "{l} × 2",
+        "satuan": "m/s",
+        "jawaban": null,
+        "angka": "l*2",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu panjang gelombang dibagi frekuensi. Yang benar dikali.",
+            "rumus": "l/2"
+          }
+        ],
+        "petunjuk": "Kalikan panjang gelombang dengan frekuensi.",
+        "penjelasan": "v = λ × f."
+      }
+    },
+    {
+      "id": "k8-gl-tali",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "v",
+          "min": 2,
+          "maks": 10,
+          "langkah": 2,
+          "rumus": ""
+        }
+      ],
+      "topik": "Getaran dan gelombang",
+      "judul": "Panjang gelombang pada tali",
+      "cerita": "Dina menggetarkan ujung tali merah dengan frekuensi 4 Hz. Gelombang merambat pada tali dengan cepat rambat {v} m/s. Berapa panjang gelombang pada tali?",
+      "besaran": [
+        {
+          "teks": "4 Hz",
+          "sym": "f",
+          "nama": "frekuensi",
+          "satuan": "Hz",
+          "ket": "frekuensi getaran tali",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "{v} m/s",
+          "sym": "v",
+          "nama": "cepat rambat",
+          "satuan": "m/s",
+          "ket": "cepat rambat gelombang",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "tali merah",
+          "ket": "warna tali, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "panjang gelombang pada tali"
+      },
+      "rumus": [
+        {
+          "f": "λ = v ÷ f",
+          "benar": true,
+          "alasan": "Dari v = λ × f, panjang gelombang sama dengan cepat rambat dibagi frekuensi."
+        },
+        {
+          "f": "λ = v × f",
+          "benar": false,
+          "alasan": "Cepat rambat dikali frekuensi tidak menghasilkan panjang gelombang."
+        },
+        {
+          "f": "λ = f ÷ v",
+          "benar": false,
+          "alasan": "Pembagiannya terbalik."
+        }
+      ],
+      "hitung": {
+        "diketahui": "v = {v} m/s · f = 4 Hz",
+        "lhs": "λ",
+        "ekspresi": "{v} ÷ 4",
+        "satuan": "m",
+        "jawaban": null,
+        "angka": "v/4",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu cepat rambat dikali frekuensi. Panjang gelombang adalah v ÷ f.",
+            "rumus": "v*4"
+          }
+        ],
+        "petunjuk": "Bagi cepat rambat dengan frekuensi.",
+        "penjelasan": "λ = v ÷ f."
+      }
+    },
+    {
+      "id": "k8-gl-sonar",
+      "kelas": "8",
+      "variasi": [
+        {
+          "nama": "t",
+          "min": 2,
+          "maks": 6,
+          "langkah": 1,
+          "rumus": ""
+        }
+      ],
+      "topik": "Getaran dan gelombang",
+      "judul": "Mengukur kedalaman laut",
+      "cerita": "Kapal nelayan yang membawa 25 awak mengirim bunyi ke dasar laut. Bunyi pantulnya diterima kembali setelah {t} s. Cepat rambat bunyi di air laut 1.500 m/s. Berapa kedalaman laut di tempat itu?",
+      "besaran": [
+        {
+          "teks": "{t} s",
+          "sym": "t",
+          "nama": "waktu pantul",
+          "satuan": "s",
+          "ket": "waktu bunyi pergi dan kembali",
+          "konv": "",
+          "catatan": ""
+        },
+        {
+          "teks": "1.500 m/s",
+          "sym": "v",
+          "nama": "cepat rambat bunyi",
+          "satuan": "m/s",
+          "ket": "cepat rambat bunyi di air laut",
+          "konv": "",
+          "catatan": ""
+        }
+      ],
+      "pengecoh": [
+        {
+          "teks": "25 awak",
+          "ket": "jumlah awak kapal, tidak dipakai menghitung"
+        }
+      ],
+      "tanya": {
+        "teks": "kedalaman laut di tempat itu"
+      },
+      "rumus": [
+        {
+          "f": "d = v × t ÷ 2",
+          "benar": true,
+          "alasan": "Bunyi menempuh jalan pergi dan pulang, jadi jaraknya dibagi 2."
+        },
+        {
+          "f": "d = v × t",
+          "benar": false,
+          "alasan": "Ini jarak pergi-pulang. Kedalaman hanya setengahnya."
+        },
+        {
+          "f": "d = v ÷ t",
+          "benar": false,
+          "alasan": "Cepat rambat dikali waktu, tidak dibagi."
+        }
+      ],
+      "hitung": {
+        "diketahui": "v = 1.500 m/s · t = {t} s",
+        "lhs": "d",
+        "ekspresi": "1.500 × {t} ÷ 2",
+        "satuan": "m",
+        "jawaban": null,
+        "angka": "1500*t/2",
+        "salah": [
+          {
+            "nilai": null,
+            "pesan": "Itu jarak pergi-pulang. Bagi 2 untuk mendapat kedalamannya.",
+            "rumus": "1500*t"
+          }
+        ],
+        "petunjuk": "Kalikan cepat rambat dengan waktu, lalu bagi 2 karena bunyi pergi dan kembali.",
+        "penjelasan": "d = v × t ÷ 2."
       }
     }
   ]
