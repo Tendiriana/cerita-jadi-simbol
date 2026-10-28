@@ -120,7 +120,7 @@ Di **Soal saya**, ketuk **Ubah cerita** untuk mengganti cerita dengan konteks se
 
 ### AI
 
-AI tidak lagi menulis rumus atau menghitung jawaban. AI hanya **memilih rumus dari daftar aplikasi, memilih angka, dan menulis cerita**. Rumus, pilihan jawaban, dan jawaban dirakit oleh aplikasi, jadi tidak bisa salah. Kalau cerita dari AI belum lolos pemeriksaan, aplikasi meminta AI memperbaikinya secara otomatis.
+Untuk rumus yang ada di daftar aplikasi, AI hanya **memilih rumus, memilih angka, dan menulis cerita**. Rumus, pilihan jawaban, dan jawaban dirakit oleh aplikasi, jadi tidak bisa salah. Untuk rumus yang tidak ada di daftar, misalnya gaya Coulomb, AI menulis **soal lengkap**. Soal itu tetap diperiksa dan jawabannya dihitung ulang oleh aplikasi sebelum bisa ditambahkan. Kalau soal dari AI belum lolos pemeriksaan, aplikasi meminta AI memperbaikinya secara otomatis.
 
 - Di **Tambah soal**: tombol **✨ Tuliskan dengan AI** menulis cerita untuk rumus yang dipilih. Tema boleh diisi, misalnya "kipas angin di masjid".
 - Di **Lainnya → ✨ Ngobrol dengan AI**: minta beberapa soal sekaligus dengan kata-kata biasa, misalnya "Buat 3 soal hukum Ohm tentang alat listrik di rumah".

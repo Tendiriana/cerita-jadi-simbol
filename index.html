@@ -2069,7 +2069,7 @@ function aiAsk(text,auto){
       if(res.status===401){adminOK=false;loginErr='PIN sudah berubah. Masuk lagi dengan PIN terbaru.';}
       render();return;}
     if(typeof res.j.sisa==='number')aiSisa=res.j.sisa;
-    var ex=aiExtract(res.j.balasan),msg={role:'assistant',content:res.j.balasan,teks:ex.teks,soal:(ex.list||[]).slice(0,3).map(function(raw){return raw&&raw.templat?aiDariTemplat(raw):aiCheck(raw);}),rusak:ex.rusak};
+    var ex=aiExtract(res.j.balasan),msg={role:'assistant',content:res.j.balasan,teks:ex.teks,soal:(ex.list||[]).slice(0,3).map(function(raw){return raw&&raw.templat?aiDariTemplat(raw):aiCheck(raw&&raw.lengkap&&typeof raw.lengkap==='object'?raw.lengkap:raw);}),rusak:ex.rusak};
     aiChat.push(msg);
     var bad=msg.soal.filter(function(x){return x.errs.length;});
     if(!auto&&(ex.rusak||bad.length)){
@@ -2085,7 +2085,7 @@ function aiSoalHtml(x,mi,si){
   var s=x.s,ok=!x.errs.length,inst=ok?instanceOf(s):s,f=s.rumus.filter(function(r){return r.benar;})[0];
   var h='<div class="ai-soal'+(ok?'':' bad')+'"><div class="mh"><b>'+esc(s.judul||'Tanpa judul')+'</b><span class="pill">'+esc(s.topik||'-')+'</span></div>'
     +'<p class="ai-cerita">'+esc(inst.cerita)+'</p>'
-    +'<p class="mut" style="margin:6px 0 0">Rumus: <b class="mono">'+esc(f?f.f:'-')+'</b>'+(ok?' · Contoh jawaban: <b>'+fmt(inst.hitung.jawaban)+' '+esc(s.hitung.satuan)+'</b>':'')+(s.variasi.length?' · angka berubah tiap dibuka':'')+'</p>';
+    +'<p class="mut" style="margin:6px 0 0">Rumus: <b class="mono">'+esc(f?f.f:'-')+'</b>'+(ok?' · Contoh jawaban: <b>'+fmtNum(inst.hitung.jawaban)+' '+esc(s.hitung.satuan)+'</b>':'')+(s.variasi.length?' · angka berubah tiap dibuka':'')+'</p>';
   if(s.pengecoh.length)h+='<p class="mut" style="margin:4px 0 0">Pengecoh: '+s.pengecoh.map(function(d){return esc(d.teks);}).join(', ')+'</p>';
   x.note.forEach(function(n){h+=msgHtml({t:'info',x:n});});
   if(!ok)h+='<div class="fb bad" role="status"><b>Belum lolos pemeriksaan</b><ul class="ai-err">'+x.errs.slice(0,6).map(function(e){return '<li>'+esc(e)+'</li>';}).join('')+'</ul></div>'
@@ -2096,7 +2096,7 @@ function aiSoalHtml(x,mi,si){
 }
 function aiHtml(){
   var h='<section class="card"><div class="sh"><h2>Buat soal dengan AI</h2>'+(aiSisa!=null?'<span class="stt">sisa '+aiSisa+' hari ini</span>':'')+'</div>'
-    +'<p class="mut">Ceritakan soal yang kamu mau, seperti mengobrol. AI memilih rumus dari daftar rumus aplikasi dan menulis ceritanya. Rumus dan jawaban dirakit serta dihitung oleh aplikasi, jadi tidak bisa salah hitung.</p></section>';
+    +'<p class="mut">Ceritakan soal yang kamu mau, seperti mengobrol. Untuk rumus yang ada di daftar aplikasi, AI cukup menulis cerita dan aplikasi yang merakit serta menghitung jawabannya. Untuk rumus lain, AI menulis soal lengkap, lalu aplikasi memeriksa dan menghitung ulang jawabannya sebelum bisa ditambahkan.</p></section>';
   var vis=aiChat.filter(function(m){return !m.auto;});
   if(!aiChat.length){
     h+='<p class="lbl" style="margin-top:14px">Contoh permintaan</p><div class="ai-saran">'+AISARAN.map(function(t,i){return '<button class="chip" data-act="ai-saran" data-v="'+i+'">'+esc(t)+'</button>';}).join('')+'</div>';
@@ -2645,7 +2645,7 @@ function aiKatalog(k){
     return T.id+' | Kelas '+T.k+' · '+T.t+' | '+T.n+' | '+T.f+' | angka: '+T.v.map(function(v){return v[0]+' = '+v[2]+' ('+v[3]+'), contoh '+fmtNum(v[4]);}).join('; ');
   }).join('\n');
 }
-var AI_ATURAN='Aturan wajib:\n- Pilih templat dari DAFTAR TEMPLAT (pakai id persis). Jangan membuat rumus sendiri.\n- Isi "nilai" untuk setiap angka templat. Pakai angka yang masuk akal dan jawabannya bulat atau paling banyak 2 angka desimal.\n- "cerita": cerita soal bahasa Indonesia yang dekat dengan kehidupan siswa SMP di Indonesia, 2–4 kalimat. Semua angka dari "nilai" harus tertulis di cerita beserta satuannya, misalnya "220 V". Tambahkan satu pengecoh berupa angka yang tidak dipakai (harga, jam, jumlah orang). Akhiri dengan pertanyaan "Berapa …?".\n- Jangan menulis rumus atau jawaban di cerita.\n- Balas dengan kalimat singkat untuk guru, lalu satu blok ```json berisi {"soal":[{"templat":"id","judul":"...","cerita":"...","nilai":{"kunci":angka},"acak":true}]}. Paling banyak 3 soal.';
+var AI_ATURAN='Aturan wajib:\n- Kalau ada templat yang cocok di DAFTAR TEMPLAT, pakai templat (id persis) dan isi "nilai" untuk setiap angkanya. Jangan membuat rumus sendiri untuk soal yang ada templatnya.\n- Kalau tidak ada templat yang cocok, tulis SOAL LENGKAP (lihat format di bawah) di kolom "lengkap" dan kosongkan "templat".\n- "cerita": cerita soal bahasa Indonesia yang dekat dengan kehidupan siswa SMP di Indonesia, 2–4 kalimat. Semua angka yang dipakai menghitung harus tertulis di cerita beserta satuannya, misalnya "220 V". Tambahkan satu pengecoh berupa angka yang tidak dipakai (harga, jam, jumlah orang). Akhiri dengan pertanyaan "Berapa …?". Pakai angka yang jawabannya bulat atau paling banyak 2 angka desimal.\n- Jangan menulis rumus atau jawaban di cerita.\n- Balas dengan kalimat singkat untuk guru, lalu satu blok ```json berisi {"soal":[{"templat":"id","judul":"...","cerita":"...","nilai":{"kunci":angka},"acak":true}]}. Paling banyak 3 soal.\n\nFORMAT SOAL LENGKAP (hanya kalau tidak ada templat): {"templat":"","lengkap":{"kelas":"9","topik":"Listrik","judul":"...","cerita":"...","besaran":[{"teks":"teks angka persis di cerita, mis. 2 μC","sym":"q","nama":"muatan","satuan":"C","ket":"penjelasan singkat","konv":"= 0,000002 C (kalau satuan diubah)"}],"pengecoh":[{"teks":"teks persis di cerita","ket":"kenapa tidak dipakai"}],"tanya":{"teks":"potongan kalimat tanya persis di cerita, tanpa kata Berapa"},"rumus":[{"f":"rumus benar","benar":true,"alasan":"..."},{"f":"rumus keliru","benar":false,"alasan":"..."},{"f":"rumus keliru","benar":false,"alasan":"..."}],"hitung":{"diketahui":"q = 2 μC · r = 3 m","lhs":"F","ekspresi":"perhitungan dengan angka, pakai × ÷ dan kurung","satuan":"N","jawaban":angka,"salah":[{"nilai":angka,"pesan":"jawaban keliru yang sering muncul dan petunjuknya"}],"petunjuk":"...","penjelasan":"..."}}}. Setiap "teks" harus ada persis di cerita dan tidak boleh bertumpukan. Simbol besaran tidak boleh dipakai dua kali.';
 function aiPesanAwal(text,k){return text+'\n\n'+AI_ATURAN+'\n\nDAFTAR TEMPLAT (id | kelas · materi | nama | rumus | angka):\n'+aiKatalog(k);}
 function aiNilai(n){var o={};if(Array.isArray(n))n.forEach(function(x){if(x&&x.k!=null)o[x.k]=x.v;});else if(n&&typeof n==='object')for(var k in n)o[k]=n[k];return o;}
 function aiDariTemplat(raw){
@@ -2913,7 +2913,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.2.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.2.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
