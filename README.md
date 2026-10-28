@@ -100,7 +100,10 @@ Menu guru berisi 4 tombol besar:
 | **➕ Tambah soal** | Pilih rumus, isi angka, tulis cerita. Selesai. |
 | **📚 Soal saya** | Daftar soal per kelas: coba, ubah cerita, hapus, urutkan |
 | **📺 Tampil di kelas** | Bahas soal di proyektor atau TV |
-| **⚙️ Pengaturan kelas** | Kunci kelas (7, 8, 9) atau materi tertentu, dan ganti PIN |
+| **⚙️ Pengaturan kelas** | Kunci kelas (7, 8, 9) atau materi tertentu, ganti PIN, dan alamat server tambahan |
+| **📝 Ujian kelas** | Buat ujian berkode, pantau siswa, kumpulkan jawaban, dan beri nilai |
+
+Tombol **⋮** di kanan atas berisi **Cara pakai**: panduan guru di mode guru, dan panduan siswa di halaman siswa.
 
 Di atas layar selalu ada keterangan **✓ Semua soal sudah terkirim ke siswa**. Setiap soal yang disimpan, diubah, atau dihapus **langsung terkirim** ke siswa. Tidak ada langkah kirim yang terpisah.
 
@@ -113,6 +116,24 @@ Di atas layar selalu ada keterangan **✓ Semua soal sudah terkirim ke siswa**. 
 5. Ketuk **Coba seperti siswa** untuk melihat hasilnya, lalu **Simpan & kirim ke siswa**.
 
 Rumusnya tidak ada di daftar? Pakai **formulir lengkap** (tautan di bawah daftar rumus, atau tombol **Formulir** di Soal saya).
+
+Untuk membuat soal yang perlu konversi satuan, pilih satuan lain di samping angka, misalnya **g** untuk massa, **menit** atau **jam** untuk waktu, **cm** untuk panjang, atau **mA** untuk arus. Aplikasi otomatis menambahkan langkah konversi (contoh: 200 g = 0,2 kg), tips di kotak besaran, dan pesan khusus kalau siswa lupa mengubah satuan.
+
+### Ujian kelas
+
+1. **Ujian kelas → Buat ujian baru.** Isi judul, pilih kelas dan materi (boleh lebih dari satu), jumlah soal, dan lama ujian.
+2. Atur aturannya:
+   - tingkat bantuan (bawaan: Sulit),
+   - acak urutan soal,
+   - boleh melewati soal,
+   - tampilkan skor ke siswa setelah selesai.
+3. Ketuk **Buat & bagikan**. Muncul **kode ujian** 6 huruf. Bagikan lewat WhatsApp atau tulis di papan.
+4. Siswa membuka **Ujian dari guru** (di beranda, di bawah Latihan cepat), mengisi kode dan nama, lalu mengerjakan. Waktu setiap siswa berjalan sejak ia mengetuk Mulai ujian.
+5. Jawaban tersimpan setiap kali satu soal selesai. Jawaban terkumpul otomatis saat waktu habis, saat siswa mengakhiri ujian, atau saat guru menekan **Tutup ujian**. Kalau HP siswa tertutup, ujian bisa dilanjutkan.
+6. Daftar siswa diperbarui setiap 15 detik. Ketuk nama siswa untuk melihat jawabannya per soal (jawaban siswa, kunci, jumlah kesalahan, waktu) dan memberi **nilai akhir**. Nilai saran sudah dihitung otomatis.
+7. **Salin daftar nilai** untuk ditempel ke WhatsApp atau Excel. **Hapus lembar kerja** membuat siswa itu boleh mengulang.
+
+Ujian kelas memerlukan **server ujian** (lihat *Server ujian* di bawah).
 
 ### Ubah cerita soal
 
@@ -144,6 +165,18 @@ Soal dikirim lewat server Cloudflare (`server/worker.js`), jadi guru tidak perlu
 
 - **Buat dengan AI**: di mode guru, guru menulis permintaan soal seperti mengobrol. AI (Cloudflare Workers AI, gratis dengan kuota harian) menyusun soal lengkap, aplikasi memeriksa dan menghitung ulang jawabannya, lalu guru menekan **Tambahkan & kirim ke siswa**. Batas 40 permintaan per kode kelas per hari.
 
+### Server ujian
+
+`server/ujian-worker.js` adalah server terpisah yang menyimpan ujian dan jawaban siswa di database D1 Cloudflare. Gratis sampai 100.000 penulisan per hari. Server soal yang sudah berjalan tidak perlu diubah.
+
+1. Dasbor Cloudflare: **Storage & Databases → D1 → Create**, beri nama `taktik-ujian`.
+2. **Workers & Pages → Create → Worker**, beri nama `taktik-ujian`, lalu **Deploy**. Ketuk **Edit code**, tempel seluruh isi `server/ujian-worker.js`, lalu **Deploy**.
+3. Di worker itu: **Settings → Bindings → Add → D1 database**, nama variabel `DB`, pilih database `taktik-ujian`.
+4. Salin alamat worker, misalnya `https://taktik-ujian.<nama>.workers.dev`.
+5. Di aplikasi: mode guru → **Pengaturan kelas → Server tambahan**, tempel alamatnya, lalu ketuk **Periksa & simpan**. Alamat itu ikut terkirim ke semua HP siswa.
+
+Tabel database dibuat otomatis saat server pertama kali dipakai. Server AI juga bisa disambungkan lewat kolom yang sama.
+
 ### Server AI (Claude)
 
 `server/ai-worker.js` adalah server terpisah khusus untuk AI. Server soal yang sudah berjalan tidak perlu diubah, karena PIN guru dicek ke server soal lewat `/login`.
@@ -152,7 +185,7 @@ Soal dikirim lewat server Cloudflare (`server/worker.js`), jadi guru tidak perlu
 2. Di dasbor Cloudflare: **Workers & Pages → Create → Worker**, beri nama `taktik-ai`, ketuk **Deploy**, lalu **Edit code**. Tempel seluruh isi `server/ai-worker.js` dan ketuk **Deploy**.
 3. Buka **Settings → Variables and Secrets**, tambahkan secret `ANTHROPIC_API_KEY` berisi kunci dari langkah 1.
 4. (Opsional) Tambahkan binding KV bernama `DB` supaya kuota 40 permintaan per hari per kelas berlaku.
-5. Salin alamat worker, misalnya `https://taktik-ai.<nama>.workers.dev`, lalu isi di `index.html` pada `AI_URL=''`.
+5. Salin alamat worker, misalnya `https://taktik-ai.<nama>.workers.dev`, lalu tempel di mode guru → **Pengaturan kelas → Server tambahan**.
 
 Model bawaan adalah `claude-opus-5-5` (kualitas terbaik). Untuk biaya lebih murah, isi variabel `CLAUDE_MODEL`, misalnya `claude-sonnet-5-5` atau `claude-haiku-5-5`.
 
