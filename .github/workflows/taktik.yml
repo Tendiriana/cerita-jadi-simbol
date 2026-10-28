@@ -2,10 +2,10 @@ name: Build TakTik IPA APK
 
 on:
   push:
+    # APK baru hanya dibuat kalau bagian Android berubah. Isi aplikasi (index.html, soal.json)
+    # diambil dari web dan ter-update sendiri tanpa APK baru.
     paths:
       - 'taktik/**'
-      - 'index.html'
-      - 'soal.json'
       - '.github/workflows/taktik.yml'
   workflow_dispatch:
 

@@ -199,6 +199,7 @@ details.fold[open] summary{margin-bottom:10px}
 .prog{background:var(--acc);color:var(--acc-ink);border-color:transparent;padding:18px}
 .prog-top{display:flex;flex-wrap:wrap;gap:6px}
 .prog .pill{background:color-mix(in srgb,var(--acc-ink) 16%,transparent);color:var(--acc-ink)}
+.prog-day{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;margin:12px 0 0;font-size:.92rem;font-weight:600}
 .prog-n{margin:16px 0 10px;font-size:1rem;font-weight:600;line-height:1.3}
 .prog-n b{font-size:2.6rem;font-weight:800;letter-spacing:-.03em;line-height:1;margin-right:4px}
 .bar-p{display:block;height:8px;border-radius:8px;background:var(--line);overflow:hidden}
@@ -294,6 +295,7 @@ details.fold[open] summary{margin-bottom:10px}
 .toast{margin:0 0 10px}
 .upd{display:flex;align-items:center;gap:12px;justify-content:space-between;margin:0 0 14px;padding:12px 14px;border-radius:14px;background:var(--acc-soft);border:1px solid var(--acc)}
 .upd span{font-size:.97rem}
+.baru{border-color:var(--acc)}
 a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 .eq.big{font-size:1.2rem;font-weight:600;margin:2px 0 0}
 .kr-list{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:4px}
@@ -613,6 +615,19 @@ function choosePin(){
 var view='home',cur=null,cp=null,RS={},sel=null,fk=null,scrollTo=null,previewFrom=null;
 var adminOK=false,adminTab='list',D=null,editId=null,formErr=null,notice=null,confirmKey=null,loginErr=false;
 var impText='',impMode='tambah',selectExport=false;
+/* target harian dan hari beruntun */
+var HARIKEY='cjs.hari',TARGET=3;
+function tglIni(d){d=d||new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+function hariNow(){
+  var o=jget(HARIKEY,{t:'',n:0,b:0}),now=tglIni(),kem=tglIni(new Date(Date.now()-864e5));
+  return {n:o.t===now?(+o.n||0):0,b:(o.t===now||o.t===kem)?(+o.b||0):0,t:o.t};
+}
+function hariTambah(){
+  var o=jget(HARIKEY,{t:'',n:0,b:0}),now=tglIni(),kem=tglIni(new Date(Date.now()-864e5));
+  if(o.t!==now){o.b=o.t===kem?(+o.b||0)+1:1;o.n=0;o.t=now;}
+  o.n=(+o.n||0)+1;store.set(HARIKEY,JSON.stringify(o));
+  return o.n;
+}
 var tingkat=(function(){var v=store.get('cjs.tingkat');return ['mudah','menengah','sulit'].indexOf(v)>=0?v:'menengah';})();
 var kelasSel=(function(){var v=store.get('cjs.kelas');return ['7','8','9'].indexOf(v)>=0?v:'9';})();
 
@@ -757,7 +772,8 @@ function onCheck(){
   if(isNaN(v)){st.calcMsg={t:'bad',x:'Tulis angkanya saja, contoh 12,5.'};return;}
   if(Math.abs(v-c.ans)<=Math.max(1e-6,Math.abs(c.ans)*0.005)){
     st.solved=true;st.calcMsg={t:'ok',x:c.explain||'Jawabanmu benar.'};
-    if(cur!=='__prev'){done[cur]=1;saveDone();}
+    if(cur!=='__prev'){done[cur]=1;saveDone();
+      var nh=hariTambah();if(nh===TARGET)st.calcMsg.x+=' 🎯 Target hari ini tercapai: '+TARGET+' soal!';}
     celebrate=true;trackWeak();afterSolve();
     try{if(navigator.vibrate)navigator.vibrate(35);}catch(e){}
     return;
@@ -828,10 +844,16 @@ function themeBtnHtml(){
 }
 var LOGO='<svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#0F6E6A"/><path d="M15 13h34a7 7 0 0 1 7 7v17a7 7 0 0 1-7 7H31.5L22 51.5V44h-7a7 7 0 0 1-7-7V20a7 7 0 0 1 7-7z" fill="#FFFFFF"/> <rect x="14" y="19.5" width="25" height="4" rx="2" fill="#B9CFCC"/> <rect x="14" y="29" width="14" height="8.5" rx="4.25" fill="#FFD84A"/> <rect x="31" y="30.6" width="6" height="2.1" rx="1.05" fill="#0F6E6A"/> <rect x="31" y="34" width="6" height="2.1" rx="1.05" fill="#0F6E6A"/> <rect x="40" y="26.5" width="11" height="13.5" rx="3.5" fill="#0F6E6A"/> <path d="M42.8 30.3l5.4 6.2M48.2 30.3l-5.4 6.2" stroke="#FFD84A" stroke-width="2.3" stroke-linecap="round"/></svg>';
 function brandHtml(title,sub){return '<div class="brand">'+LOGO+'<div><b>'+title+'</b><small>'+sub+'</small></div></div>';}
+var HERO={
+  '7':{a:'Rina bersepeda sejauh ',t1:'300 m',m:' dalam waktu ',t2:'100 s',z:'.',s1:'s',s2:'t'},
+  '8':{a:'Kotak seberat ',t1:'300 N',m:' menekan lantai seluas ',t2:'0,5 m²',z:'.',s1:'F',s2:'A'},
+  '9':{a:'Setrika berhambatan ',t1:'40 Ω',m:' dipasang pada tegangan ',t2:'220 V',z:'.',s1:'R',s2:'V'}
+};
 function heroHtml(){
+  var x=HERO[kelasSel]||HERO['9'];
   return '<h1>Ubah cerita jadi simbol.</h1><p class="lede">Pilah angka di soal, kenali materinya, pilih rumus, lalu hitung.</p>'
-    +'<div class="hero" aria-label="Contoh"><p class="hero-s">Setrika berhambatan <span class="tk" style="--c:var(--q1)">40 Ω</span> dipasang pada tegangan <span class="tk" style="--c:var(--q2)">220 V</span>.</p>'
-    +'<p class="hero-sym"><span style="--c:var(--q1)"><b>R</b> = 40 Ω</span><span style="--c:var(--q2)"><b>V</b> = 220 V</span></p></div>';
+    +'<div class="hero" aria-label="Contoh"><p class="hero-s">'+x.a+'<span class="tk" style="--c:var(--q1)">'+x.t1+'</span>'+x.m+'<span class="tk" style="--c:var(--q2)">'+x.t2+'</span>'+x.z+'</p>'
+    +'<p class="hero-sym"><span style="--c:var(--q1)"><b>'+x.s1+'</b> = '+x.t1+'</span><span style="--c:var(--q2)"><b>'+x.s2+'</b> = '+x.t2+'</span></p></div>';
 }
 function topHtml(){
   if(view==='admin'){
@@ -870,11 +892,20 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
+var BARU={'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+function baruHtml(){
+  if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
+  return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
+    +'<div class="row"><button class="btn sm" data-act="baru-tutup" data-fk="baru-tutup">Oke, mengerti</button></div></section>';
+}
 function homeHtml(){
-  var list=kelasList(),nd=list.filter(function(s){return done[s.id];}).length,tot=list.length,h='';
+  var list=kelasList(),nd=list.filter(function(s){return done[s.id];}).length,tot=list.length,h=baruHtml();
   if(!Object.keys(done).length)h+=heroHtml();
   h+='<section class="card prog"><div class="prog-top"><span class="pill">Kelas '+esc(kelasSel)+'</span><span class="pill">Tingkat '+TL[tingkat]+'</span>'
     +(streak?'<span class="pill">'+streak+' soal lancar berturut-turut</span>':'')+'</div>';
+  var hr=hariNow();
+  h+='<div class="prog-day"><span>Target hari ini: <b>'+Math.min(hr.n,TARGET)+'/'+TARGET+'</b> soal'+(hr.n>=TARGET?' ✓':'')+'</span>'
+    +(hr.b?'<span>🔥 '+hr.b+' hari beruntun</span>':'<span>Kerjakan '+TARGET+' soal setiap hari</span>')+'</div>';
   if(tot){
     h+='<p class="prog-n"><b>'+nd+'</b> dari '+tot+' soal selesai</p><span class="bar-p"><span style="width:'+pct(nd,tot)+'%"></span></span>'
       +'<div class="row"><button class="btn" data-act="lanjut" data-fk="lanjut"'+(nd>=tot?' disabled':'')+'>'+(nd>=tot?'Semua soal sudah selesai':(nd?'Lanjutkan latihan':'Mulai latihan'))+'</button></div>';
@@ -1217,17 +1248,23 @@ function rumusFoldHtml(t){
 /* 5. mode ujian */
 function kelasAll(){return data.filter(function(s){return s.kelas===kelasSel;});}
 function kelasList(){return kelasAll().filter(function(s){return !isLocked(s.topik);});}
+var examMat=store.get('cjs.uji.mat')||'semua';
+function examTopics(){var L=[];kelasList().forEach(function(s){if(L.indexOf(s.topik)<0)L.push(s.topik);});return L;}
+function examPool(){var tp=examTopics();if(examMat!=='semua'&&tp.indexOf(examMat)<0)examMat='semua';
+  return kelasList().filter(function(s){return examMat==='semua'||s.topik===examMat;});}
 function ujianHtml(){
-  var list=kelasList();
+  var list=examPool();
   var h=backRow()+'<h2 class="t">Mode ujian</h2><p class="mut">Soal diambil acak dari Kelas '+esc(kelasSel)+' dengan tingkat '+TL[tingkat]+'. Kartu rumus disembunyikan selama ujian.</p>';
   if(!list.length)return h+'<div class="card"><p class="mut">Belum ada soal untuk kelas ini.</p></div>';
+  h+='<section class="card"><div class="sh"><h2>Materi</h2></div>'+chipsHtml([['semua','Semua materi']].concat(examTopics().map(function(t){return [t,t];})),examMat,'x-mat')
+    +'<p class="mut" style="margin:10px 0 0">'+list.length+' soal tersedia'+(list.length<examN?', jadi ujian berisi '+list.length+' soal':'')+'.</p></section>';
   h+='<section class="card"><div class="sh"><h2>Jumlah soal</h2></div>'+chipsHtml([['5','5 soal'],['10','10 soal']],String(examN),'x-n')
     +'<div class="row"><button class="btn" data-act="x-start" data-fk="x-start">Mulai ujian</button></div></section>';
   if(lastExam)h+='<p class="sum">Ujian terakhir: '+esc(examLine(lastExam))+'</p>';
   return h;
 }
 function examStart(){
-  var list=kelasList().slice();
+  var list=examPool().slice();
   for(var i=list.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=list[i];list[i]=list[j];list[j]=t;}
   list=list.slice(0,Math.min(examN,list.length));
   if(!list.length)return;
@@ -1758,6 +1795,7 @@ var TOOLACT={
   fold:function(){foldOpen=!foldOpen;},
   speak:function(){speakToggle();},
   'x-n':function(v){examN=v==='10'?10:5;},
+  'x-mat':function(v){examMat=v;store.set('cjs.uji.mat',v);},
   'x-start':function(){examStart();fk=null;},
   'x-skip':function(){if(!exam)return;confirmKey=null;examNext(true);fk=null;},
   'x-next':function(){if(!exam)return;confirmKey=null;examNext(false);fk=null;},
@@ -1789,7 +1827,8 @@ var TOOLACT={
   'set-teks':function(v){fsBig=v==='besar';store.set('cjs.teks',fsBig?'besar':'normal');applyText();},
   'intro-next':function(){if(introStep<INTRO.length-1)introStep++;fk='intro-next';},
   'intro-prev':function(){if(introStep>0)introStep--;fk='intro-next';},
-  'intro-skip':function(){store.set('cjs.intro','1');introStep=0;view='home';fk=null;window.scrollTo(0,0);},
+  'baru-tutup':function(){store.set('cjs.versiLihat',APP_VERSI);fk=null;},
+  'intro-skip':function(){store.set('cjs.intro','1');store.set('cjs.versiLihat',APP_VERSI);introStep=0;view='home';fk=null;window.scrollTo(0,0);},
   'intro-ulang':function(){introStep=0;view='intro';fk='intro-next';window.scrollTo(0,0);},
   'prog-reset':function(){confirmKey='prog-reset';fk='prog-yes';},
   'prog-reset-yes':function(){done={};saveDone();weak={};store.del(WEAKKEY);mlog={};store.del(LOGKEY);streak=0;store.set(STRKEY,'0');lastExam=null;store.del(UJIKEY);levelUp=false;confirmKey=null;notice={t:'ok',x:'Semua data latihan di HP ini sudah dihapus.'};fk=null;},
@@ -2332,7 +2371,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.0.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.1.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
@@ -2349,8 +2388,8 @@ function installHtml(place){
   return '<section class="card"><div class="sh"><h2>Pasang di HP</h2></div>'+body+'</section>';
 }
 function versiHtml(){
-  var apk='';try{if(inApk)apk=' · APK '+esc(window.TaktikApp.versi());}catch(e){}
-  return '<section class="card"><div class="sh"><h2>Aplikasi</h2><span class="stt">Versi '+APP_VERSI+apk+'</span></div>'
+  var apk='';try{if(inApk)apk='<p class="mut" style="margin:0 0 8px;font-size:.88rem">Aplikasi Android '+esc(window.TaktikApp.versi())+'. Bagian Android ini jarang berubah; isi aplikasi di atas yang selalu diperbarui.</p>';}catch(e){}
+  return '<section class="card"><div class="sh"><h2>Aplikasi</h2><span class="stt">Versi '+APP_VERSI+'</span></div>'+apk
     +'<p class="mut" style="margin:0">Pembaruan berjalan otomatis: setiap kali dibuka dengan internet, aplikasi mengambil versi terbaru. Tidak perlu menghapus atau memasang ulang, dan kemajuan belajarmu tetap tersimpan.</p>'
     +(swReg?'<div class="row"><button class="btn ghost sm" data-act="upd-cek" data-fk="upd-cek">Periksa pembaruan</button></div>':'')+msgHtml(updMsg)+'</section>';
 }
