@@ -69,7 +69,7 @@ Seperti aplikasi dari Play Store, TakTik IPA memperbarui dirinya sendiri. Siswa 
    - `index.html` : cari `APP_VERSI='2.1.0'`
    Contoh: `2.1.0` → `2.1.1` untuk perbaikan kecil, `2.2.0` untuk fitur baru.
    Untuk fitur baru, tulis juga ringkasannya di `BARU` (cari `var BARU=` di `index.html`). Isinya tampil sekali di beranda sebagai kotak **Baru di versi ini**.
-3. Commit. Saat siswa membuka aplikasi dengan internet, versi baru langsung terpasang. Kalau siswa sedang mengerjakan soal, muncul tulisan **Versi baru siap** dengan tombol **Perbarui**, jadi pekerjaannya tidak hilang.
+3. Commit. Saat siswa membuka aplikasi dengan internet, aplikasi memeriksa versi langsung ke GitHub (melewati salinan CDN yang bisa tertahan sampai 10 menit), lalu memuat versi baru. Kalau siswa sedang mengerjakan soal, muncul tulisan **Versi baru siap** dengan tombol **Perbarui**, jadi pekerjaannya tidak hilang.
 
 Nomor versi yang sedang terpasang terlihat di **Pengaturan → Aplikasi**, beserta tombol **Periksa pembaruan**.
 
@@ -121,7 +121,7 @@ Untuk membuat soal yang perlu konversi satuan, pilih satuan lain di samping angk
 
 ### Ujian kelas
 
-1. **Ujian kelas → Buat ujian baru.** Isi judul, pilih kelas dan materi (boleh lebih dari satu), jumlah soal, dan lama ujian.
+1. **Ujian kelas → Buat ujian baru.** Isi judul dan pilih kelas. Pilih caranya: **Acak dari materi** (pilih materi dan jumlah soal) atau **Pilih soal sendiri** (centang soal satu per satu, bisa **Pilih semua** per materi, dan **Coba** untuk melihat soalnya; paling banyak 40 soal). Lalu atur lama ujian.
 2. Atur aturannya:
    - tingkat bantuan (bawaan: Sulit),
    - acak urutan soal,
