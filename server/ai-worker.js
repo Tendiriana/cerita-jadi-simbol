@@ -8,6 +8,7 @@
 //   CLAUDE_MODEL       opsional, bawaan claude-opus-5-5
 //   MAIN_API           opsional, alamat server soal (bawaan https://taktik-api.taktik-ipa.workers.dev)
 //   AI_HARIAN          opsional, batas permintaan per kode kelas per hari (bawaan 40)
+// Binding wajib: Service binding "API" ke worker taktik-api (untuk memeriksa PIN guru).
 // Binding opsional: KV "DB" untuk menghitung kuota harian, Workers AI "AI" sebagai cadangan kalau
 // ANTHROPIC_API_KEY belum diisi.
 
@@ -126,15 +127,22 @@ async function tanyaWorkersAI(env, riwayat) {
 }
 
 async function cekGuru(env, kode, pin) {
+  // Cloudflare menolak worker memanggil worker lain di workers.dev yang sama (error 1042),
+  // jadi server soal dipanggil lewat service binding bernama API kalau ada.
   const api = (env.MAIN_API || 'https://taktik-api.taktik-ipa.workers.dev').replace(/\/+$/, '');
+  const opsi = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kode, pin }) };
+  let r;
   try {
-    const r = await fetch(api + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kode, pin }) });
-    if (r.ok) return null;
-    const j = await r.json().catch(() => null);
-    return gagal(r.status === 429 ? 429 : 401, (j && j.pesan) || 'PIN salah. Masuk lagi dengan PIN terbaru.');
+    r = env.API ? await env.API.fetch(new Request(api + '/login', opsi)) : await fetch(api + '/login', opsi);
   } catch (e) {
     return gagal(502, 'Server soal tidak bisa dihubungi. Coba lagi.');
   }
+  if (r.ok) return null;
+  const j = await r.json().catch(() => null);
+  if (j && j.pesan && (r.status === 401 || r.status === 403 || r.status === 404 || r.status === 429)) return gagal(r.status === 429 ? 429 : 401, j.pesan);
+  return gagal(502, env.API
+    ? 'Server soal menjawab tidak seperti biasa (' + r.status + '). Coba lagi.'
+    : 'Server ini belum tersambung ke server soal. Di Cloudflare tambahkan Service binding bernama API ke worker taktik-api.');
 }
 
 async function ai(req, env) {
@@ -167,7 +175,7 @@ export default {
   async fetch(req, env) {
     const p = new URL(req.url).pathname.replace(/\/+$/, '') || '/';
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
-    if (req.method === 'GET' && p === '/') return json({ nama: 'taktik-ai', ok: true, claude: !!env.ANTHROPIC_API_KEY });
+    if (req.method === 'GET' && p === '/') return json({ nama: 'taktik-ai', ok: true, claude: !!env.ANTHROPIC_API_KEY, api: !!env.API });
     if (req.method === 'POST' && p === '/ai') {
       try { return await ai(req, env); } catch (e) { return gagal(500, 'Server AI bermasalah. Coba lagi.'); }
     }
