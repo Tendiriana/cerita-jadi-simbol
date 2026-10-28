@@ -319,6 +319,26 @@ details.fold[open] summary{margin-bottom:10px}
 .kb .item[aria-pressed="true"]{border-color:var(--bad)}.kb .item[aria-pressed="true"] .ti{background:var(--badbg);color:var(--bad)}
 .kls.off .klk{background:var(--bad);color:#fff}
 .kb{padding:0 12px 12px;border-top:1px solid var(--line);padding-top:12px}
+.uin{display:flex;gap:8px;align-items:center}.uin .in{flex:1;min-width:0}.uin select.in{flex:0 0 auto;width:auto;min-width:5.5em}
+.usat{flex:none;font-weight:700;color:var(--ink2);min-width:2.5em}
+.bant{display:grid;gap:10px;margin-top:12px}.bant details.card{padding:0}
+.bant summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:800;font-size:1.05rem;display:flex;gap:10px;align-items:center}
+.bant summary::-webkit-details-marker{display:none}.bant summary::after{content:'＋';margin-left:auto;color:var(--ink2)}.bant details[open] summary::after{content:'－'}
+.bant .bi{font-size:1.3rem}.bant .guide{padding:0 16px 14px 36px;margin:0}
+.gtile.wide{grid-column:1/-1;min-height:0;flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px 12px;background:linear-gradient(135deg,var(--acc-soft),var(--surface))}
+.gtile.wide b{margin:0}.gtile.wide small{flex-basis:100%}
+.ujk-card{font:inherit;color:var(--acc-ink);width:100%;text-align:left;margin-top:18px;border:0;border-radius:18px;padding:18px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;
+  background:linear-gradient(135deg,#0F6E6A 0%,#1E8F7A 55%,#3BBFB2 100%);box-shadow:0 8px 24px rgba(15,110,106,.28)}
+.ujk-card .ui{font-size:2rem;background:rgba(255,255,255,.18);border-radius:14px;width:52px;height:52px;display:grid;place-items:center;flex:none}
+.ujk-card .ut{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}.ujk-card b{font-size:1.15rem;font-weight:800;color:#fff}.ujk-card small{color:rgba(255,255,255,.88);font-size:.9rem;line-height:1.35}
+.ujk-card .chev{color:#fff}.ujk-card.warn{background:linear-gradient(135deg,#8a5a00,#c98a12)}
+.ujk-kode{font-size:1.4rem;letter-spacing:.2em;text-transform:uppercase}
+.ujk-info{display:flex;flex-direction:column;gap:2px;margin:12px 0 0;padding:12px 14px;border-radius:12px;background:var(--acc-soft)}.ujk-info b{font-size:1.1rem}.ujk-info .bad{color:var(--bad);font-weight:700}
+.ujk-done{text-align:center}.ujk-done .big{font-size:2.6rem;line-height:1.2}.ujk-done b{font-size:1.15rem}
+.ujk-room{text-align:center}.ujk-room .row{justify-content:center}.ujk-big{font-size:2.6rem;font-weight:800;letter-spacing:.18em;margin:6px 0 2px;color:var(--acc)}
+.ujk-code{width:auto!important;padding:0 8px;font-size:.85rem;font-weight:800;letter-spacing:.05em}
+.ujk-n{font-size:1.2rem;font-weight:800;min-width:2.2em;text-align:right}.ujk-n.sar{color:var(--ink2);font-weight:600}
+.xbar.hot{background:var(--badbg);color:var(--bad)}
 .linkb{font:inherit;background:none;border:0;padding:0;color:var(--acc);text-decoration:underline;cursor:pointer}
 
 a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
@@ -801,7 +821,7 @@ function onCheck(){
   if(isNaN(v)){st.calcMsg={t:'bad',x:'Tulis angkanya saja, contoh 12,5.'};return;}
   if(Math.abs(v-c.ans)<=Math.max(1e-6,Math.abs(c.ans)*0.005)){
     st.solved=true;st.calcMsg={t:'ok',x:c.explain||'Jawabanmu benar.'};
-    if(cur!=='__prev'){done[cur]=1;saveDone();
+    if(cur!=='__prev'&&!(exam&&exam.room)){done[cur]=1;saveDone();
       var nh=hariTambah();if(nh===TARGET)st.calcMsg.x+=' 🎯 Target hari ini tercapai: '+TARGET+' soal!';}
     celebrate=true;trackWeak();afterSolve();
     try{if(navigator.vibrate)navigator.vibrate(35);}catch(e){}
@@ -850,6 +870,7 @@ var ICON={
   'm_Usaha dan energi':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="9" width="10" height="10" rx="1.5"/><path d="M2 14h6M5.5 11 8 14l-2.5 3M2 21h20"/></svg>',
   'm_Getaran dan gelombang':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 12c2-5 4-5 5 0s3 5 5 0 3-5 5 0 3 5 5 0"/></svg>',
   m_x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg>',
+  dots:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
   konversi:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/></svg>'
 };
 function themeNow(){
@@ -887,22 +908,23 @@ function heroHtml(){
 function topHtml(){
   if(view==='admin'){
     return '<div class="bar">'+brandHtml('Mode guru','Kelola soal')+'<div class="ab">'+themeBtnHtml()
-      +'<button class="btn ghost sm icon-btn" data-act="home" data-fk="top" aria-label="Ke halaman siswa" title="Halaman siswa">'+ICON.home+'</button><button class="btn ghost sm" data-act="a-out">Keluar</button></div></div>';
+      +'<button class="btn ghost sm icon-btn" data-act="home" data-fk="top" aria-label="Ke halaman siswa" title="Halaman siswa">'+ICON.home+'</button>'+'<button class="btn ghost sm icon-btn" data-act="bt-buka" data-fk="bt" aria-label="Cara pakai" title="Cara pakai">'+ICON.dots+'</button>'+'</div></div>';
   }
   if(view==='home'){
     var nm=(siswa.nama||'').trim().split(/\s+/)[0];
     return '<div class="bar">'+brandHtml(nm?'Halo, '+esc(nm):'TakTik IPA',nm?'Siap latihan hari ini?':'Latihan soal cerita IPA SMP')+'<div class="ab">'+themeBtnHtml()
-      +'<button class="btn ghost sm icon-btn" data-act="go" data-v="atur" data-fk="top" aria-label="Pengaturan" title="Pengaturan">'+ICON.gear+'</button></div></div>';
+      +'<button class="btn ghost sm icon-btn" data-act="go" data-v="atur" data-fk="top" aria-label="Pengaturan" title="Pengaturan">'+ICON.gear+'</button>'+'<button class="btn ghost sm icon-btn" data-act="bt-buka" data-fk="bt" aria-label="Cara pakai" title="Cara pakai">'+ICON.dots+'</button>'+'</div></div>';
   }
   if(view==='intro'||view==='tampil')return '';
   var back='home',title='';
+  if(view==='bantuan'){back='bt-tutup';title='Cara pakai';}
   if(view==='play'){
     if(previewFrom){back='a-back';title='Pratinjau soal';}
     else if(exam&&cur!=='__prev'){back=null;title='Mode ujian';}
     else{back='back-play';title='Latihan';}
   }
   return '<div class="bar">'+(back?'<button class="btn ghost sm icon-btn" data-act="'+back+'" data-fk="back" aria-label="Kembali">'+ICON.back+'</button>':'')
-    +'<b class="ttl">'+title+'</b><div class="ab">'+themeBtnHtml()+'</div></div>';
+    +'<b class="ttl">'+title+'</b><div class="ab">'+themeBtnHtml()+(view==='bantuan'||view==='play'?'':'<button class="btn ghost sm icon-btn" data-act="bt-buka" data-fk="bt" aria-label="Cara pakai" title="Cara pakai">'+ICON.dots+'</button>')+'</div></div>';
 }
 var TINGKAT=[['mudah','Mudah'],['menengah','Menengah'],['sulit','Sulit']];
 var TINGKAT_KET={mudah:'Sebagian kotak sudah terisi. Cocok untuk pemanasan.',menengah:'Kotak lengkap, dengan satuan sebagai petunjuk.',sulit:'Tanpa petunjuk satuan. Soal cerita murni.'};
@@ -921,7 +943,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.3.0':['Ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -958,6 +980,7 @@ function homeHtml(){
     +(nw?qi('ulang','Ulangi soal yang pernah salah','Kerjakan lagi sampai lancar tanpa salah',nw+' soal'):'')
     +qi('kuis','Kuis simbol dan satuan','10 pertanyaan cepat tentang simbol dan satuan Kelas '+esc(kelasSel))
     +qi('konversi','Latihan konversi','10 soal ubah satuan, misalnya mA ke A dan menit ke sekon')+'</div>';
+  h+=ujkCardHtml();
   h+=installHtml('home');
   return h;
 }
@@ -1300,11 +1323,14 @@ function examStart(){
   exam={ids:list.map(function(s){return s.id;}),i:0,start:Date.now(),res:[]};
   previewFrom=null;startPlay(list[0].id,list[0]);window.scrollTo(0,0);
 }
+function examSoal(id){return exam&&exam.src?exam.src[id]:data.find(function(x){return x.id===id;});}
 function examRecord(skip){
-  var st=RS[cur],s=data.find(function(x){return x.id===cur;});
-  exam.res.push({id:cur,judul:s?s.judul:cur,err:st?st.err:0,ok:!skip&&!!(st&&st.solved)});
+  var st=RS[cur],s=examSoal(cur),r={id:cur,judul:s?s.judul:cur,err:st?st.err:0,ok:!skip&&!!(st&&st.solved)};
+  if(exam.room&&cp){r.topik=s?s.topik:'';r.lewat=!!skip;r.jawaban=st?String(st.input||''):'';r.benar=cp.calc.ans;r.satuan=cp.calc.unit;r.ms=Date.now()-(exam.tSoal||Date.now());}
+  exam.res.push(r);
 }
 function examFinish(){
+  if(exam.room){ujkSelesai(false);return;}
   var r=exam.res,n=exam.ids.length;
   exam.ids.slice(r.length).forEach(function(id){var s=data.find(function(x){return x.id===id;});r.push({id:id,judul:s?s.judul:id,err:0,ok:false});});
   var lancar=r.filter(function(x){return x.ok&&!x.err;}).length,salah=r.filter(function(x){return x.ok&&x.err;}).length;
@@ -1313,13 +1339,15 @@ function examFinish(){
   exam=null;view='hasil';window.scrollTo(0,0);
 }
 function examNext(skip){
-  examRecord(skip);exam.i++;
-  if(exam.i<exam.ids.length){var id=exam.ids[exam.i];startPlay(id,data.find(function(x){return x.id===id;}));window.scrollTo(0,0);}
+  examRecord(skip);exam.i++;exam.tSoal=Date.now();
+  if(exam.room&&ujkSes){ujkSes.res=exam.res;ujkSes.i=exam.i;ujkSimpanLokal();if(exam.i<exam.ids.length)ujkKirim(false);}
+  if(exam.i<exam.ids.length){var id=exam.ids[exam.i];startPlay(id,examSoal(id));window.scrollTo(0,0);}
   else examFinish();
 }
 function examBarHtml(){
-  return '<div class="xbar" role="status"><span>Ujian · soal '+(exam.i+1)+' dari '+exam.ids.length+'</span><span class="tm" id="timer">'+fmtTime(Date.now()-exam.start)+'</span></div>'
-    +'<div class="row">'+(RS[cur].solved?'':'<button class="btn ghost sm" data-act="x-skip" data-fk="x-skip">Lewati soal</button>')
+  var room=exam.room&&ujkSes,sisa=room?ujkSisa():0,lewati=!room||ujkSes.aturan.lewati!==false;
+  return '<div class="xbar'+(room&&sisa<60000?' hot':'')+'" role="status"><span>'+(room?esc(ujkSes.judul)+' · ':'Ujian · ')+'soal '+(exam.i+1)+' dari '+exam.ids.length+'</span><span class="tm" id="timer">'+(room?'⏱ '+fmtTime(Math.max(0,sisa)):fmtTime(Date.now()-exam.start))+'</span></div>'
+    +'<div class="row">'+(RS[cur].solved||!lewati?'':'<button class="btn ghost sm" data-act="x-skip" data-fk="x-skip">Lewati soal</button>')
     +'<button class="btn '+(confirmKey==='x-end'?'danger':'ghost')+' sm" data-act="x-end" data-fk="x-end">'+(confirmKey==='x-end'?'Ya, akhiri ujian':'Akhiri ujian')+'</button></div>';
 }
 function examSolvedHtml(){
@@ -1337,7 +1365,9 @@ function hasilHtml(){
   return h+'<div class="row"><button class="btn" data-act="go" data-v="catatan" data-fk="go-catatan">Lihat Catatanku</button><button class="btn ghost" data-act="go" data-v="ujian">Ujian lagi</button></div>';
 }
 if(typeof setInterval==='function'){
-  setInterval(function(){if(!exam||view!=='play')return;var el=document.getElementById('timer');if(el)el.textContent=fmtTime(Date.now()-exam.start);},1000);
+  setInterval(function(){if(!exam||view!=='play')return;var el=document.getElementById('timer');
+    if(exam.room&&ujkSes){var ms=ujkSisa();if(ms<=0){ujkSelesai(true);render();return;}if(el){el.textContent='⏱ '+fmtTime(ms);if(ms<60000&&el.parentNode)el.parentNode.classList.add('hot');}return;}
+    if(el)el.textContent=fmtTime(Date.now()-exam.start);},1000);
 }
 
 /* 6. bacakan soal */
@@ -1811,6 +1841,41 @@ function toolsHtml(){
     +'</div></section>';
 }
 var TOOLVIEWS={karang:karangHtml,tampil:presHtml,intro:introHtml,atur:aturHtml,kuis:kuisHtml,ulang:ulangHtml,materi:materiViewHtml,catatan:catatanHtml,rumus:rumusHtml,ujian:ujianHtml,hasil:hasilHtml,konversi:konvHtml};
+/* ---------- Cara pakai (menu ⋮): isi sesuai siapa yang membuka ---------- */
+var bantuanUntuk='siswa',bantuanDari='home';
+var BANTUAN={
+  siswa:[
+    ['🧩','Cara mengerjakan soal',['Pilih kelas dan materi di beranda, lalu pilih soal.','<b>Langkah 1 · Pilah cerita:</b> sentuh angka di cerita, lalu sentuh kotak besaran yang cocok. Angka yang tidak dipakai menghitung (harga, jam, nama) taruh di kotak <b>Coret</b>. Kalimat pertanyaan taruh di kotak <b>Ditanya</b>.','<b>Langkah 2 · Kenali materi:</b> pilih materi soal itu.','<b>Langkah 3 · Pilih rumus</b> yang cocok. Setiap pilihan ada penjelasannya.','<b>Langkah 4 · Hitung:</b> ketik angkanya saja, misalnya 12,5, lalu ketuk Periksa jawaban.']],
+    ['🎚️','Tingkat bantuan',['<b>Mudah:</b> sebagian kotak sudah terisi.','<b>Menengah:</b> satuan tampil sebagai petunjuk.','<b>Sulit:</b> tanpa petunjuk, seperti soal ujian.','Kalau kamu lancar 3 soal berturut-turut, aplikasi menyarankan naik tingkat.']],
+    ['🎯','Target harian',['Kerjakan 3 soal setiap hari. Hari beruntun 🔥 bertambah kalau kamu latihan setiap hari.']],
+    ['📝','Ujian dari guru',['Minta <b>kode ujian</b> ke gurumu.','Di beranda, ketuk <b>Ujian dari guru</b>, isi kode dan namamu, lalu ketuk <b>Mulai ujian</b>.','Waktu berjalan mundur di atas layar. Kalau waktu habis, jawabanmu otomatis terkumpul ke guru.','Jawaban tersimpan sendiri setiap kali satu soal selesai. Kalau HP tertutup, buka lagi aplikasinya untuk melanjutkan.']],
+    ['⚡','Latihan cepat',['<b>Buat soal sendiri:</b> tulis cerita dari rumus dan angka yang diberikan.','<b>Ulangi soal yang pernah salah:</b> kerjakan lagi sampai lancar.','<b>Kuis simbol dan satuan</b> dan <b>Latihan konversi:</b> 10 pertanyaan cepat.']],
+    ['📒','Catatanku dan laporan',['Catatanku berisi kesalahan yang sering kamu lakukan beserta tipsnya.','Isi nama dan kelas, lalu ketuk <b>Kirim lewat WhatsApp</b> untuk mengirim laporan ke guru.']],
+    ['📱','Pasang dan perbarui aplikasi',['Android: ketuk <b>Pasang aplikasi</b> di beranda, atau pasang APK dari gurumu.','iPhone: buka di Safari, ketuk tombol Bagikan, lalu <b>Tambahkan ke Layar Utama</b>.','Aplikasi memperbarui dirinya sendiri saat dibuka dengan internet. Kemajuanmu tetap tersimpan.']]
+  ],
+  guru:[
+    ['🔑','Masuk mode guru',['Buka <b>Pengaturan</b> (ikon roda gigi) → <b>Masuk mode guru</b>, lalu masukkan PIN.','Centang <b>Ingat saya di HP ini</b> supaya tidak perlu mengetik PIN lagi. Matikan kalau HP dipakai siswa.','Keterangan di atas layar menunjukkan apakah semua soal sudah terkirim ke siswa.']],
+    ['➕','Tambah soal',['Ketuk <b>Tambah soal</b>, pilih kelas, lalu pilih rumusnya.','Isi angkanya. Jawaban dihitung otomatis. Pilih satuan lain (misalnya g atau menit) kalau siswa perlu berlatih mengubah satuan.','Biarkan <b>Angka acak</b> tercentang supaya angka di soal berbeda untuk setiap siswa.','Tulis cerita seperti di papan tulis. Semua angka harus ada di cerita beserta satuannya, dan cerita diakhiri pertanyaan "Berapa …?". Angka lain otomatis menjadi pengecoh.','Ketuk <b>Periksa cerita</b>, lalu <b>Simpan &amp; kirim ke siswa</b>.']],
+    ['✏️','Ubah soal',['Di <b>Soal saya</b>, ketuk <b>Ubah cerita</b> untuk mengganti cerita dengan konteks sekolah sendiri. Rumus dan jawaban tetap.','Tanda seperti [m] adalah angka yang berubah, jadi jangan dihapus.','<b>Formulir</b> untuk mengubah semua bagian soal (untuk guru yang sudah mahir).']],
+    ['✨','Membuat soal dengan AI',['Di <b>Tambah soal</b>, ketuk <b>Tuliskan dengan AI</b> untuk menulis cerita dari rumus yang dipilih.','Di <b>Lainnya → Ngobrol dengan AI</b>, minta beberapa soal sekaligus dengan kata-kata biasa.','Soal dari AI diperiksa dan dihitung ulang oleh aplikasi. Ketuk <b>Coba soal ini</b> sebelum mengirim.']],
+    ['📝','Ujian kelas',['Ketuk <b>Ujian kelas</b> → <b>Buat ujian baru</b>. Pilih kelas, materi, jumlah soal, dan lama ujian, lalu atur aturannya.','Ketuk <b>Buat &amp; bagikan</b>. Bagikan <b>kode ujian</b> ke siswa, lewat WhatsApp atau ditulis di papan.','Siswa membuka <b>Ujian dari guru</b>, mengisi kode dan nama, lalu mengerjakan.','Di halaman ujian, guru melihat siapa yang sedang mengerjakan dan yang sudah selesai. Jawaban terkumpul otomatis saat waktu habis.','Ketuk nama siswa untuk melihat jawabannya dan memberi nilai. Nilai saran sudah dihitung otomatis.','Ketuk <b>Tutup ujian</b> kalau sudah selesai. Daftar nilai bisa disalin ke WhatsApp atau Excel.']],
+    ['🔒','Kunci kelas dan materi',['Di <b>Pengaturan kelas</b>, ketuk <b>Kunci kelas</b> untuk menutup satu kelas.','Ketuk nama kelas untuk melihat materinya, lalu ketuk materi untuk mengunci atau membukanya.']],
+    ['📺','Tampil di kelas',['Untuk proyektor atau TV. Pilih materi, lalu <b>Mulai tampil</b>. Langkah dibuka satu per satu.','Dari laptop: → atau spasi untuk lanjut, ← untuk mundur, N untuk angka baru, T untuk pengatur waktu, F untuk layar penuh.']],
+    ['👥','Kelas guru lain',['Pengelola utama bisa membuat <b>kode kelas</b> di Lainnya → Kelas guru lain.','Guru lain mengisi kode itu di Pengaturan, lalu masuk dengan PIN gurunya. Soal kelas itu terpisah dari soal utama.']]
+  ]
+};
+function bantuanHtml(){
+  var L=BANTUAN[bantuanUntuk];
+  return '<h2 class="t">Cara pakai '+(bantuanUntuk==='guru'?'untuk guru':'untuk siswa')+'</h2>'
+    +chipsHtml([['siswa','Siswa'],['guru','Guru']],bantuanUntuk,'bt-untuk')
+    +'<div class="bant">'+L.map(function(x,i){return '<details class="card"'+(i===0?' open':'')+'><summary><span class="bi">'+x[0]+'</span>'+esc(x[1])+'</summary><ol class="guide">'+x[2].map(function(t){return '<li>'+t+'</li>';}).join('')+'</ol></details>';}).join('')+'</div>';
+}
+TOOLVIEWS.bantuan=bantuanHtml;
+var BTACT={
+  'bt-buka':function(){bantuanUntuk=view==='admin'?'guru':'siswa';bantuanDari=view;view='bantuan';window.scrollTo(0,0);fk=null;},
+  'bt-tutup':function(){view=bantuanDari==='bantuan'?'home':bantuanDari;window.scrollTo(0,0);fk=null;},
+  'bt-untuk':function(v){bantuanUntuk=v;}
+};
 function copyReport(){
   var t=reportText(),fail=function(){notice={t:'info',x:'Salin otomatis tidak bisa di sini. Tekan lama teks laporan, lalu pilih Salin.'};render();};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){notice={t:'ok',x:'Laporan disalin. Tempel di chat ke guru.'};render();},fail);}
@@ -2040,7 +2105,7 @@ function setHtml(){
     }
     h+='</div>';
   });
-  h+='</div></section>';
+  h+='</div></section>'+serverHtml();
   h+='<section class="card"><div class="sh"><h2>'+(apiBase()&&activeKode?'Ganti PIN kelas '+esc(activeKode):'Ganti PIN')+'</h2></div><label class="f"><span>PIN baru <small>minimal 4 karakter</small></span><input class="in" id="pin1" type="password" inputmode="numeric" autocomplete="off" style="max-width:12em"></label><div class="row"><button class="btn" data-act="a-pin" data-fk="pin">Simpan PIN</button></div>'
     +(apiBase()?'<p class="mut" style="margin-top:10px">PIN disimpan di server dan langsung berlaku di semua HP.</p></section>':'<p class="mut" style="margin-top:10px">PIN disimpan dalam bentuk tersandi di soal.json. Setelah mengganti PIN, buka <b>Ekspor</b> lalu upload soal.json supaya PIN baru berlaku di semua HP. PIN adalah kunci ringan untuk mode guru, bukan pengaman data.</p></section>');
   h+='<section class="card"><div class="sh"><h2>Data di perangkat ini</h2></div><p class="mut">'+(apiBase()?'Soal yang belum dikirim tersimpan di HP ini. Buang ubahan untuk kembali ke soal yang terakhir dikirim.':'Soal yang kamu ubah tersimpan di peramban perangkat ini. Buang ubahan untuk kembali ke soal.json atau soal bawaan.')+'</p>';
@@ -2393,6 +2458,11 @@ var TPL=[
   r:[['P',50,500,50],['t',60,600,60]],x:[['E = P ÷ t','Ini bukan rumus energi.'],['E = t ÷ P','Ini rumus waktu yang salah.']],
   s:[['P/t','Itu dibagi. Energi adalah P × t.']],p:'Kalikan daya dengan waktu dalam sekon.',
   c:'Sebuah televisi berdaya {P} W menyala selama {t} s di ruang tamu yang luasnya 12 m². Berapa energi listrik yang dipakai televisi?'},
+ {id:'l-kwh',k:'9',t:'Listrik',n:'Energi listrik dalam kWh',f:'E = P × t',w:'Energi listrik (kWh) sama dengan daya (kW) dikali waktu (jam).',
+  v:[['P','P','daya','kW',0.4],['t','t','waktu','jam',5]],q:['E','energi listrik','kWh'],a:'P*t',e:'{P} × {t}',
+  r:[['P',0.5,2,0.5],['t',1,8,1]],x:[['E = P ÷ t','Dikali, bukan dibagi.'],['E = t ÷ P','Ini bukan rumus energi.']],
+  s:[['P/t','Itu dibagi. Energi adalah P × t.']],p:'Kalikan daya dalam kW dengan waktu dalam jam.',
+  c:'Sebuah kulkas berdaya {P} kW menyala selama {t} jam. Tarif listrik di rumah itu Rp1.500 per kWh. Berapa energi listrik yang dipakai kulkas?'},
  /* Kelas 9 · Magnet */
  {id:'m-F',k:'9',t:'Magnet',n:'Gaya Lorentz',f:'F = I × L × B',w:'Gaya Lorentz pada kawat tegak lurus medan magnet (sin 90° = 1).',
   v:[['I','I','kuat arus','A',2],['L','L','panjang kawat','m',1.5],['B','B','kuat medan magnet','T',0.4]],q:['F','gaya Lorentz','N'],a:'I*L*B',e:'{I} × {L} × {B}',
@@ -2451,12 +2521,12 @@ function tplById(id){for(var i=0;i<TPL.length;i++)if(TPL[i].id===id)return TPL[i
 
 /* ---------- Merakit soal dari templat dan cerita guru ---------- */
 var UNITW=['volt','ampere','ohm','watt','joule','sekon','detik','menit','jam','meter','gram','kilogram','liter','hertz','newton','pascal','tesla','weber','coulomb','kali','tanaman','lilitan','derajat','km','cm','mm','kg','g','m','s','v','a','w','j','n','c','hz','pa','t','wb','k','°c','°f','ω','kwh','wh','kw','mw','ma','mj','kj','ml','l','m²','m³','cm²','cm³','m/s','m/s²','km/jam','kg/m³','g/cm³','j/kg°c','%'];
-var STOPW=['dan','yang','di','ke','dari','untuk','dengan','pada','setiap','dalam','selama','sebesar','sejauh','adalah','itu','ini','jika','maka','atau','agar','lalu','sehingga','hingga','sampai','oleh'];
+var STOPW=['per','dan','yang','di','ke','dari','untuk','dengan','pada','setiap','dalam','selama','sebesar','sejauh','adalah','itu','ini','jika','maka','atau','agar','lalu','sehingga','hingga','sampai','oleh'];
 var NUMRE=/\d+(?:\.\d{3})+(?:,\d+)?|\d{1,2}[.:]\d{2}(?!\d)|\d+(?:,\d+)?/g;
 function numTokens(t){
   var out=[],m;NUMRE.lastIndex=0;
   while((m=NUMRE.exec(t))){
-    if(m.index>0&&/[A-Za-z]/.test(t.charAt(m.index-1)))continue;
+    if(m.index>0&&/[A-Za-z]/.test(t.charAt(m.index-1))&&!/Rp\s?$/.test(t.slice(Math.max(0,m.index-3),m.index)))continue;
     var i=m.index,j=i+m[0].length,raw=m[0],val=/^\d{1,2}[.:]\d{2}$/.test(raw)?NaN:parseNum(raw);
     if(i>=2&&/Rp\s?$/.test(t.slice(Math.max(0,i-3),i)))i=t.lastIndexOf('Rp',i);
     var rest=t.slice(j),u=rest.match(/^(\s?)([A-Za-zΩµ°%²³\/]+)/),unit='',uj=j;
@@ -2474,18 +2544,27 @@ function tanyaSpan(t){
 }
 function rapikanAngka(n){return fmtNum(n);}
 /* o: {tpl, nilai:{kunci:angka}, cerita, judul, acak} → {s, errs, info} */
+/* satuan lain yang boleh dipakai di cerita: [satuan, faktor ke satuan rumus, rentang acak dalam satuan itu (opsional)] */
+var UNITALT={kg:[['g',0.001]],s:[['menit',60,[1,10,1]],['jam',3600,[1,5,1]]],m:[['cm',0.01],['km',1000]],A:[['mA',0.001]],W:[['kW',1000]],J:[['kJ',1000]],'m²':[['cm²',0.0001]],'cm³':[['liter',1000],['mL',1]],kW:[['W',0.001]],jam:[['menit',1/60,[30,180,30]]]};
+function unitInfo(v,u){if(!u||u===v[3])return null;var L=UNITALT[v[3]]||[];for(var i=0;i<L.length;i++)if(L[i][0]===u)return {u:u,f:L[i][1],r:L[i][2]||null};return null;}
+function tipKonv(dari,ke,f){return f<1?'1 '+ke+' = '+fmtNum(Math.round(1/f*1e6)/1e6)+' '+dari+', jadi bagi '+fmtNum(Math.round(1/f*1e6)/1e6)+'.':'1 '+dari+' = '+fmtNum(f)+' '+ke+', jadi kali '+fmtNum(f)+'.';}
+function fNum(f){return String(Math.round(f*1e9)/1e9);}
+/* o: {tpl, nilai:{kunci:angka}, unit:{kunci:satuan}, cerita, judul, acak} → {s, errs, info} */
 function rakitSoal(o){
-  var T=o.tpl,errs=[],info={pakai:[],pengecoh:[],tanya:null},cer=String(o.cerita||'').replace(/\s+/g,' ').trim(),vals={};
-  T.v.forEach(function(v){var x=o.nilai&&o.nilai[v[0]];vals[v[0]]=typeof x==='number'?x:parseNum(x);});
-  T.v.forEach(function(v){if(!Number.isFinite(vals[v[0]])||vals[v[0]]<=0)errs.push('Isi angka '+v[2]+' ('+v[1]+') dengan angka lebih dari 0.');});
+  var T=o.tpl,errs=[],info={pakai:[],pengecoh:[],tanya:null},cer=String(o.cerita||'').replace(/\s+/g,' ').trim(),raw={},vals={},U={};
+  T.v.forEach(function(v){var x=o.nilai&&o.nilai[v[0]],ui=unitInfo(v,o.unit&&o.unit[v[0]]);raw[v[0]]=typeof x==='number'?x:parseNum(x);U[v[0]]=ui;
+    vals[v[0]]=ui?Math.round(raw[v[0]]*ui.f*1e9)/1e9:raw[v[0]];});
+  var su=function(v){return U[v[0]]?U[v[0]].u:v[3];};
+  T.v.forEach(function(v){if(!Number.isFinite(raw[v[0]])||raw[v[0]]<=0)errs.push('Isi angka '+v[2]+' ('+v[1]+') dengan angka lebih dari 0.');});
   if(!cer)errs.push('Tulis dulu cerita soalnya.');
   if(errs.length)return {s:null,errs:errs,info:info};
   var toks=numTokens(cer),used=[],tq=tanyaSpan(cer);
   T.v.forEach(function(v){
-    var tk=toks.filter(function(x){return used.indexOf(x)<0&&Math.abs(x.val-vals[v[0]])<1e-9;})[0];
-    if(!tk){errs.push('Angka '+rapikanAngka(vals[v[0]])+' '+v[3]+' ('+v[2]+') belum ada di cerita. Tulis angkanya di cerita, misalnya “'+rapikanAngka(vals[v[0]])+' '+v[3]+'”.');return;}
-    used.push(tk);tk.v=v;tk.useUnit=isUnitWord(tk.unit,v[3]);
-    info.pakai.push({v:v,teks:cer.slice(tk.i,tk.useUnit?tk.uj:tk.j)});
+    var tk=toks.filter(function(x){return used.indexOf(x)<0&&Math.abs(x.val-raw[v[0]])<1e-9;})[0];
+    if(!tk){errs.push('Angka '+rapikanAngka(raw[v[0]])+' '+su(v)+' ('+v[2]+') belum ada di cerita. Tulis angkanya di cerita, misalnya “'+rapikanAngka(raw[v[0]])+' '+su(v)+'”.');return;}
+    used.push(tk);tk.v=v;tk.useUnit=isUnitWord(tk.unit,su(v));
+    if(U[v[0]]&&!tk.useUnit)errs.push('Tulis satuannya setelah angka '+rapikanAngka(raw[v[0]])+', misalnya “'+rapikanAngka(raw[v[0]])+' '+su(v)+'”, supaya siswa berlatih mengubah satuan.');
+    info.pakai.push({v:v,teks:cer.slice(tk.i,tk.useUnit?tk.uj:tk.j)+(U[v[0]]?' = '+fmtNum(vals[v[0]])+' '+v[3]:'')});
   });
   if(!tq)errs.push('Tambahkan kalimat tanya di akhir cerita, misalnya “Berapa '+T.q[1]+' …?”.');
   else{
@@ -2500,26 +2579,42 @@ function rakitSoal(o){
     return {i:x.i,j:end,teks:cer.slice(x.i,end)};
   });
   info.pengecoh=dec.map(function(d){return d.teks;});
-  /* angka acak: ganti angka di cerita dengan {kunci} */
+  /* angka acak: ganti angka di cerita dengan {kunci} (atau {kunci_u} kalau satuannya diubah) */
   var rnd={};(T.r||[]).forEach(function(r){rnd[r[0]]=1;});
   var acak=!!o.acak&&T.v.some(function(v){return rnd[v[0]];}),story=cer;
-  if(acak)used.slice().sort(function(a,b){return b.i-a.i;}).forEach(function(tk){if(rnd[tk.v[0]])story=story.slice(0,tk.i)+'{'+tk.v[0]+'}'+story.slice(tk.j);});
-  var tx=function(tk){var num=acak&&rnd[tk.v[0]]?'{'+tk.v[0]+'}':tk.raw;return num+(tk.useUnit?cer.slice(tk.j,tk.uj):'');};
+  var ph=function(k){return U[k]?k+'_u':k;};
+  if(acak)used.slice().sort(function(a,b){return b.i-a.i;}).forEach(function(tk){if(rnd[tk.v[0]])story=story.slice(0,tk.i)+'{'+ph(tk.v[0])+'}'+story.slice(tk.j);});
+  var acakV=function(k){return acak&&rnd[k];};
+  var tx=function(tk){var num=acakV(tk.v[0])?'{'+ph(tk.v[0])+'}':tk.raw;return num+(tk.useUnit?cer.slice(tk.j,tk.uj):'');};
+  var basis=function(k){return acakV(k)?'{'+k+'}':fmtNum(vals[k]);};
   var sub=function(t){return t.replace(/\{(\w+)\}/g,function(m,k){return acak?m:fmtNum(vals[k]);});};
   var s={id:'',kelas:T.k,tpl:T.id,topik:T.t,judul:String(o.judul||'').trim()||T.n,cerita:story,variasi:[],
-    besaran:used.map(function(tk){var v=tk.v;return {teks:tx(tk),sym:v[1],nama:v[2],satuan:v[3],ket:v[2]+', satuannya '+v[3],konv:'',catatan:''};}),
+    besaran:used.map(function(tk){var v=tk.v,ui=U[v[0]];return {teks:tx(tk),sym:v[1],nama:v[2],satuan:v[3],ket:v[2]+', satuannya '+v[3],
+      konv:ui?'= '+basis(v[0])+' '+v[3]:'',catatan:ui?tipKonv(ui.u,v[3],ui.f):''};}),
     pengecoh:dec.map(function(d){return {teks:d.teks,ket:'info yang tidak dipakai menghitung'};}),
     tanya:{teks:tq.txt},
     rumus:[{f:T.f,benar:true,alasan:T.w}].concat(T.x.map(function(x){return {f:x[0],benar:false,alasan:x[1]};})),
-    hitung:{diketahui:T.v.map(function(v){return v[1]+' = '+(acak&&rnd[v[0]]?'{'+v[0]+'}':fmtNum(vals[v[0]]))+' '+v[3];}).join(' · '),lhs:T.q[0],ekspresi:sub(T.e),satuan:T.q[2],
-      jawaban:null,angka:'',salah:[],petunjuk:T.p,penjelasan:T.f+'.'}};
+    hitung:{diketahui:T.v.map(function(v){var k=v[0],ui=U[k];return v[1]+' = '+(ui?(acakV(k)?'{'+k+'_u}':fmtNum(raw[k]))+' '+ui.u+' = ':'')+basis(k)+' '+v[3];}).join(' · '),lhs:T.q[0],ekspresi:sub(T.e),satuan:T.q[2],
+      jawaban:null,angka:'',salah:[],petunjuk:T.p+(T.v.some(function(v){return U[v[0]];})?' Ubah dulu satuannya.':''),penjelasan:T.f+'.'}};
+  /* jawaban keliru kalau satuan lupa diubah */
+  var lupa=T.v.filter(function(v){return U[v[0]];}).map(function(v){var ui=U[v[0]];
+    return {k:v[0],rumus:T.a.replace(new RegExp('\\b'+v[0]+'\\b','g'),v[0]+'_u'),pesan:'Satuan '+v[2]+' belum diubah. '+tipKonv(ui.u,v[3],ui.f)};});
   if(acak){
-    T.v.forEach(function(v){if(!rnd[v[0]])s.variasi.push({nama:v[0],min:vals[v[0]],maks:vals[v[0]],langkah:1,rumus:''});});
-    T.r.forEach(function(r){s.variasi.push(typeof r[1]==='string'?{nama:r[0],min:NaN,maks:NaN,langkah:NaN,rumus:r[1]}:{nama:r[0],min:r[1],maks:r[2],langkah:r[3],rumus:''});});
-    s.hitung.angka=T.a;s.hitung.salah=T.s.map(function(x){return {nilai:NaN,pesan:x[1],rumus:x[0]};});
+    T.v.forEach(function(v){var k=v[0];if(rnd[k])return;s.variasi.push({nama:k,min:vals[k],maks:vals[k],langkah:1,rumus:''});
+      if(U[k])s.variasi.push({nama:k+'_u',min:raw[k],maks:raw[k],langkah:1,rumus:''});});
+    T.r.forEach(function(r){var k=r[0],ui=U[k];
+      if(typeof r[1]==='string'){s.variasi.push({nama:k,min:NaN,maks:NaN,langkah:NaN,rumus:r[1]});if(ui)s.variasi.push({nama:k+'_u',min:NaN,maks:NaN,langkah:NaN,rumus:k+'/'+fNum(ui.f)});return;}
+      if(!ui){s.variasi.push({nama:k,min:r[1],maks:r[2],langkah:r[3],rumus:''});return;}
+      var rg=ui.r||[r[1]/ui.f,r[2]/ui.f,r[3]/ui.f].map(function(x){return Math.round(x*1e6)/1e6;});
+      s.variasi.push({nama:k+'_u',min:rg[0],maks:rg[1],langkah:rg[2],rumus:''});
+      s.variasi.push({nama:k,min:NaN,maks:NaN,langkah:NaN,rumus:k+'_u*'+fNum(ui.f)});});
+    s.hitung.angka=T.a;s.hitung.salah=T.s.map(function(x){return {nilai:NaN,pesan:x[1],rumus:x[0]};}).concat(lupa.map(function(x){return {nilai:NaN,pesan:x.pesan,rumus:x.rumus};}));
   }else{
     s.hitung.jawaban=evalAngka(T.a,vals);
-    s.hitung.salah=T.s.map(function(x){return {nilai:evalAngka(x[0],vals),pesan:x[1],rumus:''};}).filter(function(x){return Number.isFinite(x.nilai)&&Math.abs(x.nilai-s.hitung.jawaban)>1e-9;});
+    var both={};for(var kk in vals){both[kk]=vals[kk];both[kk+'_u']=raw[kk];}
+    s.hitung.salah=T.s.map(function(x){return {nilai:evalAngka(x[0],vals),pesan:x[1],rumus:''};})
+      .concat(lupa.map(function(x){return {nilai:evalAngka(x.rumus,both),pesan:x.pesan,rumus:''};}))
+      .filter(function(x){return Number.isFinite(x.nilai)&&Math.abs(x.nilai-s.hitung.jawaban)>1e-9;});
   }
   s=norm(s);s.tpl=T.id;
   errs=check(s);
@@ -2530,12 +2625,17 @@ function rakitSoal(o){
   }
   return {s:errs.length?null:s,errs:errs,info:info};
 }
-function tplJawab(T,nilai){var vals={};T.v.forEach(function(v){vals[v[0]]=parseNum(nilai[v[0]]);});return evalAngka(T.a,vals);}
-function tplContoh(T,nilai){return T.c.replace(/\{(\w+)\}/g,function(m,k){var x=parseNum(nilai&&nilai[k]);return Number.isFinite(x)?fmtNum(x):m;});}
+function tplJawab(T,nilai,unit){var vals={};T.v.forEach(function(v){var ui=unitInfo(v,unit&&unit[v[0]]),x=parseNum(nilai[v[0]]);vals[v[0]]=ui?x*ui.f:x;});return evalAngka(T.a,vals);}
+function escRe(t){return String(t).replace(/[.*+?^${}()|[\]\\\/]/g,'\\$&');}
+function tplContoh(T,nilai,unit){
+  var c=T.c;
+  T.v.forEach(function(v){var ui=unitInfo(v,unit&&unit[v[0]]);if(ui)c=c.replace(new RegExp('\\{'+v[0]+'\\}(\\s?)'+escRe(v[3])),'{'+v[0]+'}$1'+ui.u);});
+  return c.replace(/\{(\w+)\}/g,function(m,k){var x=parseNum(nilai&&nilai[k]);return Number.isFinite(x)?fmtNum(x):m;});
+}
 function tplNilaiAwal(T){var o={};T.v.forEach(function(v){o[v[0]]=fmt(v[4]);});return o;}
-function tplRentang(T){return (T.r||[]).filter(function(r){return typeof r[1]!=='string'&&T.v.some(function(v){return v[0]===r[0];});}).map(function(r){
-  var v=T.v.filter(function(x){return x[0]===r[0];})[0];return v[2]+' '+fmtNum(r[1])+'–'+fmtNum(r[2])+' '+v[3];}).join(', ');}
-
+function tplRentang(T,unit){return (T.r||[]).filter(function(r){return typeof r[1]!=='string'&&T.v.some(function(v){return v[0]===r[0];});}).map(function(r){
+  var v=T.v.filter(function(x){return x[0]===r[0];})[0],ui=unitInfo(v,unit&&unit[v[0]]),rg=ui?(ui.r||[r[1]/ui.f,r[2]/ui.f]):[r[1],r[2]];
+  return v[2]+' '+fmtNum(Math.round(rg[0]*1e6)/1e6)+'–'+fmtNum(Math.round(rg[1]*1e6)/1e6)+' '+(ui?ui.u:v[3]);}).join(', ');}
 /* ---------- Mode guru yang mudah: menu utama, tambah soal dari rumus, ubah cerita ---------- */
 var GURUKEY='cjs.guru',AI_URL='';
 var G=null,UC=null;
@@ -2566,7 +2666,8 @@ function guruHomeHtml(){
     +tile('buat','➕','Tambah soal','Pilih rumus, isi angka, tulis cerita')
     +tile('list','📚','Soal saya',data.length+' soal · ubah, hapus, urutkan')
     +tile('tampil','📺','Tampil di kelas','Bahas soal di proyektor atau TV')
-    +tile('set','⚙️','Pengaturan kelas','Kunci materi dan ganti PIN')+'</div>';
+    +tile('set','⚙️','Pengaturan kelas','Kunci kelas, materi, dan PIN')
+    +'<button class="gtile wide" data-act="a-tab" data-v="ujk" data-fk="gt-ujk"><span class="gi">📝</span><b>Ujian kelas</b><small>Buat ujian dengan kode, pantau siswa, dan beri nilai</small></button></div>';
   var lain=[];
   if(apiBase()&&adminRole&&adminRole!=='offline')lain.push(['ai','✨ Ngobrol dengan AI','Minta beberapa soal sekaligus dengan kata-kata biasa']);
   if(apiBase()&&adminRole==='utama'&&!activeKode)lain.push(['kelas','👥 Kelas guru lain','Buat kode kelas untuk guru lain']);
@@ -2578,9 +2679,9 @@ function guruHomeHtml(){
 }
 
 /* --- Tambah soal: 1) pilih rumus 2) isi angka dan cerita 3) simpan & kirim --- */
-function gBaru(){G={kelas:kelasSel,tpl:null,nilai:{},acak:true,cerita:'',judul:'',hasil:null,cek:false,aiBusy:false,aiTema:'',aiErr:null};}
-function gPilih(id){var T=tplById(id);if(!T)return;G.tpl=T;G.nilai=tplNilaiAwal(T);G.cerita='';G.judul='';G.hasil=null;G.cek=false;G.acak=!!(T.r&&T.r.length);}
-function gCek(){if(!G||!G.tpl)return;G.hasil=rakitSoal({tpl:G.tpl,nilai:G.nilai,cerita:G.cerita,judul:G.judul,acak:G.acak});G.cek=true;}
+function gBaru(){G={kelas:kelasSel,tpl:null,nilai:{},unit:{},acak:true,cerita:'',judul:'',hasil:null,cek:false,aiBusy:false,aiTema:'',aiErr:null};}
+function gPilih(id){var T=tplById(id);if(!T)return;G.tpl=T;G.nilai=tplNilaiAwal(T);G.unit={};G.cerita='';G.judul='';G.hasil=null;G.cek=false;G.acak=!!(T.r&&T.r.length);}
+function gCek(){if(!G||!G.tpl)return;G.hasil=rakitSoal({tpl:G.tpl,nilai:G.nilai,unit:G.unit,cerita:G.cerita,judul:G.judul,acak:G.acak});G.cek=true;}
 function buatPilihHtml(){
   var h=guruBar('Tambah soal')+'<p class="mut">Langkah 1 dari 2 · Pilih rumus yang dipakai soal.</p>'
     +chipsHtml([['7','Kelas 7'],['8','Kelas 8'],['9','Kelas 9']],G.kelas,'g-kelas');
@@ -2595,14 +2696,17 @@ function buatPilihHtml(){
   return h;
 }
 function buatIsiHtml(){
-  var T=G.tpl,ans=tplJawab(T,G.nilai),rent=tplRentang(T);
+  var T=G.tpl,ans=tplJawab(T,G.nilai,G.unit),rent=tplRentang(T,G.unit);
   var h=guruBar('Tambah soal')+'<p class="mut">Langkah 2 dari 2 · '+esc(T.t)+' · Kelas '+esc(T.k)+'</p>'
     +'<section class="card"><div class="sh"><h2>'+esc(T.n)+'</h2><button class="btn ghost sm" data-act="g-ganti" data-fk="g-ganti">Ganti rumus</button></div><p class="eq">'+esc(T.f)+'</p></section>';
   h+='<section class="card"><div class="sh"><span class="num">1</span><h2>Isi angkanya</h2></div><div class="grid2">'
-    +T.v.map(function(v){return '<label class="f"><span>'+esc(v[2])+' ('+esc(v[1])+') <small>'+esc(v[3])+'</small></span><input class="in" data-g="'+v[0]+'" inputmode="decimal" autocomplete="off" value="'+esc(G.nilai[v[0]]||'')+'"></label>';}).join('')+'</div>'
+    +T.v.map(function(v){var alt=UNITALT[v[3]],cu=G.unit[v[0]]||v[3];
+      return '<div class="f"><span>'+esc(v[2])+' ('+esc(v[1])+')</span><div class="uin"><input class="in" data-g="'+v[0]+'" inputmode="decimal" autocomplete="off" aria-label="'+esc(v[2])+'" value="'+esc(G.nilai[v[0]]||'')+'">'
+        +(alt?'<select class="in" data-gu="'+v[0]+'" aria-label="Satuan '+esc(v[2])+'">'+[v[3]].concat(alt.map(function(a){return a[0];})).map(function(u){return '<option'+(u===cu?' selected':'')+'>'+esc(u)+'</option>';}).join('')+'</select>':'<span class="usat">'+esc(v[3])+'</span>')+'</div></div>';}).join('')+'</div>'
+    +(T.v.some(function(v){return UNITALT[v[3]];})?'<p class="mut" style="margin:6px 0 0">Pilih satuan lain (misalnya g atau menit) kalau siswa perlu berlatih mengubah satuan. Aplikasi otomatis menambahkan langkah konversinya.</p>':'')
     +'<p class="mut" style="margin:6px 0 0">Jawabannya: <b id="g-ans">'+esc(T.q[0])+' = '+(Number.isFinite(ans)?fmtNum(ans):'?')+' '+esc(T.q[2])+'</b> (dihitung otomatis)</p>'
     +(rent?'<label class="chk"><input type="checkbox" id="g-acak"'+(G.acak?' checked':'')+'> <span><b>Angka acak untuk tiap siswa</b><small>Angka di cerita berubah setiap soal dibuka ('+esc(rent)+'), jadi siswa tidak bisa menyalin jawaban teman.</small></span></label>':'')+'</section>';
-  var contoh=tplContoh(T,G.nilai);
+  var contoh=tplContoh(T,G.nilai,G.unit);
   h+='<section class="card"><div class="sh"><span class="num">2</span><h2>Tulis ceritanya</h2></div>'
     +'<p class="mut">Tulis seperti di papan tulis. Masukkan semua angka di atas beserta satuannya, dan akhiri dengan pertanyaan “Berapa …?”. Angka lain (harga, jam, jumlah orang) otomatis menjadi pengecoh.</p>'
     +'<label class="f"><span>Judul soal <small>boleh dikosongkan</small></span><input class="in" id="g-judul" value="'+esc(G.judul)+'" placeholder="'+esc(T.n)+'" autocomplete="off"></label>'
@@ -2666,7 +2770,7 @@ function ucSimpan(){
 }
 
 /* --- AI: memilih templat, angka, dan menulis cerita; soal dirakit dan dihitung oleh aplikasi --- */
-function aiAda(){return !!(AI_URL||apiBase())&&adminRole&&adminRole!=='offline';}
+function aiAda(){return !!(AI_URL||cfgUrl('ai')||apiBase())&&adminRole&&adminRole!=='offline';}
 function aiKatalog(k){
   return TPL.filter(function(T){return !k||T.k===k;}).map(function(T){
     return T.id+' | Kelas '+T.k+' · '+T.t+' | '+T.n+' | '+T.f+' | angka: '+T.v.map(function(v){return v[0]+' = '+v[2]+' ('+v[3]+'), contoh '+fmtNum(v[4]);}).join('; ');
@@ -2682,7 +2786,7 @@ function aiDariTemplat(raw){
   var r=rakitSoal({tpl:T,nilai:nil,cerita:raw.cerita,judul:raw.judul,acak:raw.acak!==false});
   return {s:r.s||{judul:raw.judul||T.n,topik:T.t,cerita:raw.cerita||'',rumus:[{f:T.f,benar:true}],variasi:[],pengecoh:[],hitung:{satuan:T.q[2]}},errs:r.errs,note:[],added:false,raw:raw,tpl:T,nilai:nil};
 }
-function aiUrlPost(body,ms){return apiCall('/ai',body,ms,AI_URL?AI_URL.replace(/\/+$/,''):'');}
+function aiUrlPost(body,ms){var u=AI_URL||cfgUrl('ai');return apiCall('/ai',body,ms,u?u.replace(/\/+$/,''):'');}
 /* menulis cerita untuk templat yang sedang dipilih guru */
 function gAi(){
   if(!G||!G.tpl||G.aiBusy)return;
@@ -2706,7 +2810,7 @@ var GACT={
   'g-sk':function(v){setBuka=setBuka===v?null:v;},
   'g-tpl':function(v){gPilih(v);window.scrollTo(0,0);fk=null;},
   'g-ganti':function(){G.tpl=null;G.hasil=null;G.cek=false;window.scrollTo(0,0);},
-  'g-contoh':function(){G.cerita=tplContoh(G.tpl,G.nilai);gCek();},
+  'g-contoh':function(){G.cerita=tplContoh(G.tpl,G.nilai,G.unit);gCek();},
   'g-cek':function(){gCek();},
   'g-ai':function(){return gAi();},
   'g-coba':function(){gCek();if(!G.hasil||G.hasil.errs.length)return;var s=JSON.parse(JSON.stringify(G.hasil.s));s.id='__prev';startPlay('__prev',s);previewFrom='buat';window.scrollTo(0,0);fk=null;},
@@ -2714,11 +2818,260 @@ var GACT={
   'uc-buka':function(v){ucBuka(v);window.scrollTo(0,0);fk=null;},
   'uc-simpan':function(){return ucSimpan();}
 };
+
+/* ---------- Ujian kelas: guru membuat ujian, siswa masuk dengan kode, jawaban terkumpul ke guru ---------- */
+var UJIAN_URL='',UJKSES='cjs.ujkelas';
+/* alamat server tambahan bisa diisi guru; disimpan di daftar kunci supaya ikut terkirim ke semua HP */
+function cfgUrl(p){for(var i=0;i<kunci.length;i++)if(kunci[i].indexOf(p+':')===0)return kunci[i].slice(p.length+1);return '';}
+function setCfgUrl(p,u){kunci=kunci.filter(function(k){return k.indexOf(p+':')!==0;});if(u)kunci.push(p+':'+u);}
+function ujianUrl(){return (UJIAN_URL||cfgUrl('ujian')).replace(/\/+$/,'');}
+function ujkCall(path,body,ms){return apiCall(path,body,ms||20000,ujianUrl());}
+function ujkGuru(path,body){body=body||{};body.kode=activeKode||'UTAMA';body.pin=adminPin||'';return ujkCall(path,body);}
+function ujkErr(res,def){return res.status===0?'Tidak ada internet, atau server ujian tidak bisa dihubungi.':((res.j&&res.j.pesan)||def);}
+function jam(t){try{return new Date(t).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+
+/* ===== sisi siswa ===== */
+var ujkSes=jget(UJKSES,null),UJ={kode:'',nama:'',info:null,msg:null,busy:false};
+function ujkSimpanLokal(){if(ujkSes)store.set(UJKSES,JSON.stringify(ujkSes));else store.del(UJKSES);}
+function ujkSisa(){return ujkSes?ujkSes.batas-(Date.now()+(ujkSes.off||0)):0;}
+function skorDari(res,n){var t=0;res.forEach(function(x){t+=x.ok?(x.err?Math.max(0.5,1-0.1*x.err):1):0;});return n?Math.round(t/n*100):0;}
+function ujkData(){var r=ujkSes.res;return {res:r,i:ujkSes.i,urutan:ujkSes.ids,skor:skorDari(r,ujkSes.ids.length),benar:r.filter(function(x){return x.ok;}).length,jumlah:ujkSes.ids.length};}
+function ujkKirim(akhir){
+  if(!ujkSes)return Promise.resolve();
+  var s=ujkSes;if(akhir)s.kirimAkhir=true;ujkSimpanLokal();
+  return ujkCall('/jawab',{room:s.room,pid:s.pid,token:s.token,data:ujkData(),akhir:!!akhir}).then(function(res){
+    if(ujkSes!==s)return;
+    if(res.ok&&(res.j.selesai||!akhir)){if(akhir){s.terkirim=true;s.kirimAkhir=false;}}
+    else if(res.j&&res.j.waktuHabis){if(akhir){s.terkirim=true;s.kirimAkhir=false;}else if(exam&&exam.room){ujkSelesai(true);render();}}
+    else if(res.ok&&akhir){s.terkirim=true;s.kirimAkhir=false;}
+    if(res.ok&&res.j.status==='tutup'&&exam&&exam.room&&!akhir){ujkSelesai(true);render();}
+    ujkSimpanLokal();if(view==='ujkhasil')render();
+  });
+}
+function ujkMulaiExam(){
+  var s=ujkSes,src={};s.soal.forEach(function(x){var n=norm(x);src[n.id]=n;});
+  exam={ids:s.ids,i:s.i,start:s.mulai||Date.now(),res:s.res,room:true,src:src,tingkatLama:tingkat,tSoal:Date.now()};
+  tingkat=s.aturan.tingkat||'sulit';
+  previewFrom=null;var id=exam.ids[exam.i];startPlay(id,src[id]);view='play';window.scrollTo(0,0);
+}
+function ujkSelesai(auto){
+  if(!ujkSes)return;
+  if(exam&&exam.room){
+    if(exam.res.length<=exam.i&&cur&&RS[cur]&&exam.ids[exam.i]===cur)examRecord(false);
+    exam.ids.slice(exam.res.length).forEach(function(id){var x=exam.src[id];exam.res.push({id:id,judul:x?x.judul:id,topik:x?x.topik:'',err:0,ok:false,lewat:true,jawaban:''});});
+    tingkat=exam.tingkatLama||tingkat;exam=null;
+  }
+  ujkSes.selesai=true;ujkSes.auto=!!auto;ujkSimpanLokal();ujkKirim(true);
+  view='ujkhasil';window.scrollTo(0,0);
+}
+function ujkCardHtml(){
+  if(!ujianUrl())return '';
+  if(ujkSes&&!ujkSes.selesai)return '<button class="ujk-card" data-act="ujk-lanjut" data-fk="ujk"><span class="ui">📝</span><span class="ut"><b>Lanjutkan ujian</b><small>'+esc(ujkSes.judul)+' · sisa waktu '+fmtTime(Math.max(0,ujkSisa()))+'</small></span><span class="chev">'+ICON.chev+'</span></button>';
+  if(ujkSes&&ujkSes.selesai&&ujkSes.kirimAkhir)return '<button class="ujk-card warn" data-act="ujk-hasil" data-fk="ujk"><span class="ui">⏳</span><span class="ut"><b>Jawaban ujian belum terkirim</b><small>Sambungkan internet, lalu ketuk di sini</small></span></button>';
+  return '<button class="ujk-card" data-act="ujk-buka" data-fk="ujk"><span class="ui">📝</span><span class="ut"><b>Ujian dari guru</b><small>Masukkan kode ujian dari gurumu, lalu kerjakan. Jawaban langsung terkumpul ke guru.</small></span><span class="chev">'+ICON.chev+'</span></button>';
+}
+function ujkJoinHtml(){
+  var h='<h2 class="t">Ujian dari guru</h2><p class="mut">Minta kode ujian ke gurumu. Waktu baru berjalan setelah kamu mengetuk Mulai ujian.</p>'
+    +'<section class="card"><label class="f"><span>Kode ujian</span><input class="in mono ujk-kode" id="uj-kode" value="'+esc(UJ.kode)+'" placeholder="Contoh: K7MP2A" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="8"></label>'
+    +'<label class="f"><span>Nama lengkap</span><input class="in" id="uj-nama" value="'+esc(UJ.nama||siswa.nama||'')+'" autocomplete="name" placeholder="Nama yang dikenali gurumu"></label>';
+  if(UJ.info){var i=UJ.info;
+    h+='<div class="ujk-info"><b>'+esc(i.judul)+'</b><span>'+(i.kelas?'Kelas '+esc(i.kelas)+' · ':'')+i.jumlah+' soal · '+i.menit+' menit</span>'+(i.status!=='buka'?'<span class="bad">Ujian ini sudah ditutup guru.</span>':'')+'</div>'
+      +'<div class="row"><button class="btn" data-act="ujk-gabung" data-fk="ujk-gabung"'+(UJ.busy||i.status!=='buka'?' disabled':'')+'>'+(UJ.busy?'Menyiapkan…':'Mulai ujian')+'</button><button class="btn ghost" data-act="ujk-ganti">Ganti kode</button></div>';
+  }else h+='<div class="row"><button class="btn" data-act="ujk-cek" data-fk="ujk-cek"'+(UJ.busy?' disabled':'')+'>'+(UJ.busy?'Memeriksa…':'Lanjut')+'</button></div>';
+  return h+msgHtml(UJ.msg)+'</section>';
+}
+function ujkHasilHtml(){
+  var s=ujkSes;if(!s)return '<p class="mut">Belum ada ujian.</p>';
+  var r=s.res,n=s.ids.length,sk=skorDari(r,n),lihat=s.aturan.lihatNilai!==false;
+  var h='<h2 class="t">'+esc(s.judul)+'</h2><p class="eyebrow">'+esc(s.nama)+'</p>';
+  h+='<section class="card ujk-done"><div class="big">'+(s.terkirim?'✓':'⏳')+'</div><b>'+(s.terkirim?'Jawabanmu sudah terkumpul ke guru':'Mengirim jawaban…')+'</b>'
+    +'<p class="mut">'+(s.auto?'Waktu ujian sudah habis. ':'')+(s.terkirim?'Gurumu akan memeriksa dan memberi nilai.':'Kalau belum terkirim, pastikan ada internet. Jawaban tetap tersimpan di HP ini.')+'</p>'
+    +(s.terkirim?'':'<div class="row"><button class="btn" data-act="ujk-kirim-ulang">Kirim lagi</button></div>')+'</section>';
+  if(lihat){
+    h+='<section class="card"><div class="stats">'+stat(sk,'skor sementara')+stat(r.filter(function(x){return x.ok;}).length+'/'+n,'soal benar')+'</div><p class="mut" style="margin:8px 0 0">Nilai akhir diberikan oleh gurumu.</p></section>';
+    h+='<section class="card"><div class="sh"><h2>Rincian</h2></div><div class="list">'+r.map(function(x,i){return '<div class="mis"><div class="mh"><b>'+(i+1)+'. '+esc(x.judul)+'</b><span class="cnt'+(x.ok&&!x.err?' good':'')+'">'+(x.ok?(x.err?x.err+' salah':'benar'):(x.lewat?'dilewati':'belum benar'))+'</span></div></div>';}).join('')+'</div></section>';
+  }
+  return h+'<div class="row"><button class="btn ghost" data-act="ujk-tutup-hasil">Kembali ke beranda</button></div>';
+}
+TOOLVIEWS.ujk=ujkJoinHtml;TOOLVIEWS.ujkhasil=ujkHasilHtml;
+var UJKACT={
+  'ujk-buka':function(){UJ={kode:'',nama:siswa.nama||'',info:null,msg:null,busy:false};view='ujk';window.scrollTo(0,0);fk='uj-kode';},
+  'ujk-ganti':function(){UJ.info=null;UJ.msg=null;fk='uj-kode';},
+  'ujk-cek':function(){
+    var k=String(UJ.kode||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(k.length<4){UJ.msg={t:'bad',x:'Tulis kode ujian dari gurumu.'};return;}
+    UJ.kode=k;UJ.busy=true;UJ.msg=null;render();
+    ujkCall('/info?room='+encodeURIComponent(k)).then(function(res){UJ.busy=false;
+      if(res.ok)UJ.info=res.j;else UJ.msg={t:'bad',x:ujkErr(res,'Kode ujian belum bisa diperiksa.')};render();});
+    return 'async';},
+  'ujk-gabung':function(){
+    var nm=String(UJ.nama||'').trim();if(nm.length<2){UJ.msg={t:'bad',x:'Tulis nama lengkapmu supaya gurumu mengenali lembar kerjamu.'};return;}
+    UJ.busy=true;UJ.msg=null;render();
+    ujkCall('/gabung',{room:UJ.kode,nama:nm}).then(function(res){UJ.busy=false;
+      if(!res.ok){UJ.msg={t:'bad',x:ujkErr(res,'Belum bisa masuk ujian.')};render();return;}
+      var j=res.j,ids=j.soal.map(function(x){return x.id;});
+      if(j.aturan.acak)ids=shuf(ids);
+      if(!siswa.nama){siswa.nama=nm;store.set(SISKEY,JSON.stringify(siswa));}
+      ujkSes={room:UJ.kode,pid:j.pid,token:j.token,judul:j.judul,nama:nm,aturan:j.aturan,mulai:j.mulai,batas:j.batas,off:j.sekarang-Date.now(),soal:j.soal,ids:ids,i:0,res:[],selesai:false};
+      ujkSimpanLokal();ujkKirim(false);ujkMulaiExam();render();});
+    return 'async';},
+  'ujk-lanjut':function(){if(!ujkSes)return;if(ujkSisa()<=0){ujkSes.res=ujkSes.res||[];ujkSelesai(true);return;}ujkMulaiExam();},
+  'ujk-hasil':function(){view='ujkhasil';if(ujkSes&&ujkSes.kirimAkhir)ujkKirim(true);},
+  'ujk-kirim-ulang':function(){ujkKirim(true);},
+  'ujk-tutup-hasil':function(){if(ujkSes&&ujkSes.terkirim){ujkSes=null;ujkSimpanLokal();}view='home';window.scrollTo(0,0);}
+};
+/* kirim ulang jawaban akhir yang tertunda saat aplikasi dibuka lagi */
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&ujkSes&&ujkSes.selesai&&ujkSes.kirimAkhir)ujkKirim(true);});
+
+/* ===== sisi guru ===== */
+var UG={list:null,msg:null,busy:false,room:null,hasil:null,lembar:null,pid:null,f:null,tmr:0};
+function ujkFormBaru(){return {judul:'',kelas:kelasSel,materi:[],n:10,menit:30,tingkat:'sulit',acak:true,lewati:true,lihatNilai:true};}
+function ujkMuatDaftar(){UG.busy=true;ujkGuru('/daftar').then(function(res){UG.busy=false;UG.list=res.ok?res.j.ujian:[];if(!res.ok)UG.msg={t:'bad',x:ujkErr(res,'Daftar ujian belum bisa dimuat.')};if(view==='admin'&&adminTab==='ujk')render();});}
+function ujkMuatHasil(diam){if(!UG.room)return;ujkGuru('/hasil',{room:UG.room}).then(function(res){
+  if(res.ok){UG.hasil=res.j;}else if(!diam)UG.msg={t:'bad',x:ujkErr(res,'Hasil ujian belum bisa dimuat.')};
+  if(view==='admin'&&adminTab==='ujk-room')render();});}
+function ujkAuto(){clearInterval(UG.tmr);UG.tmr=setInterval(function(){if(view==='admin'&&adminTab==='ujk-room'&&document.visibilityState==='visible')ujkMuatHasil(true);else clearInterval(UG.tmr);},15000);}
+function ujkSetupHtml(){
+  return guruBar('Ujian kelas')+'<section class="card"><div class="sh"><h2>Pasang server ujian dulu</h2></div>'
+    +'<p class="mut">Ujian kelas butuh server kecil untuk mengumpulkan jawaban siswa. Server ini gratis dan cukup dipasang sekali.</p><ol class="guide">'
+    +'<li>Di dasbor Cloudflare: <b>Storage &amp; Databases → D1 → Create</b>, beri nama <b>taktik-ujian</b>.</li>'
+    +'<li><b>Workers &amp; Pages → Create → Worker</b>, beri nama <b>taktik-ujian</b>, lalu Deploy.</li>'
+    +'<li><b>Edit code</b>, tempel isi berkas <b class="mono">server/ujian-worker.js</b> dari GitHub, lalu Deploy.</li>'
+    +'<li>Di worker itu: <b>Settings → Bindings → Add → D1 database</b>, nama variabel <b>DB</b>, pilih <b>taktik-ujian</b>.</li>'
+    +'<li>Salin alamat worker, lalu tempel di <b>Pengaturan kelas → Server tambahan</b>.</li></ol>'
+    +'<div class="row"><button class="btn" data-act="a-tab" data-v="set">Buka Pengaturan kelas</button></div></section>';
+}
+function ujkDaftarHtml(){
+  if(!ujianUrl())return ujkSetupHtml();
+  if(UG.list===null&&!UG.busy)ujkMuatDaftar();
+  var h=guruBar('Ujian kelas')+msgHtml(UG.msg)+'<div class="row"><button class="btn" data-act="ug-baru" data-fk="ug-baru">+ Buat ujian baru</button></div>';
+  if(UG.list===null)return h+'<div class="card"><p class="mut">Memuat daftar ujian…</p></div>';
+  if(!UG.list.length)return h+'<div class="card empty"><p><b>Belum ada ujian.</b></p><p class="mut">Buat ujian, bagikan kodenya, lalu siswa mengerjakan dari HP masing-masing.</p></div>';
+  return h+'<div class="list" style="margin-top:12px">'+UG.list.map(function(u){
+    return '<button class="item" data-act="ug-room" data-v="'+esc(u.room)+'"><span class="ti ujk-code mono">'+esc(u.room)+'</span><span class="it"><b>'+esc(u.judul)+'</b><small>'+(u.kelas?'Kelas '+esc(u.kelas)+' · ':'')+u.menit+' menit · '+u.peserta+' siswa ('+u.selesai+' selesai) · '+(u.status==='buka'?'dibuka':'ditutup')+' · '+jam(u.dibuat)+'</small></span><span class="chev">'+ICON.chev+'</span></button>';
+  }).join('')+'</div>';
+}
+function ujkBuatHtml(){
+  var f=UG.f,tops=[];data.forEach(function(s){if(s.kelas===f.kelas&&tops.indexOf(s.topik)<0)tops.push(s.topik);});
+  var pool=data.filter(function(s){return s.kelas===f.kelas&&f.materi.indexOf(s.topik)>=0;});
+  var h=guruBar('Buat ujian')+msgHtml(UG.msg)+'<section class="card"><div class="sh"><span class="num">1</span><h2>Soal</h2></div>'
+    +'<label class="f"><span>Judul ujian</span><input class="in" id="ug-judul" value="'+esc(f.judul)+'" placeholder="Contoh: Ulangan Harian Listrik 9A" autocomplete="off"></label>'
+    +'<p class="lbl">Kelas</p>'+chipsHtml([['7','Kelas 7'],['8','Kelas 8'],['9','Kelas 9']],f.kelas,'ug-kelas')
+    +'<p class="lbl">Materi <small>boleh lebih dari satu</small></p><div class="list">'+(tops.length?tops.map(function(t){var on=f.materi.indexOf(t)>=0,n=data.filter(function(s){return s.kelas===f.kelas&&s.topik===t;}).length;
+      return '<button class="item" data-act="ug-mat" data-v="'+esc(t)+'" aria-pressed="'+on+'"><span class="ti">'+(on?'☑️':'⬜')+'</span><span class="it"><b>'+esc(t)+'</b><small>'+n+' soal</small></span></button>';}).join(''):'<p class="mut">Belum ada soal di kelas ini.</p>')+'</div>'
+    +'<p class="lbl">Jumlah soal <small>'+pool.length+' soal tersedia, diambil acak</small></p>'+chipsHtml([['5','5'],['10','10'],['15','15'],['20','20'],['0','Semua']],String(f.n),'ug-n')+'</section>';
+  h+='<section class="card"><div class="sh"><span class="num">2</span><h2>Aturan</h2></div>'
+    +'<p class="lbl">Lama ujian</p>'+chipsHtml([['15','15 menit'],['30','30 menit'],['45','45 menit'],['60','60 menit'],['90','90 menit']],String(f.menit),'ug-menit')
+    +'<p class="lbl">Tingkat bantuan</p>'+chipsHtml(TINGKAT,f.tingkat,'ug-tingkat')
+    +'<label class="chk"><input type="checkbox" id="ug-acak"'+(f.acak?' checked':'')+'> <span><b>Acak urutan soal</b><small>Urutan soal setiap siswa berbeda. Angka di soal juga berbeda untuk soal yang memakai angka acak.</small></span></label>'
+    +'<label class="chk"><input type="checkbox" id="ug-lewati"'+(f.lewati?' checked':'')+'> <span><b>Boleh melewati soal</b><small>Siswa bisa lanjut ke soal berikutnya tanpa menyelesaikan soal yang sulit.</small></span></label>'
+    +'<label class="chk"><input type="checkbox" id="ug-lihat"'+(f.lihatNilai?' checked':'')+'> <span><b>Tampilkan skor ke siswa setelah selesai</b><small>Kalau dimatikan, siswa hanya melihat "Jawabanmu sudah terkumpul".</small></span></label>'
+    +'<p class="mut" style="margin:10px 0 0">Kartu rumus disembunyikan selama ujian. Waktu setiap siswa dihitung sejak ia mengetuk Mulai ujian. Jawaban terkumpul otomatis saat waktu habis atau saat guru menutup ujian.</p></section>';
+  return h+'<div class="row"><button class="btn" data-act="ug-buat" data-fk="ug-buat"'+(UG.busy||!pool.length?' disabled':'')+'>'+(UG.busy?'Membuat…':'Buat &amp; bagikan')+'</button><button class="btn ghost" data-act="a-tab" data-v="ujk">Batal</button></div>';
+}
+function ujkTeksBagi(h){return 'Ujian TakTik IPA: '+h.judul+'\nKode ujian: '+h.room+'\nLama: '+h.aturan.menit+' menit\n\nBuka aplikasi TakTik IPA → Ujian dari guru → isi kode dan namamu.\n'+(location.origin+location.pathname);}
+function ujkNilaiTeks(h){return h.judul+' ('+h.room+')\n'+h.peserta.map(function(p,i){return (i+1)+'. '+p.nama+'\t'+(p.nilai!=null?p.nilai:(p.skor!=null?p.skor+' (saran)':'-'))+'\t'+p.benar+'/'+p.jumlah+' benar\t'+p.status;}).join('\n');}
+function ujkRoomHtml(){
+  var h=UG.hasil;
+  if(!h)return guruBar('Ujian kelas')+msgHtml(UG.msg)+'<div class="card"><p class="mut">Memuat…</p></div>';
+  var st={mengerjakan:0,selesai:0,'waktu habis':0};h.peserta.forEach(function(p){st[p.status]++;});
+  var out=guruBar('Ujian kelas')+msgHtml(UG.msg)+noticeHtml()
+    +'<section class="card ujk-room"><p class="mut" style="margin:0">'+esc(h.judul)+(h.kelas?' · Kelas '+esc(h.kelas):'')+' · '+h.jumlahSoal+' soal · '+h.aturan.menit+' menit</p>'
+    +'<div class="ujk-big mono">'+esc(h.room)+'</div><p class="mut" style="margin:0">Kode ujian. Bagikan ke siswa.</p>'
+    +'<div class="row"><a class="btn" href="https://wa.me/?text='+encodeURIComponent(ujkTeksBagi(h))+'" target="_blank" rel="noopener">Bagikan lewat WhatsApp</a><button class="btn ghost" data-act="ug-salin" data-v="kode">Salin</button></div>'
+    +'<div class="row"><span class="pill'+(h.status==='buka'?' hot':'')+'">'+(h.status==='buka'?'Ujian dibuka':'Ujian ditutup')+'</span>'
+    +(h.status==='buka'?'<button class="btn '+(confirmKey==='ug-tutup'?'danger':'ghost')+' sm" data-act="ug-tutup">'+(confirmKey==='ug-tutup'?'Ya, tutup sekarang':'Tutup ujian')+'</button>':'<button class="btn ghost sm" data-act="ug-bukalagi">Buka lagi</button>')+'</div></section>';
+  out+='<div class="stats" style="margin:12px 0">'+stat(st.mengerjakan,'mengerjakan')+stat(st.selesai,'selesai')+stat(st['waktu habis'],'waktu habis')+'</div>';
+  out+='<div class="sh" style="margin:6px 0 8px"><h2>Lembar kerja siswa</h2><button class="btn ghost sm" data-act="ug-segarkan">Perbarui</button></div>';
+  if(!h.peserta.length)out+='<div class="card empty"><p class="mut">Belum ada siswa yang masuk. Daftar ini diperbarui sendiri setiap 15 detik.</p></div>';
+  else out+='<div class="list">'+h.peserta.map(function(p){
+    var nl=p.nilai!=null?'<b class="ujk-n">'+fmt(p.nilai)+'</b>':(p.skor!=null?'<span class="ujk-n sar">'+p.skor+'</span>':'');
+    return '<button class="item" data-act="ug-lembar" data-v="'+esc(p.id)+'"><span class="it"><b>'+esc(p.nama)+'</b><small>'+esc(p.status)+' · '+p.benar+'/'+(p.jumlah||h.jumlahSoal)+' benar'+(p.nilai!=null?' · sudah dinilai':'')+'</small></span>'+nl+'<span class="chev">'+ICON.chev+'</span></button>';
+  }).join('')+'</div>';
+  if(h.peserta.length)out+='<div class="row"><button class="btn ghost" data-act="ug-salin" data-v="nilai">Salin daftar nilai</button></div><p class="mut">Angka abu-abu adalah nilai saran dari aplikasi. Ketuk nama siswa untuk memberi nilai akhir.</p>';
+  out+='<div class="row" style="margin-top:16px"><button class="btn '+(confirmKey==='ug-hapus'?'danger':'ghost')+' sm" data-act="ug-hapus">'+(confirmKey==='ug-hapus'?'Ya, hapus ujian ini beserta jawabannya':'Hapus ujian')+'</button></div>';
+  return out;
+}
+function ujkLembarHtml(){
+  var L=UG.lembar;if(!L)return guruBar('Lembar kerja')+'<div class="card"><p class="mut">Memuat…</p></div>';
+  var d=L.data||{},res=d.res||[],n=d.jumlah||(UG.hasil?UG.hasil.jumlahSoal:res.length);
+  var h=guruBar('Lembar kerja')+msgHtml(UG.msg)+'<h2 class="t">'+esc(L.nama)+'</h2><p class="eyebrow">'+esc(L.status)+' · mulai '+jam(L.mulai)+(L.diubah?' · terakhir menyimpan '+jam(L.diubah):'')+'</p>';
+  h+='<section class="card"><div class="stats">'+stat((d.benar||0)+'/'+n,'soal benar')+stat(d.skor!=null?d.skor:'–','nilai saran')+'</div></section>';
+  h+='<section class="card"><div class="sh"><h2>Jawaban per soal</h2></div>'+(res.length?'<div class="list">'+res.map(function(x,i){
+    var ket=x.ok?(x.err?'benar setelah '+x.err+' kesalahan':'benar tanpa salah'):(x.lewat?'dilewati':'belum benar');
+    return '<div class="mis"><div class="mh"><b>'+(i+1)+'. '+esc(x.judul)+'</b><span class="cnt'+(x.ok?' good':'')+'">'+(x.ok?'✓':'✗')+'</span></div>'
+      +'<p class="why">'+esc(x.topik||'')+' · '+ket+(x.jawaban?' · jawaban siswa: <b>'+esc(x.jawaban)+'</b>':'')+(x.benar!=null?' · kunci: <b>'+esc(fmtNum(x.benar))+' '+esc(x.satuan||'')+'</b>':'')+(x.ms?' · '+fmtTime(x.ms):'')+'</p></div>';
+  }).join('')+'</div>':'<p class="mut">Belum ada soal yang dikerjakan.</p>')+'</section>';
+  h+='<section class="card"><div class="sh"><h2>Nilai dari guru</h2></div><div class="grid2"><label class="f"><span>Nilai (0–100)</span><input class="in" id="ug-nilai" inputmode="decimal" value="'+esc(L.nilai!=null?fmt(L.nilai):(d.skor!=null?d.skor:''))+'"></label></div>'
+    +'<label class="f"><span>Catatan untuk siswa <small>opsional</small></span><input class="in" id="ug-catatan" value="'+esc(L.catatan||'')+'" autocomplete="off"></label>'
+    +'<div class="row"><button class="btn" data-act="ug-simpan-nilai" data-fk="ug-sn">Simpan nilai</button><button class="btn ghost" data-act="ug-kembali">Kembali ke daftar</button></div>'
+    +'<div class="row"><button class="btn '+(confirmKey==='ug-hps'?'danger':'ghost')+' sm" data-act="ug-hapus-peserta">'+(confirmKey==='ug-hps'?'Ya, hapus lembar kerja ini':'Hapus lembar kerja (siswa boleh mengulang)')+'</button></div></section>';
+  return h;
+}
+function salinTeks(t,ok){
+  var done=function(){notice={t:'ok',x:ok};render();},fail=function(){notice={t:'info',x:'Salin otomatis tidak bisa di sini:\n'+t};render();};
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fail);return;}}catch(e){}
+  fail();
+}
+var UGACT={
+  'ug-baru':function(){UG.f=ujkFormBaru();UG.msg=null;adminTab='ujk-buat';window.scrollTo(0,0);},
+  'ug-kelas':function(v){UG.f.kelas=v;UG.f.materi=[];},
+  'ug-mat':function(v){var i=UG.f.materi.indexOf(v);if(i>=0)UG.f.materi.splice(i,1);else UG.f.materi.push(v);},
+  'ug-n':function(v){UG.f.n=+v;},'ug-menit':function(v){UG.f.menit=+v;},'ug-tingkat':function(v){UG.f.tingkat=v;},
+  'ug-buat':function(){
+    var f=UG.f,pool=shuf(data.filter(function(s){return s.kelas===f.kelas&&f.materi.indexOf(s.topik)>=0;}));
+    if(!pool.length){UG.msg={t:'bad',x:'Pilih minimal satu materi.'};return;}
+    var pilih=f.n?pool.slice(0,f.n):pool,judul=f.judul.trim()||('Ujian '+f.materi.join(', ')+' · Kelas '+f.kelas);
+    UG.busy=true;UG.msg=null;render();
+    ujkGuru('/buat',{judul:judul,kelas:f.kelas,soal:pilih,aturan:{menit:f.menit,tingkat:f.tingkat,acak:f.acak,lewati:f.lewati,lihatNilai:f.lihatNilai}}).then(function(res){UG.busy=false;
+      if(!res.ok){UG.msg={t:'bad',x:ujkErr(res,'Ujian belum bisa dibuat.')};render();return;}
+      UG.list=null;UG.room=res.j.room;UG.hasil=null;adminTab='ujk-room';notice={t:'ok',x:'Ujian dibuat. Bagikan kode '+res.j.room+' ke siswa.'};ujkMuatHasil();ujkAuto();render();});
+    return 'async';},
+  'ug-room':function(v){UG.room=v;UG.hasil=null;UG.msg=null;confirmKey=null;adminTab='ujk-room';ujkMuatHasil();ujkAuto();window.scrollTo(0,0);},
+  'ug-segarkan':function(){ujkMuatHasil();},
+  'ug-salin':function(v){if(!UG.hasil)return;salinTeks(v==='nilai'?ujkNilaiTeks(UG.hasil):ujkTeksBagi(UG.hasil),v==='nilai'?'Daftar nilai disalin. Tempel di WhatsApp atau Excel.':'Kode dan petunjuk ujian disalin.');return 'async';},
+  'ug-tutup':function(){if(confirmKey!=='ug-tutup'){confirmKey='ug-tutup';return;}confirmKey=null;ujkGuru('/status',{room:UG.room,status:'tutup'}).then(function(res){if(!res.ok)UG.msg={t:'bad',x:ujkErr(res,'Ujian belum bisa ditutup.')};else notice={t:'ok',x:'Ujian ditutup. Jawaban siswa yang masih mengerjakan terkumpul otomatis.'};ujkMuatHasil();});return 'async';},
+  'ug-bukalagi':function(){ujkGuru('/status',{room:UG.room,status:'buka'}).then(function(){ujkMuatHasil();});return 'async';},
+  'ug-hapus':function(){if(confirmKey!=='ug-hapus'){confirmKey='ug-hapus';return;}confirmKey=null;ujkGuru('/hapus',{room:UG.room}).then(function(res){if(res.ok){UG.list=null;adminTab='ujk';notice={t:'ok',x:'Ujian dihapus.'};}else UG.msg={t:'bad',x:ujkErr(res,'Ujian belum bisa dihapus.')};render();});return 'async';},
+  'ug-lembar':function(v){UG.pid=v;UG.lembar=null;UG.msg=null;confirmKey=null;adminTab='ujk-lembar';window.scrollTo(0,0);
+    ujkGuru('/lembar',{room:UG.room,pid:v}).then(function(res){if(res.ok)UG.lembar=res.j;else UG.msg={t:'bad',x:ujkErr(res,'Lembar kerja belum bisa dimuat.')};render();});},
+  'ug-kembali':function(){adminTab='ujk-room';ujkMuatHasil();},
+  'ug-simpan-nilai':function(){var nv=$('#ug-nilai'),ct=$('#ug-catatan'),n=nv?parseNum(nv.value):NaN;
+    if(nv&&nv.value.trim()&&(!Number.isFinite(n)||n<0||n>100)){UG.msg={t:'bad',x:'Nilai harus angka 0–100.'};return;}
+    ujkGuru('/nilai',{room:UG.room,pid:UG.pid,nilai:nv&&nv.value.trim()?n:'',catatan:ct?ct.value:''}).then(function(res){
+      if(res.ok){notice={t:'ok',x:'Nilai '+UG.lembar.nama+' tersimpan.'};adminTab='ujk-room';ujkMuatHasil();}else{UG.msg={t:'bad',x:ujkErr(res,'Nilai belum tersimpan.')};}render();});
+    return 'async';},
+  'ug-hapus-peserta':function(){if(confirmKey!=='ug-hps'){confirmKey='ug-hps';return;}confirmKey=null;
+    ujkGuru('/hapus-peserta',{room:UG.room,pid:UG.pid}).then(function(res){if(res.ok){notice={t:'ok',x:'Lembar kerja dihapus. Siswa itu bisa masuk lagi.'};adminTab='ujk-room';ujkMuatHasil();}else UG.msg={t:'bad',x:ujkErr(res,'Belum bisa dihapus.')};render();});return 'async';}
+};
+/* server tambahan (ujian dan AI) di Pengaturan kelas */
+function serverHtml(){
+  return '<section class="card"><div class="sh"><h2>Server tambahan</h2></div><p class="mut">Tempel alamat server ujian dan server AI kalau sudah dipasang (lihat README). Alamat ini ikut terkirim ke semua HP siswa.</p>'
+    +'<label class="f"><span>Server ujian</span><input class="in mono" id="srv-ujian" value="'+esc(cfgUrl('ujian'))+'" placeholder="https://taktik-ujian.xxx.workers.dev" autocomplete="off" spellcheck="false"></label>'
+    +'<label class="f"><span>Server AI (Claude)</span><input class="in mono" id="srv-ai" value="'+esc(cfgUrl('ai'))+'" placeholder="https://taktik-ai.xxx.workers.dev" autocomplete="off" spellcheck="false"></label>'
+    +'<div class="row"><button class="btn" data-act="srv-simpan" data-fk="srv">Periksa &amp; simpan</button></div>'+msgHtml(UG.srvMsg)+'</section>';
+}
+UGACT['srv-simpan']=function(){
+  var u1=($('#srv-ujian')||{}).value||'',u2=($('#srv-ai')||{}).value||'';u1=u1.trim().replace(/\/+$/,'');u2=u2.trim().replace(/\/+$/,'');
+  var bad=[u1,u2].filter(function(u){return u&&!/^https:\/\/[^\s"'<>]+$/.test(u);});
+  if(bad.length){UG.srvMsg={t:'bad',x:'Alamat harus diawali https://'};return;}
+  UG.srvMsg={t:'info',x:'Memeriksa server…'};render();
+  var cek=function(u,nama){if(!u)return Promise.resolve(true);return apiCall('/',null,10000,u).then(function(r){return r.ok&&r.j&&r.j.nama===nama;});};
+  Promise.all([cek(u1,'taktik-ujian'),cek(u2,'taktik-ai')]).then(function(ok){
+    if(!ok[0]){UG.srvMsg={t:'bad',x:'Server ujian tidak menjawab. Periksa alamatnya dan pastikan isi ujian-worker.js sudah ditempel.'};render();return;}
+    if(!ok[1]){UG.srvMsg={t:'bad',x:'Server AI tidak menjawab. Periksa alamatnya dan pastikan isi ai-worker.js sudah ditempel.'};render();return;}
+    setCfgUrl('ujian',u1);setCfgUrl('ai',u2);UG.srvMsg={t:'ok',x:'Server tersimpan.'};UG.list=null;
+    if(simpanKirim('Alamat server disimpan.')!=='async')render();});
+  return 'async';
+};
 function adminHtml(){
   if(!adminOK)return loginHtml();
   if(adminTab==='home')return guruHomeHtml();
   if(adminTab==='buat'){if(!G)gBaru();return noticeHtml()+(G.tpl?buatIsiHtml():buatPilihHtml());}
   if(adminTab==='cerita'&&UC)return ucHtml();
+  if(adminTab==='ujk')return noticeHtml()+ujkDaftarHtml();
+  if(adminTab==='ujk-buat'&&UG.f)return ujkBuatHtml();
+  if(adminTab==='ujk-room')return ujkRoomHtml();
+  if(adminTab==='ujk-lembar')return ujkLembarHtml();
   var JT={list:'Soal saya',tampil:'Tampil di kelas',ai:'Ngobrol dengan AI',kelas:'Kelas guru lain',import:'Impor soal',export:apiBase()?'Cadangan':'Ekspor',set:'Pengaturan kelas',edit:'Formulir soal lengkap'};
   var h=guruBar(JT[adminTab]||'Menu guru')+(adminTab==='edit'||adminTab==='tampil'?'':statusHtml())+noticeHtml();
   if(adminTab==='edit')return h+formHtml();
@@ -2821,6 +3174,9 @@ document.addEventListener('click',function(e){
   else if(Object.prototype.hasOwnProperty.call(KDACT,a)){if(KDACT[a](v)==='async')return;}
   else if(Object.prototype.hasOwnProperty.call(UPDACT,a)){if(UPDACT[a](v)==='async')return;}
   else if(Object.prototype.hasOwnProperty.call(GACT,a)){if(GACT[a](v)==='async')return;}
+  else if(Object.prototype.hasOwnProperty.call(BTACT,a))BTACT[a](v);
+  else if(Object.prototype.hasOwnProperty.call(UJKACT,a)){if(UJKACT[a](v)==='async')return;}
+  else if(Object.prototype.hasOwnProperty.call(UGACT,a)){if(UGACT[a](v)==='async')return;}
   else if(Object.prototype.hasOwnProperty.call(PACT,a))PACT[a](v);
   else if(a==='play'){exam=null;playFrom=(view==='materi'||view==='ulang')?view:'home';startPlay(v,data.find(function(s){return s.id===v;}));previewFrom=null;fk=null;window.scrollTo(0,0);}
   else if(a==='set-tingkat'){if(tingkat!==v){streak=0;store.set(STRKEY,'0');levelUp=false;}tingkat=v;store.set('cjs.tingkat',v);}
@@ -2909,7 +3265,9 @@ document.addEventListener('input',function(e){
   else if(t.id==='kv'&&konv){konv.input=t.value;}
   else if(t.id==='kr-text'&&karang){karang.text=t.value;}
   else if(t.id==='ai-in'){aiInput=t.value;}
-  else if(t.dataset&&t.dataset.g&&G){G.nilai[t.dataset.g]=t.value;G.cek=false;var ga=$('#g-ans');if(ga&&G.tpl){var an=tplJawab(G.tpl,G.nilai);ga.textContent=G.tpl.q[0]+' = '+(Number.isFinite(an)?fmtNum(an):'?')+' '+G.tpl.q[2];}}
+  else if(t.id==='uj-kode'){UJ.kode=t.value;}else if(t.id==='uj-nama'){UJ.nama=t.value;}
+  else if(t.id==='ug-judul'&&UG.f){UG.f.judul=t.value;}
+  else if(t.dataset&&t.dataset.g&&G){G.nilai[t.dataset.g]=t.value;G.cek=false;var ga=$('#g-ans');if(ga&&G.tpl){var an=tplJawab(G.tpl,G.nilai,G.unit);ga.textContent=G.tpl.q[0]+' = '+(Number.isFinite(an)?fmtNum(an):'?')+' '+G.tpl.q[2];}}
   else if(t.id==='g-cerita'&&G){G.cerita=t.value;G.cek=false;}
   else if(t.id==='g-judul'&&G){G.judul=t.value;}
   else if(t.id==='g-tema'&&G){G.aiTema=t.value;}
@@ -2926,6 +3284,10 @@ document.addEventListener('input',function(e){
 document.addEventListener('change',function(e){
   var t=e.target;
   if(t.id==='g-acak'&&G){G.acak=t.checked;G.cek=false;render();return;}
+  if(UG.f&&(t.id==='ug-acak'||t.id==='ug-lewati'||t.id==='ug-lihat')){UG.f[{'ug-acak':'acak','ug-lewati':'lewati','ug-lihat':'lihatNilai'}[t.id]]=t.checked;return;}
+  if(t.dataset&&t.dataset.gu&&G&&G.tpl){var k=t.dataset.gu,v=G.tpl.v.filter(function(x){return x[0]===k;})[0],lama=unitInfo(v,G.unit[k]),baru=unitInfo(v,t.value),x=parseNum(G.nilai[k]);
+    if(Number.isFinite(x)){var bs=lama?x*lama.f:x;G.nilai[k]=fmt(Math.round((baru?bs/baru.f:bs)*1e6)/1e6);}
+    G.unit[k]=t.value===v[3]?'':t.value;G.cek=false;render();return;}
   if(t.id==='impf'&&t.files&&t.files[0]){
     var fr=new FileReader();
     fr.onload=function(){impText=String(fr.result||'');confirmKey=null;render();};
@@ -2941,7 +3303,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.2.2',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.3.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
