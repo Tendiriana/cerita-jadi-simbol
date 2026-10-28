@@ -100,7 +100,7 @@ Menu guru berisi 4 tombol besar:
 | **➕ Tambah soal** | Pilih rumus, isi angka, tulis cerita. Selesai. |
 | **📚 Soal saya** | Daftar soal per kelas: coba, ubah cerita, hapus, urutkan |
 | **📺 Tampil di kelas** | Bahas soal di proyektor atau TV |
-| **⚙️ Pengaturan kelas** | Kunci materi dan ganti PIN |
+| **⚙️ Pengaturan kelas** | Kunci kelas (7, 8, 9) atau materi tertentu, dan ganti PIN |
 
 Di atas layar selalu ada keterangan **✓ Semua soal sudah terkirim ke siswa**. Setiap soal yang disimpan, diubah, atau dihapus **langsung terkirim** ke siswa. Tidak ada langkah kirim yang terpisah.
 
@@ -127,7 +127,7 @@ Untuk rumus yang ada di daftar aplikasi, AI hanya **memilih rumus, memilih angka
 
 Supaya hasil AI bagus, pasang **server AI dengan Claude** (lihat bagian *Server AI* di bawah). Tanpa server AI, aplikasi memakai AI bawaan server soal yang kualitasnya lebih rendah.
 
-**Kunci materi:** di Pengaturan mode guru, ketuk nama materi untuk mengunci atau membukanya. Materi yang dikunci tetap tampil di beranda, tetapi saat diketuk muncul pesan "Soal ini belum bisa dibuka." Upload soal.json lewat Ekspor supaya berlaku di HP siswa.
+**Kunci kelas dan materi:** di **Pengaturan kelas**, ketuk **Kunci kelas** untuk menutup satu kelas sekaligus. Ketuk nama kelas untuk melihat materinya, lalu ketuk materi untuk mengunci atau membukanya. Materi yang dikunci tetap tampil di beranda, tetapi saat diketuk muncul pesan "Soal ini belum bisa dibuka." Upload soal.json lewat Ekspor supaya berlaku di HP siswa.
 
 **Tampil di kelas:** tab di mode guru untuk proyektor atau TV. Pilih materi, lalu **Mulai tampil**. Langkah dibuka satu per satu: baca cerita, pilah besaran, tebak materi (A–D), tebak rumus (A–D), hitung, jawaban. Ada tombol angka baru, pengatur waktu 30 detik, dan soal berikutnya. Dari laptop: → atau spasi lanjut, ← mundur, N angka baru, T waktu, F layar penuh, Esc keluar.
 
