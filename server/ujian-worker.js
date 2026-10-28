@@ -46,16 +46,22 @@ async function siapkan(db) {
   siap = true;
 }
 
-async function cekGuru(env, kode, pin) {
+async function cekGuru(env, kode, pin, req) {
   // Cloudflare menolak worker memanggil worker lain di workers.dev yang sama (error 1042),
   // jadi server soal dipanggil lewat service binding bernama API kalau ada.
   const api = (env.MAIN_API || 'https://taktik-api.taktik-ipa.workers.dev').replace(/\/+$/, '');
-  const opsi = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kode, pin }) };
+  // data pengirim asli ikut diteruskan; lewat service binding, header ini tidak terisi sendiri
+  const h = { 'Content-Type': 'application/json', 'User-Agent': 'taktik-worker' };
+  const ip = req && req.headers.get('CF-Connecting-IP');
+  if (ip) { h['CF-Connecting-IP'] = ip; h['X-Forwarded-For'] = ip; }
+  const asal = req && req.headers.get('Origin');
+  if (asal) h['Origin'] = asal;
+  const opsi = { method: 'POST', headers: h, body: JSON.stringify({ kode, pin }) };
   let r;
   try {
     r = env.API ? await env.API.fetch(new Request(api + '/login', opsi)) : await fetch(api + '/login', opsi);
   } catch (e) {
-    return gagal(502, 'Server soal tidak bisa dihubungi. Coba lagi.');
+    return gagal(502, 'Server soal tidak bisa dihubungi (' + String(e && e.message || e).slice(0, 160) + ').');
   }
   if (r.ok) return null;
   const j = await r.json().catch(() => null);
@@ -154,7 +160,7 @@ async function rute(req, env) {
 
   /* ---------- guru ---------- */
   const kode = normKode(b.kode);
-  const tolak = await cekGuru(env, kode, b.pin);
+  const tolak = await cekGuru(env, kode, b.pin, req);
   if (tolak) return tolak;
   const milik = async room => {
     const u = await db.prepare('SELECT * FROM ujian WHERE room = ? AND kode = ?').bind(normRoom(room), kode).first();
