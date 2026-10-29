@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.speech.tts.Voice
 import android.webkit.JavascriptInterface
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -139,6 +140,7 @@ class MainActivity : AppCompatActivity() {
             if (ttsReady) {
                 val id = Locale("id", "ID")
                 if ((tts?.isLanguageAvailable(id) ?: TextToSpeech.LANG_NOT_SUPPORTED) >= TextToSpeech.LANG_AVAILABLE) tts?.language = id
+                pilihSuara()
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onStart(utteranceId: String) {}
                     override fun onDone(utteranceId: String) = keWeb("window.__ttsEnd&&__ttsEnd(" + JSONObject.quote(utteranceId) + ")")
@@ -150,6 +152,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (savedInstanceState != null) web.restoreState(savedInstanceState) else web.loadUrl(BuildConfig.APP_URL)
+    }
+
+    /**
+     * Pilih suara bahasa Indonesia terbaik yang sudah terpasang: yang tidak butuh internet dulu
+     * (supaya tetap jalan offline), lalu kualitas paling tinggi.
+     */
+    private fun pilihSuara() {
+        val t = tts ?: return
+        try {
+            val terbaik = t.voices
+                ?.filter { (it.locale.language == "id" || it.locale.language == "in") && !it.features.contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED) }
+                ?.sortedWith(compareBy<Voice> { it.isNetworkConnectionRequired }.thenByDescending { it.quality })
+                ?.firstOrNull()
+            if (terbaik != null) t.voice = terbaik
+            t.setPitch(1f)
+        } catch (e: Exception) {
+        }
     }
 
     /** Belum pernah online atau situs belum tersedia: pakai salinan di dalam APK. */
