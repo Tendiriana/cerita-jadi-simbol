@@ -212,8 +212,8 @@ Di halaman utama, siswa memilih tingkat:
 
 ## Tampilan siswa
 
-- Tampilan bergaya **lembar kerja**: hitam putih dengan satu warna merah, judul berhuruf serif, garis pemisah tegas, seperti lembar soal cetak. Siswa bisa memilih gaya **buku tulis** (kertas bergaris, tinta biru, tulisan tangan) di **Pengaturan → Tampilan → Gaya**. Saat ujian, tampilan selalu lembar kerja.
-- Huruf disimpan di folder `fonts/` (Kalam, Andika, Source Serif 4, IBM Plex Mono; lisensi SIL OFL), jadi tampilan tetap sama saat offline.
+- Tampilan bergaya **lembar kerja**: hitam putih dengan satu warna merah, judul berhuruf serif, garis pemisah tegas, seperti lembar soal cetak. Siswa bisa memilih gaya lain di **Pengaturan → Tampilan → Gaya**: **buku tulis** (kertas bergaris, tinta biru, tulisan tangan) atau **papan tulis** (papan hijau, tulisan kapur putih dan kuning). Saat ujian, tampilan selalu lembar kerja.
+- Huruf disimpan di folder `fonts/` (Kalam, Andika, Gochi Hand, Source Serif 4, IBM Plex Mono; lisensi SIL OFL), jadi tampilan tetap sama saat offline.
 - Kelas dipilih sekali di layar pengenalan. Kelas bisa diganti lewat tombol **Kelas ▾** di kartu kemajuan, atau di Pengaturan.
 - Tingkat bantuan dipilih di kartu kemajuan beranda.
 - Langkah soal yang sudah selesai diringkas menjadi satu baris. Ketuk **Lihat** untuk membukanya lagi.

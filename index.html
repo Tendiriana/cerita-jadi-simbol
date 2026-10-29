@@ -22,6 +22,7 @@
 @font-face{font-family:'Kalam';font-weight:700;font-display:swap;src:url(fonts/kalam-700.woff2) format('woff2')}
 @font-face{font-family:'Andika';font-weight:400;font-display:swap;src:url(fonts/andika-400.woff2) format('woff2')}
 @font-face{font-family:'Andika';font-weight:700;font-display:swap;src:url(fonts/andika-700.woff2) format('woff2')}
+@font-face{font-family:'Gochi Hand';font-weight:400;font-display:swap;src:url(fonts/gochi-hand.woff2) format('woff2')}
 @font-face{font-family:'Source Serif 4';font-weight:600 700;font-display:swap;src:url(fonts/source-serif-4.woff2) format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-weight:500;font-display:swap;src:url(fonts/plex-mono-500.woff2) format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-weight:600;font-display:swap;src:url(fonts/plex-mono-600.woff2) format('woff2')}
@@ -615,6 +616,47 @@ body.lks .mat-card,body.lks .item,body.lks .gtile{border:1px solid var(--ink)}
 body.lks .nob{border-radius:0;border-color:var(--ink);font-family:var(--f-body);font-size:.85rem}
 body.lks .tok.cut{text-decoration-color:var(--acc)}
 body.lks .gtile:first-child{box-shadow:none}
+
+/* ===== gaya papan tulis (body.papan): kapur putih dan kuning di papan hijau ===== */
+body.papan{
+  --bg:#2B4538; --surface:#32503F; --sunk:#284034; --ink:#EEF1EA; --ink2:#B9C8BD; --line:#ffffff24; --line2:#ffffff5c;
+  --acc:#F4D35E; --acc-ink:#2B4538; --acc-soft:#ffffff17; --raise:#3A5A48; --pen:#F4D35E; --rule:transparent; --margin:transparent;
+  --hl:#F4D35E; --hl-ink:#2B4538;
+  --q1:#9CC2FF; --q2:#9FE0B0; --q3:#FFC27A; --q4:#D5BCFF; --ask:#FF9EC0;
+  --warn:#FFD27A; --warnbg:#ffffff14; --ok:#9FE0B0; --okbg:#ffffff14; --bad:#FF8A7A; --badbg:#ffffff14; --info:#9CC2FF; --infobg:#ffffff14;
+  --f-hand:'Kalam',system-ui,sans-serif; --f-display:'Gochi Hand','Kalam',system-ui,sans-serif;
+  color-scheme:dark;background-image:radial-gradient(ellipse at 30% 15%,#35584A,#2B4538 70%);background-attachment:fixed}
+body.papan::before{display:none}
+body.papan .bar{background:#5C3D22;border-bottom:3px solid #8A5A33}
+body.papan .ttl,body.papan .brand b{color:#fff}
+body.papan .brand small{color:#E3D2BC}
+body.papan #nav{background:#5C3D22;border-top:3px solid #8A5A33}
+body.papan .nav-i{color:#E3D2BC}body.papan .nav-i.on{color:var(--acc)}
+body.papan h1,body.papan h2.t{color:#fff;font-weight:400}
+body.papan h1,body.papan h2.t,body.papan .sec,body.papan .sh h2,body.papan .ttl,body.papan .brand b,body.papan .mat-card b,body.papan .opt.mat b{font-family:var(--f-display);letter-spacing:.01em}
+body.papan .sec,body.papan .sh h2{font-weight:400}
+body.papan .card{border-top:2px solid var(--line2)}
+body.papan .hero,body.papan .item,body.papan .mat-card,body.papan .opt,body.papan .slot,body.papan .gtile,body.papan .tools .item{background:transparent;border:2px solid var(--line2)}
+body.papan .slot.filled{border-color:var(--c)}
+body.papan .slot .sym,body.papan .slot .val{font-family:'Kalam',var(--f-body)}
+body.papan .btn{box-shadow:none}
+body.papan .btn.ghost{background:transparent;border-color:var(--line2);color:var(--ink)}
+body.papan .tok{border-bottom-color:#ffffff99}
+body.papan .tok.on{background:#E8F2EA;color:#2B4538}
+body.papan .tok.cut{text-decoration-color:var(--bad)}
+body.papan .calc input{color:#fff;border-color:var(--acc)}
+body.papan .fb{color:#fff;border-left-color:var(--acc);background:#ffffff12}
+body.papan .fb.ok{color:var(--ok);border-left-color:var(--ok)}body.papan .fb.bad{color:var(--bad);border-left-color:var(--bad)}
+body.papan .pik,body.papan .sik,body.papan .mi,body.papan .ti{color:var(--acc)}
+body.papan .prog{border:2px dashed var(--line2);padding:14px;border-radius:6px}
+body.papan .prog-n,body.papan .prog-day{color:var(--acc)}
+body.papan .bar-p{border-color:var(--line2)}
+body.papan .bar-p > span,body.papan .prog .bar-p > span{background:var(--acc)}
+body.papan .ujk-card{background:#ffffff14;border:2px solid var(--acc);color:#fff;box-shadow:none}
+body.papan .gtile:first-child{background:var(--acc);color:var(--acc-ink);box-shadow:none}
+body.papan .bintang,body.papan .recap{border-color:var(--line2)}
+body.papan .in{background:#ffffff10;color:#fff;border-color:var(--line2)}
+body.papan .hero-sym span{background:transparent}
 </style>
 </head>
 <body class="lks">
@@ -1100,8 +1142,8 @@ var ICON={
   dots:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
   konversi:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/></svg>'
 };
-/* gaya tampilan: lembar kerja (bawaan) atau buku tulis; saat ujian selalu lembar kerja */
-function gayaNow(){return store.get('cjs.gaya')==='buku'?'buku':'lks';}
+/* gaya tampilan: lembar kerja (bawaan), buku tulis, atau papan tulis; saat ujian selalu lembar kerja */
+function gayaNow(){var g=store.get('cjs.gaya');return g==='buku'||g==='papan'?g:'lks';}
 function themeNow(){
   var t=store.get('cjs.tema');
   if(t==='light'||t==='dark')return t;
@@ -1112,8 +1154,8 @@ function applyTheme(){
     var t=store.get('cjs.tema'),de=document.documentElement;
     if(!de)return;
     if(t==='light'||t==='dark')de.setAttribute('data-theme',t);else de.removeAttribute('data-theme');
-    var lks=gayaNow()==='lks'||document.body&&document.body.classList.contains('lks');
-    var c=themeNow()==='dark'?(lks?'#141414':'#151A24'):(lks?'#FFFFFF':'#FBF8F0');
+    var g=gayaNow(),b=document.body,lks=g==='lks'||b&&b.classList.contains('lks');
+    var c=g==='papan'&&!lks?'#2B4538':themeNow()==='dark'?(lks?'#141414':'#151A24'):(lks?'#FFFFFF':'#FBF8F0');
     document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){m.setAttribute('content',c);});
   }catch(e){}
 }
@@ -1174,7 +1216,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.7.1':['Tampilan baru seperti lembar soal cetak: hitam putih, rapi, dengan satu warna merah.','Gambar soal kini berupa gambar garis sederhana.','Suka gaya buku tulis? Pilih di Pengaturan → Tampilan → Gaya.'],'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.7.1':['Tampilan baru seperti lembar soal cetak: hitam putih, rapi, dengan satu warna merah.','Gambar soal kini berupa gambar garis sederhana.','Mau gaya lain? Pilih Buku tulis atau Papan tulis di Pengaturan → Tampilan → Gaya.'],'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -1836,7 +1878,7 @@ function aturHtml(){
       +'<p class="mut" style="margin:10px 0 0">Tidak punya kode? Biarkan kosong, kamu tetap memakai soal utama.</p></section>';
   }
   h+='<section class="card"><div class="sh"><h2>Tampilan</h2></div><p class="lbl">Tema</p>'+chipsHtml([['auto','Ikuti HP'],['light','Terang'],['dark','Gelap']],mode,'set-tema')
-    +'<p class="lbl">Gaya</p>'+chipsHtml([['lks','Lembar kerja'],['buku','Buku tulis']],gayaNow(),'set-gaya')
+    +'<p class="lbl">Gaya</p>'+chipsHtml([['lks','Lembar kerja'],['buku','Buku tulis'],['papan','Papan tulis']],gayaNow(),'set-gaya')
     +'<p class="lbl">Ukuran teks</p>'+chipsHtml([['normal','Normal'],['besar','Besar']],fsBig?'besar':'normal','set-teks')+'</section>';
   h+='<section class="card"><div class="sh"><h2>Bantuan</h2></div><div class="list">'
     +'<button class="item" data-act="intro-ulang" data-fk="intro-ulang"><span class="it"><b>Lihat lagi pengenalan aplikasi</b><small>Tiga layar singkat tentang cara memakai aplikasi</small></span><span class="chev">'+ICON.chev+'</span></button></div></section>';
@@ -2157,7 +2199,7 @@ var TOOLACT={
   'kr-copy':function(v){var it=karya[+v];if(!it)return;var t=karyaText(it);
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){notice={t:'ok',x:'Cerita disalin.'};render();},function(){});},
   'set-tema':function(v){if(v==='light'||v==='dark')store.set('cjs.tema',v);else store.del('cjs.tema');applyTheme();},
-  'set-gaya':function(v){if(v==='buku')store.set('cjs.gaya','buku');else store.del('cjs.gaya');applyTheme();},
+  'set-gaya':function(v){if(v==='buku'||v==='papan')store.set('cjs.gaya',v);else store.del('cjs.gaya');applyTheme();},
   'set-teks':function(v){fsBig=v==='besar';store.set('cjs.teks',fsBig?'besar':'normal');applyText();},
   'intro-next':function(){if(introStep<INTRO.length-1)introStep++;fk='intro-next';},
   'intro-prev':function(){if(introStep>0)introStep--;fk='intro-next';},
@@ -3498,7 +3540,8 @@ function render(){
   $('#app').innerHTML=updHtml()+h;
   var nv=$('#nav');
   if(nv){var nh=navHtml();nv.innerHTML=nh;nv.hidden=!nh;try{document.body.classList.toggle('has-nav',!!nh);document.body.classList.toggle('presenting',view==='tampil');}catch(e){}}
-  try{document.body.classList.toggle('lks',gayaNow()==='lks'||['ujian','ujk','ujkhasil','ujkcek'].indexOf(view)>=0||(view==='play'&&!!exam&&cur!=='__prev'));}catch(e){}
+  try{var ujv=['ujian','ujk','ujkhasil','ujkcek'].indexOf(view)>=0||(view==='play'&&!!exam&&cur!=='__prev'),g=gayaNow();
+    document.body.classList.toggle('lks',g==='lks'||ujv);document.body.classList.toggle('papan',g==='papan'&&!ujv);}catch(e){}
   $('#foot').textContent=view==='home'?'Soal mengikuti Buku IPA SMP/MTs Kelas VII–IX, Kurikulum Merdeka.':'';
   celebrate=false;
   if(fk){var el=document.querySelector('[data-fk="'+fk+'"]');if(el&&!el.disabled){try{el.focus({preventScroll:true});}catch(_){}}fk=null;}
