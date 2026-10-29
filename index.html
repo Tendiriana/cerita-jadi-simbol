@@ -381,7 +381,7 @@ details.fold[open] summary{margin-bottom:10px}
 @media (prefers-reduced-motion:reduce){.jam.hot{animation:none}}
 .nomor{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
 .nb{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 4px;border-radius:10px;font:inherit;font-weight:800;font-size:.85rem;background:var(--sunk);color:var(--ink2);border:1.5px solid transparent}
-.nb.ok{background:var(--okbg);color:var(--ok)}
+.nb.ok{background:var(--acc-soft);color:var(--acc)}
 .nb.lw{background:var(--warnbg);color:var(--warn)}
 button.nb.lw{cursor:pointer;border-color:currentColor}
 .nomor.besar .nb{min-width:44px;height:44px;font-size:1rem}
@@ -464,6 +464,21 @@ textarea.in{min-height:84px;resize:vertical;line-height:1.45}
 .gi .ik{width:30px;height:30px;margin:0}.bi .ik{width:22px;height:22px;margin:0;vertical-align:-5px}
 .ujk-card .ui .ik{width:28px;height:28px;margin:0}.ujk-done .big .ik{width:48px;height:48px;margin:0}
 .ti .ik{margin:0}.jam .ik{margin-right:6px}
+
+.opt.pick{border-color:var(--acc);background:var(--acc-soft);box-shadow:inset 0 0 0 1px var(--acc)}
+.opt.pick::before{content:'● ';color:var(--acc)}
+.num.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+.ring .num.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.nl{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
+.nl li{display:flex;gap:10px;align-items:flex-start}
+.nl li p{margin:2px 0 0;font-size:.95rem}
+.nm-i{flex:none;width:28px;height:28px;display:grid;place-items:center;font-weight:800;border-radius:50%;color:#fff;background:var(--ok)}
+.nl li.no .nm-i{background:var(--bad)}
+.nl li.no b{color:var(--bad)}
+.nl-ex{margin-top:12px}
+.keys{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.keys .btn{min-width:44px;font-size:1.05rem}
+.calc .hit{flex:1;min-width:10em;font-family:var(--f-mono);font-weight:600;font-size:1.05rem;padding:9px 12px;border:1.5px solid var(--line2);border-radius:12px;background:var(--surface);color:var(--ink)}
 
 /* ===== gaya buku tulis ===== */
 body{background-color:var(--bg);background-image:repeating-linear-gradient(to bottom,transparent 0 31px,var(--rule) 31px 32px);background-attachment:local}
@@ -1002,37 +1017,41 @@ async function load(skipLocal){
 function newState(p){
   var order=p.formulas.map(function(_,i){return i;});
   for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t;}
-  var placed={},bs=p.slots.filter(function(s){return s.k!=='ask';}),msg='Mulai dari cerita: sentuh satu angka, lalu sentuh kotak yang cocok.';
+  var placed={},bs=p.slots.filter(function(s){return s.k!=='ask';}),msg='Sentuh satu angka atau kalimat di cerita, lalu sentuh kotaknya. Benar atau salahnya diberi tahu setelah soal selesai.';
   if(tingkat==='mudah'){
     bs.slice(0,Math.ceil(bs.length/2)).forEach(function(s){
       var t=p.story.find(function(x){return typeof x!=='string'&&x.k===s.k;});
       if(t)placed[s.k]=t.id;
     });
-    msg='Tingkat mudah: sebagian kotak sudah terisi. Lengkapi sisanya, lalu coret info yang tidak dipakai.';
+    msg='Tingkat mudah: sebagian kotak sudah terisi. Lengkapi sisanya, dan coret info yang menurutmu tidak dipakai.';
   }
-  return {placed:placed,err:0,topicOk:false,tTried:[],matMsg:null,crossed:[],fTried:[],formulaOk:false,solved:false,input:'',calcMsg:null,order:order,
+  /* semua langkah dikerjakan dulu; penilaian baru muncul setelah jawaban diperiksa (st.nilai) */
+  return {placed:placed,err:0,crossed:[],s1:false,mat:null,topicOk:false,rumus:null,formulaOk:false,solved:false,input:'',hit:'',calcMsg:null,nilai:null,hasilOk:false,order:order,
     msg:{t:'info',x:msg}};
 }
 
 /* ---------- Latihan ---------- */
 function tokenById(p,id){for(var i=0;i<p.story.length;i++){if(typeof p.story[i]!=='string'&&p.story[i].id===id)return p.story[i];}return null;}
 function decoysOf(p){return p.story.filter(function(x){return typeof x!=='string'&&x.k==='decoy';});}
-function stage1Done(p,st){
-  return p.slots.every(function(s){return st.placed[s.k];})&&decoysOf(p).every(function(d){return st.crossed.indexOf(d.id)>=0;});
-}
+function tokenOf(p,k){for(var i=0;i<p.story.length;i++){var x=p.story[i];if(typeof x!=='string'&&x.k===k)return x;}return null;}
+function slotsFull(p,st){return p.slots.every(function(s){return st.placed[s.k];});}
+function stage1Done(p,st){return !!st.s1;}
 function setMsg(t,x){RS[cur].msg={t:t,x:x};}
+function lepasToken(st,id){var k;for(k in st.placed){if(st.placed[k]===id)delete st.placed[k];}var ci=st.crossed.indexOf(id);if(ci>=0)st.crossed.splice(ci,1);}
 function onToken(id){
   var p=cp,st=RS[cur],k,pk=null;
+  if(st.s1)return;
   for(k in st.placed){if(st.placed[k]===id)pk=k;}
   if(pk){delete st.placed[pk];sel=null;setMsg('info','Dikembalikan ke cerita. Pilih lagi kalau mau.');return;}
   var ci=st.crossed.indexOf(id);
   if(ci>=0){st.crossed.splice(ci,1);sel=null;setMsg('info','Coretan dibatalkan.');return;}
   var t=tokenById(p,id);
   if(sel===id){sel=null;setMsg('info','Pilihan dibatalkan.');return;}
-  sel=id;setMsg('info','Terpilih: “'+t.txt+'”. Sekarang sentuh kotak yang cocok.');
+  sel=id;setMsg('info','Terpilih: “'+t.txt+'”. Sekarang sentuh kotak yang menurutmu cocok.');
 }
 function onSlot(kind){
   var p=cp,st=RS[cur];
+  if(st.s1)return;
   if(!sel){
     if(kind!=='coret'&&st.placed[kind]){delete st.placed[kind];setMsg('info','Kotak dikosongkan.');}
     else{setMsg('info','Pilih dulu kata atau angka di cerita, baru sentuh kotaknya.');}
@@ -1040,50 +1059,84 @@ function onSlot(kind){
   }
   var t=tokenById(p,sel),slot=null;
   p.slots.forEach(function(s){if(s.k===kind)slot=s;});
-  if(kind==='coret'){
-    if(t.k==='decoy'){st.crossed.push(t.id);sel=null;setMsg('ok','“'+t.txt+'” itu '+t.what+'. Dicoret.');}
-    else{setMsg('bad','“'+t.txt+'” dipakai untuk menjawab soal. Jangan dicoret.');
-      if(t.k==='ask')logMis('tanya','Belum mengenali kalimat pertanyaan');else logMis('coret','Mencoret angka yang sebenarnya dipakai');}
-  }else if(t.k===kind){
-    st.placed[kind]=t.id;sel=null;
-    setMsg('ok','“'+t.txt+'” itu '+t.what+'.'+(t.note?' '+t.note:''));
-  }else if(t.k==='decoy'){
-    setMsg('bad','“'+t.txt+'” itu '+t.what+'. Taruh di kotak Coret.');
-    logMis('pengecoh','Memakai info pengecoh sebagai besaran');
-  }else if(t.k==='ask'){
-    setMsg('bad','Ini kalimat pertanyaan. Taruhnya di kotak Ditanya.');
-    logMis('tanya','Belum mengenali kalimat pertanyaan');
-  }else if(kind==='ask'){
-    setMsg('bad','Kotak Ditanya untuk kalimat pertanyaan, yang biasanya diawali “Berapa”.');
-    logMis('tanya','Belum mengenali kalimat pertanyaan');
-  }else{
-    setMsg('bad','“'+t.txt+'” itu '+t.what+'. Kotak '+slot.sym+' untuk '+slot.name+'.');
-    var ts=null;p.slots.forEach(function(s){if(s.k===t.k)ts=s;});
-    if(ts)logTukar(ts,slot);
-  }
-  if(stage1Done(p,st)){sel=null;setMsg('ok','Semua kotak terisi dan pengecoh sudah dicoret. Lanjut ke langkah 2.');scrollTo='sm';}
+  lepasToken(st,t.id);
+  if(kind==='coret'){st.crossed.push(t.id);setMsg('info','“'+t.txt+'” dicoret.');}
+  else{st.placed[kind]=t.id;setMsg('info','“'+t.txt+'” ditaruh di kotak '+slot.sym+'.');}
+  sel=null;
+  if(slotsFull(p,st))setMsg('info','Semua kotak sudah terisi. Cek lagi coretanmu, lalu ketuk Lanjut di bawah.');
 }
 function onOpt(i){
   var st=RS[cur];
-  if(!st.topicOk||st.fTried.indexOf(i)>=0||st.formulaOk)return;
-  st.fTried.push(i);
-  if(cp.formulas[i].ok){st.formulaOk=true;scrollTo='s3';}
-  else logMis('rumus','Salah memilih rumus · '+cp.topik,'rumus:'+cp.topik);
+  if(!st.topicOk||st.formulaOk)return;
+  st.rumus=i;
+}
+/* hitungan yang ditulis siswa (tingkat Sulit): angka dengan titik ribuan dan koma desimal, tanda × ÷ + − ( ) ² ³ */
+function hitungTeks(x){
+  var e=String(x||'').replace(/\s+/g,'');
+  if(!e)return NaN;
+  while(/(\d)\.(\d{3})(?!\d)/.test(e))e=e.replace(/(\d)\.(\d{3})(?!\d)/,'$1$2');
+  var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-'};
+  e=e.replace(/½/g,'(1/2)').replace(/¼/g,'(1/4)').replace(/¾/g,'(3/4)')
+    .replace(/[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,function(x){return '^('+x.split('').map(function(c){return SUP[c];}).join('')+')';})
+    .replace(/,/g,'.').replace(/(\d)e([-+]?\d)/gi,'$1E$2').replace(/[×xX·*]/g,'*').replace(/[÷:\/]/g,'/').replace(/[−–]/g,'-').replace(/\^/g,'**');
+  if(!/^[0-9+\-*/().E]+$/.test(e)||/E(?![-+]?\d)/.test(e))return NaN;
+  try{var r=new Function('"use strict";return ('+e+');')();return typeof r==='number'&&isFinite(r)?r:NaN;}catch(err){return NaN;}
+}
+function dekat(v,a){return Number.isFinite(v)&&Number.isFinite(a)&&Math.abs(v-a)<=Math.max(1e-6,Math.abs(a)*0.005);}
+/* 1,72e-8 ditulis sebagai 1,72 × 10⁻⁸ supaya terbaca seperti di buku */
+function eksTampil(x){return String(x||'').replace(/(\d(?:[.,]\d+)?)e(-?)(\d+)/gi,function(_,a,m,d,o,all){var t=a+' × 10'+(m?'⁻':'')+d.split('').map(function(c){return '⁰¹²³⁴⁵⁶⁷⁸⁹'.charAt(+c);}).join('');return /÷\s*$/.test(all.slice(0,o))?'('+t+')':t;});}
+function rumusPilihan(p,st){return st.rumus!=null?p.formulas[st.rumus]:null;}
+function kiriRumus(p,st){var f=rumusPilihan(p,st);var l=f?String(f.f).split('=')[0].trim():'';return l&&l.length<=14?l:p.calc.lhs;}
+/* penilaian semua langkah setelah siswa menekan Periksa */
+function nilaiSoal(p,st){
+  var L=[],salahPilah=[];
+  p.slots.forEach(function(sl){
+    var t=st.placed[sl.k]?tokenById(p,st.placed[sl.k]):null,want=tokenOf(p,sl.k);
+    if(!t||t.k!==sl.k){
+      salahPilah.push('Kotak '+sl.sym+' ('+sl.name+') berisi “'+(t?t.txt:'kosong')+'”, seharusnya “'+(want?want.txt:'')+'”.');
+      if(t&&t.k==='decoy')logMis('pengecoh','Memakai info pengecoh sebagai besaran');
+      else if(t&&(t.k==='ask'||sl.k==='ask'))logMis('tanya','Belum mengenali kalimat pertanyaan');
+      else if(t){var ts=null;p.slots.forEach(function(x){if(x.k===t.k)ts=x;});if(ts)logTukar(ts,sl);}
+    }
+  });
+  decoysOf(p).forEach(function(d){
+    if(st.crossed.indexOf(d.id)<0){salahPilah.push('“'+d.txt+'” seharusnya dicoret: '+d.what+'.');logMis('pengecoh','Tidak mencoret info pengecoh');}
+  });
+  st.crossed.forEach(function(id){var t=tokenById(p,id);if(t&&t.k!=='decoy'){salahPilah.push('“'+t.txt+'” dicoret, padahal dipakai untuk menjawab.');logMis('coret','Mencoret angka yang sebenarnya dipakai');}});
+  L.push({k:'pilah',judul:'Pilah cerita',ok:!salahPilah.length,isi:salahPilah.length?salahPilah:['Semua angka dan pertanyaan ada di kotak yang benar, dan pengecoh sudah dicoret.']});
+  var mOk=st.mat===p.topik;
+  if(!mOk)logMis('materi','Salah mengenali materi soal','materi');
+  L.push({k:'materi',judul:'Kenali materi',ok:mOk,isi:[mOk?'Betul, soal '+p.topik+'.':'Kamu memilih '+(st.mat||'-')+'. Soal ini termasuk '+p.topik+'.'+(MATERI[p.topik]?' '+MATERI[p.topik].ket:'')]});
+  var f=rumusPilihan(p,st),fb=p.formulas.filter(function(x){return x.ok;})[0],fOk=!!(f&&f.ok);
+  if(!fOk)logMis('rumus','Salah memilih rumus · '+p.topik,'rumus:'+p.topik);
+  L.push({k:'rumus',judul:'Pilih rumus',ok:fOk,isi:fOk?['Betul: '+f.f+'.'+(f.why?' '+f.why:'')]:['Kamu memilih '+(f?f.f:'-')+'.'+(f&&f.why?' '+f.why:''),'Rumus yang benar: '+(fb?fb.f:'')+'.']});
+  var c=p.calc,v=parseNum(st.input),hOk=dekat(v,c.ans);
+  if(tingkat==='sulit'){
+    var hv=hitungTeks(st.hit),hitOk=dekat(hv,c.ans);
+    if(!hitOk)logMis('hitung','Salah menyusun hitungan · '+p.topik,'hitung:'+p.topik);
+    L.push({k:'hitungan',judul:'Tulis hitungan',ok:hitOk,isi:[hitOk?'Betul: '+st.hit+'.':'Hitunganmu: '+(st.hit||'-')+(Number.isFinite(hv)?' = '+fmtNum(Math.round(hv*1000)/1000):'')+'.','Hitungan yang benar: '+c.lhs+' = '+eksTampil(c.expr)+'.']});
+  }
+  var alt=null;c.alt.forEach(function(x){if(!alt&&dekat(v,x.v))alt=x.msg;});
+  if(!hOk)logHitung(alt);
+  L.push({k:'hasil',judul:'Hasil',ok:hOk,isi:hOk?['Betul: '+c.lhs+' = '+fmtNum(c.ans)+' '+c.unit+'.']:['Jawabanmu '+(st.input||'-')+' '+c.unit+'. Jawaban yang benar '+fmtNum(c.ans)+' '+c.unit+'.'+(alt?' '+alt:'')]});
+  return L;
 }
 function onCheck(){
-  var st=RS[cur],c=cp.calc,v=parseNum(st.input),i;
-  if(isNaN(v)){st.calcMsg={t:'bad',x:'Tulis angkanya saja, contoh 12,5.'};return;}
-  if(Math.abs(v-c.ans)<=Math.max(1e-6,Math.abs(c.ans)*0.005)){
-    st.solved=true;st.calcMsg={t:'ok',x:c.explain||'Betul.'};
-    if(cur!=='__prev'&&!(exam&&exam.room)){done[cur]=1;saveDone();
-      var nh=hariTambah();if(nh===TARGET)st.calcMsg.x+=' Target hari ini tercapai: '+TARGET+' soal!';}
-    celebrate=true;trackWeak();afterSolve();
-    try{if(navigator.vibrate)navigator.vibrate(35);}catch(e){}
-    return;
+  var st=RS[cur],c=cp.calc,v=parseNum(st.input);
+  if(!st.formulaOk||st.solved)return;
+  if(tingkat==='sulit'&&!Number.isFinite(hitungTeks(st.hit))){st.calcMsg={t:'bad',x:'Tulis dulu hitungannya dengan angka dan tanda × ÷ + −, contoh 220 ÷ 40.'};return;}
+  if(isNaN(v)){st.calcMsg={t:'bad',x:'Tulis hasilnya dengan angka saja, contoh 12,5.'};return;}
+  st.calcMsg=null;
+  var L=nilaiSoal(cp,st);
+  st.nilai=L;st.err=L.filter(function(x){return !x.ok;}).length;st.solved=true;
+  st.hasilOk=L[L.length-1].ok;st.topicOk=true;st.formulaOk=true;st.s1=true;
+  st.lihat1=st.lihat2=st.lihat3=false;
+  if(cur!=='__prev'&&!(exam&&exam.room)){
+    if(st.hasilOk){done[cur]=1;saveDone();}
+    var nh=hariTambah();if(nh===TARGET)st.target=true;
   }
-  for(i=0;i<c.alt.length;i++){if(Math.abs(v-c.alt[i].v)<1e-6){st.calcMsg={t:'bad',x:c.alt[i].msg};logHitung(c.alt[i].msg);return;}}
-  st.calcMsg={t:'bad',x:'Belum betul. '+c.tip};
-  logHitung(null);
+  celebrate=st.err===0;trackWeak();afterSolve();scrollTo='s4';
+  try{if(navigator.vibrate)navigator.vibrate(35);}catch(e){}
 }
 /* gambar garis sesuai benda di cerita; dicocokkan dari judul dulu, lalu cerita.
    Sengaja tidak memakai nama materi supaya langkah Kenali materi tetap menantang. */
@@ -1224,7 +1277,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.8.1':['Bacakan soal kini membaca angka, rupiah, jam, dan satuan dengan benar, misalnya Rp1.500 dibaca seribu lima ratus rupiah.','Aplikasi memilih suara bahasa Indonesia terbaik di HP. Cara memasang suara yang lebih alami ada di Cara pakai.'],'2.8.0':['Logo baru: lembar soal dengan simbol x =.','Semua emoji diganti gambar garis yang rapi, termasuk di menu guru dan Cara pakai.','Kalimat di aplikasi dibuat lebih seperti guru berbicara.'],'2.7.1':['Tampilan baru seperti lembar soal cetak: hitam putih, rapi, dengan satu warna merah.','Gambar soal kini berupa gambar garis sederhana.','Mau gaya lain? Pilih Buku tulis atau Papan tulis di Pengaturan → Tampilan → Gaya.'],'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.9.0':['Benar atau salah kini diberi tahu setelah soal selesai, lengkap dengan rincian setiap langkah dan kunci jawabannya.','Tingkat Sulit lebih menantang: tulis sendiri hitungannya, misalnya 220 ÷ 40, lalu hasilnya.'],'2.8.1':['Bacakan soal kini membaca angka, rupiah, jam, dan satuan dengan benar, misalnya Rp1.500 dibaca seribu lima ratus rupiah.','Aplikasi memilih suara bahasa Indonesia terbaik di HP. Cara memasang suara yang lebih alami ada di Cara pakai.'],'2.8.0':['Logo baru: lembar soal dengan simbol x =.','Semua emoji diganti gambar garis yang rapi, termasuk di menu guru dan Cara pakai.','Kalimat di aplikasi dibuat lebih seperti guru berbicara.'],'2.7.1':['Tampilan baru seperti lembar soal cetak: hitam putih, rapi, dengan satu warna merah.','Gambar soal kini berupa gambar garis sederhana.','Mau gaya lain? Pilih Buku tulis atau Papan tulis di Pengaturan → Tampilan → Gaya.'],'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -1290,63 +1343,80 @@ function nextUnsolvedId(){
   return null;
 }
 function playHtml(){
-  var p=cp,st=RS[cur],done1=stage1Done(p,st),h='';
-  var back=previewFrom?'<button class="btn ghost sm" data-act="a-back" data-fk="back">← Kembali ke admin</button>':'<button class="btn ghost sm" data-act="home" data-fk="back">← Semua soal</button>';
+  var p=cp,st=RS[cur],done1=stage1Done(p,st),h='',ujianRoom=!!(exam&&exam.room&&cur!=='__prev');
   var ik=gambarSvg(ikonSoal(SRC[cur]||p));
-  h+=(exam&&cur!=='__prev'?examBarHtml():'')+'<div class="ptitle">'+(ik?'<span class="pik" aria-hidden="true">'+ik+'</span>':'')+'<div><h2 class="t">'+esc(p.judul)+'</h2><p class="eyebrow">'+(st.topicOk||previewFrom?esc(p.topik):'Materi: ?')+(previewFrom?' · pratinjau':'')+'</p></div></div>';
+  var mat=st.solved&&!ujianRoom?p.topik:(st.topicOk?st.mat:null);
+  h+=(exam&&cur!=='__prev'?examBarHtml():'')+'<div class="ptitle">'+(ik?'<span class="pik" aria-hidden="true">'+ik+'</span>':'')+'<div><h2 class="t">'+esc(p.judul)+'</h2><p class="eyebrow">'+(previewFrom?esc(p.topik)+' · pratinjau':(mat?esc(mat):'Materi: ?'))+'</p></div></div>';
   h+=stepsHtml(done1,st);
+  var N=st.solved&&!ujianRoom?st.nilai:null,tanda=function(k){if(!N)return null;var x=N.filter(function(y){return y.k===k;})[0];return x?x.ok:null;};
   var placedIds=Object.keys(st.placed).map(function(k){return st.placed[k];});
   var story=p.story.map(function(x){
     if(typeof x==='string')return esc(x);
     var on=placedIds.indexOf(x.id)>=0,cut=st.crossed.indexOf(x.id)>=0;
     var cls='tok'+(sel===x.id?' sel':'')+(on?' on':'')+(cut?' cut':'');
-    var c=x.k==='decoy'?'':' style="--c:var('+colorOf(x.k)+')"';
+    var pk=null;for(var k in st.placed){if(st.placed[k]===x.id)pk=k;}
+    var c=pk?' style="--c:var('+colorOf(pk)+')"':'';
     return '<button class="'+cls+'"'+c+' data-act="tok" data-v="'+x.id+'" data-fk="t-'+x.id+'" aria-pressed="'+(sel===x.id)+'"'+(done1?' disabled':'')+'>'+esc(x.txt)+'</button>';
   }).join('');
   var slots=p.slots.map(function(s){
     var tid=st.placed[s.k],t=tid?tokenById(p,tid):null;
     var cls='slot'+(t?' filled':'')+(sel&&!t?' armed':'');
-    return '<button class="'+cls+'" style="--c:var('+colorOf(s.k)+')" data-act="slot" data-v="'+s.k+'" data-fk="s-'+s.k+'"'+(done1?' disabled':'')+'><span class="sym">'+esc(s.sym)+'</span><span class="nm">'+esc(s.name)+(tingkat==='sulit'?'':'<small>'+esc(s.u)+'</small>')+'</span><span class="val">'+(t?esc(t.txt)+(t.conv?' <em>'+esc(t.conv)+'</em>':''):'<span class="ph">kosong</span>')+'</span></button>';
+    return '<button class="'+cls+'" style="--c:var('+colorOf(s.k)+')" data-act="slot" data-v="'+s.k+'" data-fk="s-'+s.k+'"'+(done1?' disabled':'')+'><span class="sym">'+esc(s.sym)+'</span><span class="nm">'+esc(s.name)+(tingkat==='sulit'?'':'<small>'+esc(s.u)+'</small>')+'</span><span class="val">'+(t?esc(t.txt)+(t.conv&&tingkat!=='sulit'?' <em>'+esc(t.conv)+'</em>':''):'<span class="ph">kosong</span>')+'</span></button>';
   }).join('');
   var cr=st.crossed.map(function(id){return esc(tokenById(p,id).txt);}).join(' · ');
   slots+='<button class="slot coret'+(sel?' armed':'')+'" data-act="slot" data-v="coret" data-fk="s-coret"'+(done1?' disabled':'')+'><span class="sym">✕</span><span class="nm">Coret<small>info yang tidak dipakai menghitung</small></span><span class="val">'+(cr||'<span class="ph">kosong</span>')+'</span></button>';
   var tutupBtn=function(v){return '<button class="btn ghost sm" data-act="lihat" data-v="'+v+'">Ringkas</button>';};
-  if(done1&&!st.lihat1){
-    var isi1=p.slots.filter(function(x){return x.k!=='ask';}).map(function(x){var t=tokenById(p,st.placed[x.k]);return esc(x.sym)+' = '+esc(t?t.txt:'');}).join(' · ')
-      +(st.crossed.length?' · coret: '+st.crossed.map(function(id){return esc(tokenById(p,id).txt);}).join(', '):'');
-    h+=ringkasHtml('s1','Pilah cerita',isi1,1);
-  }else
-  h+='<section class="card" id="s1"><div class="sh"><span class="num">1</span><h2>Pilah cerita</h2>'+(done1?tutupBtn(1):'<span class="stt">sekarang</span>')+'</div>'
+  var isiPilah=function(){return p.slots.filter(function(x){return x.k!=='ask';}).map(function(x){var t=tokenById(p,st.placed[x.k]);return esc(x.sym)+' = '+esc(t?t.txt:'');}).join(' · ')
+      +(st.crossed.length?' · coret: '+st.crossed.map(function(id){return esc(tokenById(p,id).txt);}).join(', '):'');};
+  if(done1&&!st.lihat1)h+=ringkasHtml('s1','Pilah cerita',isiPilah(),1,tanda('pilah'));
+  else h+='<section class="card" id="s1"><div class="sh"><span class="num">1</span><h2>Pilah cerita</h2>'+(done1?tutupBtn(1):'<span class="stt">sekarang</span>')+'</div>'
     +'<p class="mut">Sentuh angka atau kalimat di cerita, lalu sentuh kotak yang cocok. Info yang tidak dipakai taruh di Coret.</p>'
-    +speakBtnHtml()+'<p class="story">'+story+'</p><div class="slots">'+slots+'</div>'+fbHtml(st.msg)+'</section>';
-  var lock2=!st.topicOk,opts='';
-  if(!lock2){
-    opts='<div class="opts">'+st.order.map(function(i){
-      var f=p.formulas[i],tried=st.fTried.indexOf(i)>=0,cls='opt'+(tried?(f.ok?' yes':' no'):'');
-      return '<div><button class="'+cls+'" data-act="opt" data-v="'+i+'" data-fk="o'+i+'"'+(tried||st.formulaOk?' disabled':'')+'>'+(tried&&f.ok?'✓ ':'')+esc(f.f)+'</button>'+(tried&&f.why?'<p class="why">'+esc(f.why)+'</p>':'')+'</div>';
+    +speakBtnHtml()+'<p class="story">'+story+'</p><div class="slots">'+slots+'</div>'+(done1?'':fbHtml(st.msg))+'</section>';
+  h+=st.topicOk&&!st.lihat2?ringkasHtml('sm','Materi',esc(st.mat||''),2,tanda('materi')):materiHtml(p,st,done1);
+  h+=st.mat?rumusFoldHtml(st.mat):'';
+  var lock2=!st.topicOk,f=rumusPilihan(p,st);
+  if(st.formulaOk&&!st.lihat3)h+=ringkasHtml('s2','Rumus','<span class="mono">'+esc(f?f.f:'')+'</span>',3,tanda('rumus'));
+  else{
+    var opts='<div class="opts">'+st.order.map(function(i){
+      var on=st.rumus===i;
+      return '<div><button class="opt'+(on?' pick':'')+'" data-act="opt" data-v="'+i+'" data-fk="o'+i+'" aria-pressed="'+on+'"'+(st.formulaOk?' disabled':'')+'>'+esc(p.formulas[i].f)+'</button></div>';
     }).join('')+'</div>';
+    h+='<section class="card'+(lock2?' locked':'')+'" id="s2"><div class="sh"><span class="num">3</span><h2>Pilih rumus</h2>'+(st.formulaOk?tutupBtn(3):'<span class="stt">'+(lock2?'terkunci':'sekarang')+'</span>')+'</div>'
+      +(lock2?'<p class="mut">Terbuka setelah materi dipilih.</p>':'<p class="mut">Rumus mana yang cocok dengan besaran di kotak dan yang ditanya?</p>'+opts)+'</section>';
   }
-  h+=st.topicOk&&!st.lihat2?ringkasHtml('sm','Materi',esc(p.topik),2):materiHtml(p,st,done1);
-  h+=rumusFoldHtml(p.topik);
-  var fb=p.formulas.filter(function(f){return f.ok;})[0];
-  if(st.formulaOk&&!st.lihat3)h+=ringkasHtml('s2','Rumus','<span class="mono">'+esc(fb?fb.f:'')+'</span>',3);
-  else h+='<section class="card'+(lock2?' locked':'')+'" id="s2"><div class="sh"><span class="num">3</span><h2>Pilih rumus</h2><span class="stt'+(st.formulaOk?' done':'')+'">'+(st.formulaOk?'selesai':(lock2?'terkunci':'sekarang'))+'</span></div>'
-    +(lock2?'<p class="mut">Terbuka setelah materi soal dikenali.</p>':'<p class="mut">Rumus mana yang cocok dengan besaran di kotak dan yang ditanya?</p>'+opts)+'</section>';
   var lock3=!st.formulaOk,c=p.calc,b3='';
   if(!lock3){
-    var nx=previewFrom?null:nextUnsolvedId();
-    b3='<p class="mut">Masukkan angka dari kotak, lalu hitung.</p>'+(c.given?'<p class="eq">'+esc(c.given)+'</p>':'')
-      +'<div class="calc"><span class="eq">'+esc(c.lhs)+' = '+esc(c.expr)+' =</span><span class="answ"><input id="ans" type="text" inputmode="decimal" autocomplete="off" aria-label="Jawaban" value="'+esc(st.input)+'"'+(st.solved?' disabled':'')+'><span class="eq">'+esc(c.unit)+'</span></span></div>'
+    var dik=p.slots.filter(function(x){return x.k!=='ask';}).map(function(x){var t=tokenById(p,st.placed[x.k]);return esc(x.sym)+' = '+esc(t?t.txt:'?');}).join(' · ');
+    var lhs=esc(kiriRumus(p,st)),dis=st.solved?' disabled':'';
+    b3='<p class="mut">Hitung memakai rumus yang kamu pilih dan angka di kotak.'+(tingkat==='sulit'?' Tulis dulu hitungannya, lalu hasilnya.':'')+'</p>'
+      +'<p class="eq">Rumus: '+esc(f?f.f:'')+'</p><p class="eq">Diketahui: '+dik+'</p>';
+    if(tingkat==='sulit'){
+      b3+='<p class="lbl">Hitungan</p><div class="calc"><span class="eq">'+lhs+' =</span><input id="hit" class="hit" type="text" autocomplete="off" aria-label="Hitungan" placeholder="contoh 220 ÷ 40" value="'+esc(st.hit)+'"'+dis+'></div>'
+        +(st.solved?'':'<div class="keys" role="group" aria-label="Tanda hitung">'+['×','÷','+','−','(',')','²','^',','].map(function(k){return '<button class="btn ghost sm" data-act="key" data-v="'+esc(k)+'" aria-label="tulis '+esc(k)+'">'+esc(k)+'</button>';}).join('')+'<button class="btn ghost sm" data-act="key" data-v="del" aria-label="hapus satu">⌫</button></div>')
+        +'<p class="lbl">Hasil</p>';
+    }
+    b3+='<div class="calc"><span class="eq">'+lhs+' =</span><span class="answ"><input id="ans" type="text" inputmode="decimal" autocomplete="off" aria-label="Hasil" value="'+esc(st.input)+'"'+dis+'><span class="eq">'+esc(c.unit)+'</span></span></div>'
       +fbHtml(st.calcMsg);
-    if(st.solved)b3+=bintangHtml(st.err)+recapHtml(p,st)+levelUpHtml();
   }
-  h+='<section class="card'+(lock3?' locked':'')+(st.solved&&celebrate?' win':'')+'" id="s3"><div class="sh"><span class="num">4</span><h2>Hitung</h2><span class="stt'+(st.solved?' done':'')+'">'+(st.solved?'selesai':(lock3?'terkunci':'sekarang'))+'</span></div>'
-    +(lock3?'<p class="mut">Terbuka setelah rumus yang benar dipilih.</p>':b3)+'</section>';
+  h+='<section class="card'+(lock3?' locked':'')+'" id="s3"><div class="sh"><span class="num">4</span><h2>Hitung</h2><span class="stt">'+(st.solved?'selesai':(lock3?'terkunci':'sekarang'))+'</span></div>'
+    +(lock3?'<p class="mut">Terbuka setelah rumus dipilih.</p>':b3)+'</section>';
+  if(st.solved)h+=penilaianHtml(p,st);
   return h;
 }
+/* rincian benar atau salah setiap langkah, muncul setelah jawaban diperiksa */
+function penilaianHtml(p,st){
+  if(exam&&exam.room&&cur!=='__prev')return '<section class="card" id="s4"><div class="fb info" role="status"><b>Tersimpan</b>Jawaban soal ini sudah disimpan. Nilainya diumumkan oleh gurumu.</div></section>';
+  var L=st.nilai||[],nb=L.filter(function(x){return x.ok;}).length;
+  return '<section class="card nilai'+(celebrate?' win':'')+'" id="s4"><div class="sh"><h2>Penilaian</h2><span class="stt">'+nb+' dari '+L.length+' benar</span></div>'
+    +'<ol class="nl">'+L.map(function(x){return '<li class="'+(x.ok?'ok':'no')+'"><span class="nm-i" aria-label="'+(x.ok?'benar':'salah')+'">'+(x.ok?'✓':'✗')+'</span><div><b>'+esc(x.judul)+'</b>'+x.isi.map(function(t){return '<p>'+esc(t)+'</p>';}).join('')+'</div></li>';}).join('')+'</ol>'
+    +(p.calc.explain?'<p class="mut nl-ex"><b>Pembahasan:</b> '+esc(p.calc.explain)+'</p>':'')
+    +(st.target?'<p class="mut">Target hari ini tercapai: '+TARGET+' soal.</p>':'')
+    +bintangHtml(st.err)+recapHtml(p,st)+levelUpHtml()+'</section>';
+}
 
-function ringkasHtml(id,judul,isi,v){
-  return '<section class="card ring" id="'+id+'"><button class="ring-b" data-act="lihat" data-v="'+v+'" aria-expanded="false"><span class="num ok">✓</span><span class="ring-t"><b>'+judul+'</b><small>'+isi+'</small></span><span class="ring-l">Lihat</span></button></section>';
+function ringkasHtml(id,judul,isi,v,ok){
+  var m=ok===true?'<span class="num ok" aria-label="benar">✓</span>':ok===false?'<span class="num bad" aria-label="salah">✗</span>':'<span class="num">'+v+'</span>';
+  return '<section class="card ring" id="'+id+'"><button class="ring-b" data-act="lihat" data-v="'+v+'" aria-expanded="false">'+m+'<span class="ring-t"><b>'+judul+'</b><small>'+isi+'</small></span><span class="ring-l">Lihat</span></button></section>';
 }
 /* bintang setelah soal selesai: 3 tanpa salah, 2 untuk 1–2 kesalahan, 1 untuk lebih */
 function bintangHtml(err){
@@ -1486,28 +1556,19 @@ function materiList(p){
 }
 function onMat(v){
   var st=RS[cur];
-  if(!st||st.topicOk||st.tTried.indexOf(v)>=0||!stage1Done(cp,st))return;
-  st.tTried.push(v);
-  if(v===cp.topik){
-    st.topicOk=true;scrollTo='s2';
-    st.matMsg={t:'ok',x:'Tepat, ini soal '+cp.topik+'. Sekarang pilih rumus '+cp.topik+' yang cocok.'};
-  }else{
-    var bs=cp.slots.filter(function(x){return x.k!=='ask';}).map(function(x){return x.sym+' ('+x.name+')';}).join(', ');
-    st.matMsg={t:'bad',x:'Bukan '+v+'. Lihat lagi kotak yang sudah kamu isi: '+bs+'. Besaran itu paling sering muncul di materi apa?'};
-    logMis('materi','Salah mengenali materi soal','materi');
-  }
+  if(!st||st.topicOk||!stage1Done(cp,st))return;
+  st.mat=v;
 }
 function materiHtml(p,st,done1){
   var lock=!done1,body;
   if(lock)body='<p class="mut">Terbuka setelah cerita selesai dipilah.</p>';
   else{
     body='<p class="mut">Soal ini termasuk materi apa? Lihat lagi besaran di kotak.</p><div class="opts">'+materiList(p).map(function(m){
-      var tried=st.tTried.indexOf(m)>=0,ok=m===p.topik,cls='opt mat'+(tried?(ok?' yes':' no'):'');
-      var d=(tingkat==='sulit'||!MATERI[m])?'':'<small>'+esc(MATERI[m].ket)+'</small>';
-      return '<button class="'+cls+'" data-act="mat" data-v="'+esc(m)+'" data-fk="m-'+esc(m)+'"'+(tried||st.topicOk?' disabled':'')+'><b>'+(tried&&ok?'✓ ':'')+esc(m)+'</b>'+d+'</button>';
-    }).join('')+'</div>'+fbHtml(st.matMsg);
+      var on=st.mat===m,d=(tingkat==='sulit'||!MATERI[m])?'':'<small>'+esc(MATERI[m].ket)+'</small>';
+      return '<button class="opt mat'+(on?' pick':'')+'" data-act="mat" data-v="'+esc(m)+'" data-fk="m-'+esc(m)+'" aria-pressed="'+on+'"'+(st.topicOk?' disabled':'')+'><b>'+esc(m)+'</b>'+d+'</button>';
+    }).join('')+'</div>';
   }
-  return '<section class="card'+(lock?' locked':'')+'" id="sm"><div class="sh"><span class="num">2</span><h2>Kenali materi</h2><span class="stt'+(st.topicOk?' done':'')+'">'+(st.topicOk?'selesai':(lock?'terkunci':'sekarang'))+'</span></div>'+body+'</section>';
+  return '<section class="card'+(lock?' locked':'')+'" id="sm"><div class="sh"><span class="num">2</span><h2>Kenali materi</h2>'+(st.topicOk?'<button class="btn ghost sm" data-act="lihat" data-v="2">Ringkas</button>':'<span class="stt">'+(lock?'terkunci':'sekarang')+'</span>')+'</div>'+body+'</section>';
 }
 
 /* 4. kartu rumus */
@@ -1600,9 +1661,9 @@ function kelasList(){return kelasAll().filter(function(s){return !isLocked(s.top
 function ujianHtml(){return ujkJoinHtml();}
 function examSoal(id){return exam&&exam.src?exam.src[id]:data.find(function(x){return x.id===id;});}
 function examRecord(skip){
-  var st=RS[cur],s=examSoal(cur),r={id:cur,judul:s?s.judul:cur,err:st?st.err:0,ok:!skip&&!!(st&&st.solved)};
+  var st=RS[cur],s=examSoal(cur),r={id:cur,judul:s?s.judul:cur,err:st?st.err:0,ok:!skip&&!!(st&&st.solved&&st.hasilOk)};
   if(exam.room&&cp){r.topik=s?s.topik:'';r.lewat=!!skip;r.jawaban=st?String(st.input||''):'';r.benar=cp.calc.ans;r.satuan=cp.calc.unit;r.ms=Date.now()-(exam.tSoal||Date.now());}
-  if(exam.ulang!=null){r.lewat=!r.ok;exam.res[exam.ulang]=r;}else exam.res.push(r);
+  if(exam.ulang!=null){r.lewat=!!skip;exam.res[exam.ulang]=r;}else exam.res.push(r);
 }
 function examFinish(){ujkSelesai(false);}
 function examNext(skip){
@@ -1614,13 +1675,13 @@ function examNext(skip){
   else examFinish();
 }
 /* setelah soal terakhir: soal yang dilewati masih bisa dikerjakan selama waktu masih ada */
-function ujkAdaLewat(){return !!(exam&&exam.room&&ujkSes&&ujkSes.aturan.lewati!==false&&exam.res.some(function(r){return !r.ok;}));}
+function ujkAdaLewat(){return !!(exam&&exam.room&&ujkSes&&ujkSes.aturan.lewati!==false&&exam.res.some(function(r){return r.lewat;}));}
 function ujkKeCek(){if(!ujkAdaLewat()){examFinish();return;}cur=null;cp=null;view='ujkcek';window.scrollTo(0,0);}
 function ujkCekHtml(){
   if(!exam||!exam.room)return '<p class="mut">Ujian sudah selesai.</p>';
-  var n=exam.res.filter(function(r){return !r.ok;}).length,ok=exam.res.length-n;
-  return '<h2 class="t">Periksa sebelum dikumpulkan</h2><p class="mut">'+ok+' soal sudah benar, '+n+' soal dilewati. Ketuk nomor kuning untuk mengerjakannya lagi selama waktu masih ada.</p>'
-    +'<section class="card">'+nomorHtml(true)+'<p class="mut nket"><span class="nb ok sm">✓</span> sudah benar <span class="nb lw sm">!</span> dilewati</p></section>'
+  var n=exam.res.filter(function(r){return r.lewat;}).length,ok=exam.res.length-n;
+  return '<h2 class="t">Periksa sebelum dikumpulkan</h2><p class="mut">'+ok+' soal sudah dijawab, '+n+' soal dilewati. Ketuk nomor kuning untuk mengerjakannya lagi selama waktu masih ada.</p>'
+    +'<section class="card">'+nomorHtml(true)+'<p class="mut nket"><span class="nb ok sm">✓</span> sudah dijawab <span class="nb lw sm">!</span> dilewati</p></section>'
     +'<div class="row"><button class="btn '+(confirmKey==='x-kumpul'?'danger':'')+'" data-act="x-kumpul" data-fk="x-kumpul">'+(confirmKey==='x-kumpul'?'Ya, kumpulkan sekarang':'Kumpulkan jawaban')+'</button></div>';
 }
 function ujkJamHtml(){
@@ -1628,12 +1689,12 @@ function ujkJamHtml(){
   var ms=Math.max(0,ujkSisa());
   return '<span class="jam'+(ms<60000?' hot':ms<300000?' warn':'')+'" id="timer" role="timer" aria-label="Sisa waktu">'+ik('clock')+'<span>'+fmtTime(ms)+'</span></span>';
 }
-/* nomor soal: hijau = sudah benar, kuning = dilewati, garis = sedang dikerjakan */
+/* nomor soal: terisi = sudah dijawab, kuning = dilewati, garis = sedang dikerjakan (benar atau salah tidak ditampilkan) */
 function nomorHtml(klik){
   var now=exam.ulang!=null?exam.ulang:exam.i;
   return '<div class="nomor'+(klik?' besar':'')+'" role="list">'+exam.ids.map(function(id,k){
-    var r=exam.res[k],c=k===now&&view==='play'?'now':r?(r.ok?'ok':'lw'):'';
-    var lbl='Soal '+(k+1)+(c==='ok'?', sudah benar':c==='lw'?', dilewati':c==='now'?', sedang dikerjakan':', belum');
+    var r=exam.res[k],c=k===now&&view==='play'?'now':r?(r.lewat?'lw':'ok'):'';
+    var lbl='Soal '+(k+1)+(c==='ok'?', sudah dijawab':c==='lw'?', dilewati':c==='now'?', sedang dikerjakan':', belum');
     if(klik&&c==='lw')return '<button class="nb lw" role="listitem" data-act="x-buka" data-v="'+k+'" data-fk="nb-'+k+'" aria-label="'+lbl+', kerjakan">'+(k+1)+'</button>';
     return '<span class="nb '+c+'" role="listitem" aria-label="'+lbl+'">'+(c==='ok'?'✓':(k+1))+'</span>';
   }).join('')+'</div>';
@@ -1839,11 +1900,11 @@ function ulangHtml(){
 /* 4. ringkasan setelah soal selesai */
 function recapHtml(p,st){
   var rows=p.slots.filter(function(x){return x.k!=='ask';}).map(function(x){
-    var t=tokenById(p,st.placed[x.k]);
+    var t=tokenOf(p,x.k);
     return '<li><b style="color:var('+colorOf(x.k)+')">'+esc(x.sym)+'</b> <span>'+esc(x.name)+'</span> <span class="eq">= '+esc(t?t.txt:'')+(t&&t.conv?' '+esc(t.conv):'')+'</span></li>';
   }).join('');
   var f=p.formulas.filter(function(x){return x.ok;})[0];
-  return '<div class="recap"><p class="rt">Ringkasan soal</p><ul>'+rows+'</ul>'
+  return '<div class="recap"><p class="rt">Kunci jawaban</p><ul>'+rows+'</ul>'
     +'<p><span class="rl">Materi</span><b>'+esc(p.topik)+'</b></p>'
     +'<p><span class="rl">Rumus</span><span class="eq">'+esc(f?f.f:'')+'</span></p>'
     +'<p><span class="rl">Hasil</span><span class="eq"><b>'+esc(p.calc.lhs)+' = '+fmtNum(p.calc.ans)+' '+esc(p.calc.unit)+'</b></span></p>'
@@ -1861,11 +1922,14 @@ function actbarHtml(){
     var nx=nextUnsolvedId();
     return wrap(b('again','Ulangi',1)+(nx?b('next','Soal berikutnya'):b('back-play','Selesai')));
   }
-  if(st.formulaOk)return wrap(b('check','Periksa jawaban'));
-  var tot=p.slots.length+decoysOf(p).length,n=Object.keys(st.placed).length+st.crossed.length,lab;
-  if(!stage1Done(p,st))lab='<span class="act-t">Pilah cerita<small>'+n+' dari '+tot+' bagian sudah ditempatkan</small></span><span class="act-p"><span style="width:'+pct(n,tot)+'%"></span></span>';
-  else if(!st.topicOk)lab='<span class="act-t">Langkah 2<small>Pilih materi soal ini</small></span>';
-  else lab='<span class="act-t">Langkah 3<small>Pilih rumus yang cocok</small></span>';
+  if(st.formulaOk)return wrap(b('check',exam&&exam.room&&cur!=='__prev'?'Simpan jawaban':'Periksa jawaban'));
+  var tot=p.slots.length,n=Object.keys(st.placed).length,lab;
+  if(!st.s1){
+    if(slotsFull(p,st))return wrap('<span class="act-t">Pilah cerita<small>Semua kotak terisi'+(st.crossed.length?', '+st.crossed.length+' dicoret':'')+'</small></span>'+b('langkah','Lanjut'));
+    lab='<span class="act-t">Pilah cerita<small>'+n+' dari '+tot+' kotak sudah terisi</small></span><span class="act-p"><span style="width:'+pct(n,tot)+'%"></span></span>';
+  }
+  else if(!st.topicOk)lab=st.mat?'<span class="act-t">Langkah 2<small>Materi: '+esc(st.mat)+'</small></span>'+b('langkah','Lanjut'):'<span class="act-t">Langkah 2<small>Pilih materi soal ini</small></span>';
+  else lab=st.rumus!=null?'<span class="act-t">Langkah 3<small>Rumus sudah dipilih</small></span>'+b('langkah','Lanjut'):'<span class="act-t">Langkah 3<small>Pilih rumus yang cocok</small></span>';
   return wrap(lab);
 }
 
@@ -2186,8 +2250,8 @@ var TOOLVIEWS={karang:karangHtml,tampil:presHtml,intro:introHtml,atur:aturHtml,k
 var bantuanUntuk='siswa',bantuanDari='home';
 var BANTUAN={
   siswa:[
-    ['puzzle','Cara mengerjakan soal',['Pilih kelas dan materi di beranda, lalu pilih soal.','<b>Langkah 1 · Pilah cerita:</b> sentuh angka di cerita, lalu sentuh kotak besaran yang cocok. Angka yang tidak dipakai menghitung (harga, jam, nama) taruh di kotak <b>Coret</b>. Kalimat pertanyaan taruh di kotak <b>Ditanya</b>.','<b>Langkah 2 · Kenali materi:</b> pilih materi soal itu.','<b>Langkah 3 · Pilih rumus</b> yang cocok. Setiap pilihan ada penjelasannya.','<b>Langkah 4 · Hitung:</b> ketik angkanya saja, misalnya 12,5, lalu ketuk Periksa jawaban.']],
-    ['adjustments','Tingkat bantuan',['<b>Mudah:</b> sebagian kotak sudah terisi.','<b>Menengah:</b> satuan tampil sebagai petunjuk.','<b>Sulit:</b> tanpa petunjuk, seperti soal ujian.','Kalau kamu lancar 3 soal berturut-turut, aplikasi menyarankan naik tingkat.']],
+    ['puzzle','Cara mengerjakan soal',['Pilih kelas dan materi di beranda, lalu pilih soal.','<b>Langkah 1 · Pilah cerita:</b> sentuh angka di cerita, lalu sentuh kotak besaran yang cocok. Angka yang tidak dipakai menghitung (harga, jam, nama) taruh di kotak <b>Coret</b>. Kalimat pertanyaan taruh di kotak <b>Ditanya</b>.','Setelah semua kotak terisi, ketuk <b>Lanjut</b>.','<b>Langkah 2 · Kenali materi:</b> pilih materi soal itu, lalu ketuk Lanjut.','<b>Langkah 3 · Pilih rumus</b> yang cocok, lalu ketuk Lanjut.','<b>Langkah 4 · Hitung</b> memakai rumus pilihanmu. Ketik hasilnya dengan angka saja, misalnya 12,5, lalu ketuk <b>Periksa jawaban</b>.','Benar atau salah baru diberi tahu setelah soal selesai. Bagian <b>Penilaian</b> menunjukkan langkah mana yang benar, salahnya di mana, dan kunci jawabannya.']],
+    ['adjustments','Tingkat bantuan',['<b>Mudah:</b> sebagian kotak sudah terisi.','<b>Menengah:</b> satuan tampil sebagai petunjuk.','<b>Sulit:</b> tanpa petunjuk dan tanpa kartu rumus. Di langkah Hitung kamu menulis sendiri hitungannya, misalnya 220 ÷ 40, lalu hasilnya. Hitunganmu ikut dinilai.','Kalau kamu lancar 3 soal berturut-turut, aplikasi menyarankan naik tingkat.']],
     ['target','Target harian',['Kerjakan 3 soal setiap hari. Hari beruntun bertambah kalau kamu latihan setiap hari.']],
     ['clipboard-list','Ujian dari guru',['Minta <b>kode ujian</b> ke gurumu.','Ketuk menu <b>Ujian</b> di bawah layar, isi kode dan namamu, lalu ketuk <b>Mulai ujian</b>.','Waktu berjalan mundur di atas layar. Kalau waktu habis, jawabanmu otomatis terkumpul ke guru.','Jawaban tersimpan sendiri setiap kali satu soal selesai. Kalau HP tertutup, buka lagi aplikasinya untuk melanjutkan.']],
     ['bolt','Latihan cepat',['<b>Buat soal sendiri:</b> tulis cerita dari rumus dan angka yang diberikan.','<b>Ulangi soal yang pernah salah:</b> kerjakan lagi sampai lancar.','<b>Kuis simbol dan satuan</b> dan <b>Latihan konversi:</b> 10 pertanyaan cepat.']],
@@ -2234,7 +2298,7 @@ var TOOLACT={
   'x-next':function(){if(!exam)return;confirmKey=null;examNext(false);fk=null;},
   'x-end':function(){if(!exam)return;if(confirmKey!=='x-end'){confirmKey='x-end';return;}confirmKey=null;if(exam.room)ujkSelesai(false);else{examRecord(false);examFinish();}fk=null;},
   'x-kumpul':function(){if(!exam)return;if(confirmKey!=='x-kumpul'){confirmKey='x-kumpul';return;}confirmKey=null;ujkSelesai(false);fk=null;},
-  'x-buka':function(v){if(!exam||!exam.room)return;var k=+v;if(!(k>=0&&k<exam.ids.length)||!exam.res[k]||exam.res[k].ok)return;
+  'x-buka':function(v){if(!exam||!exam.room)return;var k=+v;if(!(k>=0&&k<exam.ids.length)||!exam.res[k]||!exam.res[k].lewat)return;
     confirmKey=null;exam.ulang=k;exam.tSoal=Date.now();var id=exam.ids[k];startPlay(id,examSoal(id));window.scrollTo(0,0);fk=null;},
   'kv-check':function(){kvCheck();fk=konv&&konv.done?'kv-next':'kv';},
   'kv-next':function(){if(!konv)return;konv.i++;konv.input='';konv.msg=null;konv.done=false;konv.tries=0;fk=konv.i<konv.q.length?'kv':'kv-new';},
@@ -3654,6 +3718,12 @@ document.addEventListener('click',function(e){
   else if(a==='slot')onSlot(v);
   else if(a==='opt')onOpt(+v);
   else if(a==='check')onCheck();
+  else if(a==='langkah'&&RS[cur]){var st0=RS[cur];sel=null;
+    if(!st0.s1){if(slotsFull(cp,st0)){st0.s1=true;scrollTo='sm';}}
+    else if(!st0.topicOk){if(st0.mat){st0.topicOk=true;scrollTo='s2';}}
+    else if(!st0.formulaOk){if(st0.rumus!=null){st0.formulaOk=true;scrollTo='s3';fk=null;}}
+    if(fk==='ab-langkah')fk=null;}
+  else if(a==='key'&&RS[cur]&&!RS[cur].solved){var hs=RS[cur].hit||'';RS[cur].hit=v==='del'?hs.slice(0,-1):hs+(/[×÷+−]/.test(v)?' '+v+' ':v);RS[cur].hit=RS[cur].hit.replace(/\s{2,}/g,' ');fk=null;}
   else if(a==='again'){delete done[cur];saveDone();startPlay(cur,SRC[cur]);fk=null;window.scrollTo(0,0);}
   else if(a==='next'){var n=nextUnsolvedId();if(n){startPlay(n,data.find(function(s){return s.id===n;}));fk=null;window.scrollTo(0,0);}else view='home';}
   else if(a==='a-open'){view='admin';adminTab='home';loginErr=false;confirmKey=null;
@@ -3730,6 +3800,7 @@ document.addEventListener('input',function(e){
   var t=e.target;
   if(t.dataset&&t.dataset.p&&D){setPath(D,t.dataset.p,t.value);}
   else if(t.id==='ans'){RS[cur].input=t.value;}
+  else if(t.id==='hit'){RS[cur].hit=t.value;}
   else if(t.id==='imp'){impText=t.value;confirmKey=null;}
   else if(t.id==='kv'&&konv){konv.input=t.value;}
   else if(t.id==='kr-text'&&karang){karang.text=t.value;}
@@ -3766,13 +3837,14 @@ document.addEventListener('change',function(e){
 document.addEventListener('keydown',function(e){
   if(e.key!=='Enter')return;
   if(e.target.id==='ans'){e.preventDefault();onCheck();fk='check';render();}
+  else if(e.target.id==='hit'){e.preventDefault();var an=$('#ans');if(an)an.focus();}
   else if(e.target.id==='kv'){e.preventDefault();if(konv&&konv.done)TOOLACT['kv-next']();else TOOLACT['kv-check']();render();}
   else if(e.target.id==='pin'){e.preventDefault();var pv=$('#pin');if(pv&&pinOk(pv.value)){adminOK=true;loginErr=false;}else loginErr=true;render();}
 });
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.8.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.9.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
