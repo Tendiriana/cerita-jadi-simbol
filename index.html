@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>TakTik IPA</title>
-<meta name="theme-color" content="#F3F5F8" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0E1318" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FBF8F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151A24" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -14,30 +14,41 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="TakTik IPA">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
-/* Tampilan bersih dan modern: latar abu kebiruan, kartu putih, satu aksen teal.
-   Warna paling kuat dipakai untuk simbol besaran (m, h, g, ?), karena itu inti aplikasi. */
+/* Gaya buku tulis: kertas bergaris, tinta biru pulpen, judul dan angka bertulisan tangan, merah untuk catatan guru.
+   Saat ujian dipakai gaya lembar kerja (body.lks): hitam putih dengan satu warna merah.
+   Huruf disimpan di folder fonts supaya tetap tampil saat offline (semuanya berlisensi SIL OFL). */
+@font-face{font-family:'Kalam';font-weight:400;font-display:swap;src:url(fonts/kalam-400.woff2) format('woff2')}
+@font-face{font-family:'Kalam';font-weight:700;font-display:swap;src:url(fonts/kalam-700.woff2) format('woff2')}
+@font-face{font-family:'Andika';font-weight:400;font-display:swap;src:url(fonts/andika-400.woff2) format('woff2')}
+@font-face{font-family:'Andika';font-weight:700;font-display:swap;src:url(fonts/andika-700.woff2) format('woff2')}
+@font-face{font-family:'Source Serif 4';font-weight:600 700;font-display:swap;src:url(fonts/source-serif-4.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-weight:500;font-display:swap;src:url(fonts/plex-mono-500.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-weight:600;font-display:swap;src:url(fonts/plex-mono-600.woff2) format('woff2')}
 :root{
-  --bg:#F3F5F8; --surface:#FFFFFF; --sunk:#EDF0F4; --ink:#18212B; --ink2:#5A6675; --line:#E1E6EC; --line2:#C5CED8;
-  --acc:#0F6E6A; --acc-ink:#FFFFFF; --acc-soft:#E1F0EE; --raise:#FFFFFF;
-  --hl:#FFE27A; --hl-ink:#18212B;
-  --q1:#2563EB; --q2:#0E8F63; --q3:#C2650A; --q4:#7445D6; --ask:#C92A63;
-  --warn:#8A5300; --warnbg:#FBF0D9; --ok:#11804C; --okbg:#E4F4EB; --bad:#BE3420; --badbg:#FCEBE7; --info:#2459C9; --infobg:#E9F0FD;
-  --shadow:0 1px 2px rgba(24,33,43,.06);
-  --f-body:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --f-display:var(--f-body);
+  --bg:#FBF8F0; --surface:#FFFDF7; --sunk:#F2EDE0; --ink:#24304A; --ink2:#5D6680; --line:#E3E0D6; --line2:#A7B4C9;
+  --acc:#1F3B8A; --acc-ink:#FFFFFF; --acc-soft:#E7ECF7; --raise:#FFFDF7;
+  --pen:#B2402F; --rule:#DCE4EF; --margin:#EBB0AA;
+  --hl:#FFF0A0; --hl-ink:#24304A;
+  --q1:#2459C9; --q2:#0E8050; --q3:#C2650A; --q4:#7445D6; --ask:#C92A63;
+  --warn:#8A5300; --warnbg:#FBF0D9; --ok:#11804C; --okbg:#E4F2E6; --bad:#BE3420; --badbg:#FBEAE4; --info:#2459C9; --infobg:#E9EFFA;
+  --shadow:none;
+  --f-body:'Andika',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-display:'Kalam','Andika',system-ui,sans-serif;
+  --f-hand:'Kalam','Andika',system-ui,sans-serif;
   --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0E1318; --surface:#161D24; --sunk:#1B232C; --ink:#E6EBF0; --ink2:#98A5B3; --line:#252F3A; --line2:#3A4654;
-  --acc:#3BBFB2; --acc-ink:#08201E; --acc-soft:#123331; --raise:#2A3541;
+  --bg:#151A24; --surface:#1B2130; --sunk:#222A3A; --ink:#E4E9F5; --ink2:#9AA6BF; --line:#2A3346; --line2:#4A5770;
+  --acc:#8FB0FF; --acc-ink:#0E1424; --acc-soft:#1F2B48; --raise:#252E40;
+  --pen:#FF9A8A; --rule:#222A39; --margin:#5A3436;
   --hl:#E9C64B; --hl-ink:#14191F;
   --q1:#7AA7FF; --q2:#3CCB95; --q3:#F59E4E; --q4:#B596FF; --ask:#FF7AA8;
   --warn:#F2B84B; --warnbg:#35290F; --ok:#4CC38A; --okbg:#122E1F; --bad:#FF8B76; --badbg:#3A1C17; --info:#7AA7FF; --infobg:#16243D; --shadow:none; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0E1318; --surface:#161D24; --sunk:#1B232C; --ink:#E6EBF0; --ink2:#98A5B3; --line:#252F3A; --line2:#3A4654;
-  --acc:#3BBFB2; --acc-ink:#08201E; --acc-soft:#123331; --raise:#2A3541;
+  --bg:#151A24; --surface:#1B2130; --sunk:#222A3A; --ink:#E4E9F5; --ink2:#9AA6BF; --line:#2A3346; --line2:#4A5770;
+  --acc:#8FB0FF; --acc-ink:#0E1424; --acc-soft:#1F2B48; --raise:#252E40;
+  --pen:#FF9A8A; --rule:#222A39; --margin:#5A3436;
   --hl:#E9C64B; --hl-ink:#14191F;
   --q1:#7AA7FF; --q2:#3CCB95; --q3:#F59E4E; --q4:#B596FF; --ask:#FF7AA8;
   --warn:#F2B84B; --warnbg:#35290F; --ok:#4CC38A; --okbg:#122E1F; --bad:#FF8B76; --badbg:#3A1C17; --info:#7AA7FF; --infobg:#16243D; --shadow:none; color-scheme:dark}
@@ -447,6 +458,149 @@ textarea.in{min-height:84px;resize:vertical;line-height:1.45}
 .radio input{width:20px;height:20px;accent-color:var(--acc)}
 .foot{margin:24px 0 0;font-size:.85rem;color:var(--ink2);max-width:70ch}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* ===== gaya buku tulis ===== */
+body{background-color:var(--bg);background-image:repeating-linear-gradient(to bottom,transparent 0 31px,var(--rule) 31px 32px);background-attachment:local}
+body::before{content:'';position:fixed;top:0;bottom:0;left:max(9px,calc(50% - 372px));border-left:1.5px solid var(--margin);pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1}
+h1,h2.t,.sec,.sh h2,.grp h2,.brand b,.ttl,.mat-card b,.mhead h2.t,.gbar b,.rt,.recap .rt{font-family:var(--f-hand);letter-spacing:0}
+h1{font-weight:700;color:var(--acc)}
+h2.t{font-weight:700;font-size:1.7rem;line-height:1.15}
+.sec{font-weight:700;font-size:1.4rem;color:var(--pen);margin:26px 0 8px}
+.sh h2{font-weight:700;font-size:1.3rem;color:var(--pen)}
+.brand b{font-weight:700;font-size:1.3rem;color:var(--acc)}
+.ttl{font-weight:700;font-size:1.2rem;color:var(--acc)}
+.eyebrow{font-family:var(--f-hand);font-weight:400;font-size:1rem;color:var(--pen)}
+.bar{background:color-mix(in srgb,var(--bg) 90%,transparent);border-bottom:1.5px solid var(--acc)}
+.bar .btn.ghost{background:transparent;border-color:transparent}
+/* kartu menjadi bagian halaman yang dipisah garis putus-putus */
+.card{background:transparent;border:0;border-top:1.5px dashed var(--line2);border-radius:0;padding:14px 2px 6px;box-shadow:none}
+.card.locked{background:transparent;border-top-style:dashed}
+.hero{background:var(--surface);border:1.5px solid var(--line2);border-radius:6px;box-shadow:none}
+.num{border-radius:50%;background:transparent;color:var(--pen);border:2px solid var(--pen);font-family:var(--f-hand);font-size:1rem}
+.card.locked .num{background:transparent;color:var(--line2);border-color:var(--line2)}
+.stt{background:transparent;font-family:var(--f-hand);font-size:.9rem;padding:0;border-radius:0}
+.stt.done{background:transparent}
+/* tombol */
+.btn{border-radius:6px;box-shadow:3px 3px 0 color-mix(in srgb,var(--acc) 28%,transparent)}
+.btn.ghost{background:var(--surface);border-color:var(--line2);box-shadow:none}
+.btn.danger{box-shadow:3px 3px 0 color-mix(in srgb,var(--bad) 28%,transparent)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 color-mix(in srgb,var(--acc) 28%,transparent)}
+.btn.ghost:active{box-shadow:none}
+.seg{background:transparent;border:1.5px solid var(--line2);border-radius:6px}
+.seg .chip{border-radius:4px}
+.seg .chip[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink);box-shadow:none}
+.pill{border-radius:4px;background:transparent;border:1.5px solid var(--line2)}
+/* daftar dan pilihan */
+.item,.mat-card,.opt,.slot,.gtile,.arow,.kls,.mis,.in,.calc input,.ai-soal{border-radius:6px;box-shadow:none}
+.item{border:1.5px solid var(--line2)}
+.nob{border-radius:50%;background:transparent;border:1.5px solid var(--line2);font-family:var(--f-hand);font-size:1rem}
+.nob.ok{background:transparent;border-color:var(--ok)}
+.mat-card{border:1.5px solid var(--line2)}
+.mat-card b{font-weight:700;font-size:1.25rem}
+.mi,.mhead .mi{background:transparent;color:var(--acc);border-radius:0;width:auto;justify-content:start}
+.mi svg{width:30px;height:30px;stroke-width:1.7}
+.mhead .mi svg{width:40px;height:40px}
+.bar-p{background:transparent;border:1.5px solid var(--acc);border-radius:4px;height:9px}
+.bar-p > span{border-radius:0;background:repeating-linear-gradient(-45deg,var(--acc) 0 2px,transparent 2px 5px)}
+.mat-card .bar-p{border-color:var(--c,var(--acc))}
+.mat-card .bar-p > span{background:var(--c,var(--acc))}
+.ti{background:transparent;border-radius:0;color:var(--acc)}
+.tools .item{background:var(--surface);border-color:var(--line2)}
+/* kartu kemajuan beranda: tulisan di kertas, bukan kotak berwarna */
+.prog{background:transparent;color:var(--ink);border:0;border-top:1.5px dashed var(--line2);padding:14px 2px}
+.prog .pill{background:transparent;color:var(--acc);border-color:var(--acc)}
+.prog-day{font-family:var(--f-hand);font-size:1.05rem;color:var(--pen)}
+.prog-n{font-family:var(--f-hand);color:var(--acc);font-size:1.15rem}
+.prog-n b{font-weight:700;font-size:3rem}
+.prog .bar-p{background:transparent}
+.prog .bar-p > span{background:repeating-linear-gradient(-45deg,var(--acc) 0 2px,transparent 2px 5px)}
+.prog .btn{background:var(--acc);color:var(--acc-ink)}
+.prog .seg{background:transparent}.prog .chip{color:var(--ink2)}
+.prog .chip[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink)}
+.prog-ket{color:var(--ink2);opacity:1}
+.prog-tk>span{color:var(--ink2);opacity:1}
+.pbtn{color:var(--acc)!important;background:transparent!important;border:1.5px solid var(--acc)!important;border-radius:4px}
+/* halaman soal */
+.ptitle h2.t{font-size:1.8rem}
+.pik{width:64px;height:64px;border-radius:0;background:transparent;color:var(--acc)}
+.pik svg{width:60px;height:60px}
+.sik{color:var(--acc)}.sik svg{width:28px;height:28px;display:block}
+.steps li{font-family:var(--f-hand);font-size:.95rem;font-weight:400}
+.steps li.now{font-weight:700;color:var(--acc)}
+.steps li::before{border-radius:2px;height:4px}
+.story{font-size:1.12rem}
+.tok{border-radius:2px;border-bottom:2px dashed var(--acc)}
+.tok.on{background:color-mix(in srgb,var(--c) 22%,var(--hl));font-weight:700}
+.tok.sel{background:transparent;color:inherit;outline:2px solid var(--acc);outline-offset:1px;border-bottom:2px solid var(--acc)}
+.tok.cut{opacity:1;color:var(--ink2);border-bottom:0;text-decoration:line-through 2.5px var(--bad)}
+.slot{background:var(--surface);border-width:1.5px}
+.slot .sym{font-family:var(--f-hand);font-weight:700;font-size:2rem}
+.slot .val{font-family:var(--f-hand);font-weight:700;font-size:1.2rem}
+.slot .ph{font-family:var(--f-hand);font-weight:400}
+.slot.filled{background:var(--surface)}
+.slot.coret{--c:var(--bad)}
+.calc input{font-family:var(--f-hand);font-weight:700;font-size:1.35rem;color:var(--acc);border-width:0 0 2px;border-radius:0;background:transparent;padding:4px 6px}
+.calc input:focus{box-shadow:none;border-color:var(--pen)}
+.fb{border-radius:0;background:transparent;border-left-width:3px;font-family:var(--f-hand);font-size:1.12rem;line-height:1.45;color:var(--pen);border-left-color:var(--pen)}
+.fb.ok{background:transparent;color:var(--ok)}
+.fb.bad{background:transparent;color:var(--bad)}
+.fb.info{color:var(--acc);border-left-color:var(--acc)}
+.fb b{font-weight:700}
+.fb ul,.fb code{font-family:var(--f-body)}
+.opt{background:var(--surface)}
+.opt.mat b{font-family:var(--f-hand);font-weight:700;font-size:1.25rem}
+.recap{background:transparent;border:1.5px dashed var(--line2);border-radius:6px}
+.bintang{background:transparent;border:1.5px dashed var(--ok);border-radius:6px}
+.bintang b{font-family:var(--f-hand);font-size:1.3rem}
+details.fold summary{font-family:var(--f-hand);font-size:1.1rem}
+.act-t{font-family:var(--f-hand);font-weight:700;font-size:1.1rem}
+/* navigasi bawah */
+#nav{background:color-mix(in srgb,var(--bg) 94%,transparent);border-top:1.5px solid var(--acc)}
+.nav-i.on .nic{background:transparent}
+.nav-i.on{text-decoration:underline 2px;text-underline-offset:4px}
+/* kartu ujian di beranda dan menu guru */
+.ujk-card{background:var(--acc);box-shadow:3px 3px 0 color-mix(in srgb,var(--acc) 28%,transparent);border-radius:6px}
+.ujk-card.warn{background:var(--warn)}
+.ujk-card .ui{background:transparent;border:1.5px solid rgba(255,255,255,.5);border-radius:50%}
+.gtile{border:1.5px solid var(--line2)}
+.gtile:first-child{box-shadow:3px 3px 0 color-mix(in srgb,var(--acc) 28%,transparent)}
+.gtile.wide{background:var(--surface)}
+.upd{border-radius:6px}
+.dots i{border-radius:2px}
+
+/* ===== gaya lembar kerja (LKS) untuk ujian ===== */
+body.lks{
+  --bg:#FFFFFF; --surface:#FFFFFF; --sunk:#F2F2F2; --ink:#1D1D1D; --ink2:#555555; --line:#DDDDDD; --line2:#1D1D1D;
+  --acc:#C8102E; --acc-ink:#FFFFFF; --acc-soft:#FBE7EA; --raise:#FFFFFF; --pen:#1D1D1D; --rule:transparent; --margin:transparent;
+  --f-hand:'Source Serif 4',Georgia,serif; --f-display:'Source Serif 4',Georgia,serif}
+:root[data-theme="dark"] body.lks{--bg:#141414; --surface:#141414; --sunk:#222; --ink:#EDEDED; --ink2:#AAAAAA; --line:#333; --line2:#DADADA; --acc:#FF5A6E; --acc-ink:#140507; --acc-soft:#3A1219; --pen:#EDEDED}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body.lks{--bg:#141414; --surface:#141414; --sunk:#222; --ink:#EDEDED; --ink2:#AAAAAA; --line:#333; --line2:#DADADA; --acc:#FF5A6E; --acc-ink:#140507; --acc-soft:#3A1219; --pen:#EDEDED}}
+body.lks{background-image:none}
+body.lks::before{display:none}
+body.lks .bar{border-bottom:2px solid var(--ink)}
+body.lks .ttl,body.lks .brand b{color:var(--ink)}
+body.lks h2.t,body.lks .sh h2,body.lks .sec{color:var(--ink);font-weight:700}
+body.lks .card{border-top:1px solid var(--ink)}
+body.lks .btn{border-radius:0;box-shadow:none}
+body.lks .item,body.lks .slot,body.lks .opt,body.lks .calc input{border-radius:0}
+body.lks .slot .val,body.lks .calc input{font-family:var(--f-mono);font-weight:600;font-size:1.1rem}
+body.lks .calc input{border:1.5px solid var(--ink);color:var(--ink)}
+body.lks .slot .sym{font-family:var(--f-mono)}
+body.lks .story{font-size:1.15rem}
+body.lks .tok.on{background:var(--sunk)}
+body.lks .tok{border-bottom:1.5px dotted var(--ink)}
+body.lks .fb{font-family:var(--f-body);font-size:.97rem;border:1px solid var(--ink);border-left:4px solid var(--acc);color:var(--ink);padding:10px 12px}
+body.lks .num{border-radius:0;border-color:var(--ink);color:var(--ink)}
+body.lks .steps li.now{color:var(--ink)}
+body.lks .pik{color:var(--ink)}
+body.lks .xbar{border-radius:0;background:transparent;border:1px solid var(--ink)}
+body.lks .nb{border-radius:0}
+body.lks .jam{border-radius:0;background:transparent;border:1.5px solid currentColor;color:var(--ink)}
+body.lks .jam.warn{color:var(--warn)}body.lks .jam.hot{color:var(--bad)}
+body.lks #nav{border-top:2px solid var(--ink)}
+body.lks .ujk-card{border-radius:0;box-shadow:none}
+body.lks .bintang,body.lks .recap{border-radius:0;border-style:solid}
 </style>
 </head>
 <body>
@@ -870,15 +1024,19 @@ function onCheck(){
   st.calcMsg={t:'bad',x:'Belum tepat. '+c.tip};
   logHitung(null);
 }
-/* gambar kecil sesuai benda di cerita; dicocokkan dari judul dulu, lalu cerita */
-var IKON=[[/lampu senter|senter/,'🔦'],[/charger|ponsel|\bhp\b|handphone/,'📱'],[/penanak nasi|nasi/,'🍚'],[/kipas/,'🌀'],[/speaker|pengeras suara/,'🔊'],[/blender/,'🥤'],
-  [/mobil mainan/,'🏎️'],[/mobil/,'🚗'],[/dinamo sepeda|sepeda/,'🚲'],[/kincir angin|pltb|angin/,'🌬️'],[/plta|bendungan|air terjun/,'💧'],[/kalkulator/,'🧮'],
-  [/pompa air/,'🚰'],[/power bank|baterai|aki\b/,'🔋'],[/panel surya|sel surya|tenaga surya|matahari/,'☀️'],[/pltn|nuklir/,'⚛️'],[/lampu|led\b/,'💡'],[/setrika/,'👕'],
-  [/pemanas/,'♨️'],[/ercis|kacang/,'🌱'],[/mawar|bunga/,'🌹'],[/jagung/,'🌽'],[/kelapa/,'🥥'],[/\bbuah\b/,'🍎'],[/albino|rambut|\banak\b.*(lahir|orang tua)/,'👪'],
-  [/minyak/,'🍳'],[/madu/,'🍯'],[/kayu/,'🌳'],[/aluminium|logam/,'🔩'],[/batu|linggis/,'⛏️'],[/panci|memanaskan air/,'🍲'],[/besi/,'🔩'],[/gelas|air minum/,'🥛'],
-  [/demam|badan|tubuh/,'🌡️'],[/kawat|kabel|resistor|rangkaian/,'🔌'],[/berjalan|jalan kaki/,'🚶'],[/kelas|sekolah/,'🏫'],[/\bbus\b/,'🚌'],[/motor/,'🏍️'],[/pelari|berlari/,'🏃'],
-  [/sepatu/,'👟'],[/penyelam|menyelam/,'🤿'],[/kolam/,'🐟'],[/dongkrak|bengkel/,'🔧'],[/kotak|kardus/,'📦'],[/meja|lemari/,'🪑'],
-  [/pekerja bangunan|bangunan/,'🏗️'],[/bandul/,'🕰️'],[/ayunan/,'🎠'],[/tali/,'🎗️'],[/laut|sonar|kapal/,'🚢'],[/gelombang|ombak/,'🌊'],[/magnet/,'🧲']];
+/* gambar garis sesuai benda di cerita; dicocokkan dari judul dulu, lalu cerita.
+   Sengaja tidak memakai nama materi supaya langkah Kenali materi tetap menantang. */
+/* gambar garis (Tabler Icons, lisensi MIT, tabler.io) */
+var GAMBAR={'apple':'<path d="M4 11.319c0 3.102 .444 5.319 2.222 7.978c1.351 1.797 3.156 2.247 5.08 .988c.426 -.268 .97 -.268 1.397 0c1.923 1.26 3.728 .809 5.079 -.988c1.778 -2.66 2.222 -4.876 2.222 -7.977c0 -2.661 -1.99 -5.32 -4.444 -5.32c-1.267 0 -2.41 .693 -3.22 1.44a.5 .5 0 0 1 -.672 0c-.809 -.746 -1.953 -1.44 -3.22 -1.44c-2.454 0 -4.444 2.66 -4.444 5.319"/><path d="M7 12c0 -1.47 .454 -2.34 1.5 -3"/><path d="M12 7c0 -1.2 .867 -4 3 -4"/>','battery-2':'<path d="M6 7h11a2 2 0 0 1 2 2v.5a.5 .5 0 0 0 .5 .5a.5 .5 0 0 1 .5 .5v3a.5 .5 0 0 1 -.5 .5a.5 .5 0 0 0 -.5 .5v.5a2 2 0 0 1 -2 2h-11a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2"/><path d="M7 10l0 4"/><path d="M10 10l0 4"/>','bike':'<path d="M5 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M19 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M12 19l0 -4l-3 -3l5 -4l2 3l3 0"/><path d="M17 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>','blender':'<path d="M9 10h-3a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h10.802a1 1 0 0 1 .984 1.179l-1.786 9.821"/><path d="M8 4l2 11"/><path d="M11 15h4a3 3 0 0 1 3 3v2a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-2a3 3 0 0 1 3 -3z"/><path d="M12 4v-1h2v1"/><path d="M13 18v.01"/>','bottle':'<path d="M10 5h4v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v2z"/><path d="M14 3.5c0 1.626 .507 3.212 1.45 4.537l.05 .07a8.093 8.093 0 0 1 1.5 4.694v6.199a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2v-6.2c0 -1.682 .524 -3.322 1.5 -4.693l.05 -.07a7.823 7.823 0 0 0 1.45 -4.537"/><path d="M7 14.803a2.4 2.4 0 0 0 1 -.803a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 1 -.805"/>','bowl-chopsticks':'<path d="M4 11h16a1 1 0 0 1 1 1v.5c0 1.5 -2.517 5.573 -4 6.5v1a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-1c-1.687 -1.054 -4 -5 -4 -6.5v-.5a1 1 0 0 1 1 -1z"/><path d="M19 7l-14 1"/><path d="M19 2l-14 3"/>','box':'<path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12l0 9"/><path d="M12 12l-8 -4.5"/>','bucket-droplet':'<path d="M5 16l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737z"/><path d="M13.737 9.737c2.299 -2.3 3.23 -5.095 2.081 -6.245c-1.15 -1.15 -3.945 -.217 -6.244 2.082c-2.3 2.299 -3.231 5.095 -2.082 6.244c1.15 1.15 3.946 .218 6.245 -2.081z"/><path d="M7.492 11.818c.362 .362 .768 .676 1.208 .934l6.895 4.047c1.078 .557 2.255 -.075 3.692 -1.512c1.437 -1.437 2.07 -2.614 1.512 -3.692c-.372 -.718 -1.72 -3.017 -4.047 -6.895a6.015 6.015 0 0 0 -.934 -1.208"/>','bulb':'<path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7"/><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3"/><path d="M9.7 17l4.6 0"/>','bus':'<path d="M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17h-2v-11a1 1 0 0 1 1 -1h14a5 7 0 0 1 5 7v5h-2m-4 0h-8"/><path d="M16 5l1.5 7l4.5 0"/><path d="M2 10l15 0"/><path d="M7 5l0 5"/><path d="M12 5l0 5"/>','calculator':'<path d="M4 3m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M8 7m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v1a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z"/><path d="M8 14l0 .01"/><path d="M12 14l0 .01"/><path d="M16 14l0 .01"/><path d="M8 17l0 .01"/><path d="M12 17l0 .01"/><path d="M16 17l0 .01"/>','car':'<path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/>','car-crane':'<path d="M5 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M7 18h8m4 0h2v-6a5 5 0 0 0 -5 -5h-1l1.5 5h4.5"/><path d="M12 18v-11h3"/><path d="M3 17v-5h9"/><path d="M4 12v-6l18 -3v2"/><path d="M8 12v-4l-4 -2"/>','crane':'<path d="M6 21h6"/><path d="M9 21v-18l-6 6h18"/><path d="M9 3l10 6"/><path d="M17 9v4a2 2 0 1 1 -2 2"/>','cube':'<path d="M21 16.008v-8.018a1.98 1.98 0 0 0 -1 -1.717l-7 -4.008a2.016 2.016 0 0 0 -2 0l-7 4.008c-.619 .355 -1 1.01 -1 1.718v8.018c0 .709 .381 1.363 1 1.717l7 4.008a2.016 2.016 0 0 0 2 0l7 -4.008c.619 -.355 1 -1.01 1 -1.718z"/><path d="M12 22v-10"/><path d="M12 12l8.73 -5.04"/><path d="M3.27 6.96l8.73 5.04"/>','device-mobile':'<path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z"/><path d="M11 4h2"/><path d="M12 17v.01"/>','device-speaker':'<path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"/><path d="M12 14m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M12 7l0 .01"/>','droplet':'<path d="M7.502 19.423c2.602 2.105 6.395 2.105 8.996 0c2.602 -2.105 3.262 -5.708 1.566 -8.546l-4.89 -7.26c-.42 -.625 -1.287 -.803 -1.936 -.397a1.376 1.376 0 0 0 -.41 .397l-4.893 7.26c-1.695 2.838 -1.035 6.441 1.567 8.546z"/>','fish':'<path d="M16.69 7.44a6.973 6.973 0 0 0 -1.69 4.56c0 1.747 .64 3.345 1.699 4.571"/><path d="M2 9.504c7.715 8.647 14.75 10.265 20 2.498c-5.25 -7.761 -12.285 -6.142 -20 2.504"/><path d="M18 11v.01"/><path d="M11.5 10.5c-.667 1 -.667 2 0 3"/>','flame':'<path d="M12 10.941c2.333 -3.308 .167 -7.823 -1 -8.941c0 3.395 -2.235 5.299 -3.667 6.706c-1.43 1.408 -2.333 3.621 -2.333 5.588c0 3.704 3.134 6.706 7 6.706s7 -3.002 7 -6.706c0 -1.712 -1.232 -4.403 -2.333 -5.588c-2.084 3.353 -3.257 3.353 -4.667 2.235"/>','flask':'<path d="M9 3l6 0"/><path d="M10 9l4 0"/><path d="M10 3v6l-4 11a.7 .7 0 0 0 .5 1h11a.7 .7 0 0 0 .5 -1l-4 -11v-6"/>','flower':'<path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M12 2a3 3 0 0 1 3 3c0 .562 -.259 1.442 -.776 2.64l-.724 1.36l1.76 -1.893c.499 -.6 .922 -1 1.27 -1.205a2.968 2.968 0 0 1 4.07 1.099a3.011 3.011 0 0 1 -1.09 4.098c-.374 .217 -.99 .396 -1.846 .535l-2.664 .366l2.4 .326c1 .145 1.698 .337 2.11 .576a3.011 3.011 0 0 1 1.09 4.098a2.968 2.968 0 0 1 -4.07 1.098c-.348 -.202 -.771 -.604 -1.27 -1.205l-1.76 -1.893l.724 1.36c.516 1.199 .776 2.079 .776 2.64a3 3 0 0 1 -6 0c0 -.562 .259 -1.442 .776 -2.64l.724 -1.36l-1.76 1.893c-.499 .601 -.922 1 -1.27 1.205a2.968 2.968 0 0 1 -4.07 -1.098a3.011 3.011 0 0 1 1.09 -4.098c.374 -.218 .99 -.396 1.846 -.536l2.664 -.366l-2.4 -.325c-1 -.145 -1.698 -.337 -2.11 -.576a3.011 3.011 0 0 1 -1.09 -4.099a2.968 2.968 0 0 1 4.07 -1.099c.348 .203 .771 .604 1.27 1.205l1.76 1.894c-1 -2.292 -1.5 -3.625 -1.5 -4a3 3 0 0 1 3 -3z"/>','glass-full':'<path d="M8 21l8 0"/><path d="M12 15l0 6"/><path d="M17 3l1 7c0 3.012 -2.686 5 -6 5s-6 -1.988 -6 -5l1 -7h10z"/><path d="M6 10a5 5 0 0 1 6 0a5 5 0 0 0 6 0"/>','ironing':'<path d="M9 6h7.459a3 3 0 0 1 2.959 2.507l.577 3.464l.81 4.865a1 1 0 0 1 -.985 1.164h-16.82a7 7 0 0 1 7 -7h9.8"/>','magnet':'<path d="M4 13v-8a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v8a2 2 0 0 0 6 0v-8a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v8a8 8 0 0 1 -16 0"/><path d="M4 8l5 0"/><path d="M15 8l4 0"/>','metronome':'<path d="M14.153 8.188l-.72 -3.236a2.493 2.493 0 0 0 -4.867 0l-3.025 13.614a2 2 0 0 0 1.952 2.434h7.014a2 2 0 0 0 1.952 -2.434l-.524 -2.357m-4.935 1.791l9 -13"/><path d="M20 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>','motorbike':'<path d="M5 16m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M19 16m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M7.5 14h5l4 -4h-10.5m1.5 4l4 -4"/><path d="M13 6h2l1.5 3l2 4"/>','pick':'<path d="M13 8l-9.383 9.418a2.091 2.091 0 0 0 0 2.967a2.11 2.11 0 0 0 2.976 0l9.407 -9.385"/><path d="M9 3h4.586a1 1 0 0 1 .707 .293l6.414 6.414a1 1 0 0 1 .293 .707v4.586a2 2 0 1 1 -4 0v-3l-5 -5h-3a2 2 0 1 1 0 -4z"/>','plug':'<path d="M9.785 6l8.215 8.215l-2.054 2.054a5.81 5.81 0 1 1 -8.215 -8.215l2.054 -2.054z"/><path d="M4 20l3.5 -3.5"/><path d="M15 4l-3.5 3.5"/><path d="M20 9l-3.5 3.5"/>','propeller':'<path d="M12 13m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M14.167 10.5c.722 -1.538 1.156 -3.043 1.303 -4.514c.22 -1.63 -.762 -2.986 -3.47 -2.986s-3.69 1.357 -3.47 2.986c.147 1.471 .581 2.976 1.303 4.514"/><path d="M13.169 16.751c.97 1.395 2.057 2.523 3.257 3.386c1.3 1 2.967 .833 4.321 -1.512c1.354 -2.345 .67 -3.874 -.85 -4.498c-1.348 -.608 -2.868 -.985 -4.562 -1.128"/><path d="M8.664 13c-1.693 .143 -3.213 .52 -4.56 1.128c-1.522 .623 -2.206 2.153 -.852 4.498s3.02 2.517 4.321 1.512c1.2 -.863 2.287 -1.991 3.258 -3.386"/>','radioactive':'<path d="M13.5 14.6l3 5.19a9 9 0 0 0 4.5 -7.79h-6a3 3 0 0 1 -1.5 2.6"/><path d="M13.5 9.4l3 -5.19a9 9 0 0 0 -9 0l3 5.19a3 3 0 0 1 3 0"/><path d="M10.5 14.6l-3 5.19a9 9 0 0 1 -4.5 -7.79h6a3 3 0 0 0 1.5 2.6"/>','ripple':'<path d="M3 7c3 -2 6 -2 9 0s6 2 9 0"/><path d="M3 17c3 -2 6 -2 9 0s6 2 9 0"/><path d="M3 12c3 -2 6 -2 9 0s6 2 9 0"/>','run':'<path d="M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21l0 -4l-4 -3l1 -6"/><path d="M7 12l0 -3l5 -1l3 3l3 1"/>','school':'<path d="M22 9l-10 -4l-10 4l10 4l10 -4v6"/><path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4"/>','scuba-mask':'<path d="M4 7h12a1 1 0 0 1 1 1v4.5a2.5 2.5 0 0 1 -2.5 2.5h-.5a2 2 0 0 1 -2 -2a2 2 0 1 0 -4 0a2 2 0 0 1 -2 2h-.5a2.5 2.5 0 0 1 -2.5 -2.5v-4.5a1 1 0 0 1 1 -1z"/><path d="M10 17a2 2 0 0 0 2 2h3.5a5.5 5.5 0 0 0 5.5 -5.5v-9.5"/>','seeding':'<path d="M12 10a6 6 0 0 0 -6 -6h-3v2a6 6 0 0 0 6 6h3"/><path d="M12 14a6 6 0 0 1 6 -6h3v1a6 6 0 0 1 -6 6h-3"/><path d="M12 20l0 -10"/>','ship':'<path d="M2 20a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1"/><path d="M4 18l-1 -5h18l-2 4"/><path d="M5 13v-6h8l4 6"/><path d="M7 7v-4h-1"/>','shoe':'<path d="M4 6h5.426a1 1 0 0 1 .863 .496l1.064 1.823a3 3 0 0 0 1.896 1.407l4.677 1.114a4 4 0 0 1 3.074 3.89v2.27a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10a1 1 0 0 1 1 -1z"/><path d="M14 13l1 -2"/><path d="M8 18v-1a4 4 0 0 0 -4 -4h-1"/><path d="M10 12l1.5 -3"/>','solar-panel':'<path d="M4.28 14h15.44a1 1 0 0 0 .97 -1.243l-1.5 -6a1 1 0 0 0 -.97 -.757h-12.44a1 1 0 0 0 -.97 .757l-1.5 6a1 1 0 0 0 .97 1.243z"/><path d="M4 10h16"/><path d="M10 6l-1 8"/><path d="M14 6l1 8"/><path d="M12 14v4"/><path d="M7 18h10"/>','soup':'<path d="M4 11h16a1 1 0 0 1 1 1v.5c0 1.5 -2.517 5.573 -4 6.5v1a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-1c-1.687 -1.054 -4 -5 -4 -6.5v-.5a1 1 0 0 1 1 -1z"/><path d="M12 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/><path d="M16 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/><path d="M8 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/>','table':'<path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"/><path d="M3 10h18"/><path d="M10 3v18"/>','thermometer':'<path d="M19 5a2.828 2.828 0 0 1 0 4l-8 8h-4v-4l8 -8a2.828 2.828 0 0 1 4 0z"/><path d="M16 7l-1.5 -1.5"/><path d="M13 10l-1.5 -1.5"/><path d="M10 13l-1.5 -1.5"/><path d="M7 17l-3 3"/>','tree':'<path d="M12 13l-2 -2"/><path d="M12 12l2 -2"/><path d="M12 21v-13"/><path d="M9.824 16a3 3 0 0 1 -2.743 -3.69a3 3 0 0 1 .304 -4.833a3 3 0 0 1 4.615 -3.707a3 3 0 0 1 4.614 3.707a3 3 0 0 1 .305 4.833a3 3 0 0 1 -2.919 3.695h-4z"/>','trees':'<path d="M16 5l3 3l-2 1l4 4l-3 1l4 4h-9"/><path d="M15 21l0 -3"/><path d="M8 13l-2 -2"/><path d="M8 12l2 -2"/><path d="M8 21v-13"/><path d="M5.824 16a3 3 0 0 1 -2.743 -3.69a3 3 0 0 1 .304 -4.833a3 3 0 0 1 4.615 -3.707a3 3 0 0 1 4.614 3.707a3 3 0 0 1 .305 4.833a3 3 0 0 1 -2.919 3.695h-4z"/>','users':'<path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/>','walk':'<path d="M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M7 21l3 -4"/><path d="M16 21l-2 -4l-3 -3l1 -6"/><path d="M6 12l2 -3l4 -1l3 3l3 1"/>','wave-sine':'<path d="M21 12h-2c-.894 0 -1.662 -.857 -1.761 -2c-.296 -3.45 -.749 -6 -2.749 -6s-2.5 3.582 -2.5 8s-.5 8 -2.5 8s-2.452 -2.547 -2.749 -6c-.1 -1.147 -.867 -2 -1.763 -2h-2"/>','wheat':'<path d="M12.014 21.514v-3.75"/><path d="M5.93 9.504l-.43 1.604c-.712 2.659 .866 5.391 3.524 6.105c.997 .268 1.993 .535 2.99 .801v-3.44c-.164 -2.105 -1.637 -3.879 -3.676 -4.426l-2.408 -.644z"/><path d="M13.744 11.164c.454 -.454 .815 -.994 1.061 -1.587c.246 -.594 .372 -1.23 .372 -1.873c0 -.643 -.126 -1.279 -.372 -1.872c-.246 -.594 -.606 -1.133 -1.061 -1.588l-1.73 -1.73l-1.73 1.73c-.454 .454 -.815 .994 -1.06 1.588c-.246 .594 -.372 1.23 -.373 1.872c0 .643 .127 1.279 .373 1.873c.246 .594 .606 1.133 1.06 1.587"/><path d="M18.099 9.504l.43 1.604c.712 2.659 -.866 5.391 -3.525 6.105c-.997 .268 -1.994 .535 -2.99 .801v-3.44c.164 -2.105 1.637 -3.879 3.677 -4.426l2.408 -.644z"/>','windmill':'<path d="M12 12c2.76 0 5 -2.01 5 -4.5s-2.24 -4.5 -5 -4.5v9z"/><path d="M12 12c0 2.76 2.01 5 4.5 5s4.5 -2.24 4.5 -5h-9z"/><path d="M12 12c-2.76 0 -5 2.01 -5 4.5s2.24 4.5 5 4.5v-9z"/><path d="M12 12c0 -2.76 -2.01 -5 -4.5 -5s-4.5 2.24 -4.5 5h9z"/>'};
+function gambarSvg(n){return GAMBAR[n]?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+GAMBAR[n]+'</svg>':'';}
+var IKON=[[/lampu senter|senter/,'bulb'],[/charger|ponsel|\bhp\b|handphone/,'device-mobile'],[/penanak nasi|nasi/,'bowl-chopsticks'],[/kipas/,'propeller'],[/speaker|pengeras suara/,'device-speaker'],[/blender/,'blender'],
+  [/mobil mainan/,'car'],[/mobil/,'car'],[/dinamo sepeda|sepeda/,'bike'],[/kincir angin|pltb|angin/,'windmill'],[/plta|bendungan|air terjun/,'droplet'],[/kalkulator/,'calculator'],
+  [/pompa air/,'bucket-droplet'],[/power bank|baterai|aki\b/,'battery-2'],[/panel surya|sel surya|tenaga surya|matahari/,'solar-panel'],[/pltn|nuklir/,'radioactive'],[/lampu|led\b/,'bulb'],[/setrika/,'ironing'],
+  [/pemanas/,'flame'],[/ercis|kacang/,'seeding'],[/mawar|bunga/,'flower'],[/jagung/,'wheat'],[/kelapa/,'tree'],[/\bbuah\b/,'apple'],[/albino|rambut|\banak\b.*(lahir|orang tua)/,'users'],
+  [/minyak/,'bottle'],[/madu/,'flask'],[/kayu/,'trees'],[/aluminium|logam/,'cube'],[/batu|linggis/,'pick'],[/panci|memanaskan air/,'soup'],[/besi/,'cube'],[/gelas|air minum/,'glass-full'],
+  [/demam|badan|tubuh/,'thermometer'],[/kawat|kabel|resistor|rangkaian/,'plug'],[/berjalan|jalan kaki/,'walk'],[/kelas|sekolah/,'school'],[/\bbus\b/,'bus'],[/motor/,'motorbike'],[/pelari|berlari/,'run'],
+  [/sepatu/,'shoe'],[/penyelam|menyelam/,'scuba-mask'],[/kolam/,'fish'],[/dongkrak|bengkel/,'car-crane'],[/kotak|kardus/,'box'],[/meja|lemari/,'table'],
+  [/pekerja bangunan|bangunan/,'crane'],[/bandul/,'metronome'],[/ayunan/,'metronome'],[/tali/,'wave-sine'],[/laut|sonar|kapal/,'ship'],[/gelombang|ombak/,'ripple'],[/magnet/,'magnet']];
 function ikonSoal(s){
   if(!s)return '';
   var a=String(s.judul||'').toLowerCase(),b=String(s.cerita||'').toLowerCase(),i;
@@ -999,7 +1157,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -1046,7 +1204,7 @@ function materiViewHtml(){
   if(!arr.length)return h+'<div class="card"><p class="mut">Belum ada soal untuk materi ini.</p></div>';
   return h+'<div class="list">'+arr.map(function(s,i){
     return '<button class="item" data-act="play" data-v="'+esc(s.id)+'"><span class="nob'+(done[s.id]?' ok':'')+'">'+(done[s.id]?'✓':(i+1))+'</span>'
-      +'<span class="it"><b>'+esc(s.judul)+'</b><small>'+s.besaran.length+' besaran'+(done[s.id]?', sudah selesai':'')+'</small></span><span class="sik" aria-hidden="true">'+ikonSoal(s)+'</span><span class="chev">'+ICON.chev+'</span></button>';
+      +'<span class="it"><b>'+esc(s.judul)+'</b><small>'+s.besaran.length+' besaran'+(done[s.id]?', sudah selesai':'')+'</small></span><span class="sik" aria-hidden="true">'+gambarSvg(ikonSoal(s))+'</span><span class="chev">'+ICON.chev+'</span></button>';
   }).join('')+'</div>';
 }
 function navHtml(){
@@ -1067,7 +1225,7 @@ function nextUnsolvedId(){
 function playHtml(){
   var p=cp,st=RS[cur],done1=stage1Done(p,st),h='';
   var back=previewFrom?'<button class="btn ghost sm" data-act="a-back" data-fk="back">← Kembali ke admin</button>':'<button class="btn ghost sm" data-act="home" data-fk="back">← Semua soal</button>';
-  var ik=ikonSoal(SRC[cur]||p);
+  var ik=gambarSvg(ikonSoal(SRC[cur]||p));
   h+=(exam&&cur!=='__prev'?examBarHtml():'')+'<div class="ptitle">'+(ik?'<span class="pik" aria-hidden="true">'+ik+'</span>':'')+'<div><h2 class="t">'+esc(p.judul)+'</h2><p class="eyebrow">'+(st.topicOk||previewFrom?esc(p.topik):'Materi: ?')+(previewFrom?' · pratinjau':'')+'</p></div></div>';
   h+=stepsHtml(done1,st);
   var placedIds=Object.keys(st.placed).map(function(k){return st.placed[k];});
@@ -3321,6 +3479,7 @@ function render(){
   $('#app').innerHTML=updHtml()+h;
   var nv=$('#nav');
   if(nv){var nh=navHtml();nv.innerHTML=nh;nv.hidden=!nh;try{document.body.classList.toggle('has-nav',!!nh);document.body.classList.toggle('presenting',view==='tampil');}catch(e){}}
+  try{document.body.classList.toggle('lks',['ujian','ujk','ujkhasil','ujkcek'].indexOf(view)>=0||(view==='play'&&!!exam&&cur!=='__prev'));}catch(e){}
   $('#foot').textContent=view==='home'?'Soal mengikuti Buku IPA SMP/MTs Kelas VII–IX, Kurikulum Merdeka.':'';
   celebrate=false;
   if(fk){var el=document.querySelector('[data-fk="'+fk+'"]');if(el&&!el.disabled){try{el.focus({preventScroll:true});}catch(_){}}fk=null;}
@@ -3490,7 +3649,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.6.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.7.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}

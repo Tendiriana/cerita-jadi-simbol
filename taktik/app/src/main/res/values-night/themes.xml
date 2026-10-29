@@ -12,6 +12,6 @@
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
         <item name="postSplashScreenTheme">@style/Theme.TakTik</item>
     </style>
-    <color name="bg">#0E1318</color>
-    <color name="acc">#3BBFB2</color>
+    <color name="bg">#151A24</color>
+    <color name="acc">#8FB0FF</color>
 </resources>
