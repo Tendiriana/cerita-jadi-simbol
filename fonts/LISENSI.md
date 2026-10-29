@@ -7,6 +7,7 @@ Huruf disimpan di sini supaya aplikasi tetap tampil sama saat offline. Semua ber
 |---|---|---|
 | `kalam-*.woff2` | Kalam (judul dan angka bergaya tulisan tangan) | Indian Type Foundry |
 | `andika-*.woff2` | Andika (isi teks) | SIL International |
+| `gochi-hand.woff2` | Gochi Hand (judul gaya papan tulis) | Huerta Tipográfica |
 | `source-serif-4.woff2` | Source Serif 4 (judul saat ujian) | Adobe |
 | `plex-mono-*.woff2` | IBM Plex Mono (rumus dan angka) | IBM |
 
