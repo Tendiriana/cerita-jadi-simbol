@@ -703,7 +703,7 @@ function colorOf(k){if(k==='ask')return '--ask';var n=parseInt(String(k).slice(1
 function fmt(n){return String(n).replace('.',',');}
 function parseNum(s){
   s=String(s==null?'':s).trim().replace(/\s/g,'');
-  if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
+  if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))s=s.replace(/\./g,'');
   s=s.replace(',','.');
   return /^-?\d*\.?\d+$/.test(s)?parseFloat(s):NaN;
 }
@@ -3844,7 +3844,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.9.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.9.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
