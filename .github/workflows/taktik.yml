@@ -35,6 +35,7 @@ jobs:
         run: |
           mkdir -p taktik/app/src/main/assets/www
           cp index.html soal.json manifest.webmanifest icon-192.png icon-512.png apple-touch-icon.png taktik/app/src/main/assets/www/
+          cp -r fonts taktik/app/src/main/assets/www/
 
       # Kunci tanda tangan dari Settings → Secrets and variables → Actions.
       - name: Restore signing key

@@ -2,9 +2,11 @@
 // Jaringan dulu (selalu cek versi terbaru), cadangan dari cache supaya tetap terbuka saat offline.
 // Setiap kali aplikasi diperbarui, naikkan VERSI di sini dan APP_VERSI di index.html.
 // HP yang sudah memasang aplikasi otomatis mendapat versi baru, tanpa perlu uninstall.
-const VERSI = '2.6.0';
+const VERSI = '2.7.0';
 const C = 'taktik-' + VERSI;
-const INTI = ['./', 'index.html', 'soal.json', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-512-maskable.png', 'apple-touch-icon.png'];
+const INTI = ['./', 'index.html', 'soal.json', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-512-maskable.png', 'apple-touch-icon.png',
+  'fonts/kalam-400.woff2', 'fonts/kalam-700.woff2', 'fonts/andika-400.woff2', 'fonts/andika-700.woff2',
+  'fonts/source-serif-4.woff2', 'fonts/plex-mono-500.woff2', 'fonts/plex-mono-600.woff2'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(C)
