@@ -1224,7 +1224,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.8.0':['Logo baru: lembar soal dengan simbol x =.','Semua emoji diganti gambar garis yang rapi, termasuk di menu guru dan Cara pakai.','Kalimat di aplikasi dibuat lebih seperti guru berbicara.'],'2.7.1':['Tampilan baru seperti lembar soal cetak: hitam putih, rapi, dengan satu warna merah.','Gambar soal kini berupa gambar garis sederhana.','Mau gaya lain? Pilih Buku tulis atau Papan tulis di Pengaturan → Tampilan → Gaya.'],'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.8.1':['Bacakan soal kini membaca angka, rupiah, jam, dan satuan dengan benar, misalnya Rp1.500 dibaca seribu lima ratus rupiah.','Aplikasi memilih suara bahasa Indonesia terbaik di HP. Cara memasang suara yang lebih alami ada di Cara pakai.'],'2.8.0':['Logo baru: lembar soal dengan simbol x =.','Semua emoji diganti gambar garis yang rapi, termasuk di menu guru dan Cara pakai.','Kalimat di aplikasi dibuat lebih seperti guru berbicara.'],'2.7.1':['Tampilan baru seperti lembar soal cetak: hitam putih, rapi, dengan satu warna merah.','Gambar soal kini berupa gambar garis sederhana.','Mau gaya lain? Pilih Buku tulis atau Papan tulis di Pengaturan → Tampilan → Gaya.'],'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -1663,10 +1663,62 @@ function speakBtnHtml(){
   if(!canSpeak)return '';
   return '<div class="row" style="margin:0 0 4px"><button class="btn ghost sm" data-act="speak" data-fk="speak" aria-pressed="'+speaking+'">'+(speaking?'■ Berhenti membaca':ik('volume')+'Bacakan soal')+'</button></div>';
 }
+/* teks soal diubah menjadi kalimat lisan sebelum dibacakan, supaya angka, rupiah, jam, dan satuan
+   dibaca seperti guru membacanya (contoh: Rp1.500 → seribu lima ratus rupiah, 0,5 m² → nol koma lima meter persegi) */
+var SATUAN_LISAN=[['Nm²/C²','newton meter kuadrat per coulomb kuadrat'],['Ωm','ohm meter'],['km/jam','kilometer per jam'],['m/s²','meter per sekon kuadrat'],['m/s','meter per sekon'],['kg/m³','kilogram per meter kubik'],
+  ['g/cm³','gram per sentimeter kubik'],['g/mL','gram per mililiter'],['N/m²','newton per meter persegi'],['J/kg°C','joule per kilogram derajat Celsius'],
+  ['J/(kg°C)','joule per kilogram derajat Celsius'],['J/kg·°C','joule per kilogram derajat Celsius'],['J/kg.°C','joule per kilogram derajat Celsius'],
+  ['kWh','kilowatt jam'],['kW','kilowatt'],['MW','megawatt'],['mA','miliampere'],['mV','milivolt'],['kV','kilovolt'],['kJ','kilojoule'],['MJ','megajoule'],
+  ['kPa','kilopascal'],['Pa','pascal'],['kΩ','kiloohm'],['Ω','ohm'],['Hz','hertz'],['Wb','weber'],['μC','mikrocoulomb'],['µC','mikrocoulomb'],['nC','nanocoulomb'],
+  ['km','kilometer'],['cm³','sentimeter kubik'],['cm²','sentimeter persegi'],['cm','sentimeter'],['mm','milimeter'],['m³','meter kubik'],['m²','meter persegi'],
+  ['mL','mililiter'],['kg','kilogram'],['kkal','kilokalori'],['kal','kalori'],['°C','derajat Celsius'],['°F','derajat Fahrenheit'],['°','derajat'],
+  ['m','meter'],['g','gram'],['L','liter'],['K','kelvin'],['N','newton'],['J','joule'],['W','watt'],['V','volt'],['A','ampere'],['s','sekon'],['T','tesla'],['C','coulomb'],['%','persen']];
+var ANGKA_LISAN=['nol','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan','sepuluh','sebelas'];
+function terbilang(n){
+  n=Math.floor(Math.abs(n));
+  if(n<12)return ANGKA_LISAN[n];
+  if(n<20)return terbilang(n-10)+' belas';
+  if(n<100)return terbilang(Math.floor(n/10))+' puluh'+(n%10?' '+terbilang(n%10):'');
+  if(n<200)return 'seratus'+(n>100?' '+terbilang(n-100):'');
+  if(n<1000)return terbilang(Math.floor(n/100))+' ratus'+(n%100?' '+terbilang(n%100):'');
+  if(n<2000)return 'seribu'+(n>1000?' '+terbilang(n-1000):'');
+  var besar=[[1e12,'triliun'],[1e9,'miliar'],[1e6,'juta'],[1e3,'ribu']];
+  for(var i=0;i<besar.length;i++)if(n>=besar[i][0]){var d=Math.floor(n/besar[i][0]),r=n%besar[i][0];return terbilang(d)+' '+besar[i][1]+(r?' '+terbilang(r):'');}
+  return String(n);
+}
+/* "1.500" atau "2,75" → kata; angka di belakang koma dibaca satu per satu */
+function angkaLisan(t){
+  var neg=/^[-−]/.test(t);t=t.replace(/^[-−]/,'');
+  var p=t.split(','),bulat=parseInt(p[0].replace(/\./g,''),10);
+  var w=isNaN(bulat)?t:terbilang(bulat);
+  if(p[1])w+=' koma '+p[1].split('').map(function(d){return ANGKA_LISAN[+d]||d;}).join(' ');
+  return (neg?'minus ':'')+w;
+}
+var RE_ANGKA='[-−]?\\d{1,3}(?:\\.\\d{3})+(?:,\\d+)?|[-−]?\\d+(?:,\\d+)?';
+var RE_SATUAN=null,RE_PANGKAT=null,SUPER={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-'};
+function teksLisan(txt){
+  var su=SATUAN_LISAN.map(function(x){return x[0].replace(/[.*+?^${}()|[\]\\/]/g,'\\$&');}).join('|');
+  if(!RE_SATUAN){RE_SATUAN=new RegExp('('+RE_ANGKA+')\\s?('+su+')(?![A-Za-z0-9])','g');RE_PANGKAT=new RegExp('(\\d+)([⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+)(?:\\s?('+su+'))?(?![A-Za-z0-9])','g');}
+  var sat={};SATUAN_LISAN.forEach(function(x){sat[x[0]]=x[1];});
+  var t=String(txt)
+    .replace(/Rp\.?\s?(\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+(?:,\d+)?)/g,function(_,a){return angkaLisan(a)+' rupiah';})
+    .replace(/pukul\s+(\d{1,2})[.:](\d{2})/gi,function(_,h,m){return 'pukul '+terbilang(+h)+(+m?' lewat '+terbilang(+m)+' menit':'');})
+    .replace(/([A-Za-z])(\d)/g,'$1 $2')
+    .replace(RE_PANGKAT,function(_,a,p,u){return angkaLisan(a)+' pangkat '+angkaLisan(p.split('').map(function(c){return SUPER[c];}).join(''))+(u?' '+sat[u]:'');})
+    .replace(RE_SATUAN,function(_,a,u){return angkaLisan(a)+' '+sat[u];});
+  /* satuan gabungan yang tidak didahului angka, misalnya "dalam g/cm³" */
+  SATUAN_LISAN.forEach(function(x){if(/[\/Ω]/.test(x[0])&&x[0].length>1)t=t.split(x[0]).join(x[1]);});
+  return t
+    .replace(new RegExp(RE_ANGKA,'g'),function(a){return angkaLisan(a);})
+    .replace(/°C/g,' derajat Celsius').replace(/°F/g,' derajat Fahrenheit').replace(/°/g,' derajat').replace(/×/g,' kali ').replace(/÷/g,' dibagi ').replace(/=/g,' sama dengan ').replace(/\//g,' per ').replace(/²/g,' kuadrat').replace(/³/g,' kubik').replace(/Ω/g,' ohm')
+    .replace(/\s+([,.?!])/g,'$1').replace(/\s{2,}/g,' ').trim();
+}
 var idVoice=null,speakJob=null,utts=[];
 function pickVoice(){
   try{var vs=speechSynthesis.getVoices()||[];
-    idVoice=vs.filter(function(v){return /^(id|in)([-_]|$)/i.test(v.lang||'');})[0]||null;}catch(e){}
+    /* pilih suara Indonesia yang paling bagus: suara Google/alami lebih dulu, lalu suara yang tersimpan di HP */
+    var nilai=function(v){return (/natural|neural|enhanced|premium|online|google/i.test(v.name||'')?2:0)+(v.localService?1:0);};
+    idVoice=vs.filter(function(v){return /^(id|in)([-_]|$)/i.test(v.lang||'');}).sort(function(a,b){return nilai(b)-nilai(a);})[0]||null;}catch(e){}
 }
 if(canSpeak){
   pickVoice();
@@ -1677,7 +1729,7 @@ function speakToggle(){
   if(!canSpeak)return;
   if(speaking){stopSpeak();return;}
   pickVoice();
-  var txt=cp.story.map(function(x){return typeof x==='string'?x:x.txt;}).join('').replace(/²/g,' kuadrat').replace(/Ω/g,' ohm');
+  var txt=teksLisan(cp.story.map(function(x){return typeof x==='string'?x:x.txt;}).join(''));
   /* dibacakan per kalimat: teks panjang sering terputus di Chrome Android */
   var parts=(txt.match(/[^.?!]+[.?!]*/g)||[txt]).map(function(t){return t.trim();}).filter(Boolean);
   var sy=speechSynthesis,job={},left=parts.length;
@@ -1685,7 +1737,7 @@ function speakToggle(){
   var done=function(){if(speakJob!==job)return;speaking=false;speakJob=null;utts=[];render();};
   utts=parts.map(function(t){
     var u=new SpeechSynthesisUtterance(t);
-    u.lang=idVoice?idVoice.lang:'id-ID';if(idVoice)u.voice=idVoice;u.rate=0.95;
+    u.lang=idVoice?idVoice.lang:'id-ID';if(idVoice)u.voice=idVoice;u.rate=0.92;u.pitch=1;
     u.onend=function(){if(--left<=0)done();};
     u.onerror=function(e){
       var er=e&&e.error;
@@ -2140,7 +2192,8 @@ var BANTUAN={
     ['clipboard-list','Ujian dari guru',['Minta <b>kode ujian</b> ke gurumu.','Ketuk menu <b>Ujian</b> di bawah layar, isi kode dan namamu, lalu ketuk <b>Mulai ujian</b>.','Waktu berjalan mundur di atas layar. Kalau waktu habis, jawabanmu otomatis terkumpul ke guru.','Jawaban tersimpan sendiri setiap kali satu soal selesai. Kalau HP tertutup, buka lagi aplikasinya untuk melanjutkan.']],
     ['bolt','Latihan cepat',['<b>Buat soal sendiri:</b> tulis cerita dari rumus dan angka yang diberikan.','<b>Ulangi soal yang pernah salah:</b> kerjakan lagi sampai lancar.','<b>Kuis simbol dan satuan</b> dan <b>Latihan konversi:</b> 10 pertanyaan cepat.']],
     ['notebook','Catatanku dan laporan',['Catatanku berisi kesalahan yang sering kamu lakukan beserta tipsnya.','Isi nama dan kelas, lalu ketuk <b>Kirim lewat WhatsApp</b> untuk mengirim laporan ke guru.']],
-    ['device-mobile','Pasang dan perbarui aplikasi',['Android: ketuk <b>Pasang aplikasi</b> di beranda, atau pasang APK dari gurumu.','iPhone: buka di Safari, ketuk tombol Bagikan, lalu <b>Tambahkan ke Layar Utama</b>.','Aplikasi memperbarui dirinya sendiri saat dibuka dengan internet. Kemajuanmu tetap tersimpan.']]
+    ['device-mobile','Pasang dan perbarui aplikasi',['Android: ketuk <b>Pasang aplikasi</b> di beranda, atau pasang APK dari gurumu.','iPhone: buka di Safari, ketuk tombol Bagikan, lalu <b>Tambahkan ke Layar Utama</b>.','Aplikasi memperbarui dirinya sendiri saat dibuka dengan internet. Kemajuanmu tetap tersimpan.']],
+    ['volume','Suara bacaan soal',['Ketuk <b>Bacakan soal</b> di langkah Pilah cerita. Angka, rupiah, jam, dan satuan dibaca lengkap, misalnya Rp1.500 dibaca <i>seribu lima ratus rupiah</i>.','Suaranya berasal dari HP. Supaya lebih jelas dan alami: buka <b>Pengaturan HP</b> → cari <b>Text-to-speech</b> (Teks ke ucapan) → pilih mesin <b>Google</b> → <b>Bahasa Indonesia</b>, lalu unduh suara yang paling bagus.','Terlalu cepat atau lambat? Atur <b>Kecepatan ucapan</b> di menu yang sama.']]
   ],
   guru:[
     ['key','Masuk mode guru',['Buka <b>Pengaturan</b> (ikon roda gigi) → <b>Masuk mode guru</b>, lalu masukkan PIN.','Centang <b>Ingat saya di HP ini</b> supaya tidak perlu mengetik PIN lagi. Matikan kalau HP dipakai siswa.','Keterangan di atas layar menunjukkan apakah semua soal sudah terkirim ke siswa.']],
@@ -3719,7 +3772,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.8.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.8.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
