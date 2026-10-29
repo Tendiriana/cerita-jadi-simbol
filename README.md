@@ -208,7 +208,7 @@ Di halaman utama, siswa memilih tingkat:
 
 - **Mudah**: sebagian kotak sudah terisi.
 - **Menengah**: kotak kosong, satuan tampil sebagai petunjuk.
-- **Sulit**: kotak kosong tanpa petunjuk satuan dan konversi, tanpa penjelasan materi dan kartu rumus, dan siswa menulis sendiri hitungannya.
+- **Sulit**: tidak ada kotak berlabel. Siswa menyentuh setiap angka di cerita lalu memilih simbolnya sendiri dari deretan simbol (simbol yang benar ditambah simbol lain dari materi yang sama), atau ✕ kalau tidak dipakai, dan memilih simbol yang ditanya. Jumlah angka yang dipakai tidak diberi tahu. Tanpa konversi satuan, penjelasan materi, dan kartu rumus; siswa juga menulis sendiri hitungannya.
 
 ## Tampilan siswa
 
