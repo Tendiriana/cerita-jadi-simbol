@@ -11,6 +11,7 @@
       "topik": "Listrik",
       "judul": "Arus pada setrika",
       "cerita": "Setrika listrik memiliki hambatan 40 Ω dan dihubungkan ke sumber tegangan 220 V. Setrika itu dipakai 30 menit setiap hari. Berapa kuat arus yang mengalir pada setrika?",
+      "ceritaSulit": "Pada setrika listrik milik Ibu tertulis 40 Ω. Setrika itu dicolokkan ke stopkontak 220 V dan dipakai 30 menit setiap hari. Berapa kuat arus yang mengalir pada setrika?",
       "besaran": [
         {
           "teks": "40 Ω",
@@ -79,6 +80,7 @@
       "topik": "Listrik",
       "judul": "Tegangan pada lampu pijar",
       "cerita": "Sebuah lampu pijar memiliki hambatan 200 Ω. Ketika menyala, arus sebesar 0,3 A mengalir melalui lampu. Lampu itu dibeli seharga Rp12.000. Berapa tegangan pada lampu?",
+      "ceritaSulit": "Pada sebuah lampu pijar tertulis 200 Ω. Ketika lampu menyala, alat ukur di rangkaian menunjukkan 0,3 A. Lampu itu dibeli seharga Rp12.000. Berapa tegangan pada lampu?",
       "besaran": [
         {
           "teks": "200 Ω",
@@ -147,6 +149,7 @@
       "topik": "Listrik",
       "judul": "Arus dari muatan yang mengalir",
       "cerita": "Sebuah penghantar dialiri muatan listrik sebesar 120 C selama 60 s. Penghantar itu terbuat dari tembaga. Berapa kuat arus listrik pada penghantar?",
+      "ceritaSulit": "Sebuah penghantar dari tembaga dilewati 120 C dalam 60 s. Berapa kuat arus listrik pada penghantar?",
       "besaran": [
         {
           "teks": "120 C",
@@ -219,6 +222,7 @@
       "topik": "Listrik",
       "judul": "Hambatan pengganti seri",
       "cerita": "Dua hambatan, 4 Ω dan 6 Ω, disusun seri pada sebuah papan rangkaian. Tegangan baterai 20 V tidak dipakai untuk mencari hambatan pengganti. Berapa hambatan pengganti rangkaian?",
+      "ceritaSulit": "Dua resistor, 4 Ω dan 6 Ω, disusun seri pada papan rangkaian yang memakai baterai 20 V. Berapa hambatan pengganti rangkaian?",
       "besaran": [
         {
           "teks": "4 Ω",
@@ -291,6 +295,7 @@
       "topik": "Listrik",
       "judul": "Arus pada rangkaian seri",
       "cerita": "Dua hambatan, 4 Ω dan 6 Ω, disusun seri dan dihubungkan ke sumber tegangan 20 V. Rangkaian ini dipasang di ruang kelas. Berapa kuat arus yang mengalir pada rangkaian?",
+      "ceritaSulit": "Dua resistor, 4 Ω dan 6 Ω, disusun seri lalu disambungkan ke baterai 20 V di ruang kelas. Berapa kuat arus yang mengalir pada rangkaian?",
       "besaran": [
         {
           "teks": "20 V",
@@ -372,6 +377,7 @@
       "topik": "Listrik",
       "judul": "Hambatan pengganti paralel",
       "cerita": "Dua hambatan, 6 Ω dan 3 Ω, disusun paralel. Susunan ini dibuat untuk praktikum di laboratorium sekolah. Berapa hambatan pengganti rangkaian paralel?",
+      "ceritaSulit": "Di laboratorium sekolah, resistor 6 Ω dan resistor 3 Ω disusun paralel. Berapa hambatan pengganti rangkaian paralel?",
       "besaran": [
         {
           "teks": "6 Ω",
@@ -444,6 +450,7 @@
       "topik": "Listrik",
       "judul": "Arus pada cabang paralel",
       "cerita": "Hambatan 3 Ω dan hambatan lain 6 Ω disusun paralel, lalu dihubungkan ke sumber tegangan 12 V. Berapa kuat arus yang melalui hambatan 3 Ω?",
+      "ceritaSulit": "Resistor 3 Ω dan resistor 6 Ω disusun paralel, lalu disambungkan ke baterai 12 V. Berapa kuat arus yang melalui hambatan 3 Ω?",
       "besaran": [
         {
           "teks": "12 V",
@@ -516,6 +523,7 @@
       "topik": "Listrik",
       "judul": "Gaya antara dua muatan",
       "cerita": "Muatan q1 = 2 C dan q2 = 3 C terpisah sejauh 3 m. Konstanta k = 9 × 10⁹ Nm²/C². Percobaan ini dilakukan di ruang laboratorium. Berapa gaya Coulomb antara kedua muatan?",
+      "ceritaSulit": "Di ruang laboratorium, dua bola kecil bernilai 2 C dan 3 C diletakkan terpisah 3 m. Gunakan 9 × 10⁹ Nm²/C². Berapa gaya Coulomb antara kedua muatan?",
       "besaran": [
         {
           "teks": "2 C",
@@ -602,6 +610,7 @@
       "topik": "Listrik",
       "judul": "Jarak diubah, gaya berubah",
       "cerita": "Gaya Coulomb antara dua muatan sebesar 6 × 10⁹ N ketika jaraknya 3 m. Jarak kemudian diubah menjadi 6 m. Muatan tidak diubah. Berapa gaya Coulomb setelah jaraknya diubah?",
+      "ceritaSulit": "Dua benda bermuatan saling tolak 6 × 10⁹ N saat terpisah 3 m. Keduanya lalu digeser hingga terpisah 6 m tanpa mengubah muatannya. Berapa gaya Coulomb setelah jaraknya diubah?",
       "besaran": [
         {
           "teks": "6 × 10⁹ N",
@@ -674,6 +683,7 @@
       "topik": "Listrik",
       "judul": "Kuat medan di sekitar muatan",
       "cerita": "Sebuah muatan titik Q = 4 C berada di udara. Titik P berjarak 2 m dari muatan itu. Konstanta k = 9 × 10⁹ Nm²/C². Berapa kuat medan listrik di titik P?",
+      "ceritaSulit": "Sebuah benda kecil bernilai 4 C berada di udara. Titik P terletak 2 m dari benda itu. Gunakan 9 × 10⁹ Nm²/C². Berapa kuat medan listrik di titik P?",
       "besaran": [
         {
           "teks": "4 C",
@@ -746,6 +756,7 @@
       "topik": "Listrik",
       "judul": "Beda potensial dari usaha",
       "cerita": "Untuk memindahkan muatan 2 C dari titik A ke titik B, diperlukan energi listrik sebesar 60 J. Perpindahan itu melalui lintasan lurus dan pendek. Berapa beda potensial antara titik A dan B?",
+      "ceritaSulit": "Untuk memindahkan 2 C dari titik A ke titik B lewat lintasan lurus dan pendek, diperlukan 60 J. Berapa beda potensial antara titik A dan B?",
       "besaran": [
         {
           "teks": "2 C",
@@ -814,6 +825,7 @@
       "topik": "Listrik",
       "judul": "Hambatan kawat tembaga",
       "cerita": "Kawat tembaga dengan hambatan jenis 1,72 × 10⁻⁸ Ωm memiliki panjang 100 m dan luas penampang 2 × 10⁻⁶ m². Harga kabel itu Rp50.000. Berapa hambatan kawat tersebut?",
+      "ceritaSulit": "Kabel tembaga seharga Rp50.000 bertuliskan 1,72 × 10⁻⁸ Ωm. Kabel itu 100 m dan irisan melintangnya 2 × 10⁻⁶ m². Berapa hambatan kawat tersebut?",
       "besaran": [
         {
           "teks": "1,72 × 10⁻⁸ Ωm",
@@ -891,6 +903,7 @@
       "topik": "Listrik",
       "judul": "Arus pada charger HP",
       "cerita": "Rina mengisi daya HP memakai charger seharga Rp45.000. Charger itu memberi tegangan {V} V pada rangkaian yang hambatannya {R} Ω. Berapa kuat arus yang mengalir pada rangkaian?",
+      "ceritaSulit": "Rina mengisi daya HP memakai charger seharga Rp45.000. Charger itu memberi {V} V pada rangkaian {R} Ω. Berapa kuat arus yang mengalir pada rangkaian?",
       "variasi": [
         {
           "nama": "R",
@@ -984,6 +997,7 @@
       "topik": "Listrik",
       "judul": "Hambatan lampu senter",
       "cerita": "Lampu senter milik Dodi sudah dipakai 2 tahun. Senter itu memakai baterai {V} volt dan lampunya dilalui arus {I} A. Berapa hambatan lampu senter itu?",
+      "ceritaSulit": "Lampu senter milik Dodi sudah dipakai 2 tahun. Senter itu memakai baterai {V} volt, dan lampunya menarik {I} A. Berapa hambatan lampu senter itu?",
       "variasi": [
         {
           "nama": "R",
@@ -1082,6 +1096,7 @@
       "topik": "Listrik",
       "judul": "Muatan yang mengalir pada setrika",
       "cerita": "Setrika di rumah Ani dibeli 3 tahun yang lalu. Saat dipakai, kabelnya dialiri arus {I} A selama {t} sekon. Berapa besar muatan listrik yang berpindah?",
+      "ceritaSulit": "Setrika di rumah Ani dibeli 3 tahun yang lalu. Saat dipakai, kabelnya dilewati {I} A selama {t} sekon. Berapa besar muatan listrik yang berpindah?",
       "variasi": [
         {
           "nama": "I",
@@ -1168,6 +1183,7 @@
       "topik": "Listrik",
       "judul": "Lama muatan mengalir",
       "cerita": "Lampu di ruang tamu berukuran 3 m × 4 m dialiri arus {I} A. Muatan listrik yang mengalir melalui lampu itu sebanyak {q} C. Berapa lama muatan itu mengalir?",
+      "ceritaSulit": "Lampu di ruang tamu berukuran 3 m × 4 m dilewati {I} A. Sebanyak {q} C mengalir melalui lampu itu. Berapa lama muatan itu mengalir?",
       "variasi": [
         {
           "nama": "I",
@@ -1363,6 +1379,7 @@
       "topik": "Listrik",
       "judul": "Dua lampu identik paralel",
       "cerita": "Dua lampu identik masing-masing berhambatan {R} Ω dipasang paralel di teras rumah. Lampu itu dinyalakan setiap pukul 18.00. Berapa hambatan pengganti kedua lampu?",
+      "ceritaSulit": "Dua lampu identik, masing-masing bertuliskan {R} Ω, dipasang paralel di teras rumah. Lampu itu dinyalakan setiap pukul 18.00. Berapa hambatan pengganti kedua lampu?",
       "variasi": [
         {
           "nama": "R",
@@ -1433,6 +1450,7 @@
       "topik": "Listrik",
       "judul": "Daya setrika listrik",
       "cerita": "Ibu menyetrika 15 potong baju. Setrika listrik itu dipasang pada tegangan 220 V dan dialiri arus {I} A. Berapa daya listrik setrika?",
+      "ceritaSulit": "Ibu menyetrika 15 potong baju. Setrika itu dicolokkan ke stopkontak 220 V dan menarik {I} A. Berapa daya listrik setrika?",
       "variasi": [
         {
           "nama": "I",
@@ -1512,6 +1530,7 @@
       "topik": "Listrik",
       "judul": "Energi penanak nasi",
       "cerita": "Penanak nasi berdaya {P} watt dipakai memasak 2 liter beras. Alat itu menyala selama {m} menit. Berapa energi listrik yang digunakan, dalam joule?",
+      "ceritaSulit": "Penanak nasi bertuliskan {P} watt dipakai memasak 2 liter beras. Alat itu menyala {m} menit. Berapa energi listrik yang digunakan, dalam joule?",
       "variasi": [
         {
           "nama": "P",
@@ -1605,6 +1624,7 @@
       "topik": "Listrik",
       "judul": "Kawat nikrom pada pemanas",
       "cerita": "Pemanas air memakai kawat nikrom dengan hambatan jenis 1 × 10⁻⁶ Ωm. Kawat itu panjangnya {L} meter dan luas penampangnya 2 × 10⁻⁷ m². Pemanas dibeli di toko yang berjarak 3 km. Berapa hambatan kawat nikrom itu?",
+      "ceritaSulit": "Pemanas air yang dibeli di toko berjarak 3 km memakai kawat nikrom 1 × 10⁻⁶ Ωm. Kawat itu {L} meter dengan irisan melintang 2 × 10⁻⁷ m². Berapa hambatan kawat nikrom itu?",
       "variasi": [
         {
           "nama": "L",
@@ -1687,6 +1707,7 @@
       "topik": "Magnet",
       "judul": "Gaya pada kawat berarus",
       "cerita": "Sebuah kawat sepanjang 50 cm dialiri arus listrik 4 A di dalam medan magnet 0,2 T. Arah arus tegak lurus medan magnet. Kawat itu terbuat dari tembaga dengan massa 20 g. Berapa gaya Lorentz yang bekerja pada kawat?",
+      "ceritaSulit": "Kawat tembaga 50 cm bermassa 20 g dilewati 4 A dan diletakkan di antara kutub magnet 0,2 T, tegak lurus garis gaya magnetnya. Berapa gaya Lorentz yang bekerja pada kawat?",
       "besaran": [
         {
           "teks": "50 cm",
@@ -1764,6 +1785,7 @@
       "topik": "Magnet",
       "judul": "Gaya Lorentz dengan sudut",
       "cerita": "Kawat sepanjang 0,5 m dialiri arus 2 A di dalam medan magnet 0,4 T. Arah arus membentuk sudut 30° terhadap arah medan magnet. Sebuah kawat dicat hitam. Berapa gaya Lorentz pada kawat?",
+      "ceritaSulit": "Sepotong kawat dicat hitam. Kawat 0,5 m itu dilewati 2 A di antara kutub magnet 0,4 T dan membentuk 30° terhadap garis gaya magnetnya. Berapa gaya Lorentz pada kawat?",
       "besaran": [
         {
           "teks": "0,5 m",
@@ -1850,6 +1872,7 @@
       "topik": "Magnet",
       "judul": "GGL dari perubahan fluks",
       "cerita": "Sebuah kumparan memiliki 200 lilitan. Fluks magnetik yang melalui kumparan berubah sebesar 0,5 Wb dalam waktu 0,1 s. Kumparan itu dibeli seharga Rp15.000. Berapa besar GGL induksi yang timbul?",
+      "ceritaSulit": "Sebuah kumparan seharga Rp15.000 terdiri atas 200 lilitan. Magnet yang digerakkan di dekatnya menimbulkan perubahan 0,5 Wb dalam 0,1 s. Berapa besar GGL induksi yang timbul?",
       "besaran": [
         {
           "teks": "200 lilitan",
@@ -1927,6 +1950,7 @@
       "topik": "Magnet",
       "judul": "Fluks berubah dari dua nilai",
       "cerita": "Sebuah kumparan 100 lilitan dilalui fluks magnetik yang berubah dari 0,8 Wb menjadi 0,2 Wb dalam waktu 0,4 s. Pada saat percobaan, lampu di ruangan menyala terang. Berapa besar GGL induksi yang timbul?",
+      "ceritaSulit": "Saat percobaan, lampu di ruangan menyala terang. Sebuah kumparan 100 lilitan dilalui 0,8 Wb yang kemudian turun menjadi 0,2 Wb dalam 0,4 s. Berapa besar GGL induksi yang timbul?",
       "besaran": [
         {
           "teks": "100 lilitan",
@@ -2013,6 +2037,7 @@
       "topik": "Magnet",
       "judul": "Gaya pada motor kipas angin",
       "cerita": "Di dalam motor kipas angin, kawat sepanjang {L} m dialiri arus {I} A dan berada tegak lurus terhadap medan magnet {B} T. Kipas itu punya 3 tingkat kecepatan. Berapa gaya Lorentz pada kawat?",
+      "ceritaSulit": "Di dalam motor kipas angin dengan 3 tingkat kecepatan, kawat {L} m dilewati {I} A dan berada tegak lurus terhadap magnet {B} T. Berapa gaya Lorentz pada kawat?",
       "variasi": [
         {
           "nama": "L",
@@ -2124,6 +2149,7 @@
       "topik": "Magnet",
       "judul": "Gaya pada kumparan speaker",
       "cerita": "Pada kumparan pengeras suara, kawat sepanjang {L} m dialiri arus {I} A dan berada tegak lurus terhadap medan magnet {B} T. Speaker itu dibeli seharga Rp250.000. Berapa gaya Lorentz pada kawat?",
+      "ceritaSulit": "Pada kumparan pengeras suara seharga Rp250.000, kawat {L} m dilewati {I} A dan berada tegak lurus terhadap magnet {B} T. Berapa gaya Lorentz pada kawat?",
       "variasi": [
         {
           "nama": "L",
@@ -2235,6 +2261,7 @@
       "topik": "Magnet",
       "judul": "Gaya pada motor blender",
       "cerita": "Di dalam motor blender, kawat sepanjang {L} m dialiri arus {I} A dan berada tegak lurus terhadap medan magnet {B} T. Blender itu berkapasitas 1,5 liter. Berapa gaya Lorentz pada kawat?",
+      "ceritaSulit": "Di dalam motor blender berkapasitas 1,5 liter, kawat {L} m dilewati {I} A dan berada tegak lurus terhadap magnet {B} T. Berapa gaya Lorentz pada kawat?",
       "variasi": [
         {
           "nama": "L",
@@ -2346,6 +2373,7 @@
       "topik": "Magnet",
       "judul": "Gaya pada motor mobil mainan",
       "cerita": "Pada motor mobil mainan, kawat sepanjang {L} m dialiri arus {I} A dan berada tegak lurus terhadap medan magnet {B} T. Mobil mainan itu milik adik yang berumur 7 tahun. Berapa gaya Lorentz pada kawat?",
+      "ceritaSulit": "Mobil mainan milik adik yang berumur 7 tahun punya motor kecil. Di dalamnya, kawat {L} m dilewati {I} A dan berada tegak lurus terhadap magnet {B} T. Berapa gaya Lorentz pada kawat?",
       "variasi": [
         {
           "nama": "L",
@@ -2457,6 +2485,7 @@
       "topik": "Magnet",
       "judul": "Mencari kuat arus dari gaya Lorentz",
       "cerita": "Percobaan di laboratorium lantai 2: seutas kawat sepanjang {L} m diletakkan tegak lurus dalam medan magnet {B} T. Kawat itu mengalami gaya Lorentz {F} N. Berapa kuat arus pada kawat?",
+      "ceritaSulit": "Percobaan di laboratorium lantai 2: seutas kawat {L} m diletakkan tegak lurus di antara kutub magnet {B} T. Kawat itu terdorong {F} N. Berapa kuat arus pada kawat?",
       "variasi": [
         {
           "nama": "L",
@@ -2575,6 +2604,7 @@
       "topik": "Magnet",
       "judul": "Mencari kuat medan magnet",
       "cerita": "Kawat penghantar sepanjang {L} m dialiri arus {I} A dan dipasang tegak lurus di antara kutub magnet tapal kuda. Kawat itu mengalami gaya {F} N. Magnet tapal kuda itu beratnya 300 gram. Berapa kuat medan magnet di antara kutubnya?",
+      "ceritaSulit": "Magnet tapal kuda seberat 300 gram dipakai dalam percobaan. Kawat {L} m dilewati {I} A dan dipasang tegak lurus di antara kutubnya, lalu terdorong {F} N. Berapa kuat medan magnet di antara kutubnya?",
       "variasi": [
         {
           "nama": "L",
@@ -2693,6 +2723,7 @@
       "topik": "Magnet",
       "judul": "Mencari panjang kawat",
       "cerita": "Sebuah kawat dialiri arus {I} A dan berada tegak lurus dalam medan magnet {B} T. Gaya Lorentz yang dialami kawat {F} N. Kawat itu dibungkus isolator berwarna merah setebal 1 mm. Berapa panjang kawat yang berada dalam medan magnet?",
+      "ceritaSulit": "Sebuah kawat berisolator merah setebal 1 mm dilewati {I} A dan berada tegak lurus di antara kutub magnet {B} T. Kawat itu terdorong {F} N. Berapa panjang kawat yang berada dalam medan magnet?",
       "variasi": [
         {
           "nama": "I",
@@ -2811,6 +2842,7 @@
       "topik": "Magnet",
       "judul": "Kawat membentuk sudut 30°",
       "cerita": "Kabel sepanjang {L} m dialiri arus {I} A. Kabel itu berada dalam medan magnet {B} T dan membentuk sudut 30° terhadap arah medan. Kabel itu dibeli 2 gulung. Berapa gaya Lorentz pada kabel?",
+      "ceritaSulit": "Ayah membeli 2 gulung kabel. Sepotong kabel {L} m dilewati {I} A di antara kutub magnet {B} T dan membentuk sudut 30° terhadap garis gaya magnetnya. Berapa gaya Lorentz pada kabel?",
       "variasi": [
         {
           "nama": "L",
@@ -2927,6 +2959,7 @@
       "topik": "Magnet",
       "judul": "GGL pada dinamo sepeda",
       "cerita": "Andi mengayuh sepeda sejauh 2 km. Dinamo sepedanya memiliki kumparan {N} lilitan. Fluks magnetik di dalam kumparan berubah sebesar {dF} Wb dalam waktu {dt} s. Berapa GGL induksi yang timbul?",
+      "ceritaSulit": "Andi mengayuh sepeda sejauh 2 km. Kumparan dinamo sepedanya terdiri atas {N} lilitan. Saat roda berputar, terjadi perubahan {dF} Wb dalam {dt} s. Berapa GGL induksi yang timbul?",
       "variasi": [
         {
           "nama": "N",
@@ -3029,6 +3062,7 @@
       "topik": "Magnet",
       "judul": "GGL pada generator PLTA",
       "cerita": "Generator PLTA di sebuah sungai selebar 40 m memiliki kumparan {N} lilitan. Saat turbin berputar, fluks magnetik pada kumparan berubah {dF} Wb dalam {dt} s. Berapa GGL induksi yang timbul?",
+      "ceritaSulit": "Generator PLTA di sungai selebar 40 m memiliki kumparan {N} lilitan. Saat turbin berputar, terjadi perubahan {dF} Wb dalam {dt} s. Berapa GGL induksi yang timbul?",
       "variasi": [
         {
           "nama": "N",
@@ -3131,6 +3165,7 @@
       "topik": "Magnet",
       "judul": "Magnet masuk ke kumparan",
       "cerita": "Pada percobaan Faraday, sebuah magnet batang sepanjang 12 cm didorong masuk ke kumparan {N} lilitan. Fluks magnetik berubah {dF} Wb dalam waktu {dt} s. Berapa GGL induksi yang timbul?",
+      "ceritaSulit": "Pada percobaan Faraday, magnet batang 12 cm didorong masuk ke kumparan {N} lilitan sehingga terjadi perubahan {dF} Wb dalam {dt} s. Berapa GGL induksi yang timbul?",
       "variasi": [
         {
           "nama": "N",
@@ -3233,6 +3268,7 @@
       "topik": "Magnet",
       "judul": "GGL pada generator kincir angin",
       "cerita": "Kincir angin setinggi 30 m memutar generator dengan kumparan {N} lilitan. Fluks magnetik pada kumparan berubah {dF} Wb dalam {dt} s. Berapa GGL induksi yang timbul?",
+      "ceritaSulit": "Kincir angin setinggi 30 m memutar generator dengan kumparan {N} lilitan. Terjadi perubahan {dF} Wb dalam {dt} s. Berapa GGL induksi yang timbul?",
       "variasi": [
         {
           "nama": "N",
@@ -3335,6 +3371,7 @@
       "topik": "Magnet",
       "judul": "Mencari jumlah lilitan",
       "cerita": "Sebuah kumparan menghasilkan GGL induksi {E} V ketika fluks magnetiknya berubah {dF} Wb dalam waktu {dt} s. Kumparan itu dililitkan pada pipa sepanjang 10 cm. Berapa jumlah lilitan kumparan?",
+      "ceritaSulit": "Sebuah kumparan yang dililitkan pada pipa 10 cm menghasilkan {E} V ketika terjadi perubahan {dF} Wb dalam {dt} s. Berapa jumlah lilitan kumparan?",
       "variasi": [
         {
           "nama": "Nx",
@@ -3444,6 +3481,7 @@
       "topik": "Magnet",
       "judul": "Mencari perubahan fluks",
       "cerita": "Kumparan {N} lilitan pada dinamo menghasilkan GGL induksi {E} V dalam waktu {dt} s. Dinamo itu dipasang pada sepeda berwarna hijau milik Siti yang berumur 13 tahun. Berapa perubahan fluks magnetik pada kumparan?",
+      "ceritaSulit": "Dinamo pada sepeda hijau milik Siti yang berumur 13 tahun punya kumparan {N} lilitan. Dinamo itu menghasilkan {E} V dalam {dt} s. Berapa perubahan fluks magnetik pada kumparan?",
       "variasi": [
         {
           "nama": "N",
@@ -3547,6 +3585,7 @@
       "topik": "Magnet",
       "judul": "Mencari selang waktu",
       "cerita": "Magnet digerakkan keluar dari kumparan {N} lilitan sehingga fluks magnetiknya berubah {dF} Wb. GGL induksi yang timbul {E} V. Percobaan ini diulang 4 kali. Berapa selang waktu perubahan fluks itu?",
+      "ceritaSulit": "Magnet ditarik keluar dari kumparan {N} lilitan sehingga terjadi perubahan {dF} Wb, dan lampu kecil menyala karena {E} V. Percobaan ini diulang 4 kali. Berapa selang waktu perubahan fluks itu?",
       "variasi": [
         {
           "nama": "N",
@@ -3650,6 +3689,7 @@
       "topik": "Magnet",
       "judul": "Gaya pada motor mobil listrik",
       "cerita": "Di dalam motor mobil listrik, kawat sepanjang {L} m berada tegak lurus dalam medan magnet {B} T dan dialiri arus {I} A. Mobil itu bisa menempuh 300 km sekali isi. Berapa gaya Lorentz pada kawat?",
+      "ceritaSulit": "Mobil listrik bisa menempuh 300 km sekali isi. Di dalam motornya, kawat {L} m berada tegak lurus di antara kutub magnet {B} T dan dilewati {I} A. Berapa gaya Lorentz pada kawat?",
       "variasi": [
         {
           "nama": "L",
@@ -3761,6 +3801,7 @@
       "topik": "Energi alternatif",
       "judul": "Daya sebuah sel surya",
       "cerita": "Sebuah sel surya silikon berukuran 10 cm × 10 cm diletakkan di bawah sinar matahari. Sel surya itu menghasilkan tegangan 0,5 V dan arus 0,1 A. Berapa daya listrik yang dihasilkan?",
+      "ceritaSulit": "Sebuah sel surya silikon 10 cm × 10 cm dijemur di bawah sinar matahari. Multimeter menunjukkan 0,5 V dan 0,1 A. Berapa daya listrik yang dihasilkan?",
       "variasi": [],
       "besaran": [
         {
@@ -3832,6 +3873,7 @@
       "topik": "Energi alternatif",
       "judul": "Daya panel surya mini",
       "cerita": "Untuk projek lampu surya, kelompok Budi memakai panel surya mini {V} V. Saat terkena matahari selama 3 jam, panel itu menghasilkan arus {I} A. Berapa daya listrik yang dihasilkan panel?",
+      "ceritaSulit": "Untuk proyek lampu surya, kelompok Budi memakai panel surya mini bertuliskan {V} V. Setelah dijemur 3 jam, panel itu mengalirkan {I} A. Berapa daya listrik yang dihasilkan panel?",
       "variasi": [
         {
           "nama": "V",
@@ -3918,6 +3960,7 @@
       "topik": "Energi alternatif",
       "judul": "Daya generator PLTB",
       "cerita": "Generator pada pembangkit listrik tenaga bayu (PLTB) yang memiliki 3 bilah baling-baling menghasilkan tegangan {V} V dan arus {I} A. Berapa daya listrik yang dihasilkan generator?",
+      "ceritaSulit": "Generator pada PLTB dengan 3 bilah baling-baling menunjukkan {V} V dan {I} A. Berapa daya listrik yang dihasilkan generator?",
       "variasi": [
         {
           "nama": "V",
@@ -4004,6 +4047,7 @@
       "topik": "Energi alternatif",
       "judul": "Daya PLTA mini di desa",
       "cerita": "Sebuah PLTA mini di desa memanfaatkan air terjun setinggi 15 m. Generatornya menghasilkan tegangan {V} V dan arus {I} A. Berapa daya listrik yang dihasilkan?",
+      "ceritaSulit": "Sebuah PLTA mini di desa memanfaatkan air terjun setinggi 15 m. Generatornya menunjukkan {V} V dan {I} A. Berapa daya listrik yang dihasilkan?",
       "variasi": [
         {
           "nama": "V",
@@ -4090,6 +4134,7 @@
       "topik": "Energi alternatif",
       "judul": "Daya motor mobil listrik",
       "cerita": "Baterai mobil listrik menyalurkan tegangan {V} V dan arus {I} A ke motor listrik. Mobil itu memiliki 5 kursi penumpang. Berapa daya listrik yang diterima motor?",
+      "ceritaSulit": "Mobil listrik dengan 5 kursi penumpang memakai baterai yang menyalurkan {V} V dan {I} A ke motornya. Berapa daya listrik yang diterima motor?",
       "variasi": [
         {
           "nama": "V",
@@ -4176,6 +4221,7 @@
       "topik": "Energi alternatif",
       "judul": "Daya sel surya kalkulator",
       "cerita": "Kalkulator seharga Rp60.000 memakai sel surya yang menghasilkan tegangan {V} V dan arus {I} A. Berapa daya listrik sel surya itu?",
+      "ceritaSulit": "Kalkulator seharga Rp60.000 memakai sel surya yang menghasilkan {V} V dan {I} A. Berapa daya listrik sel surya itu?",
       "variasi": [
         {
           "nama": "V",
@@ -4262,6 +4308,7 @@
       "topik": "Energi alternatif",
       "judul": "Daya pompa air tenaga surya",
       "cerita": "Pompa air tenaga surya di kebun seluas 2 hektare bekerja pada tegangan {V} V dengan arus {I} A. Berapa daya listrik pompa itu?",
+      "ceritaSulit": "Pompa air tenaga surya di kebun 2 hektare bekerja pada {V} V dan menarik {I} A. Berapa daya listrik pompa itu?",
       "variasi": [
         {
           "nama": "V",
@@ -4348,6 +4395,7 @@
       "topik": "Energi alternatif",
       "judul": "Arus dari panel surya atap",
       "cerita": "Panel surya di atap rumah yang dihuni 4 orang menghasilkan daya {P} W pada tegangan {V} V. Berapa kuat arus yang dihasilkan panel itu?",
+      "ceritaSulit": "Panel surya di atap rumah yang dihuni 4 orang bertuliskan {P} W dan {V} V. Berapa kuat arus yang dihasilkan panel itu?",
       "variasi": [
         {
           "nama": "V",
@@ -4441,6 +4489,7 @@
       "topik": "Energi alternatif",
       "judul": "Arus dari kincir angin sekolah",
       "cerita": "Kincir angin di halaman sekolah setinggi 8 m memutar generator yang menghasilkan daya {P} W pada tegangan {V} V. Berapa kuat arus listrik dari generator?",
+      "ceritaSulit": "Kincir angin setinggi 8 m di halaman sekolah memutar generator bertuliskan {P} W dan {V} V. Berapa kuat arus listrik dari generator?",
       "variasi": [
         {
           "nama": "V",
@@ -4534,6 +4583,7 @@
       "topik": "Energi alternatif",
       "judul": "Arus lampu LED dari baterai Li-ion",
       "cerita": "Lampu bertenaga surya buatan siswa memakai baterai Li-ion 3,7 V. Lampu LED-nya berdaya {P} W dan dipakai 5 malam berturut-turut. Berapa kuat arus yang mengalir ke lampu?",
+      "ceritaSulit": "Lampu tenaga surya buatan siswa memakai baterai Li-ion 3,7 V. Lampu LED-nya bertuliskan {P} W dan dinyalakan 5 malam berturut-turut. Berapa kuat arus yang mengalir ke lampu?",
       "variasi": [
         {
           "nama": "Ix",
@@ -4620,6 +4670,7 @@
       "topik": "Energi alternatif",
       "judul": "Tegangan kerja panel surya",
       "cerita": "Panel surya untuk lampu jalan desa menghasilkan daya {P} W dengan kuat arus {I} A. Lampu jalan itu dipasang setiap 25 m. Berapa tegangan yang dihasilkan panel?",
+      "ceritaSulit": "Lampu jalan desa dipasang setiap 25 m. Panel suryanya bertuliskan {P} W dan mengalirkan {I} A. Berapa tegangan yang dihasilkan panel?",
       "variasi": [
         {
           "nama": "I",
@@ -4713,6 +4764,7 @@
       "topik": "Energi alternatif",
       "judul": "Energi lampu taman tenaga surya",
       "cerita": "Lampu taman tenaga surya berdaya {P} W dipasang di taman seluas 50 m². Setiap malam lampu itu menyala selama {h} jam. Berapa energi listrik yang digunakan lampu setiap malam?",
+      "ceritaSulit": "Lampu taman tenaga surya bertuliskan {P} W dipasang di taman seluas 50 m². Setiap malam lampu itu menyala {h} jam. Berapa energi listrik yang digunakan lampu setiap malam?",
       "variasi": [
         {
           "nama": "P",
@@ -4806,6 +4858,7 @@
       "topik": "Energi alternatif",
       "judul": "Energi lampu jalan tenaga surya",
       "cerita": "Lampu jalan tenaga surya di desa berdaya {P} W dan tingginya 6 meter. Lampu itu menyala selama {h} jam. Berapa energi listrik yang digunakan lampu?",
+      "ceritaSulit": "Lampu jalan tenaga surya setinggi 6 meter di desa bertuliskan {P} W. Lampu itu menyala {h} jam. Berapa energi listrik yang digunakan lampu?",
       "variasi": [
         {
           "nama": "P",
@@ -4899,6 +4952,7 @@
       "topik": "Energi alternatif",
       "judul": "Energi power bank tenaga surya",
       "cerita": "Power bank tenaga surya seharga Rp150.000 mengisi daya HP dengan daya {P} W selama {h} jam. Berapa energi listrik yang disalurkan ke HP?",
+      "ceritaSulit": "Power bank tenaga surya seharga Rp150.000 bertuliskan {P} W dan dipakai mengisi HP selama {h} jam. Berapa energi listrik yang disalurkan ke HP?",
       "variasi": [
         {
           "nama": "P",
@@ -4992,6 +5046,7 @@
       "topik": "Energi alternatif",
       "judul": "Energi dari kincir angin mini",
       "cerita": "Kincir angin mini dengan 4 sudu menghasilkan daya {P} W. Kincir itu bekerja selama {m} menit. Berapa energi listrik yang dihasilkan?",
+      "ceritaSulit": "Kincir angin mini dengan 4 sudu bertuliskan {P} W. Kincir itu berputar {m} menit. Berapa energi listrik yang dihasilkan?",
       "variasi": [
         {
           "nama": "P",
@@ -5085,6 +5140,7 @@
       "topik": "Energi alternatif",
       "judul": "Energi dari PLTN",
       "cerita": "Pada tahun 2015 ada 437 PLTN yang beroperasi di dunia. Sebuah PLTN menghasilkan daya {P} MW selama {t} sekon. Berapa energi listrik yang dihasilkan, dalam MJ (megajoule)?",
+      "ceritaSulit": "Pada tahun 2015 ada 437 PLTN di dunia. Sebuah PLTN berkekuatan {P} MW beroperasi {t} sekon. Berapa energi listrik yang dihasilkan, dalam MJ (megajoule)?",
       "variasi": [
         {
           "nama": "P",
@@ -5171,6 +5227,7 @@
       "topik": "Energi alternatif",
       "judul": "Daya sebuah PLTN",
       "cerita": "Sebuah PLTN di Uni Emirat Arab menghasilkan energi listrik {E} MJ dalam waktu {t} sekon. PLTN itu memiliki 4 unit reaktor. Berapa daya PLTN tersebut, dalam MW?",
+      "ceritaSulit": "Sebuah PLTN di Uni Emirat Arab dengan 4 unit reaktor menghasilkan {E} MJ dalam {t} sekon. Berapa daya PLTN tersebut, dalam MW?",
       "variasi": [
         {
           "nama": "t",
@@ -5264,6 +5321,7 @@
       "topik": "Energi alternatif",
       "judul": "Energi motor mobil listrik",
       "cerita": "Mobil listrik berwarna putih melaju dengan motor berdaya {P} kW selama {t} sekon. Berapa energi listrik yang digunakan motor, dalam kJ (kilojoule)?",
+      "ceritaSulit": "Mobil listrik berwarna putih melaju dengan motor {P} kW selama {t} sekon. Berapa energi listrik yang digunakan motor, dalam kJ (kilojoule)?",
       "variasi": [
         {
           "nama": "P",
@@ -5345,6 +5403,7 @@
       "topik": "Energi alternatif",
       "judul": "Waktu PLTA menghasilkan energi",
       "cerita": "PLTA mini di sungai berarus deras menghasilkan daya {P} W. Petugas mencatat suhu air 24 °C. Berapa lama PLTA itu harus bekerja untuk menghasilkan energi {E} J?",
+      "ceritaSulit": "PLTA mini di sungai berarus deras bertuliskan {P} W. Petugas mencatat air sungai 24 °C. Berapa lama PLTA itu harus bekerja untuk menghasilkan {E} J?",
       "variasi": [
         {
           "nama": "P",
@@ -5438,6 +5497,7 @@
       "topik": "Energi alternatif",
       "judul": "Waktu mengisi baterai dengan panel surya",
       "cerita": "Panel surya berdaya {P} W dipakai mengisi baterai di pos ronda yang berjarak 200 m dari rumah. Baterai itu membutuhkan energi {E} J. Berapa lama waktu pengisiannya?",
+      "ceritaSulit": "Panel surya bertuliskan {P} W dipakai mengisi baterai di pos ronda yang berjarak 200 m dari rumah. Baterai itu perlu {E} J. Berapa lama waktu pengisiannya?",
       "variasi": [
         {
           "nama": "P",
@@ -7052,6 +7112,7 @@
       "topik": "Massa jenis",
       "judul": "Massa jenis batu",
       "cerita": "Dodi menemukan sebuah batu di halaman sekolah pukul 07.00. Batu itu bermassa {m} g dan volumenya 20 cm³. Berapa massa jenis batu itu?",
+      "ceritaSulit": "Dodi menemukan sebuah batu di halaman sekolah pukul 07.00. Timbangan menunjukkan {m} g, dan saat batu dicelupkan, air di gelas ukur naik 20 cm³. Berapa massa jenis batu itu?",
       "besaran": [
         {
           "teks": "{m} g",
@@ -7143,6 +7204,7 @@
       "topik": "Massa jenis",
       "judul": "Massa jenis minyak goreng",
       "cerita": "Ibu membeli minyak goreng seharga Rp18.000. Sebanyak {vol} cm³ minyak itu ditimbang dan massanya {m} g. Berapa massa jenis minyak goreng?",
+      "ceritaSulit": "Ibu membeli minyak goreng seharga Rp18.000. Sebanyak {vol} cm³ minyak itu dituang ke wadah, lalu timbangan menunjukkan {m} g. Berapa massa jenis minyak goreng?",
       "besaran": [
         {
           "teks": "{vol} cm³",
@@ -7222,6 +7284,7 @@
       "topik": "Massa jenis",
       "judul": "Massa balok kayu",
       "cerita": "Sebuah balok kayu berwarna cokelat memiliki volume {vol} cm³. Massa jenis kayu itu 0,6 g/cm³. Berapa massa balok kayu?",
+      "ceritaSulit": "Sebuah balok kayu berwarna cokelat berukuran {vol} cm³. Kayu jenis itu 0,6 g/cm³. Berapa massa balok kayu?",
       "besaran": [
         {
           "teks": "{vol} cm³",
@@ -7308,6 +7371,7 @@
       "topik": "Massa jenis",
       "judul": "Volume balok aluminium",
       "cerita": "Pak Budi membeli sebuah balok aluminium di toko bangunan yang berjarak 2 km dari rumahnya. Massa balok itu {m} g. Massa jenis aluminium 2,7 g/cm³. Berapa volume balok aluminium?",
+      "ceritaSulit": "Pak Budi membeli balok aluminium di toko bangunan yang berjarak 2 km dari rumahnya. Timbangan menunjukkan {m} g. Aluminium memiliki 2,7 g/cm³. Berapa volume balok aluminium?",
       "besaran": [
         {
           "teks": "{m} g",
@@ -7387,6 +7451,7 @@
       "topik": "Massa jenis",
       "judul": "Massa jenis madu",
       "cerita": "Sebotol madu hutan bervolume 0,5 liter memiliki massa {m} g. Madu itu dibeli dari peternak lebah di desa sebelah. Berapa massa jenis madu dalam g/cm³?",
+      "ceritaSulit": "Sebotol madu hutan 0,5 liter ditimbang dan hasilnya {m} g. Madu itu dibeli dari peternak lebah di desa sebelah. Berapa massa jenis madu dalam g/cm³?",
       "besaran": [
         {
           "teks": "0,5 liter",
@@ -7471,6 +7536,7 @@
       "topik": "Suhu dan kalor",
       "judul": "Memanaskan air di panci",
       "cerita": "Ibu memanaskan {m} kg air memakai panci merah dari suhu 25 °C hingga 75 °C. Kalor jenis air 4.200 J/kg°C. Berapa kalor yang diperlukan?",
+      "ceritaSulit": "Ibu memanaskan {m} kg air memakai panci merah dari 25 °C hingga 75 °C. Untuk air, gunakan 4.200 J/kg°C. Berapa kalor yang diperlukan?",
       "besaran": [
         {
           "teks": "{m} kg",
@@ -7573,6 +7639,7 @@
       "topik": "Suhu dan kalor",
       "judul": "Kalor untuk sepotong besi",
       "cerita": "Di bengkel, sepotong besi bermassa 0,5 kg dipanaskan sehingga suhunya naik {dT} °C. Kalor jenis besi 450 J/kg°C. Bengkel itu buka sejak tahun 2010. Berapa kalor yang diterima besi?",
+      "ceritaSulit": "Di bengkel yang buka sejak tahun 2010, sepotong besi 0,5 kg dipanaskan hingga termometer naik {dT} °C. Untuk besi, gunakan 450 J/kg°C. Berapa kalor yang diterima besi?",
       "besaran": [
         {
           "teks": "0,5 kg",
@@ -7668,6 +7735,7 @@
       "topik": "Suhu dan kalor",
       "judul": "Air minum di gelas",
       "cerita": "Rani memanaskan {mg} g air minum sehingga suhunya naik 10 °C. Kalor jenis air 4.200 J/kg°C. Gelas yang dipakai Rani bergambar kucing. Berapa kalor yang diperlukan?",
+      "ceritaSulit": "Rani memanaskan {mg} g air minum di gelas bergambar kucing hingga termometer naik 10 °C. Untuk air, gunakan 4.200 J/kg°C. Berapa kalor yang diperlukan?",
       "besaran": [
         {
           "teks": "{mg} g",
@@ -7756,6 +7824,7 @@
       "topik": "Suhu dan kalor",
       "judul": "Suhu kelas dalam kelvin",
       "cerita": "Termometer di kelas 7B menunjukkan suhu {C} °C. Di kelas itu ada 32 siswa. Berapa suhu kelas itu dalam kelvin?",
+      "ceritaSulit": "Termometer di kelas 7B yang berisi 32 siswa menunjukkan {C} °C. Berapa suhu kelas itu dalam kelvin?",
       "besaran": [
         {
           "teks": "{C} °C",
@@ -7826,6 +7895,7 @@
       "topik": "Suhu dan kalor",
       "judul": "Suhu badan dalam Fahrenheit",
       "cerita": "Saat demam, suhu badan Bima diukur {C} °C. Bima minum obat 3 kali sehari. Berapa suhu itu dalam derajat Fahrenheit?",
+      "ceritaSulit": "Saat Bima demam, termometer menunjukkan {C} °C. Bima minum obat 3 kali sehari. Berapa suhu itu dalam derajat Fahrenheit?",
       "besaran": [
         {
           "teks": "{C} °C",
@@ -7901,6 +7971,7 @@
       "topik": "Gerak",
       "judul": "Kelajuan Rina bersepeda",
       "cerita": "Rina bersepeda dengan sepeda biru sejauh {s} m dalam waktu 100 s. Berapa kelajuan Rina?",
+      "ceritaSulit": "Rina mengayuh sepeda biru menempuh {s} m dan tiba di warung 100 s kemudian. Berapa kelajuan Rina?",
       "besaran": [
         {
           "teks": "{s} m",
@@ -7985,6 +8056,7 @@
       "topik": "Gerak",
       "judul": "Jarak tempuh bus",
       "cerita": "Sebuah bus yang membawa 40 penumpang melaju dengan kelajuan tetap 60 km/jam selama {t} jam. Berapa jarak yang ditempuh bus?",
+      "ceritaSulit": "Sebuah bus yang membawa 40 penumpang melaju tetap 60 km/jam selama {t} jam. Berapa jarak yang ditempuh bus?",
       "besaran": [
         {
           "teks": "60 km/jam",
@@ -8071,6 +8143,7 @@
       "topik": "Gerak",
       "judul": "Waktu berjalan ke sekolah",
       "cerita": "Andi berangkat dari rumah pukul 06.30. Jarak rumah ke sekolah {s} m. Andi berjalan dengan kelajuan tetap 1,5 m/s. Berapa lama waktu yang diperlukan Andi untuk sampai di sekolah?",
+      "ceritaSulit": "Andi berangkat dari rumah pukul 06.30. Rumahnya {s} m dari sekolah, dan Andi berjalan tetap 1,5 m/s. Berapa lama waktu yang diperlukan Andi untuk sampai di sekolah?",
       "besaran": [
         {
           "teks": "{s} m",
@@ -8150,6 +8223,7 @@
       "topik": "Gerak",
       "judul": "Kelajuan motor dalam m/s",
       "cerita": "Ayah mengendarai motor dengan kelajuan {v} km/jam menuju pasar. Ayah membawa 5 kg beras. Berapa kelajuan motor dalam m/s?",
+      "ceritaSulit": "Ayah mengendarai motor ke pasar sambil membawa 5 kg beras. Spidometer menunjukkan {v} km/jam. Berapa kelajuan motor dalam m/s?",
       "besaran": [
         {
           "teks": "{v} km/jam",
@@ -8225,6 +8299,7 @@
       "topik": "Gerak",
       "judul": "Kelajuan pelari",
       "cerita": "Seorang pelari bernomor punggung 17 menempuh lintasan sejauh {s} m dalam waktu 2 menit. Berapa kelajuan pelari dalam m/s?",
+      "ceritaSulit": "Seorang pelari dengan nomor punggung 17 menempuh lintasan {s} m dan finis 2 menit kemudian. Berapa kelajuan pelari dalam m/s?",
       "besaran": [
         {
           "teks": "{s} m",
@@ -8304,6 +8379,7 @@
       "topik": "Tekanan",
       "judul": "Tekanan kotak di lantai",
       "cerita": "Sebuah kotak berisi 12 buku memiliki berat {F} N dan diletakkan di lantai. Luas alas kotak 0,5 m². Berapa tekanan kotak pada lantai?",
+      "ceritaSulit": "Sebuah kotak berisi 12 buku ditimbang dengan neraca pegas dan hasilnya {F} N. Kotak itu diletakkan di lantai dengan alas 0,5 m². Berapa tekanan kotak pada lantai?",
       "besaran": [
         {
           "teks": "{F} N",
@@ -8383,6 +8459,7 @@
       "topik": "Tekanan",
       "judul": "Gaya dari sepatu",
       "cerita": "Sepasang sepatu baru seharga Rp250.000 menekan lantai dengan tekanan {P} Pa. Luas alas kedua sepatu 0,04 m². Berapa gaya yang diberikan sepatu pada lantai?",
+      "ceritaSulit": "Sepasang sepatu baru seharga Rp250.000 menekan lantai {P} Pa. Alas kedua sepatu itu 0,04 m². Berapa gaya yang diberikan sepatu pada lantai?",
       "besaran": [
         {
           "teks": "{P} Pa",
@@ -8462,6 +8539,7 @@
       "topik": "Tekanan",
       "judul": "Tekanan pada penyelam",
       "cerita": "Seorang penyelam membawa kamera seharga Rp3.000.000 dan menyelam sampai kedalaman {h} m di bawah permukaan laut. Massa jenis air laut 1.000 kg/m³ dan percepatan gravitasi 10 m/s². Berapa tekanan hidrostatis yang dialami penyelam?",
+      "ceritaSulit": "Seorang penyelam membawa kamera seharga Rp3.000.000 dan turun {h} m di bawah permukaan laut. Untuk air laut gunakan 1.000 kg/m³, dan di bumi 10 m/s². Berapa tekanan hidrostatis yang dialami penyelam?",
       "besaran": [
         {
           "teks": "{h} m",
@@ -8562,6 +8640,7 @@
       "topik": "Tekanan",
       "judul": "Tekanan di dasar kolam ikan",
       "cerita": "Pak Joko memelihara 50 ekor ikan di kolam. Kedalaman air kolam {hcm} cm. Massa jenis air 1.000 kg/m³ dan percepatan gravitasi 10 m/s². Berapa tekanan hidrostatis di dasar kolam?",
+      "ceritaSulit": "Pak Joko memelihara 50 ekor ikan. Air kolamnya {hcm} cm dari permukaan sampai dasar. Untuk air gunakan 1.000 kg/m³, dan di bumi 10 m/s². Berapa tekanan hidrostatis di dasar kolam?",
       "besaran": [
         {
           "teks": "{hcm} cm",
@@ -8650,6 +8729,7 @@
       "topik": "Tekanan",
       "judul": "Dongkrak hidrolik di bengkel",
       "cerita": "Bengkel Pak Ali memakai dongkrak hidrolik untuk mengangkat mobil putih. Luas penampang kecil dongkrak 0,01 m² dan luas penampang besar 0,5 m². Gaya {F1} N diberikan pada penampang kecil. Berapa gaya angkat pada penampang besar?",
+      "ceritaSulit": "Bengkel Pak Ali memakai dongkrak hidrolik untuk mengangkat mobil putih. Pengisap kecilnya 0,01 m² dan pengisap besarnya 0,5 m². Pengisap kecil ditekan {F1} N. Berapa gaya angkat pada penampang besar?",
       "besaran": [
         {
           "teks": "0,01 m²",
@@ -8743,6 +8823,7 @@
       "topik": "Usaha dan energi",
       "judul": "Usaha mendorong meja",
       "cerita": "Doni mendorong meja kayu yang dibeli tahun 2019 dengan gaya {F} N sehingga meja berpindah sejauh 3 m. Berapa usaha yang dilakukan Doni?",
+      "ceritaSulit": "Doni mendorong meja kayu yang dibeli tahun 2019 sekuat {F} N hingga meja bergeser 3 m. Berapa usaha yang dilakukan Doni?",
       "besaran": [
         {
           "teks": "{F} N",
@@ -8827,6 +8908,7 @@
       "topik": "Usaha dan energi",
       "judul": "Energi potensial buah kelapa",
       "cerita": "Sebuah kelapa bermassa {m} kg tergantung pada ketinggian 8 m dari tanah. Pohon kelapa itu berumur 15 tahun. Percepatan gravitasi 10 m/s². Berapa energi potensial buah kelapa?",
+      "ceritaSulit": "Sebuah kelapa {m} kg tergantung 8 m di atas tanah, pada pohon yang berumur 15 tahun. Di bumi gunakan 10 m/s². Berapa energi potensial buah kelapa?",
       "besaran": [
         {
           "teks": "{m} kg",
@@ -8915,6 +8997,7 @@
       "topik": "Usaha dan energi",
       "judul": "Energi kinetik sepeda",
       "cerita": "Kakak mengendarai sepeda bernomor polisi B 1234 XY dengan kelajuan {v} m/s. Massa kakak dan sepedanya 60 kg. Berapa energi kinetik kakak dan sepedanya?",
+      "ceritaSulit": "Kakak mengendarai sepeda bernomor B 1234 XY dengan {v} m/s. Kakak dan sepedanya ditimbang 60 kg. Berapa energi kinetik kakak dan sepedanya?",
       "besaran": [
         {
           "teks": "{v} m/s",
@@ -8999,6 +9082,7 @@
       "topik": "Usaha dan energi",
       "judul": "Daya pekerja bangunan",
       "cerita": "Seorang pekerja bangunan berumur 35 tahun melakukan usaha {W} J untuk mengangkat semen dalam waktu 20 s. Berapa daya pekerja itu?",
+      "ceritaSulit": "Seorang pekerja bangunan berumur 35 tahun mengangkat semen dan mengeluarkan {W} J dalam 20 s. Berapa daya pekerja itu?",
       "besaran": [
         {
           "teks": "{W} J",
@@ -9078,6 +9162,7 @@
       "topik": "Usaha dan energi",
       "judul": "Mengungkit batu dengan linggis",
       "cerita": "Pak Tani memakai linggis sepanjang 1,2 m untuk mengungkit batu seberat {w} N. Lengan beban 0,2 m dan lengan kuasa 1 m. Berapa gaya kuasa yang diperlukan?",
+      "ceritaSulit": "Pak Tani memakai linggis 1,2 m untuk mengungkit batu {w} N. Batu itu 0,2 m dari titik tumpu, dan tangan Pak Tani 1 m dari titik tumpu. Berapa gaya kuasa yang diperlukan?",
       "besaran": [
         {
           "teks": "{w} N",
@@ -9166,6 +9251,7 @@
       "topik": "Getaran dan gelombang",
       "judul": "Frekuensi bandul",
       "cerita": "Sebuah bandul dengan tali sepanjang 50 cm berayun sebanyak {n} kali getaran dalam waktu 10 s. Berapa frekuensi bandul?",
+      "ceritaSulit": "Sebuah bandul bertali 50 cm berayun bolak-balik {n} kali dalam 10 s. Berapa frekuensi bandul?",
       "besaran": [
         {
           "teks": "{n} kali",
@@ -9245,6 +9331,7 @@
       "topik": "Getaran dan gelombang",
       "judul": "Periode ayunan anak",
       "cerita": "Adik bermain ayunan di taman bermain bersama 3 temannya. Ayunan itu bergetar 20 kali dalam waktu {t} s. Berapa periode ayunan?",
+      "ceritaSulit": "Adik bermain ayunan di taman bersama 3 temannya. Ayunan itu bolak-balik 20 kali dalam {t} s. Berapa periode ayunan?",
       "besaran": [
         {
           "teks": "20 kali",
@@ -9324,6 +9411,7 @@
       "topik": "Getaran dan gelombang",
       "judul": "Cepat rambat gelombang di kolam",
       "cerita": "Sebuah batu dilempar ke kolam pada pagi hari. Gelombang di permukaan air memiliki panjang gelombang {l} m dan frekuensi 2 Hz. Berapa cepat rambat gelombang itu?",
+      "ceritaSulit": "Pada pagi hari, sebuah batu dilempar ke kolam. Jarak dua puncak riak air yang berdekatan {l} m, dan riak itu bergetar 2 Hz. Berapa cepat rambat gelombang itu?",
       "besaran": [
         {
           "teks": "{l} m",
@@ -9403,6 +9491,7 @@
       "topik": "Getaran dan gelombang",
       "judul": "Panjang gelombang pada tali",
       "cerita": "Dina menggetarkan ujung tali merah dengan frekuensi 4 Hz. Gelombang merambat pada tali dengan cepat rambat {v} m/s. Berapa panjang gelombang pada tali?",
+      "ceritaSulit": "Dina menggetarkan ujung tali merah 4 Hz. Gelombang bergerak di sepanjang tali {v} m/s. Berapa panjang gelombang pada tali?",
       "besaran": [
         {
           "teks": "4 Hz",
@@ -9482,6 +9571,7 @@
       "topik": "Getaran dan gelombang",
       "judul": "Mengukur kedalaman laut",
       "cerita": "Kapal nelayan yang membawa 25 awak mengirim bunyi ke dasar laut. Bunyi pantulnya diterima kembali setelah {t} s. Cepat rambat bunyi di air laut 1.500 m/s. Berapa kedalaman laut di tempat itu?",
+      "ceritaSulit": "Kapal nelayan yang membawa 25 awak mengirim bunyi ke dasar laut. Pantulannya kembali {t} s kemudian. Di air laut, bunyi merambat 1.500 m/s. Berapa kedalaman laut di tempat itu?",
       "besaran": [
         {
           "teks": "{t} s",
