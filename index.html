@@ -1072,7 +1072,7 @@ function onOpt(i){
 }
 /* hitungan yang ditulis siswa (tingkat Sulit): angka dengan titik ribuan dan koma desimal, tanda × ÷ + − ( ) ² ³ */
 function hitungTeks(x){
-  var e=String(x||'').replace(/\s+/g,'');
+  var e=String(x||'').replace(/\s+/g,'').replace(/%/g,'');
   if(!e)return NaN;
   while(/(\d)\.(\d{3})(?!\d)/.test(e))e=e.replace(/(\d)\.(\d{3})(?!\d)/,'$1$2');
   var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-'};
@@ -1086,38 +1086,42 @@ function dekat(v,a){return Number.isFinite(v)&&Number.isFinite(a)&&Math.abs(v-a)
 /* 1,72e-8 ditulis sebagai 1,72 × 10⁻⁸ supaya terbaca seperti di buku */
 function eksTampil(x){return String(x||'').replace(/(\d(?:[.,]\d+)?)e(-?)(\d+)/gi,function(_,a,m,d,o,all){var t=a+' × 10'+(m?'⁻':'')+d.split('').map(function(c){return '⁰¹²³⁴⁵⁶⁷⁸⁹'.charAt(+c);}).join('');return /÷\s*$/.test(all.slice(0,o))?'('+t+')':t;});}
 function rumusPilihan(p,st){return st.rumus!=null?p.formulas[st.rumus]:null;}
-function kiriRumus(p,st){var f=rumusPilihan(p,st);var l=f?String(f.f).split('=')[0].trim():'';return l&&l.length<=14?l:p.calc.lhs;}
+/* label hasil selalu besaran yang ditanya (misalnya Rp, bukan 1/Rp dari rumus paralel) */
+function kiriRumus(p){return p.calc.lhs||'?';}
 /* penilaian semua langkah setelah siswa menekan Periksa */
 function nilaiSoal(p,st){
-  var L=[],salahPilah=[];
+  var L=[],salahPilah=[],sudah={};
+  /* satu jenis kesalahan cukup dicatat sekali per soal (dua kotak yang tertukar tidak dihitung dua kali) */
+  var catat=function(c,l,k){var key=k||c;if(sudah[key])return;sudah[key]=1;logMis(c,l,k);};
+  var catatTukar=function(a,b){var key='tukar:'+[a.k,b.k].sort().join('|');if(sudah[key])return;sudah[key]=1;logTukar(a,b);};
   p.slots.forEach(function(sl){
     var t=st.placed[sl.k]?tokenById(p,st.placed[sl.k]):null,want=tokenOf(p,sl.k);
     if(!t||t.k!==sl.k){
       salahPilah.push('Kotak '+sl.sym+' ('+sl.name+') berisi “'+(t?t.txt:'kosong')+'”, seharusnya “'+(want?want.txt:'')+'”.');
-      if(t&&t.k==='decoy')logMis('pengecoh','Memakai info pengecoh sebagai besaran');
-      else if(t&&(t.k==='ask'||sl.k==='ask'))logMis('tanya','Belum mengenali kalimat pertanyaan');
-      else if(t){var ts=null;p.slots.forEach(function(x){if(x.k===t.k)ts=x;});if(ts)logTukar(ts,sl);}
+      if(t&&t.k==='decoy')catat('pengecoh','Memakai info pengecoh sebagai besaran');
+      else if(t&&(t.k==='ask'||sl.k==='ask'))catat('tanya','Belum mengenali kalimat pertanyaan');
+      else if(t){var ts=null;p.slots.forEach(function(x){if(x.k===t.k)ts=x;});if(ts)catatTukar(ts,sl);}
     }
   });
   decoysOf(p).forEach(function(d){
-    if(st.crossed.indexOf(d.id)<0){salahPilah.push('“'+d.txt+'” seharusnya dicoret: '+d.what+'.');logMis('pengecoh','Tidak mencoret info pengecoh');}
+    if(st.crossed.indexOf(d.id)<0){salahPilah.push('“'+d.txt+'” seharusnya dicoret: '+d.what+'.');catat('pengecoh','Tidak mencoret info pengecoh');}
   });
-  st.crossed.forEach(function(id){var t=tokenById(p,id);if(t&&t.k!=='decoy'){salahPilah.push('“'+t.txt+'” dicoret, padahal dipakai untuk menjawab.');logMis('coret','Mencoret angka yang sebenarnya dipakai');}});
+  st.crossed.forEach(function(id){var t=tokenById(p,id);if(t&&t.k!=='decoy'){salahPilah.push('“'+t.txt+'” dicoret, padahal dipakai untuk menjawab.');catat('coret','Mencoret angka yang sebenarnya dipakai');}});
   L.push({k:'pilah',judul:'Pilah cerita',ok:!salahPilah.length,isi:salahPilah.length?salahPilah:['Semua angka dan pertanyaan ada di kotak yang benar, dan pengecoh sudah dicoret.']});
   var mOk=st.mat===p.topik;
-  if(!mOk)logMis('materi','Salah mengenali materi soal','materi');
+  if(!mOk)catat('materi','Salah mengenali materi soal','materi');
   L.push({k:'materi',judul:'Kenali materi',ok:mOk,isi:[mOk?'Betul, soal '+p.topik+'.':'Kamu memilih '+(st.mat||'-')+'. Soal ini termasuk '+p.topik+'.'+(MATERI[p.topik]?' '+MATERI[p.topik].ket:'')]});
   var f=rumusPilihan(p,st),fb=p.formulas.filter(function(x){return x.ok;})[0],fOk=!!(f&&f.ok);
-  if(!fOk)logMis('rumus','Salah memilih rumus · '+p.topik,'rumus:'+p.topik);
+  if(!fOk)catat('rumus','Salah memilih rumus · '+p.topik,'rumus:'+p.topik);
   L.push({k:'rumus',judul:'Pilih rumus',ok:fOk,isi:fOk?['Betul: '+f.f+'.'+(f.why?' '+f.why:'')]:['Kamu memilih '+(f?f.f:'-')+'.'+(f&&f.why?' '+f.why:''),'Rumus yang benar: '+(fb?fb.f:'')+'.']});
   var c=p.calc,v=parseNum(st.input),hOk=dekat(v,c.ans);
   if(tingkat==='sulit'){
     var hv=hitungTeks(st.hit),hitOk=dekat(hv,c.ans);
-    if(!hitOk)logMis('hitung','Salah menyusun hitungan · '+p.topik,'hitung:'+p.topik);
+    if(!hitOk)catat('hitung','Salah menyusun hitungan · '+p.topik,'hitung:'+p.topik);
     L.push({k:'hitungan',judul:'Tulis hitungan',ok:hitOk,isi:[hitOk?'Betul: '+st.hit+'.':'Hitunganmu: '+(st.hit||'-')+(Number.isFinite(hv)?' = '+fmtNum(Math.round(hv*1000)/1000):'')+'.','Hitungan yang benar: '+c.lhs+' = '+eksTampil(c.expr)+'.']});
   }
   var alt=null;c.alt.forEach(function(x){if(!alt&&dekat(v,x.v))alt=x.msg;});
-  if(!hOk)logHitung(alt);
+  if(!hOk){if(alt!=null&&isKonv(alt))catat('konversi','Lupa mengubah satuan sebelum menghitung','konversi');else catat('hitung','Salah menghitung · '+p.topik,'hitung:'+p.topik);}
   L.push({k:'hasil',judul:'Hasil',ok:hOk,isi:hOk?['Betul: '+c.lhs+' = '+fmtNum(c.ans)+' '+c.unit+'.']:['Jawabanmu '+(st.input||'-')+' '+c.unit+'. Jawaban yang benar '+fmtNum(c.ans)+' '+c.unit+'.'+(alt?' '+alt:'')]});
   return L;
 }
@@ -1261,7 +1265,7 @@ function topHtml(){
     +'<b class="ttl">'+title+'</b><div class="ab">'+ujkJamHtml()+themeBtnHtml()+(view==='bantuan'||view==='play'||view==='ujkcek'?'':'<button class="btn ghost sm icon-btn" data-act="bt-buka" data-fk="bt" aria-label="Cara pakai" title="Cara pakai">'+ICON.dots+'</button>')+'</div></div>';
 }
 var TINGKAT=[['mudah','Mudah'],['menengah','Menengah'],['sulit','Sulit']];
-var TINGKAT_KET={mudah:'Sebagian kotak sudah terisi. Cocok untuk pemanasan.',menengah:'Kotak lengkap, dengan satuan sebagai petunjuk.',sulit:'Tanpa petunjuk satuan. Soal cerita murni.'};
+var TINGKAT_KET={mudah:'Sebagian kotak sudah terisi. Cocok untuk pemanasan.',menengah:'Kotak lengkap, dengan satuan sebagai petunjuk.',sulit:'Tanpa petunjuk satuan dan kartu rumus. Kamu menulis sendiri hitungannya.'};
 function chipsHtml(list,cur,act){
   return '<div class="seg" role="group">'+list.map(function(x){var on=cur===x[0];
     return '<button class="chip" aria-pressed="'+on+'" data-act="'+act+'" data-v="'+x[0]+'" data-fk="'+act+'-'+x[0]+'">'+esc(x[1])+'</button>';}).join('')+'</div>';
@@ -1422,7 +1426,7 @@ function ringkasHtml(id,judul,isi,v,ok){
 function bintangHtml(err){
   if(exam&&exam.room)return '';
   var n=err===0?3:(err<=2?2:1),t=n===3?'Benar semua, tanpa salah.':(n===2?'Sudah benar. Tadi ada yang keliru sedikit.':'Selesai. Kerjakan sekali lagi supaya lancar.');
-  return '<div class="bintang b'+n+'" role="status"><span class="bs">'+[1,2,3].map(function(i){return '<i class="'+(i<=n?'on':'')+'">★</i>';}).join('')+'</span><b>'+t+'</b>'+(err?'<small>'+err+' kesalahan di soal ini</small>':'')+'</div>';
+  return '<div class="bintang b'+n+'" role="status"><span class="bs">'+[1,2,3].map(function(i){return '<i class="'+(i<=n?'on':'')+'">★</i>';}).join('')+'</span><b>'+t+'</b>'+(err?'<small>'+err+' langkah salah di soal ini</small>':'')+'</div>';
 }
 
 /* ---------- Fitur belajar: catatan, naik tingkat, laporan, kartu rumus, ujian, suara, konversi ---------- */
@@ -3393,7 +3397,8 @@ function ujkBuatHtml(){
     +'<label class="chk"><input type="checkbox" id="ug-acak"'+(f.acak?' checked':'')+'> <span><b>Acak urutan soal</b><small>Urutan soal setiap siswa berbeda. Angka di soal juga berbeda untuk soal yang memakai angka acak.</small></span></label>'
     +'<label class="chk"><input type="checkbox" id="ug-lewati"'+(f.lewati?' checked':'')+'> <span><b>Boleh melewati soal</b><small>Siswa bisa lanjut ke soal berikutnya tanpa menyelesaikan soal yang sulit.</small></span></label>'
     +'<label class="chk"><input type="checkbox" id="ug-lihat"'+(f.lihatNilai?' checked':'')+'> <span><b>Tampilkan skor ke siswa setelah selesai</b><small>Kalau dimatikan, siswa hanya melihat "Jawabanmu sudah terkumpul".</small></span></label>'
-    +'<p class="mut" style="margin:10px 0 0">Kartu rumus disembunyikan selama ujian. Waktu setiap siswa dihitung sejak ia mengetuk Mulai ujian. Jawaban terkumpul otomatis saat waktu habis atau saat guru menutup ujian.</p></section>';
+    +'<p class="mut" style="margin:6px 0 0">'+esc({mudah:'Mudah: sebagian kotak sudah terisi.',menengah:'Menengah: satuan tampil sebagai petunjuk.',sulit:'Sulit: tanpa petunjuk satuan, dan siswa menulis sendiri hitungannya.'}[f.tingkat]||'')+'</p>'
+    +'<p class="mut" style="margin:10px 0 0">Benar atau salah setiap soal tidak ditampilkan ke siswa selama ujian. Kartu rumus disembunyikan selama ujian. Waktu setiap siswa dihitung sejak ia mengetuk Mulai ujian. Jawaban terkumpul otomatis saat waktu habis atau saat guru menutup ujian.</p></section>';
   return h+'<div class="row"><button class="btn" data-act="ug-buat" data-fk="ug-buat"'+(UG.busy||!pool.length?' disabled':'')+'>'+(UG.busy?'Membuat…':'Buat &amp; bagikan')+'</button><button class="btn ghost" data-act="a-tab" data-v="ujk">Batal</button></div>';
 }
 function ujkPilihHtml(f){
@@ -3844,7 +3849,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.9.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.9.2',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
