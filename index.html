@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>TakTik IPA</title>
-<meta name="theme-color" content="#FBF8F0" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#151A24" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -601,9 +601,23 @@ body.lks .jam.warn{color:var(--warn)}body.lks .jam.hot{color:var(--bad)}
 body.lks #nav{border-top:2px solid var(--ink)}
 body.lks .ujk-card{border-radius:0;box-shadow:none}
 body.lks .bintang,body.lks .recap{border-radius:0;border-style:solid}
+body.lks h1{color:var(--ink)}
+body.lks .prog{border:1px solid var(--ink);padding:14px 16px;margin-top:16px}
+body.lks .prog-n{color:var(--ink)}
+body.lks .prog-day{font-family:var(--f-body);font-size:.92rem;color:var(--ink2);font-weight:600}
+body.lks .bar-p{border-color:var(--ink);border-width:1px;border-radius:0}
+body.lks .bar-p > span,body.lks .prog .bar-p > span,body.lks .mat-card .bar-p > span{background:var(--ink)}
+body.lks .mat-card .bar-p{border-color:var(--ink)}
+body.lks .mi,body.lks .sik,body.lks .ti,body.lks .pik{color:var(--ink)}
+body.lks .pill,body.lks .prog .pill,body.lks .pbtn{color:var(--ink)!important;border-color:var(--ink)!important;border-radius:0}
+body.lks .mat-card,body.lks .gtile,body.lks .hero,body.lks .seg,body.lks .seg .chip,body.lks .upd,body.lks .in,body.lks .arow,body.lks .kls{border-radius:0}
+body.lks .mat-card,body.lks .item,body.lks .gtile{border:1px solid var(--ink)}
+body.lks .nob{border-radius:0;border-color:var(--ink);font-family:var(--f-body);font-size:.85rem}
+body.lks .tok.cut{text-decoration-color:var(--acc)}
+body.lks .gtile:first-child{box-shadow:none}
 </style>
 </head>
-<body>
+<body class="lks">
 <div class="wrap">
   <header id="top"></header>
   <main id="app"><p class="mut">Memuat soal…</p></main>
@@ -1086,6 +1100,8 @@ var ICON={
   dots:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
   konversi:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/></svg>'
 };
+/* gaya tampilan: lembar kerja (bawaan) atau buku tulis; saat ujian selalu lembar kerja */
+function gayaNow(){return store.get('cjs.gaya')==='buku'?'buku':'lks';}
 function themeNow(){
   var t=store.get('cjs.tema');
   if(t==='light'||t==='dark')return t;
@@ -1096,7 +1112,8 @@ function applyTheme(){
     var t=store.get('cjs.tema'),de=document.documentElement;
     if(!de)return;
     if(t==='light'||t==='dark')de.setAttribute('data-theme',t);else de.removeAttribute('data-theme');
-    var c=themeNow()==='dark'?'#0E1318':'#F3F5F8';
+    var lks=gayaNow()==='lks'||document.body&&document.body.classList.contains('lks');
+    var c=themeNow()==='dark'?(lks?'#141414':'#151A24'):(lks?'#FFFFFF':'#FBF8F0');
     document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){m.setAttribute('content',c);});
   }catch(e){}
 }
@@ -1157,7 +1174,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.7.1':['Tampilan baru seperti lembar soal cetak: hitam putih, rapi, dengan satu warna merah.','Gambar soal kini berupa gambar garis sederhana.','Suka gaya buku tulis? Pilih di Pengaturan → Tampilan → Gaya.'],'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -1819,6 +1836,7 @@ function aturHtml(){
       +'<p class="mut" style="margin:10px 0 0">Tidak punya kode? Biarkan kosong, kamu tetap memakai soal utama.</p></section>';
   }
   h+='<section class="card"><div class="sh"><h2>Tampilan</h2></div><p class="lbl">Tema</p>'+chipsHtml([['auto','Ikuti HP'],['light','Terang'],['dark','Gelap']],mode,'set-tema')
+    +'<p class="lbl">Gaya</p>'+chipsHtml([['lks','Lembar kerja'],['buku','Buku tulis']],gayaNow(),'set-gaya')
     +'<p class="lbl">Ukuran teks</p>'+chipsHtml([['normal','Normal'],['besar','Besar']],fsBig?'besar':'normal','set-teks')+'</section>';
   h+='<section class="card"><div class="sh"><h2>Bantuan</h2></div><div class="list">'
     +'<button class="item" data-act="intro-ulang" data-fk="intro-ulang"><span class="it"><b>Lihat lagi pengenalan aplikasi</b><small>Tiga layar singkat tentang cara memakai aplikasi</small></span><span class="chev">'+ICON.chev+'</span></button></div></section>';
@@ -2139,6 +2157,7 @@ var TOOLACT={
   'kr-copy':function(v){var it=karya[+v];if(!it)return;var t=karyaText(it);
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){notice={t:'ok',x:'Cerita disalin.'};render();},function(){});},
   'set-tema':function(v){if(v==='light'||v==='dark')store.set('cjs.tema',v);else store.del('cjs.tema');applyTheme();},
+  'set-gaya':function(v){if(v==='buku')store.set('cjs.gaya','buku');else store.del('cjs.gaya');applyTheme();},
   'set-teks':function(v){fsBig=v==='besar';store.set('cjs.teks',fsBig?'besar':'normal');applyText();},
   'intro-next':function(){if(introStep<INTRO.length-1)introStep++;fk='intro-next';},
   'intro-prev':function(){if(introStep>0)introStep--;fk='intro-next';},
@@ -3479,7 +3498,7 @@ function render(){
   $('#app').innerHTML=updHtml()+h;
   var nv=$('#nav');
   if(nv){var nh=navHtml();nv.innerHTML=nh;nv.hidden=!nh;try{document.body.classList.toggle('has-nav',!!nh);document.body.classList.toggle('presenting',view==='tampil');}catch(e){}}
-  try{document.body.classList.toggle('lks',['ujian','ujk','ujkhasil','ujkcek'].indexOf(view)>=0||(view==='play'&&!!exam&&cur!=='__prev'));}catch(e){}
+  try{document.body.classList.toggle('lks',gayaNow()==='lks'||['ujian','ujk','ujkhasil','ujkcek'].indexOf(view)>=0||(view==='play'&&!!exam&&cur!=='__prev'));}catch(e){}
   $('#foot').textContent=view==='home'?'Soal mengikuti Buku IPA SMP/MTs Kelas VII–IX, Kurikulum Merdeka.':'';
   celebrate=false;
   if(fk){var el=document.querySelector('[data-fk="'+fk+'"]');if(el&&!el.disabled){try{el.focus({preventScroll:true});}catch(_){}}fk=null;}
@@ -3649,7 +3668,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.7.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.7.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
