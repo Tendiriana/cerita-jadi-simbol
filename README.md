@@ -208,7 +208,7 @@ Di halaman utama, siswa memilih tingkat:
 
 - **Mudah**: sebagian kotak sudah terisi.
 - **Menengah**: kotak kosong, satuan tampil sebagai petunjuk.
-- **Sulit**: kotak kosong tanpa petunjuk satuan, soal cerita murni.
+- **Sulit**: kotak kosong tanpa petunjuk satuan dan konversi, tanpa penjelasan materi dan kartu rumus, dan siswa menulis sendiri hitungannya.
 
 ## Tampilan siswa
 
@@ -222,10 +222,12 @@ Di halaman utama, siswa memilih tingkat:
 
 ## Langkah latihan
 
-1. **Pilah cerita**: siswa menaruh angka ke kotak besaran dan mencoret info pengecoh.
-2. **Kenali materi**: siswa menentukan apakah soal termasuk materi yang mana (Listrik, Magnet, Energi alternatif, dan materi lain yang terbuka). Di tingkat Mudah dan Menengah, setiap pilihan disertai penjelasan singkat. Nama materi di bawah judul dan kartu rumus baru muncul setelah langkah ini benar.
+1. **Pilah cerita**: siswa menaruh angka ke kotak besaran dan mencoret info pengecoh, lalu ketuk **Lanjut**.
+2. **Kenali materi**: siswa menentukan apakah soal termasuk materi yang mana. Di tingkat Mudah dan Menengah, setiap pilihan disertai penjelasan singkat, dan kartu rumus materi yang dipilih bisa dibuka.
 3. **Pilih rumus**.
-4. **Hitung**.
+4. **Hitung** memakai rumus pilihan siswa dan angka di kotaknya. Di tingkat Sulit, siswa menulis sendiri hitungannya (misalnya `220 ÷ 40`, dengan tombol × ÷ + − ( ) ² ^) lalu hasilnya.
+
+Benar atau salah **tidak** diberi tahu di setiap langkah. Setelah siswa mengetuk **Periksa jawaban**, bagian **Penilaian** menunjukkan setiap langkah benar atau salah, salahnya di mana, pembahasan, dan kunci jawaban. Bintang dihitung dari banyaknya langkah yang salah. Soal dihitung selesai kalau hasil akhirnya benar. Saat ujian, penilaian tidak ditampilkan per soal; nilainya diumumkan guru.
 
 ## Alat belajar untuk siswa
 
