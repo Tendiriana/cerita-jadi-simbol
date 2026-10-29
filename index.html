@@ -3314,7 +3314,7 @@ function aiUrlPost(body,ms){var u=AI_URL||cfgUrl('ai');return apiCall('/ai',body
 function gAi(){
   if(!G||!G.tpl||G.aiBusy)return;
   var T=G.tpl;G.aiBusy=true;G.aiErr=null;render();
-  var minta='Tulis 1 soal dengan templat '+T.id+' ('+T.n+'). Pakai angka ini: '+T.v.map(function(v){return v[0]+' = '+(G.nilai[v[0]]||v[4])+' '+v[3];}).join(', ')+'.'+(G.aiTema.trim()?' Tema cerita: '+G.aiTema.trim()+'.':'');
+  var minta='Tulis 1 soal dengan templat '+T.id+' ('+T.n+'). Pakai angka ini: '+T.v.map(function(v){return v[0]+' = '+(G.nilai[v[0]]||v[4])+' '+v[3];}).join(', ')+'.'+(G.aiTema.trim()?' Tema cerita: '+G.aiTema.trim()+'.':'')+(G.hanya?' Soal ini khusus tingkat Sulit: jangan menyebut nama besaran ('+T.v.map(function(v){return v[2];}).join(', ')+') di depan angkanya. Contoh: “bertuliskan 58 W”, bukan “dengan daya 58 W”; “timbangan menunjukkan 20 g”, bukan “massanya 20 g”. Siswa harus mengenali besaran dari satuannya.':'');
   aiUrlPost({kode:activeKode||'UTAMA',pin:adminPin||'',mode:'templat',pesan:[{role:'user',content:aiPesanAwal(minta,T.k)}],konteks:aiKonteks()},150000).then(function(res){
     G.aiBusy=false;
     if(!res.ok){G.aiErr=res.status===0?'Tidak ada internet, atau AI terlalu lama. Coba lagi.':((res.j&&res.j.pesan)||'AI belum bisa menjawab. Coba lagi.');render();return;}
@@ -3970,7 +3970,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.11.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.11.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
