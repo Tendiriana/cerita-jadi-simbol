@@ -7,394 +7,630 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&family=Kalam:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Caveat:wght@500;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
-/* Layout: buku catatan praktikum di atas kertas milimeter; satu lembar per mata kuliah, peta topik digambar sebagai grafik dua sumbu. */
+/* Layout: situs portofolio bergaya presentasi Canva, 16:9 per halaman, tema scrapbook di atas papan biru tua. Satu tema warna yang disengaja. */
 :root{
-  --paper:#f6f8fb;
-  --grid:rgba(47,91,211,.07);
-  --ink:#16233f;
-  --ink-soft:#4a5875;
-  --line:#d3dcea;
-  --card:#ffffff;
-  --pen:#2c56c9;
-  --mark:#ffe066;
-  --mark-ink:#16233f;
-  --q-hi:#e8eefc;
-  --f-display:"Bricolage Grotesque", "Trebuchet MS", Arial, sans-serif;
-  --f-body:"Source Serif 4", Georgia, "Times New Roman", serif;
-  --f-mono:"IBM Plex Mono", "Courier New", monospace;
-  --f-hand:"Kalam", "Comic Sans MS", cursive;
+  --board:#1f2c56;
+  --board-2:#273769;
+  --paper:#fffdf6;
+  --ink:#1b2440;
+  --ink-soft:#4b5674;
+  --coral:#e9534a;
+  --coral-d:#b83a33;
+  --navy:#1f2c56;
+  --yel:#ffe08a;
+  --mint:#b8ead6;
+  --pink:#ffc9d6;
+  --sky:#c6dcff;
+  --line:#d8dfec;
+  --f-title:"Bowlby One", "Arial Black", Impact, sans-serif;
+  --f-body:"Nunito", "Segoe UI", Arial, sans-serif;
+  --f-hand:"Caveat", "Comic Sans MS", cursive;
+  --f-mono:"Space Mono", "Courier New", monospace;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0f1625;--grid:rgba(143,176,255,.06);--ink:#e5ebf6;--ink-soft:#a5b2ca;--line:#26344f;--card:#151f33;--pen:#93b2ff;--mark:#e7c53e;--mark-ink:#0f1625;--q-hi:#1c2a47;color-scheme:dark}}
-:root[data-theme="dark"]{--paper:#0f1625;--grid:rgba(143,176,255,.06);--ink:#e5ebf6;--ink-soft:#a5b2ca;--line:#26344f;--card:#151f33;--pen:#93b2ff;--mark:#e7c53e;--mark-ink:#0f1625;--q-hi:#1c2a47;color-scheme:dark}
-
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:72px}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{
-  background-color:var(--paper);
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:24px 24px;
-  color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.65;
-}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
-a{color:var(--pen)}
-a:focus-visible,summary:focus-visible{outline:2px solid var(--pen);outline-offset:3px;border-radius:2px}
-.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.mono{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:0}
-h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+html,body{height:100%}
+body{margin:0;background:#0e1222;color:var(--ink);font-family:var(--f-body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:#0e1222}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+
+.app{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stage{position:relative;width:min(100%, calc((100dvh - 120px) * 16 / 9));aspect-ratio:16/9;container-type:inline-size;--u:1cqw;border-radius:6px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.slide{position:absolute;inset:0}
+.deck .slide{display:none}
+.deck .slide.on{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:.4;transform:translateX(1.5%)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.deck .slide.on{animation:none}}
+
+/* papan */
+.board{position:absolute;inset:0;padding:calc(var(--u)*5) calc(var(--u)*4.5) calc(var(--u)*3.4);
+  background-color:var(--board);
+  background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.4px),radial-gradient(rgba(255,224,138,.06) 1px,transparent 1.4px),linear-gradient(135deg,var(--board-2),var(--board));
+  background-size:calc(var(--u)*1.1) calc(var(--u)*1.1),calc(var(--u)*1.7) calc(var(--u)*1.7),100% 100%;
+  background-position:0 0,calc(var(--u)*.5) calc(var(--u)*.7),0 0;
+  display:flex;flex-direction:column;gap:calc(var(--u)*1.6)}
+
+/* kertas */
+.sheet{position:relative;background:var(--paper);border-radius:calc(var(--u)*.6);box-shadow:0 calc(var(--u)*.5) calc(var(--u)*1.4) rgba(0,0,0,.3);padding:calc(var(--u)*3) calc(var(--u)*3.2) calc(var(--u)*2.4);flex:1;min-height:0;display:flex;flex-direction:column;gap:calc(var(--u)*1.6)}
+.notebook{padding-top:calc(var(--u)*4.2);
+  background-image:radial-gradient(circle at center,var(--board) calc(var(--u)*.85),transparent calc(var(--u)*.9));
+  background-size:calc(var(--u)*5) calc(var(--u)*2.6);background-repeat:repeat-x;background-position:calc(var(--u)*2) calc(var(--u)*.6)}
+.grid{background-image:linear-gradient(rgba(70,110,200,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(70,110,200,.13) 1px,transparent 1px);background-size:calc(var(--u)*1.8) calc(var(--u)*1.8)}
+.clip{position:absolute;width:calc(var(--u)*4.4);top:calc(var(--u)*-2.4);left:calc(var(--u)*2);transform:rotate(-8deg)}
+.pclip{position:absolute;width:calc(var(--u)*2);top:calc(var(--u)*-2.2);right:calc(var(--u)*4);transform:rotate(10deg)}
+.tape{position:absolute;width:calc(var(--u)*12);height:calc(var(--u)*2.6);background:repeating-linear-gradient(45deg,rgba(184,234,214,.85) 0 calc(var(--u)*.7),rgba(255,255,255,.55) calc(var(--u)*.7) calc(var(--u)*1.4));z-index:3;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.t1{top:calc(var(--u)*1.6);left:calc(var(--u)*6);transform:rotate(-6deg)}
+.t2{top:calc(var(--u)*1.8);right:calc(var(--u)*7);transform:rotate(5deg);background:repeating-linear-gradient(45deg,rgba(255,201,214,.9) 0 calc(var(--u)*.7),rgba(255,255,255,.55) calc(var(--u)*.7) calc(var(--u)*1.4))}
+.t3{top:calc(var(--u)*2);right:calc(var(--u)*30);transform:rotate(-3deg);background:repeating-linear-gradient(45deg,rgba(255,224,138,.9) 0 calc(var(--u)*.7),rgba(255,255,255,.5) calc(var(--u)*.7) calc(var(--u)*1.4))}
+
+.sticky{background:var(--yel);padding:calc(var(--u)*1.4);box-shadow:calc(var(--u)*.2) calc(var(--u)*.4) calc(var(--u)*.8) rgba(0,0,0,.18);border-radius:2px;color:var(--ink)}
+.sticky.mint{background:var(--mint)}.sticky.pink{background:var(--pink)}.sticky.sky{background:var(--sky)}.sticky.yel{background:var(--yel)}
+
+/* tipografi */
+.label{display:inline-block;align-self:flex-start;font-family:var(--f-title);font-weight:400;font-size:calc(var(--u)*2.2);line-height:1.1;letter-spacing:.02em;color:#fff;padding:calc(var(--u)*.5) calc(var(--u)*1.3);margin:0;text-wrap:balance;max-width:100%}
+.label.navy{background:var(--navy)}
+.label.coral{background:var(--coral)}
+.label.floating{box-shadow:calc(var(--u)*.35) calc(var(--u)*.35) 0 #0e1222}
+.mono{font-family:var(--f-mono);font-size:calc(var(--u)*.85);letter-spacing:.06em;text-transform:uppercase}
+.hand{font-family:var(--f-hand);font-weight:700;font-size:calc(var(--u)*1.7);line-height:1.15;color:#2a50b8;margin:0}
+.hand-sm{font-family:var(--f-hand);font-weight:700;font-size:calc(var(--u)*1.45);color:#2a50b8}
+.kicker{margin:0;color:var(--ink-soft)}
+.kicker.light{color:#c9d3ef}
+.kicker.right{position:absolute;top:calc(var(--u)*5.6);right:calc(var(--u)*4.5);max-width:50%;text-align:right}
 p{margin:0}
-.mark{background:linear-gradient(transparent 55%,var(--mark) 55%);color:inherit;padding:0 .1em}
 
-/* bar navigasi */
-.bar-top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1.5px solid var(--ink)}
-.bar-top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px;flex-wrap:wrap}
-.brand{font-family:var(--f-display);font-weight:800;font-size:1rem;text-decoration:none;color:var(--ink);letter-spacing:-.01em}
-.brand small{font-family:var(--f-mono);font-weight:400;font-size:.72rem;color:var(--ink-soft);margin-left:8px;letter-spacing:.05em}
-.nav{display:flex;gap:18px;flex-wrap:wrap}
-.nav a{font-family:var(--f-mono);font-size:.78rem;text-decoration:none;color:var(--ink);letter-spacing:.04em}
-.nav a:hover{color:var(--pen);text-decoration:underline}
+/* tombol */
+.pill{position:absolute;z-index:5;top:calc(var(--u)*1.6);border:none;border-radius:999px;font-family:var(--f-title);font-size:calc(var(--u)*1.25);letter-spacing:.04em;padding:calc(var(--u)*.55) calc(var(--u)*1.5);background:var(--coral);color:#fff;box-shadow:0 calc(var(--u)*.3) 0 var(--coral-d)}
+.pill:hover{transform:translateY(-1px)}
+.pill:active{transform:translateY(2px);box-shadow:0 calc(var(--u)*.1) 0 var(--coral-d)}
+.pill-next{right:calc(var(--u)*1.6)}
+.pill-back{left:calc(var(--u)*1.6);background:var(--yel);color:var(--ink);box-shadow:0 calc(var(--u)*.3) 0 #c9a648;font-size:calc(var(--u)*1)}
+.pill-home{position:static;align-self:center;margin-top:calc(var(--u)*1)}
 
-/* pembuka */
-.hero{padding-block:56px 40px}
-.hero-grid{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end}
-.hero h1{font-size:clamp(2.4rem,7vw,4.6rem);font-weight:800;letter-spacing:-.03em;margin-top:14px}
-.hero h1 span{display:block;font-weight:500;font-size:.42em;letter-spacing:0;color:var(--ink-soft);margin-top:10px}
-.hero-meta{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:22px;font-family:var(--f-mono);font-size:.85rem}
-.hero-meta b{font-weight:500;color:var(--ink-soft);margin-right:6px}
-.hand{font-family:var(--f-hand);color:var(--pen);font-size:1.25rem;line-height:1.35;transform:rotate(-1.5deg);display:inline-block;margin-top:26px}
-.stamp{width:168px;height:168px;border:2.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;position:relative;background:var(--card)}
-.stamp::after{content:"";position:absolute;inset:8px;border:1px dashed var(--ink-soft);border-radius:50%}
-.stamp b{font-family:var(--f-display);font-size:3.2rem;font-weight:800;letter-spacing:-.04em}
-.stamp i{position:absolute;bottom:30px;white-space:nowrap;font-style:normal;font-family:var(--f-mono);font-size:.62rem;letter-spacing:.14em;color:var(--ink-soft)}
+/* sampul */
+.cover-sheet{justify-content:center;align-items:center;text-align:center;gap:calc(var(--u)*1.4);margin:calc(var(--u)*1.5) calc(var(--u)*8) calc(var(--u)*1.5) calc(var(--u)*3)}
+.cover-top{position:absolute;top:calc(var(--u)*2);left:calc(var(--u)*2.4);right:calc(var(--u)*2.4);display:flex;justify-content:space-between;align-items:center}
+.chip{font-family:var(--f-mono);font-size:calc(var(--u)*.9);border:2px solid var(--navy);padding:calc(var(--u)*.3) calc(var(--u)*.8);letter-spacing:.06em;text-transform:uppercase}
+.ribbon{font-family:var(--f-body);font-weight:800;font-size:calc(var(--u)*1.5);background:var(--pink);padding:calc(var(--u)*.3) calc(var(--u)*1.4);border-radius:4px}
+.mega{margin:0;font-family:var(--f-title);font-weight:400;font-size:calc(var(--u)*9.4);line-height:.95;letter-spacing:.01em;color:var(--navy);text-shadow:calc(var(--u)*.35) calc(var(--u)*.35) 0 var(--sky),calc(var(--u)*.7) calc(var(--u)*.7) 0 var(--coral)}
+.mega.small{font-size:calc(var(--u)*7)}
+.namebar{font-family:var(--f-body);font-weight:800;font-size:calc(var(--u)*2.3);background:var(--yel);padding:calc(var(--u)*.4) calc(var(--u)*1.6);transform:rotate(-1deg)}
+.cover-sub{font-size:calc(var(--u)*1.3);color:var(--ink-soft);font-weight:600}
+.cover-note{position:absolute;right:calc(var(--u)*3);bottom:calc(var(--u)*5);width:calc(var(--u)*15);transform:rotate(5deg);display:flex;flex-direction:column;gap:calc(var(--u)*.3)}
+.cover-note b{font-family:var(--f-mono);font-size:calc(var(--u)*1.5)}
+.atom{position:absolute;right:calc(var(--u)*4.5);top:calc(var(--u)*6);width:calc(var(--u)*9);color:var(--yel);opacity:.9;transform:rotate(14deg)}
+.end-sheet{margin:calc(var(--u)*2) calc(var(--u)*10)}
+.end-text{max-width:60ch;font-size:calc(var(--u)*1.4);line-height:1.5}
+
+/* daftar isi */
+.toc-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:calc(var(--u)*2.4);flex:1;min-height:0}
+.toc-main{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:calc(var(--u)*1)}
+.toc-main button,.toc-mk button{width:100%;text-align:left;background:none;border:none;border-bottom:2px dashed var(--line);display:flex;gap:calc(var(--u)*1.2);align-items:baseline;padding:calc(var(--u)*.7) 0}
+.toc-main button{font-family:var(--f-title);font-size:calc(var(--u)*2.2);color:var(--coral)}
+.toc-main button span{font-family:var(--f-body);font-weight:800;font-size:calc(var(--u)*1.6);color:var(--ink)}
+.toc-main button:hover span,.toc-mk button:hover span{text-decoration:underline;text-decoration-color:var(--coral);text-underline-offset:4px}
+.toc-note{transform:rotate(1.5deg);display:flex;flex-direction:column;gap:calc(var(--u)*.6);align-self:start}
+.toc-mk{list-style:none;margin:0;padding:0}
+.toc-mk button{font-family:var(--f-mono);font-size:calc(var(--u)*.95);border-bottom-color:rgba(27,36,64,.2);padding:calc(var(--u)*.45) 0}
+.toc-mk button span{font-family:var(--f-body);font-weight:700;font-size:calc(var(--u)*1.12)}
 
 /* profil */
-.sec{padding-block:44px}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1.5px solid var(--ink);padding-bottom:10px;margin-bottom:28px;flex-wrap:wrap}
-.sec-head h2{font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:700;letter-spacing:-.02em}
-.profil{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:32px}
-.bio{background:var(--card);border:1.5px solid var(--ink);padding:24px}
-.bio dl{margin:0;display:grid;gap:14px}
-.bio dt{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
-.bio dd{margin:2px 0 0;font-size:1rem}
-.visi{display:grid;gap:26px;min-width:0}
-.visi blockquote{margin:0;font-family:var(--f-display);font-size:clamp(1.3rem,2.6vw,1.75rem);font-weight:500;line-height:1.3;letter-spacing:-.01em}
-.visi h3{font-size:1.05rem;margin-bottom:8px}
-.visi ul{margin:0;padding-left:1.1em;display:grid;gap:6px}
-.visi p{max-width:65ch}
+.profil-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:calc(var(--u)*2.6);flex:1;min-height:0}
+.bio{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*1.4) calc(var(--u)*2);align-content:start}
+.bio dt{font-family:var(--f-mono);font-size:calc(var(--u)*.8);letter-spacing:.07em;text-transform:uppercase;color:var(--coral)}
+.bio dd{margin:calc(var(--u)*.2) 0 0;font-weight:700;font-size:calc(var(--u)*1.35);line-height:1.3}
+.visi-col{display:flex;flex-direction:column;gap:calc(var(--u)*2)}
+.visi-note{transform:rotate(-2deg);display:flex;flex-direction:column;gap:calc(var(--u)*.5)}
+.visi-note p{font-weight:800;font-size:calc(var(--u)*1.65);line-height:1.3}
+.quote{font-size:calc(var(--u)*1.6)}
 
-/* indeks */
-.indeks{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-.indeks a{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:16px;align-items:baseline;padding:14px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
-.indeks a:hover{background:var(--q-hi)}
-.ix-n{font-family:var(--f-mono);color:var(--pen);font-size:.9rem}
-.ix-t{font-family:var(--f-display);font-weight:700;font-size:1.15rem}
-.ix-a{font-family:var(--f-mono);font-size:.75rem;color:var(--ink-soft)}
+/* model guru */
+.guru-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u)*1.6)}
+.guru-grid .sticky{display:flex;flex-direction:column;gap:calc(var(--u)*.6);min-height:calc(var(--u)*11)}
+.guru-grid .sticky:nth-child(odd){transform:rotate(-2deg)}.guru-grid .sticky:nth-child(even){transform:rotate(1.5deg)}
+.guru-grid b{font-family:var(--f-title);font-size:calc(var(--u)*1.8);color:var(--coral)}
+.guru-grid p{font-weight:700;font-size:calc(var(--u)*1.2);line-height:1.35}
+.filosofi{border-left:calc(var(--u)*.5) solid var(--coral);padding-left:calc(var(--u)*1.4)}
+.filosofi h3{margin:0 0 calc(var(--u)*.4);font-family:var(--f-title);font-weight:400;font-size:calc(var(--u)*1.4);color:var(--navy)}
+.filosofi p{font-size:calc(var(--u)*1.25);line-height:1.5;max-width:80ch}
+
+/* peta mata kuliah */
+.tiles{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*2);align-content:center;padding:0 calc(var(--u)*1)}
+.tile{border:none;text-align:left;display:flex;flex-direction:column;gap:calc(var(--u)*.6);min-height:calc(var(--u)*11);transition:transform .15s}
+.tile:nth-child(3n+1){transform:rotate(-1.6deg)}.tile:nth-child(3n+2){transform:rotate(1deg)}.tile:nth-child(3n){transform:rotate(-.6deg)}
+.tile:hover{transform:rotate(0) translateY(-3px)}
+.tile b{font-weight:800;font-size:calc(var(--u)*1.45);line-height:1.25;flex:1}
+.tile-go{font-family:var(--f-hand);font-weight:700;font-size:calc(var(--u)*1.4);color:var(--coral-d)}
 
 /* lembar mata kuliah */
-.lembar{background:var(--card);border:1.5px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:clamp(20px,4vw,44px);margin-bottom:48px}
-.lembar-head h2{font-size:clamp(1.6rem,3.6vw,2.4rem);font-weight:800;letter-spacing:-.02em;margin-top:8px}
-.intro{margin-top:14px;color:var(--ink-soft);max-width:70ch;font-size:.98rem}
-.lembar-peta{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;margin-top:32px;align-items:start}
+.mk-sheet .kicker{position:absolute;top:calc(var(--u)*4.6);right:calc(var(--u)*3)}
+.mk-grid{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2.4);flex:1;min-height:0}
+.quad{margin:0;display:grid;grid-template-columns:auto 1fr;grid-template-rows:1fr auto;gap:calc(var(--u)*.6);min-height:0}
+.ax{font-family:var(--f-hand);font-weight:700;font-size:calc(var(--u)*1.3);color:#2a50b8}
+.ax-y{writing-mode:vertical-rl;transform:rotate(180deg);text-align:end}
+.ax-x{grid-column:2;text-align:right}
+.quad-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:calc(var(--u)*1);border-left:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:calc(var(--u)*.8)}
+.qd{padding:calc(var(--u)*1);display:flex;flex-direction:column;gap:calc(var(--u)*.4);background:#f1f3f8;border-radius:3px}
+.qd .mono{font-size:calc(var(--u)*.68);color:var(--ink-soft)}
+.qd b{font-weight:800;font-size:calc(var(--u)*1.12);line-height:1.25}
+.qd-tr{background:var(--yel);transform:rotate(-1.5deg);box-shadow:calc(var(--u)*.2) calc(var(--u)*.3) calc(var(--u)*.6) rgba(0,0,0,.15)}
+.qd-br{background:var(--mint)}
+.panel{min-height:0;display:flex;flex-direction:column;gap:calc(var(--u)*.6)}
+.alasan{list-style:none;margin:0;padding:0 calc(var(--u)*.6) 0 0;overflow:auto;display:flex;flex-direction:column;gap:calc(var(--u)*1)}
+.alasan b{font-weight:800;font-size:calc(var(--u)*1.1)}
+.alasan p{font-size:calc(var(--u)*1.02);line-height:1.45;color:var(--ink-soft)}
 
-.plot{margin:0;display:grid;grid-template-columns:22px minmax(0,1fr);grid-template-rows:auto auto;gap:6px}
-.plot-y{grid-row:1;writing-mode:vertical-rl;transform:rotate(180deg);display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
-.plot-grid{display:grid;grid-template-columns:1fr 1fr;border-left:2px solid var(--ink);border-bottom:2px solid var(--ink);position:relative}
-.plot-x{grid-column:2;display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
-.q{min-height:132px;padding:12px;display:flex;flex-direction:column;gap:6px;border-right:1px dashed var(--line);border-top:1px dashed var(--line)}
-.q-tr{background:var(--q-hi)}
-.q-kat{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
-.q-top{font-family:var(--f-display);font-weight:700;font-size:.95rem;line-height:1.25}
+.paper{background:var(--paper);border-radius:calc(var(--u)*.5);padding:calc(var(--u)*2) calc(var(--u)*2.2);box-shadow:0 calc(var(--u)*.4) calc(var(--u)*1.2) rgba(0,0,0,.28);position:relative}
+.two{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2.2);padding-top:calc(var(--u)*1)}
+.three{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*1.8)}
+.c4{font-family:var(--f-hand);font-weight:700;font-size:calc(var(--u)*2.1);color:var(--coral);line-height:1}
+.paper h3{margin:0;font-weight:800;font-size:calc(var(--u)*1.3);line-height:1.3;color:var(--navy);text-wrap:balance}
+.txt{overflow:auto;padding-right:calc(var(--u)*.6);display:flex;flex-direction:column;gap:calc(var(--u)*.8)}
+.txt p{font-size:calc(var(--u)*1.06);line-height:1.55}
+.paper.sm h3{font-size:calc(var(--u)*1.1)}
+.paper.sm .txt p{font-size:calc(var(--u)*.98)}
+.num{position:absolute;top:calc(var(--u)*-1.2);left:calc(var(--u)*1.4);width:calc(var(--u)*2.6);height:calc(var(--u)*2.6);border-radius:50%;background:var(--coral);color:#fff;display:grid;place-items:center;font-family:var(--f-title);font-size:calc(var(--u)*1.2)}
+.files{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1)}
+.file{display:inline-flex;align-items:center;gap:calc(var(--u)*.7);background:var(--yel);color:var(--ink);text-decoration:none;font-weight:800;font-size:calc(var(--u)*1.05);padding:calc(var(--u)*.6) calc(var(--u)*1.2);border-radius:999px;box-shadow:0 calc(var(--u)*.25) 0 #c9a648}
+.file span{font-family:var(--f-mono);font-size:calc(var(--u)*.75);background:var(--navy);color:#fff;padding:calc(var(--u)*.15) calc(var(--u)*.5);border-radius:4px}
+.file:hover{transform:translateY(-1px)}
+.file.ghost{background:transparent;color:#c9d3ef;box-shadow:none;border:2px dashed #55649a;font-family:var(--f-hand);font-size:calc(var(--u)*1.35)}
+.rekap{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*2);background:var(--paper);border-radius:calc(var(--u)*.5);padding:calc(var(--u)*1.2) calc(var(--u)*1.8)}
+.rekap h4{margin:0 0 calc(var(--u)*.5);font-weight:800;font-size:calc(var(--u)*1.05)}
+.bar{display:grid;grid-template-columns:calc(var(--u)*6.5) 1fr calc(var(--u)*2);gap:calc(var(--u)*.6);align-items:center;font-size:calc(var(--u)*.9);margin-bottom:calc(var(--u)*.3)}
+.bar i{display:block;height:calc(var(--u)*.9);background:#e7ebf3;border-radius:999px;overflow:hidden}
+.bar em{display:block;height:100%;background:var(--coral)}
+.bar b{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
 
-.alasan{list-style:none;margin:0;padding:0;display:grid;gap:16px;min-width:0}
-.alasan b{font-family:var(--f-display);font-size:1rem;display:block}
-.alasan p{font-size:.93rem;color:var(--ink-soft);margin-top:4px}
-.tag{display:inline-block;font-family:var(--f-mono);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--ink-soft);color:var(--ink-soft);padding:1px 6px;margin-top:4px}
-.tag-tr{border-color:var(--ink);background:var(--mark);color:var(--mark-ink)}
+/* navigasi bawah */
+.nav{width:min(100%, calc((100dvh - 120px) * 16 / 9));display:flex;align-items:center;gap:14px;color:#c9d3ef;font-family:var(--f-mono);font-size:13px}
+.nav button{background:#1c2340;border:1px solid #2e3966;border-radius:999px;width:38px;height:38px;display:grid;place-items:center;color:#fff;font-size:18px;flex:none}
+.nav button:hover{background:#2a3563}
+.count{min-width:62px;text-align:center;font-variant-numeric:tabular-nums}
+.nav input[type=range]{flex:1;accent-color:var(--yel);min-width:0}
+.noscript-note{color:#c9d3ef;font-family:var(--f-mono);font-size:12px}
 
-.blok{margin-top:40px}
-.blok h3{font-size:1.25rem;font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:6px}
-details{border-bottom:1px solid var(--line)}
-summary{cursor:pointer;list-style:none;padding:14px 0;display:grid;grid-template-columns:118px minmax(0,1fr) 20px;gap:14px;align-items:baseline;font-family:var(--f-display);font-weight:500;font-size:1.02rem}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font-family:var(--f-mono);color:var(--pen);font-size:1.1rem}
-details[open] summary::after{content:"−"}
-.c4{font-family:var(--f-hand);color:var(--pen);font-size:1.05rem;font-weight:700}
-.jawab{display:grid;gap:12px;padding:0 0 18px 132px;max-width:calc(132px + 68ch)}
-.an-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:14px}
-.an h4{font-size:.98rem;font-weight:700;margin-bottom:8px}
-.an p{font-size:.92rem;color:var(--ink-soft)}
-.an p+p{margin-top:8px}
-.files{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
-.file{display:flex;align-items:center;gap:10px;border:1.5px solid var(--ink);padding:9px 14px;text-decoration:none;color:var(--ink);background:var(--paper);font-family:var(--f-display);font-weight:500;font-size:.92rem;max-width:100%}
-.file:hover{background:var(--mark);color:var(--mark-ink)}
-.file-ext{font-family:var(--f-mono);font-size:.68rem;border:1px solid currentColor;padding:1px 5px;flex:none}
-.catatan{font-family:var(--f-hand);color:var(--pen);font-size:1.05rem;margin-top:16px}
-
-.rekap{border:1px dashed var(--ink-soft);padding:18px;margin-top:14px}
-.rekap-judul{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
-.rekap-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
-.rekap-sub{font-family:var(--f-display);font-weight:700;font-size:.92rem;margin-bottom:8px}
-.bar{display:grid;grid-template-columns:76px minmax(0,1fr) 28px;gap:8px;align-items:center;font-size:.82rem;margin-bottom:6px}
-.bar-l{font-family:var(--f-mono);font-size:.72rem;color:var(--ink-soft)}
-.bar-t{height:10px;border:1px solid var(--ink);background:var(--paper)}
-.bar-t span{display:block;height:100%;background:var(--pen)}
-.bar-n{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
-
-.kaki{border-top:1.5px solid var(--ink);padding-block:28px 40px;font-family:var(--f-mono);font-size:.78rem;color:var(--ink-soft)}
-.kaki .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-
-@media (max-width:860px){
-  .profil,.lembar-peta{grid-template-columns:1fr}
-  .an-grid,.rekap-grid{grid-template-columns:1fr}
-}
-@media (max-width:640px){
-  .hero-grid{grid-template-columns:1fr}
-  .stamp{display:none}
-  summary{grid-template-columns:minmax(0,1fr) 20px}
-  .c4{grid-column:1/-1;margin-bottom:-8px}
-  .jawab{padding-left:0}
-  .q{min-height:110px;padding:10px}
-  .q-top{font-size:.85rem}
-  .lembar{box-shadow:4px 4px 0 var(--ink)}
+/* layar sempit: tiap halaman jadi kartu memanjang supaya teks tetap terbaca */
+@media (max-width:760px){
+  .app{justify-content:flex-start}
+  .stage,.nav{width:100%}
+  .stage{aspect-ratio:auto;--u:10.5px;overflow:visible;box-shadow:none}
+  .slide{position:relative;inset:auto}
+  .board{position:relative;inset:auto;min-height:72dvh;padding:56px 14px 22px;border-radius:6px}
+  .sheet{padding:30px 18px 20px}
+  .notebook{padding-top:40px}
+  .mega{font-size:min(calc(var(--u)*9.4),15vw)}
+  .mega.small{font-size:min(calc(var(--u)*7),12vw)}
+  .label{font-size:21px}
+  .cover-sheet,.end-sheet{margin:10px 0}
+  .cover-top{position:static;flex-wrap:wrap;gap:8px;justify-content:center}
+  .cover-note{position:relative;right:auto;bottom:auto;width:auto;align-self:flex-end;transform:rotate(2deg);margin-top:8px}
+  .atom{width:56px;top:60px;right:18px;opacity:.6}
+  .toc-grid,.profil-grid,.mk-grid,.two,.three,.rekap{grid-template-columns:1fr}
+  .bio{grid-template-columns:1fr}
+  .guru-grid{grid-template-columns:1fr 1fr}
+  .tiles{grid-template-columns:1fr}
+  .kicker.right,.mk-sheet .kicker{position:static;max-width:none;text-align:left}
+  .quad{min-height:300px}
+  .txt,.alasan{overflow:visible}
+  .t3{right:20px}
+  .pill{top:12px}
 }
 </style>
 </head>
 <body>
-<header class="bar-top">
-  <div class="wrap">
-    <a class="brand" href="#atas">A.N. Gimnastiar<small>PORTOFOLIO SEMESTER 1</small></a>
-    <nav class="nav" aria-label="Navigasi">
-      <a href="#profil">Profil</a>
-      <a href="#mata-kuliah">Mata kuliah</a>
-      <a href="#fil">Refleksi</a>
-    </nav>
+<div class="app">
+  <main class="stage" id="stage" aria-roledescription="presentasi">
+<section class="slide" id="sampul" data-n="1" aria-label="Halaman 1">
+<div class="board">
+  <div class="tape t1"></div><div class="tape t2"></div>
+  <div class="sheet cover-sheet">
+    <div class="cover-top"><span class="chip">PPG Prajabatan &middot; IPA</span><span class="hand-sm">semester 1 &middot; 2026</span></div>
+    <p class="ribbon">Refleksi Pengalaman Belajar</p>
+    <h1 class="mega">PORTOFOLIO</h1>
+    <p class="namebar">Asih Nurbaiti Gimnastiar, S.Pd.</p>
+    <p class="cover-sub">Mahasiswa PPG Calon Guru Tahun 2026 &middot; Universitas Negeri Gorontalo</p>
   </div>
-</header>
-
-<main id="atas">
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <p class="mono">PPG Prajabatan · Bidang Studi IPA · Universitas Negeri Gorontalo · 2026</p>
-        <h1>Asih Nurbaiti Gimnastiar, S.Pd.<span>Portofolio refleksi pengalaman belajar semester 1</span></h1>
-        <div class="hero-meta">
-          <span><b>NIM</b>12117251044</span>
-          <span><b>PPL</b>SMP Negeri 1 Gorontalo</span>
-          <span><b>Isi</b>6 mata kuliah · 6 LK 2</span>
-        </div>
-        <p class="hand">murid yang hafal belum tentu paham, jadi saya belajar mengajar dari hal yang dekat dengan mereka</p>
-      </div>
-      <div class="stamp" aria-hidden="true"><b>AN</b><i>PPG · IPA · 2026</i></div>
+  <div class="sticky yel cover-note"><span class="mono">NIM</span><b>12117251044</b><span class="hand-sm">6 mata kuliah,<br>6 lembar refleksi</span></div>
+  <div class="atom"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="4"><ellipse cx="50" cy="50" rx="44" ry="16"/><ellipse cx="50" cy="50" rx="44" ry="16" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="44" ry="16" transform="rotate(120 50 50)"/></g><circle cx="50" cy="50" r="7" fill="currentColor"/></svg></div>
+</div>
+<button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="daftar-isi" data-n="2" aria-label="Halaman 2">
+<div class="board">
+  <div class="sheet notebook toc-sheet">
+    <svg class="clip" viewBox="0 0 60 70" aria-hidden="true"><path d="M8 30h44l-6 34H14z" fill="#1d1f24"/><path d="M8 30h44l-2 8H10z" fill="#3a3d45"/><path d="M18 30V10a12 12 0 0 1 24 0v20" fill="none" stroke="#9aa1ad" stroke-width="4"/><path d="M24 30V14a6 6 0 0 1 12 0v16" fill="none" stroke="#c9ced6" stroke-width="3"/></svg>
+    <h2 class="label navy">DAFTAR ISI</h2>
+    <div class="toc-grid">
+      <ul class="toc-main">
+        <li><button type="button" data-go="profil">A<span>Profil Mahasiswa</span></button></li>
+        <li><button type="button" data-go="guru">B<span>Model Guru dan Filosofi Mengajar</span></button></li>
+        <li><button type="button" data-go="peta">C<span>Refleksi Mata Kuliah Semester 1</span></button></li>
+        <li><button type="button" data-go="penutup">D<span>Penutup</span></button></li>
+      </ul>
+      <div class="sticky mint toc-note"><p class="hand">ketuk judul untuk langsung menuju halamannya</p><ol class="toc-mk"><li><button type="button" data-go="fil">01<span>Filosofi Pendidikan dan Pendidikan Nilai</span></button></li><li><button type="button" data-go="ppd">02<span>Pemahaman tentang Peserta Didik dan Pembelajarannya</span></button></li><li><button type="button" data-go="pmad">03<span>Pembelajaran Mendalam dan Asesmen Dasar</span></button></li><li><button type="button" data-go="dif">04<span>Pembelajaran Berdiferensiasi</span></button></li><li><button type="button" data-go="gm">05<span>Pola Pikir Bertumbuh (Growth Mindset) dalam Pembelajaran</span></button></li><li><button type="button" data-go="pplt">06<span>Praktik Pengalaman Lapangan (PPL) Terbimbing</span></button></li></ol></div>
     </div>
-  </section>
-
-  <section class="sec" id="profil">
-    <div class="wrap">
-      <div class="sec-head"><h2>Profil</h2><p class="mono">Mahasiswa PPG calon guru</p></div>
-      <div class="profil">
-        <div class="bio">
-          <dl>
-            <div><dt>Nama</dt><dd>Asih Nurbaiti Gimnastiar, S.Pd.</dd></div>
-            <div><dt>NIM</dt><dd>12117251044</dd></div>
-            <div><dt>Program</dt><dd>Pendidikan Profesi Guru Prajabatan, bidang studi IPA</dd></div>
-            <div><dt>Kampus</dt><dd>Universitas Negeri Gorontalo</dd></div>
-            <div><dt>Sekolah mitra PPL</dt><dd>SMP Negeri 1 Gorontalo</dd></div>
-            <div><dt>Kelompok</dt><dd>Kelompok MIPA</dd></div>
-          </dl>
-        </div>
-        <div class="visi">
-          <blockquote>Menjadi guru IPA yang menuntun murid memahami alam di sekitarnya, bukan sekadar menghafal istilahnya.</blockquote>
-          <div>
-            <h3>Guru yang ingin saya tuju</h3>
-            <ul>
-              <li>Mengenali murid lebih dulu sebelum menentukan cara mengajar.</li>
-              <li>Membuat kelas yang aman untuk mencoba, bertanya, dan salah.</li>
-              <li>Mengaitkan materi IPA dengan kejadian sehari-hari murid.</li>
-              <li>Terus merefleksikan cara mengajar dan mau belajar dari rekan guru.</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Filosofi mengajar</h3>
-            <p>Saya percaya setiap murid bisa berkembang dengan caranya sendiri. Tugas saya adalah menuntun, seperti pesan Ki Hadjar Dewantara, dengan memberi pengalaman belajar yang bermakna, dukungan yang sesuai kebutuhan, dan respons yang menghargai usaha mereka.</p>
-          </div>
-        </div>
+  </div>
+</div>
+<button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="profil" data-n="3" aria-label="Halaman 3">
+<div class="board">
+  <div class="sheet grid profil-sheet">
+    <svg class="pclip" viewBox="0 0 30 90" aria-hidden="true"><path d="M20 20v48a8 8 0 0 1-16 0V14a10 10 0 0 1 20 0v52a4 4 0 0 1-8 0V22" fill="none" stroke="#a7aeba" stroke-width="3.2" stroke-linecap="round"/></svg>
+    <h2 class="label coral">PROFIL MAHASISWA</h2>
+    <div class="profil-grid">
+      <dl class="bio">
+        <div><dt>Nama</dt><dd>Asih Nurbaiti Gimnastiar, S.Pd.</dd></div>
+        <div><dt>NIM</dt><dd>12117251044</dd></div>
+        <div><dt>Program</dt><dd>PPG Prajabatan, bidang studi IPA</dd></div>
+        <div><dt>Kampus</dt><dd>Universitas Negeri Gorontalo</dd></div>
+        <div><dt>Sekolah mitra PPL</dt><dd>SMP Negeri 1 Gorontalo</dd></div>
+        <div><dt>Kelompok</dt><dd>Kelompok MIPA</dd></div>
+      </dl>
+      <div class="visi-col">
+        <div class="sticky yel visi-note"><span class="mono">VISI</span><p>Menjadi guru IPA yang menuntun murid memahami alam di sekitarnya, bukan sekadar menghafal istilahnya.</p></div>
+        <p class="hand quote">&ldquo;murid yang hafal belum tentu paham, jadi saya belajar mengajar dari hal yang dekat dengan mereka&rdquo;</p>
       </div>
     </div>
-  </section>
-
-  <section class="sec" id="mata-kuliah">
-    <div class="wrap">
-      <div class="sec-head"><h2>Mata kuliah semester 1</h2><p class="mono">Ketuk untuk membuka lembar refleksi</p></div>
-      <ol class="indeks"><li><a href="#fil"><span class="ix-n">01</span><span class="ix-t">Filosofi Pendidikan dan Pendidikan Nilai</span><span class="ix-a">0 artefak</span></a></li><li><a href="#ppd"><span class="ix-n">02</span><span class="ix-t">Pemahaman tentang Peserta Didik dan Pembelajarannya</span><span class="ix-a">1 artefak</span></a></li><li><a href="#pmad"><span class="ix-n">03</span><span class="ix-t">Pembelajaran Mendalam dan Asesmen Dasar</span><span class="ix-a">1 artefak</span></a></li><li><a href="#dif"><span class="ix-n">04</span><span class="ix-t">Pembelajaran Berdiferensiasi</span><span class="ix-a">1 artefak</span></a></li><li><a href="#gm"><span class="ix-n">05</span><span class="ix-t">Pola Pikir Bertumbuh (Growth Mindset) dalam Pembelajaran</span><span class="ix-a">2 artefak</span></a></li><li><a href="#pplt"><span class="ix-n">06</span><span class="ix-t">Praktik Pengalaman Lapangan (PPL) Terbimbing</span><span class="ix-a">0 artefak</span></a></li></ol>
-    </div>
-  </section>
-
-  <section class="sec">
-    <div class="wrap">
-      <p class="hand" style="margin:0 0 24px">cara membaca peta topik: makin ke kanan makin bermanfaat, makin ke atas makin menarik</p>
-      <article class="lembar" id="fil">
-<header class="lembar-head">
-<p class="mono">Lembar 1 dari 6 · LK 2 Refleksi Mata Kuliah</p>
-<h2>Filosofi Pendidikan dan Pendidikan Nilai</h2>
-</header>
-<div class="lembar-peta">
-<figure class="plot" aria-label="Peta topik berdasarkan ketertarikan dan manfaat">
-<div class="plot-y"><span>kurang menarik</span><span>lebih menarik</span></div>
-<div class="plot-grid"><div class="q q-tl"><span class="q-kat">Menarik tetapi kurang bermanfaat</span><span class="q-top">Pendidikan Nilai dalam Kerangka Pendidikan Nasional</span></div><div class="q q-tr"><span class="q-kat">Menarik dan bermanfaat</span><span class="q-top">Landasan Filosofi Pendidikan Nasional</span></div><div class="q q-bl"><span class="q-kat">Kurang menarik dan kurang bermanfaat</span><span class="q-top">Pola Pikir Bertumbuh (Growth Mindset)</span></div><div class="q q-br"><span class="q-kat">Kurang menarik tetapi bermanfaat</span><span class="q-top">Kode Etik Guru</span></div></div>
-<div class="plot-x"><span>kurang bermanfaat</span><span>lebih bermanfaat</span></div>
-</figure>
-<ul class="alasan"><li><b>Landasan Filosofi Pendidikan Nasional</b><span class="tag tag-tr">Menarik dan bermanfaat</span><p>Materi ini paling berkesan karena disajikan melalui studi kasus, seperti kasus Ali yang mogok sekolah. Dari materi ini saya memahami filosofi pendidikan Ki Hadjar Dewantara, pentingnya pendidikan yang berpihak kepada murid, serta peran guru dalam menuntun murid sesuai kodrat alam dan kodrat zamannya.</p></li><li><b>Kode Etik Guru</b><span class="tag tag-br">Kurang menarik tetapi bermanfaat</span><p>Meskipun saya telah mempelajari kode etik guru sebelumnya, materi ini tetap sangat bermanfaat karena disertai berbagai studi kasus yang menunjukkan pentingnya profesionalisme, tanggung jawab, dan penghormatan terhadap hak-hak murid dalam menjalankan profesi guru.</p></li><li><b>Pendidikan Nilai dalam Kerangka Pendidikan Nasional</b><span class="tag tag-tl">Menarik tetapi kurang bermanfaat</span><p>Materi ini menarik karena membahas peran guru dalam menanamkan nilai-nilai kepada murid. Namun, manfaat baru yang saya rasakan tidak sebesar materi lainnya karena sebagian konsep telah saya pelajari pada mata pelajaran maupun perkuliahan sebelumnya.</p></li><li><b>Pola Pikir Bertumbuh (Growth Mindset)</b><span class="tag tag-bl">Kurang menarik dan kurang bermanfaat</span><p>Materi ini lebih banyak memperkuat pemahaman yang telah saya miliki karena konsep growth mindset juga saya pelajari pada mata kuliah growth mindset. Selain itu, pembahasan mengenai Sekolah Imbau masih belum dekat dengan pengalaman saya sehingga manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul>
-</div>
-<section class="blok">
-<h3>Refleksi sebagai calon guru</h3>
-<details open><summary><span class="c4">Connection</span>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</summary><div class="jawab"><p>Menurut saya, seluruh materi yang dipelajari pada mata kuliah Filosofi Pendidikan dan Pendidikan Nilai memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Setiap topik memberikan wawasan baru yang mendukung pembentukan kompetensi sebagai pendidik. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Landasan Filosofi Pendidikan Nasional dan Kode Etik Guru, karena kedua materi tersebut memberikan pemahaman baru yang paling berpengaruh terhadap cara pandang saya sebagai calon guru.</p><p>Melalui materi Landasan Filosofi Pendidikan Nasional, saya memahami pemikiran Ki Hadjar Dewantara bahwa pendidikan merupakan proses menuntun tumbuh kembang murid sesuai dengan kodrat alam dan kodrat zamannya. Guru tidak bertugas membentuk murid sesuai keinginannya, melainkan membimbing dan memfasilitasi agar setiap murid dapat berkembang sesuai potensi yang dimilikinya. Studi kasus mengenai Ahli yang mogok sekolah juga membuat saya memahami bahwa setiap permasalahan pendidikan perlu diselesaikan berdasarkan filosofi pendidikan yang berpihak kepada murid, bukan hanya berorientasi pada penyelesaian masalah secara cepat.</p><p>Selain itu, materi Kode Etik Guru memberikan pemahaman bahwa guru tidak hanya dituntut menguasai materi pembelajaran, tetapi juga harus menjunjung tinggi profesionalisme, integritas, tanggung jawab, dan menghormati hak serta martabat setiap murid. Berbagai studi kasus yang dibahas selama perkuliahan menyadarkan saya bahwa setiap tindakan guru memiliki konsekuensi etis sehingga harus selalu didasarkan pada kepentingan terbaik bagi murid.</p><p>Melalui kedua materi tersebut, saya semakin memahami bahwa menjadi guru bukan sekadar mengajar, tetapi juga menjadi pendidik yang mampu menuntun, memberi teladan, serta mengambil keputusan secara bijaksana berdasarkan filosofi pendidikan dan kode etik profesi.</p></div></details><details><summary><span class="c4">Challenge</span>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</summary><div class="jawab"><p>Sebelum mempelajari mata kuliah ini, saya cenderung berpikir bahwa tugas utama guru adalah menyampaikan materi pembelajaran dan memastikan murid mematuhi aturan yang berlaku. Setelah mempelajari Landasan Filosofi Pendidikan Nasional, saya memahami bahwa guru seharusnya menjadi penuntun yang membantu murid berkembang sesuai dengan kodrat alam dan kodrat zamannya. Guru perlu menciptakan pembelajaran yang memerdekakan murid, yaitu pembelajaran yang memberikan ruang bagi mereka untuk berpikir, berkembang, dan mengoptimalkan potensinya.</p><p>Selain itu, melalui materi Kode Etik Guru, saya memperoleh perspektif baru bahwa setiap tindakan guru harus mempertimbangkan aspek etika, profesionalisme, dan hak-hak murid. Sebelumnya saya belum menyadari bahwa tindakan yang dianggap sederhana, seperti memberikan hukuman tanpa mempertimbangkan kondisi murid atau bertindak berdasarkan emosi, dapat menjadi pelanggaran kode etik bahkan berpotensi menimbulkan konsekuensi hukum. Materi ini mengubah cara pandang saya dalam menyikapi berbagai situasi yang mungkin terjadi di lingkungan sekolah.</p></div></details><details><summary><span class="c4">Concept</span>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</summary><div class="jawab"><p>Konsep utama yang saya pelajari adalah bahwa pendidikan menurut Ki Hadjar Dewantara merupakan proses menuntun murid agar mampu berkembang sesuai dengan kodrat alam dan kodrat zamannya. Saya juga memahami bahwa pembelajaran seharusnya memerdekakan murid, yaitu memberikan kesempatan kepada setiap murid untuk belajar sesuai dengan potensi, kebutuhan, dan karakteristiknya sehingga mereka dapat berkembang secara optimal.</p><p>Selain itu, saya mempelajari bahwa guru harus menjunjung tinggi Kode Etik Guru sebagai pedoman dalam menjalankan profesinya. Guru dituntut untuk bersikap profesional, bertanggung jawab, adil, menghormati hak-hak murid, mampu mengendalikan emosi, serta menjadi teladan dalam setiap tindakan. Kedua konsep tersebut saling melengkapi karena filosofi pendidikan menjadi landasan berpikir dalam mendidik, sedangkan kode etik menjadi pedoman dalam mewujudkan perilaku profesional sebagai seorang guru.</p></div></details><details><summary><span class="c4">Change</span>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</summary><div class="jawab"><p>Setelah mengikuti mata kuliah ini, saya akan berusaha untuk menjadi guru yang tidak hanya berfokus pada penyampaian materi pembelajaran, tetapi juga mampu menuntun murid agar berkembang sesuai dengan kodrat alam dan kodrat zamannya. Saya ingin menghadirkan pembelajaran yang memerdekakan murid dengan memberikan ruang bagi mereka untuk aktif belajar, berpikir kritis, dan mengembangkan potensi yang dimiliki.</p><p>Saya juga berkomitmen untuk selalu menjunjung tinggi kode etik profesi dalam setiap tindakan, membangun komunikasi yang menghargai martabat murid, dan  mengendalikan emosi ketika menghadapi berbagai permasalahan di kelas. Saya berharap dapat menjadi guru yang profesional, berintegritas, reflektif, dan mampu menjadi teladan sehingga tidak hanya mengajarkan ilmu pengetahuan, tetapi juga membentuk karakter murid.</p></div></details>
-</section>
-<section class="blok">
-<h3>Analisis artefak</h3>
-
-<div class="an-grid"><div class="an"><h4>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h4><p>Artefak yang saya pilih adalah tugas Landasan Filosofi Pendidikan Nasional dan Laporan Hasil Diskusi Kelompok &quot;Kasus-kasus Pelanggaran Kode Etik Guru&quot;. Kedua artefak tersebut menunjukkan pemahaman saya tentang filosofi pendidikan sebagai landasan dalam mendidik murid serta pentingnya menerapkan kode etik guru dalam menghadapi permasalahan nyata di sekolah.</p></div><div class="an"><h4>Mengapa artefak tersebut yang saya pilih?</h4><p>Saya memilih kedua artefak tersebut karena sesuai dengan pengalaman belajar yang paling bermakna bagi saya. Artefak Landasan Filosofi Pendidikan Nasional membantu saya memahami bahwa guru berperan menuntun murid sesuai dengan kodrat alam dan kodrat zamannya. Sementara itu, artefak Kode Etik Guru menunjukkan bagaimana konsep tersebut diterapkan dalam menganalisis kasus nyata sehingga saya semakin memahami pentingnya profesionalisme, etika, dan keputusan yang berpihak kepada murid.</p></div><div class="an"><h4>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h4><p>Pada artefak Landasan Filosofi Pendidikan Nasional, bagian yang paling mendukung adalah pembahasan mengenai pemikiran Ki Hadjar Dewantara tentang pendidikan yang menuntun murid sesuai kodrat alam dan kodrat zamannya. Pada artefak Kode Etik Guru, bagian yang paling mendukung adalah analisis pelanggaran kode etik, alternatif penyelesaian, dan refleksi akhir. Kedua bagian tersebut memperkuat pemahaman saya bahwa guru tidak hanya menguasai materi pembelajaran, tetapi juga harus berpihak kepada murid serta menjunjung tinggi etika profesi dalam setiap tindakan.</p></div></div>
-<div class="files"><a class="file" href="berkas/LK2_Filosofi_Pendidikan.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>LK 2 Filosofi Pendidikan</span></a></div>
-<p class="catatan">Artefak tugas Landasan Filosofi Pendidikan Nasional dan laporan diskusi kode etik guru belum diunggah.</p>
-</section>
-</article><article class="lembar" id="ppd">
-<header class="lembar-head">
-<p class="mono">Lembar 2 dari 6 · LK 2 Refleksi Mata Kuliah</p>
-<h2>Pemahaman tentang Peserta Didik dan Pembelajarannya</h2>
-</header>
-<div class="lembar-peta">
-<figure class="plot" aria-label="Peta topik berdasarkan ketertarikan dan manfaat">
-<div class="plot-y"><span>kurang menarik</span><span>lebih menarik</span></div>
-<div class="plot-grid"><div class="q q-tl"><span class="q-kat">Menarik tetapi kurang bermanfaat</span><span class="q-top">Pembelajaran Berpusat pada Peserta Didik</span></div><div class="q q-tr"><span class="q-kat">Menarik dan bermanfaat</span><span class="q-top">Perbedaan Karakteristik Peserta Didik</span></div><div class="q q-bl"><span class="q-kat">Kurang menarik dan kurang bermanfaat</span><span class="q-top">Memahami Peserta Didik secara Holistik</span></div><div class="q q-br"><span class="q-kat">Kurang menarik tetapi bermanfaat</span><span class="q-top">Profiling Peserta Didik</span></div></div>
-<div class="plot-x"><span>kurang bermanfaat</span><span>lebih bermanfaat</span></div>
-</figure>
-<ul class="alasan"><li><b>Perbedaan Karakteristik Peserta Didik</b><span class="tag tag-tr">Menarik dan bermanfaat</span><p>Materi ini paling berkesan karena saya langsung menyusun strategi pembelajaran untuk murid dengan karakteristik berbeda, seperti Rizky yang menyukai teknologi dan Zahra yang lebih mudah belajar melalui gambar. Dari sini saya belajar bahwa perbedaan murid bukan hambatan, tetapi kekuatan yang bisa dimanfaatkan.</p></li><li><b>Profiling Peserta Didik</b><span class="tag tag-br">Kurang menarik tetapi bermanfaat</span><p>Di awal, materi ini terasa kurang menarik karena banyak berisi cara mengumpulkan dan mengolah data murid. Namun, materi ini sangat bermanfaat karena profil murid menjadi dasar untuk menentukan peran, kegiatan, dan bentuk dukungan yang tepat bagi setiap murid.</p></li><li><b>Pembelajaran Berpusat pada Peserta Didik</b><span class="tag tag-tl">Menarik tetapi kurang bermanfaat</span><p>Materi ini menarik karena dibahas melalui kasus kelas yang pasif. Namun, manfaat baru yang saya rasakan tidak sebesar materi lainnya karena konsep pembelajaran yang berpusat pada murid sudah cukup sering saya temui pada perkuliahan sebelumnya.</p></li><li><b>Memahami Peserta Didik secara Holistik</b><span class="tag tag-bl">Kurang menarik dan kurang bermanfaat</span><p>Materi ini lebih banyak membahas landasan teori perkembangan peserta didik. Konsep ini penting sebagai dasar, tetapi sebagian sudah saya pelajari sebelumnya dan kembali digunakan pada topik-topik berikutnya, sehingga manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul>
-</div>
-<section class="blok">
-<h3>Refleksi sebagai calon guru</h3>
-<details open><summary><span class="c4">Connection</span>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</summary><div class="jawab"><p>Menurut saya, seluruh materi pada mata kuliah Pemahaman tentang Peserta Didik dan Pembelajarannya memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Perbedaan Karakteristik Peserta Didik dan Profiling Peserta Didik.</p><p>Melalui topik Perbedaan Karakteristik Peserta Didik, saya memahami bahwa setiap murid memiliki cara belajar, minat, dan kecepatan yang berbeda. Guru perlu menyiapkan strategi yang memberi ruang bagi perbedaan tersebut, misalnya membagi peran dalam kelompok sesuai kekuatan murid dan memberikan pilihan cara menyajikan hasil belajar.</p><p>Melalui topik Profiling Peserta Didik, saya belajar bahwa strategi yang tepat hanya bisa disusun jika guru benar-benar mengenal muridnya. Profil murid membantu guru mengetahui siapa yang membutuhkan dukungan tambahan, siapa yang siap diberi tantangan, dan cara belajar apa yang paling sesuai bagi masing-masing murid.</p></div></details><details><summary><span class="c4">Challenge</span>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</summary><div class="jawab"><p>Sebelum mempelajari mata kuliah ini, saya cenderung memberikan kegiatan dan tugas yang sama kepada semua murid, termasuk meminta semua murid presentasi di depan kelas. Saya belum terbiasa mengatur peran murid berdasarkan karakteristiknya.</p><p>Setelah mempelajari mata kuliah ini, saya memahami bahwa guru perlu menyesuaikan kegiatan dengan karakteristik murid. Murid yang cepat dapat diberi analisis yang lebih menantang, sementara murid yang kesulitan difokuskan pada konsep dasar. Murid juga boleh menyajikan hasil belajar dengan cara yang berbeda, seperti poster, presentasi, video, atau penjelasan lisan kelompok. Hal yang paling berbeda bagi saya adalah guru tidak perlu memaksa semua murid tampil di depan kelas.</p></div></details><details><summary><span class="c4">Concept</span>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</summary><div class="jawab"><p>Konsep utama yang saya pelajari adalah bahwa peserta didik memiliki karakteristik yang beragam, baik dari gaya belajar, minat, kemampuan, maupun kepribadian. Perbedaan ini perlu difasilitasi melalui strategi pembelajaran yang fleksibel, misalnya kelompok heterogen, pembagian peran, dan diferensiasi tugas.</p><p>Selain itu, saya mempelajari bahwa profiling peserta didik merupakan langkah awal untuk memahami murid secara utuh. Data profil kemudian digunakan untuk merancang pembelajaran yang berpusat pada murid. Kedua konsep ini saling melengkapi karena profiling membantu guru mengenali perbedaan, sedangkan strategi pembelajaran menjadi cara memfasilitasi perbedaan tersebut.</p></div></details><details><summary><span class="c4">Change</span>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</summary><div class="jawab"><p>Setelah mengikuti mata kuliah ini, saya ingin mengenali karakteristik murid sejak awal melalui profiling, lalu memakai hasilnya untuk membentuk kelompok dan membagi peran. Saya akan memberikan tugas dengan tingkat kesulitan yang sesuai dan pilihan cara menyajikan hasil belajar.</p><p>Saya juga ingin lebih menghargai murid yang tidak percaya diri tampil di depan kelas dengan memberi alternatif cara menunjukkan pemahamannya. Dengan begitu, setiap murid dapat belajar sesuai kekuatannya dan tetap mencapai tujuan pembelajaran yang sama.</p></div></details>
-</section>
-<section class="blok">
-<h3>Analisis artefak</h3>
-
-<div class="an-grid"><div class="an"><h4>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h4><p>Artefak yang saya pilih adalah tugas 2.E Strategi Pembelajaran untuk Memfasilitasi Perbedaan Karakteristik Setiap Murid. Tugas ini berisi rancangan pembelajaran sistem pencernaan dengan model Problem Based Learning yang disesuaikan dengan karakteristik murid.</p></div><div class="an"><h4>Mengapa artefak tersebut yang saya pilih?</h4><p>Saya memilih artefak ini karena menunjukkan penerapan kedua pengalaman belajar yang paling bermakna bagi saya. Rancangan ini disusun berdasarkan karakteristik murid yang sudah dikenali, lalu diwujudkan dalam pembagian peran, diferensiasi kegiatan, dan pilihan produk belajar.</p></div><div class="an"><h4>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h4><p>Bagian yang paling mendukung adalah tahap mengorganisasi murid, yaitu pembagian peran sesuai karakteristik: Rizky bertugas mengeksplorasi informasi dan teknologi, sedangkan Zahra bertugas membuat visualisasi berupa gambar atau diagram. Bagian penyelidikan juga mendukung, karena memuat diferensiasi bagi murid yang cepat untuk menganalisis gangguan pencernaan dan bagi murid yang kesulitan untuk fokus pada urutan dan fungsi organ.</p><p>Bagian penyajian hasil juga mendukung refleksi saya, yaitu pilihan poster, presentasi, video, atau penjelasan lisan, serta pernyataan bahwa guru tidak memaksa semua murid tampil di depan kelas. Bagian-bagian tersebut memperkuat pemahaman saya bahwa perbedaan karakteristik murid perlu dikenali dan difasilitasi dalam pembelajaran.</p></div></div>
-<div class="files"><a class="file" href="berkas/LK2_Pemahaman_Peserta_Didik.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>LK 2 Pemahaman Peserta Didik</span></a><a class="file" href="berkas/Artefak_2E_Strategi_Perbedaan_Karakteristik.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>2.E Strategi Pembelajaran untuk Memfasilitasi Perbedaan Karakteristik Murid</span></a></div>
-
-</section>
-</article><article class="lembar" id="pmad">
-<header class="lembar-head">
-<p class="mono">Lembar 3 dari 6 · LK 2 Refleksi Mata Kuliah</p>
-<h2>Pembelajaran Mendalam dan Asesmen Dasar</h2>
-</header>
-<div class="lembar-peta">
-<figure class="plot" aria-label="Peta topik berdasarkan ketertarikan dan manfaat">
-<div class="plot-y"><span>kurang menarik</span><span>lebih menarik</span></div>
-<div class="plot-grid"><div class="q q-tl"><span class="q-kat">Menarik tetapi kurang bermanfaat</span><span class="q-top">Evaluasi, Refleksi, dan Rencana Tindak Lanjut Pembelajaran Mendalam</span></div><div class="q q-tr"><span class="q-kat">Menarik dan bermanfaat</span><span class="q-top">Pendekatan Pembelajaran Mendalam</span></div><div class="q q-bl"><span class="q-kat">Kurang menarik dan kurang bermanfaat</span><span class="q-top">Implementasi Pembelajaran Mendalam</span></div><div class="q q-br"><span class="q-kat">Kurang menarik tetapi bermanfaat</span><span class="q-top">Perencanaan Pembelajaran Mendalam</span></div></div>
-<div class="plot-x"><span>kurang bermanfaat</span><span>lebih bermanfaat</span></div>
-</figure>
-<ul class="alasan"><li><b>Pendekatan Pembelajaran Mendalam</b><span class="tag tag-tr">Menarik dan bermanfaat</span><p>Materi ini paling berkesan karena dibuka dengan kasus kelas yang terlihat aktif tetapi ternyata belum mendalam. Dari kasus pembelajaran siklus air, saya menyadari bahwa murid yang bisa menyebutkan urutan materi belum tentu memahami maknanya dalam kehidupan sehari-hari.</p></li><li><b>Perencanaan Pembelajaran Mendalam</b><span class="tag tag-br">Kurang menarik tetapi bermanfaat</span><p>Di awal, materi ini terasa kurang menarik karena banyak berisi komponen perencanaan yang harus dipenuhi. Namun, materi ini sangat bermanfaat karena mengajarkan saya merancang pembelajaran yang memuat prinsip berkesadaran, bermakna, dan menggembirakan sejak tahap perencanaan, lalu mempraktikkannya melalui microteaching.</p></li><li><b>Evaluasi, Refleksi, dan Rencana Tindak Lanjut Pembelajaran Mendalam</b><span class="tag tag-tl">Menarik tetapi kurang bermanfaat</span><p>Materi ini menarik karena memperkenalkan inkuiri kolaboratif sebagai ruang guru belajar bersama. Namun, manfaat langsung yang saya rasakan tidak sebesar materi lainnya karena pada saat itu saya belum banyak memiliki pengalaman mengajar yang bisa didiskusikan dalam siklus inkuiri kolaboratif.</p></li><li><b>Implementasi Pembelajaran Mendalam</b><span class="tag tag-bl">Kurang menarik dan kurang bermanfaat</span><p>Materi ini lebih banyak memperkuat pemahaman yang sudah saya peroleh dari topik sebelumnya, karena prinsip dan langkah pembelajaran mendalam kembali dibahas dalam bentuk analisis implementasi. Karena itu, manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul>
-</div>
-<section class="blok">
-<h3>Refleksi sebagai calon guru</h3>
-<details open><summary><span class="c4">Connection</span>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</summary><div class="jawab"><p>Menurut saya, seluruh materi pada mata kuliah Pembelajaran Mendalam dan Asesmen Dasar memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Pendekatan Pembelajaran Mendalam dan Perencanaan Pembelajaran Mendalam.</p><p>Melalui topik Pendekatan Pembelajaran Mendalam, saya memahami perbedaan pembelajaran dangkal dan mendalam. Pada kasus siklus air, murid mampu menyebutkan urutan penguapan, kondensasi, dan hujan, tetapi bingung saat diminta menjelaskan mengapa pakaian bisa kering atau mengapa ada titik air di kaca. Hal ini menyadarkan saya bahwa tugas guru bukan membuat murid hafal, tetapi membuat murid paham dan mampu mengaitkan konsep dengan kehidupan nyata.</p><p>Melalui topik Perencanaan Pembelajaran Mendalam, saya belajar bahwa pembelajaran yang mendalam harus dirancang dengan sengaja. Guru perlu merencanakan pertanyaan pemantik yang kontekstual, kegiatan yang melibatkan murid secara aktif, dan kesempatan bagi murid untuk merefleksikan cara berpikirnya.</p></div></details><details><summary><span class="c4">Challenge</span>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</summary><div class="jawab"><p>Sebelum mempelajari mata kuliah ini, saya menganggap kelas yang ramai menjawab, guru yang bersemangat, dan murid yang hafal materi sudah menandakan pembelajaran berhasil. Saya juga sering memulai pembelajaran dengan menjelaskan materi lalu meminta murid mengulangnya.</p><p>Setelah mempelajari mata kuliah ini, saya memahami bahwa pembelajaran bisa terlihat aktif tetapi belum mendalam. Prinsip menggembirakan saja tidak cukup jika prinsip berkesadaran dan bermakna belum tercapai. Pembelajaran sebaiknya dimulai dari fenomena yang dekat dengan murid, lalu murid diajak mengamati, mencoba, dan menyimpulkan sendiri, bukan langsung diberi definisi untuk dihafal.</p></div></details><details><summary><span class="c4">Concept</span>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</summary><div class="jawab"><p>Konsep utama yang saya pelajari adalah tiga prinsip pembelajaran mendalam, yaitu berkesadaran, bermakna, dan menggembirakan. Berkesadaran berarti murid menyadari proses berpikirnya, bermakna berarti materi dikaitkan dengan pengalaman nyata murid, dan menggembirakan berarti suasana belajar membuat murid terlibat dengan senang.</p><p>Selain itu, saya mempelajari bahwa perencanaan pembelajaran mendalam perlu memadukan ketiga prinsip tersebut dengan pengalaman belajar memahami, mengaplikasi, dan merefleksi. Kegiatan seperti percobaan sederhana, demonstrasi, dan pertanyaan bertahap membantu murid membangun pemahaman sendiri. Kedua konsep ini saling melengkapi karena prinsip menjadi arah, sedangkan perencanaan menjadi cara mewujudkannya di kelas.</p></div></details><details><summary><span class="c4">Change</span>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</summary><div class="jawab"><p>Setelah mengikuti mata kuliah ini, saya ingin memulai pembelajaran dengan pertanyaan pemantik yang dekat dengan pengalaman murid, misalnya mengapa jemuran bisa kering atau mengapa ada embun di pagi hari. Saya juga ingin memperbanyak kegiatan pengamatan dan percobaan sederhana agar murid memahami proses, bukan hanya hafal istilah.</p><p>Saya akan mengecek pemahaman murid dengan pertanyaan yang menuntut penerapan konsep pada situasi nyata, bukan hanya pertanyaan hafalan. Selain itu, saya ingin membiasakan murid merefleksikan apa yang sudah dan belum mereka pahami di akhir pembelajaran.</p></div></details>
-</section>
-<section class="blok">
-<h3>Analisis artefak</h3>
-
-<div class="an-grid"><div class="an"><h4>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h4><p>Artefak yang saya pilih adalah tugas analisis Kasus 1 tentang pembelajaran siklus air. Tugas ini berisi analisis apakah pembelajaran tergolong dangkal atau mendalam, analisis kesenjangan pemahaman murid, refleksi prinsip pembelajaran mendalam, keterkaitan dengan konteks nyata, dan desain ulang pembelajaran.</p></div><div class="an"><h4>Mengapa artefak tersebut yang saya pilih?</h4><p>Saya memilih artefak ini karena memuat kedua pengalaman belajar yang paling bermakna bagi saya. Bagian analisis kasus menunjukkan pemahaman saya tentang perbedaan pembelajaran dangkal dan mendalam, sedangkan bagian desain ulang pembelajaran menunjukkan bagaimana saya merancang kegiatan yang lebih mendalam.</p></div><div class="an"><h4>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h4><p>Bagian yang paling mendukung adalah jawaban tentang pemahaman awal dan refleksi prinsip. Di bagian tersebut saya menyimpulkan bahwa pembelajaran masih dangkal karena menekankan hafalan, serta prinsip berkesadaran dan bermakna belum tercapai walaupun prinsip menggembirakan cukup terlihat.</p><p>Bagian keterkaitan konteks dan desain ulang pembelajaran juga mendukung refleksi saya, yaitu pertanyaan pemantik tentang pakaian yang kering dan embun pagi, percobaan membasahi dua kain di tempat panas dan teduh, serta demonstrasi gelas berisi es batu untuk menunjukkan pengembunan. Bagian-bagian tersebut memperkuat pemahaman saya bahwa pembelajaran mendalam terjadi ketika murid mengamati, mencoba, menalar, dan menyimpulkan sendiri.</p></div></div>
-<div class="files"><a class="file" href="berkas/LK2_Pembelajaran_Mendalam_Asesmen_Dasar.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>LK 2 Pembelajaran Mendalam dan Asesmen Dasar</span></a><a class="file" href="berkas/Artefak_Kasus_1_Pembelajaran_Mendalam.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>Analisis Kasus 1: Pembelajaran Siklus Air</span></a></div>
-
-</section>
-</article><article class="lembar" id="dif">
-<header class="lembar-head">
-<p class="mono">Lembar 4 dari 6 · LK 2 Refleksi Mata Kuliah</p>
-<h2>Pembelajaran Berdiferensiasi</h2>
-</header>
-<div class="lembar-peta">
-<figure class="plot" aria-label="Peta topik berdasarkan ketertarikan dan manfaat">
-<div class="plot-y"><span>kurang menarik</span><span>lebih menarik</span></div>
-<div class="plot-grid"><div class="q q-tl"><span class="q-kat">Menarik tetapi kurang bermanfaat</span><span class="q-top">Aspek-Aspek Pembelajaran Berdiferensiasi</span></div><div class="q q-tr"><span class="q-kat">Menarik dan bermanfaat</span><span class="q-top">Merancang, Mengimplementasikan, dan Mengevaluasi Pembelajaran Berdiferensiasi</span></div><div class="q q-bl"><span class="q-kat">Kurang menarik dan kurang bermanfaat</span><span class="q-top">Strategi Penerapan Pembelajaran Berdiferensiasi</span></div><div class="q q-br"><span class="q-kat">Kurang menarik tetapi bermanfaat</span><span class="q-top">Apa dan Mengapa Pembelajaran Berdiferensiasi</span></div></div>
-<div class="plot-x"><span>kurang bermanfaat</span><span>lebih bermanfaat</span></div>
-</figure>
-<ul class="alasan"><li><b>Merancang, Mengimplementasikan, dan Mengevaluasi Pembelajaran Berdiferensiasi</b><span class="tag tag-tr">Menarik dan bermanfaat</span><p>Materi ini paling berkesan karena saya langsung praktik menyusun rancangan pembelajaran bersama kelompok, yaitu modul ajar Cahaya untuk kelas VIII yang memadukan prinsip Understanding by Design dengan pembelajaran berdiferensiasi, lalu menyimulasikannya. Dari kegiatan ini saya belajar bahwa diferensiasi harus direncanakan sejak awal, bukan ditambahkan di akhir.</p></li><li><b>Apa dan Mengapa Pembelajaran Berdiferensiasi</b><span class="tag tag-br">Kurang menarik tetapi bermanfaat</span><p>Di awal, materi ini terasa banyak teori karena membahas pengertian dan alasan pembelajaran perlu berdiferensiasi. Namun, materi ini sangat bermanfaat karena mengajarkan cara memetakan kebutuhan murid melalui asesmen dan mengolahnya menjadi profil murid dan profil kelas. Kemampuan ini saya pakai lagi saat menyusun identifikasi murid pada modul ajar.</p></li><li><b>Aspek-Aspek Pembelajaran Berdiferensiasi</b><span class="tag tag-tl">Menarik tetapi kurang bermanfaat</span><p>Materi ini menarik karena dibahas melalui kasus kelas nyata dan pendekatan design thinking. Namun, manfaat baru yang saya rasakan tidak sebesar materi lainnya karena konsep diferensiasi konten, proses, produk, dan lingkungan belajar sebagian sudah saya kenal dari mata kuliah sebelumnya.</p></li><li><b>Strategi Penerapan Pembelajaran Berdiferensiasi</b><span class="tag tag-bl">Kurang menarik dan kurang bermanfaat</span><p>Materi ini lebih banyak memperkuat pemahaman yang sudah saya peroleh dari topik aspek-aspek diferensiasi, karena strategi yang dibahas banyak beririsan dengan topik tersebut. Selain itu, beberapa contoh kasus belum terlalu dekat dengan kondisi kelas yang saya hadapi, sehingga manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul>
-</div>
-<section class="blok">
-<h3>Refleksi sebagai calon guru</h3>
-<details open><summary><span class="c4">Connection</span>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</summary><div class="jawab"><p>Menurut saya, seluruh materi pada mata kuliah Pembelajaran Berdiferensiasi memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Apa dan Mengapa Pembelajaran Berdiferensiasi serta Merancang, Mengimplementasikan, dan Mengevaluasi Pembelajaran Berdiferensiasi, karena keduanya paling berpengaruh terhadap cara saya merencanakan pembelajaran.</p><p>Melalui topik Apa dan Mengapa Pembelajaran Berdiferensiasi, saya memahami bahwa setiap murid datang dengan kesiapan belajar, minat, dan profil belajar yang berbeda. Sebagai guru, saya perlu mengenali perbedaan itu terlebih dahulu melalui asesmen, lalu memetakannya menjadi profil murid dan profil kelas sebagai dasar menyusun pembelajaran.</p><p>Melalui topik Merancang, Mengimplementasikan, dan Mengevaluasi Pembelajaran Berdiferensiasi, saya belajar mengubah hasil pemetaan tersebut menjadi rancangan nyata. Bersama kelompok, saya menyusun modul ajar Cahaya untuk kelas VIII yang memuat diferensiasi konten, proses, dan lingkungan belajar, lalu menyimulasikannya. Dari pengalaman ini saya memahami bahwa peran guru bukan menyamaratakan cara belajar, tetapi memfasilitasi agar setiap murid dapat mencapai tujuan pembelajaran yang sama dengan cara yang sesuai dengan kebutuhannya.</p></div></details><details><summary><span class="c4">Challenge</span>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</summary><div class="jawab"><p>Sebelum mempelajari mata kuliah ini, saya cenderung menyiapkan satu cara mengajar untuk semua murid. Materi, kegiatan, dan tugas yang saya berikan sama, sehingga murid yang cepat paham sering menunggu, sedangkan murid yang belum siap tertinggal. Saya juga jarang memakai hasil asesmen awal untuk merencanakan pembelajaran.</p><p>Setelah mempelajari mata kuliah ini, saya menyadari bahwa pembelajaran berdiferensiasi tidak berarti membuat rencana yang berbeda untuk setiap murid. Guru cukup menyediakan beberapa pilihan, misalnya materi dalam bentuk video, gambar, dan simulasi, kegiatan yang bertahap, serta bimbingan sebaya. Hal lain yang berbeda dari kebiasaan saya adalah merancang pembelajaran dimulai dari tujuan akhir dan bukti penilaian, baru kemudian kegiatannya, seperti pada prinsip Understanding by Design.</p></div></details><details><summary><span class="c4">Concept</span>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</summary><div class="jawab"><p>Konsep utama yang saya pelajari adalah bahwa pembelajaran berdiferensiasi merupakan upaya guru menyesuaikan pembelajaran dengan kebutuhan murid berdasarkan kesiapan belajar, minat, dan profil belajarnya. Kebutuhan ini dikenali melalui asesmen awal, lalu diolah menjadi profil murid dan profil kelas.</p><p>Selain itu, saya mempelajari bahwa diferensiasi dapat dilakukan pada aspek konten, proses, produk, dan lingkungan belajar, dan harus dirancang dengan jelas sejak tahap perencanaan. Rancangan tersebut kemudian diterapkan, diamati, dan dievaluasi melalui asesmen formatif agar guru dapat menyesuaikan pembelajaran berikutnya. Kedua konsep ini saling melengkapi karena pemetaan kebutuhan menjadi dasar, sedangkan perancangan menjadi cara mewujudkannya di kelas.</p></div></details><details><summary><span class="c4">Change</span>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</summary><div class="jawab"><p>Setelah mengikuti mata kuliah ini, saya akan selalu melakukan asesmen awal sebelum memulai materi baru dan memakai hasilnya untuk menyusun pembelajaran, bukan sekadar sebagai formalitas. Saya ingin menyediakan pilihan materi dan kegiatan yang beragam agar murid dengan gaya belajar visual, auditorial, maupun kinestetik sama-sama terbantu.</p><p>Saya juga ingin terbiasa merancang pembelajaran dimulai dari tujuan dan bukti penilaian, memberikan latihan bertahap bagi murid yang belum siap, serta tantangan tambahan bagi murid yang sudah siap. Setelah pembelajaran berjalan, saya akan mengevaluasi apakah diferensiasi yang saya berikan benar-benar membantu murid, lalu memperbaikinya pada pertemuan berikutnya.</p></div></details>
-</section>
-<section class="blok">
-<h3>Analisis artefak</h3>
-
-<div class="an-grid"><div class="an"><h4>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h4><p>Artefak yang saya pilih adalah tugas 4.C Diskusi Pemecahan Kasus: Menyusun Rancangan Pembelajaran, berupa modul ajar IPA Cahaya untuk kelas VIII yang menggunakan prinsip Understanding by Design dan pembelajaran berdiferensiasi. Modul ini saya susun bersama rekan kelompok, yaitu Dhea Priti Aristifani Junus dan Ummi Khoiriyah.</p></div><div class="an"><h4>Mengapa artefak tersebut yang saya pilih?</h4><p>Saya memilih artefak ini karena paling lengkap menggambarkan pengalaman belajar saya pada mata kuliah ini. Modul ajar tersebut dimulai dari identifikasi murid, seperti pengetahuan awal, minat, dan kebutuhan belajarnya, yang merupakan penerapan topik pemetaan kebutuhan murid. Setelah itu, modul memuat rancangan diferensiasi dan langkah pembelajaran yang merupakan penerapan topik merancang, mengimplementasikan, dan mengevaluasi pembelajaran berdiferensiasi.</p></div><div class="an"><h4>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h4><p>Bagian yang paling mendukung adalah identifikasi murid pada bagian awal modul, yang menunjukkan bahwa rancangan disusun berdasarkan kondisi murid. Bagian berikutnya adalah Tahap 2 Bukti Penilaian, yang memuat diferensiasi konten melalui video, gambar, animasi, dan simulasi Virtual Laboratorium, diferensiasi proses melalui eksplorasi, diskusi kelompok, dan latihan bertahap, serta diferensiasi lingkungan belajar melalui diskusi kelompok, bimbingan sebaya, dan diskusi lintas kelompok.</p><p>Bagian remedial dan pengayaan juga mendukung refleksi saya, karena menunjukkan penanganan yang berbeda bagi murid yang belum paham, seperti bimbingan terstruktur dan latihan bertahap, serta bagi murid yang sudah paham, seperti kegiatan tantangan. Bagian-bagian tersebut memperkuat pemahaman saya bahwa diferensiasi harus direncanakan sejak awal dan didasarkan pada kebutuhan murid.</p></div></div>
-<div class="files"><a class="file" href="berkas/LK2_Pembelajaran_Berdiferensiasi.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>LK 2 Pembelajaran Berdiferensiasi</span></a><a class="file" href="berkas/Artefak_4C_Modul_Ajar_Cahaya.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>4.C Modul Ajar Cahaya Kelas VIII (UbD dan Diferensiasi)</span></a></div>
-
-</section>
-</article><article class="lembar" id="gm">
-<header class="lembar-head">
-<p class="mono">Lembar 5 dari 6 · LK 2 Refleksi Mata Kuliah</p>
-<h2>Pola Pikir Bertumbuh (Growth Mindset) dalam Pembelajaran</h2>
-</header>
-<div class="lembar-peta">
-<figure class="plot" aria-label="Peta topik berdasarkan ketertarikan dan manfaat">
-<div class="plot-y"><span>kurang menarik</span><span>lebih menarik</span></div>
-<div class="plot-grid"><div class="q q-tl"><span class="q-kat">Menarik tetapi kurang bermanfaat</span><span class="q-top">Cara Kerja Otak pada Pola Pikir Bertumbuh</span></div><div class="q q-tr"><span class="q-kat">Menarik dan bermanfaat</span><span class="q-top">Pola Pikir Bertumbuh dalam Konteks Pembelajaran</span></div><div class="q q-bl"><span class="q-kat">Kurang menarik dan kurang bermanfaat</span><span class="q-top">Menumbuhkan dan Mengembangkan Pola Pikir Bertumbuh</span></div><div class="q q-br"><span class="q-kat">Kurang menarik tetapi bermanfaat</span><span class="q-top">Membentuk Cara Pandang Baru: Pentingnya Memahami Pola Pikir Bertumbuh dalam Dunia Pendidikan</span></div></div>
-<div class="plot-x"><span>kurang bermanfaat</span><span>lebih bermanfaat</span></div>
-</figure>
-<ul class="alasan"><li><b>Pola Pikir Bertumbuh dalam Konteks Pembelajaran</b><span class="tag tag-tr">Menarik dan bermanfaat</span><p>Materi ini paling berkesan karena langsung berkaitan dengan apa yang saya ucapkan dan lakukan di kelas. Melalui kasus Bu Rina dan latihan mengubah respons guru, saya menyadari bahwa kalimat sederhana dari guru bisa menumbuhkan atau justru mematikan semangat belajar murid.</p></li><li><b>Membentuk Cara Pandang Baru: Pentingnya Memahami Pola Pikir Bertumbuh dalam Dunia Pendidikan</b><span class="tag tag-br">Kurang menarik tetapi bermanfaat</span><p>Di awal, materi ini terasa cukup teoretis karena membahas perbedaan growth mindset dan fixed mindset. Namun, materi ini sangat bermanfaat, terutama saat menganalisis data PISA. Dari data tersebut saya melihat bahwa pola pikir murid berkaitan dengan capaian belajarnya, sehingga growth mindset bukan sekadar motivasi, tetapi kebutuhan nyata pendidikan di Indonesia.</p></li><li><b>Cara Kerja Otak pada Pola Pikir Bertumbuh</b><span class="tag tag-tl">Menarik tetapi kurang bermanfaat</span><p>Materi ini menarik karena membahas neuroplastisitas, yaitu kemampuan otak untuk terus berkembang melalui latihan. Namun, manfaat praktis yang saya rasakan tidak sebesar materi lainnya karena pembahasannya lebih banyak pada penjelasan ilmiah, sedangkan penerapannya di kelas lebih banyak dibahas pada topik lain.</p></li><li><b>Menumbuhkan dan Mengembangkan Pola Pikir Bertumbuh</b><span class="tag tag-bl">Kurang menarik dan kurang bermanfaat</span><p>Materi ini lebih banyak memperkuat pemahaman yang sudah saya peroleh dari topik sebelumnya, karena konsep esensial tentang pola pikir bertumbuh dan perkembangan otak sudah dibahas di awal. Kasus “Sudah dari sananya, Bu” juga mirip dengan kasus lain yang pernah dibahas, sehingga manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul>
-</div>
-<section class="blok">
-<h3>Refleksi sebagai calon guru</h3>
-<details open><summary><span class="c4">Connection</span>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</summary><div class="jawab"><p>Menurut saya, seluruh materi pada mata kuliah Pola Pikir Bertumbuh dalam Pembelajaran memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Membentuk Cara Pandang Baru: Pentingnya Memahami Pola Pikir Bertumbuh dalam Dunia Pendidikan serta Pola Pikir Bertumbuh dalam Konteks Pembelajaran.</p><p>Melalui topik Membentuk Cara Pandang Baru, saya memahami bahwa pola pikir murid sangat memengaruhi cara mereka belajar. Saat menganalisis data PISA, saya melihat bahwa negara dengan persentase murid ber-growth mindset tinggi, seperti Finlandia dan Kanada, juga memiliki skor membaca, matematika, dan sains yang tinggi. Sebaliknya, Indonesia dengan persentase 39% memiliki skor yang masih rendah. Hal ini menyadarkan saya bahwa guru punya peran besar dalam membentuk pola pikir murid.</p><p>Melalui topik Pola Pikir Bertumbuh dalam Konteks Pembelajaran, saya belajar bahwa growth mindset tidak cukup hanya dipahami, tetapi harus terlihat dari cara guru merespons murid setiap hari. Respons guru yang menekankan proses, usaha, dan strategi akan membantu murid melihat kesulitan sebagai bagian dari belajar, bukan tanda bahwa mereka tidak mampu.</p></div></details><details><summary><span class="c4">Challenge</span>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</summary><div class="jawab"><p>Sebelum mempelajari mata kuliah ini, saya cenderung memberikan pujian pada hasil, misalnya “Kamu pintar” saat murid mendapat nilai bagus. Ketika murid gagal, saya lebih sering langsung memberi tahu jawaban yang benar tanpa mengajak mereka melihat letak kesalahannya. Saya juga belum menyadari bahwa budaya mengejar nilai tuntas, misalnya merasa cukup dengan nilai 78 karena tidak remedial, termasuk bentuk pola pikir tetap.</p><p>Setelah mempelajari mata kuliah ini, saya memahami bahwa pujian sebaiknya diberikan pada usaha dan strategi, bukan pada kecerdasan. Kesalahan perlu diperlakukan sebagai bahan belajar, bukan sesuatu yang memalukan. Saya juga belajar memakai kata “belum” (the power of yet), misalnya “Kamu belum bisa sekarang”, yang memberi pesan bahwa kemampuan masih bisa berkembang.</p></div></details><details><summary><span class="c4">Concept</span>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</summary><div class="jawab"><p>Konsep utama yang saya pelajari adalah perbedaan growth mindset dan fixed mindset. Murid dengan growth mindset percaya bahwa kemampuan dapat berkembang melalui usaha, latihan, dan strategi yang tepat, sedangkan murid dengan fixed mindset menganggap kemampuan sudah tetap sejak lahir, sehingga mudah menyerah dan menghindari tantangan.</p><p>Selain itu, saya mempelajari bahwa guru dapat menumbuhkan growth mindset melalui respons dan umpan balik sehari-hari, seperti menghargai proses, memecah tugas sulit menjadi langkah kecil, memberi tantangan yang sesuai bagi murid yang sudah menguasai materi, dan meyakinkan murid bahwa bertanya dan melakukan kesalahan adalah bagian dari belajar. Kedua konsep ini saling melengkapi karena pemahaman tentang pola pikir menjadi dasar, sedangkan respons guru menjadi cara menerapkannya di kelas.</p></div></details><details><summary><span class="c4">Change</span>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</summary><div class="jawab"><p>Setelah mengikuti mata kuliah ini, saya ingin lebih sadar dengan kalimat yang saya ucapkan kepada murid. Saya akan membiasakan memuji usaha dan strategi, memakai kata “belum” saat murid merasa tidak bisa, serta mengajak murid melihat kesalahan sebagai petunjuk bagian yang perlu diperbaiki.</p><p>Saya juga ingin menciptakan suasana kelas yang aman untuk mencoba, bertanya, dan salah. Kepada orang tua, saya ingin menyampaikan bahwa perkembangan belajar anak lebih penting daripada sekadar nilai. Dengan cara ini, saya berharap murid tidak lagi belajar hanya untuk mengejar nilai tuntas, tetapi benar-benar memahami materi.</p></div></details>
-</section>
-<section class="blok">
-<h3>Analisis artefak</h3>
-
-<div class="an-grid"><div class="an"><h4>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h4><p>Artefak yang saya pilih adalah LK 1.3 “Di Balik Angka dan Pola Pikir” dan LK 4.2 “Mengubah Responmu untuk Kelas Bertumbuh”. Kedua artefak tersebut menunjukkan pemahaman saya tentang pentingnya growth mindset dalam pendidikan dan cara menerapkannya melalui respons guru di kelas.</p></div><div class="an"><h4>Mengapa artefak tersebut yang saya pilih?</h4><p>Saya memilih kedua artefak tersebut karena sesuai dengan dua pengalaman belajar yang paling bermakna bagi saya. LK 1.3 membantu saya memahami alasan growth mindset penting melalui analisis data PISA. LK 4.2 menunjukkan bagaimana pemahaman tersebut saya terapkan dalam bentuk respons guru terhadap situasi yang sering terjadi di kelas.</p></div><div class="an"><h4>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h4><p>Pada LK 1.3, bagian yang paling mendukung adalah analisis pola hubungan antara persentase growth mindset dan skor PISA, serta jawaban saya tentang penyebab rendahnya skor Indonesia, yaitu budaya belajar yang berorientasi pada nilai, termasuk contoh murid yang merasa cukup dengan nilai 78 karena tidak remedial. Bagian peran guru, termasuk pendekatan the power of yet, juga mendukung refleksi saya.</p><p>Pada LK 4.2, bagian yang paling mendukung adalah respons yang saya tulis untuk sepuluh situasi kelas, misalnya “Kamu mungkin belum bisa sekarang, tapi dengan latihan dan strategi yang tepat kemampuanmu bisa berkembang” untuk murid yang merasa tidak bisa, dan “Kesalahan membantu kita mengetahui bagian yang perlu diperbaiki” untuk murid yang sering salah. Respons-respons tersebut menunjukkan perubahan cara saya menanggapi murid, dari berfokus pada hasil menjadi berfokus pada proses, usaha, dan strategi.</p></div></div>
-<div class="files"><a class="file" href="berkas/LK2_Pola_Pikir_Bertumbuh.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>LK 2 Pola Pikir Bertumbuh</span></a><a class="file" href="berkas/Artefak_LK_1.3_Di_Balik_Angka.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>LK 1.3 Di Balik Angka dan Pola Pikir</span></a><a class="file" href="berkas/Artefak_LK_4.2_Mengubah_Responmu.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>LK 4.2 Mengubah Responmu untuk Kelas Bertumbuh</span></a></div>
-
-</section>
-</article><article class="lembar" id="pplt">
-<header class="lembar-head">
-<p class="mono">Lembar 6 dari 6 · LK 2 Refleksi Mata Kuliah</p>
-<h2>Praktik Pengalaman Lapangan (PPL) Terbimbing</h2>
-</header>
-<div class="lembar-peta">
-<figure class="plot" aria-label="Peta topik berdasarkan ketertarikan dan manfaat">
-<div class="plot-y"><span>kurang menarik</span><span>lebih menarik</span></div>
-<div class="plot-grid"><div class="q q-tl"><span class="q-kat">Menarik tetapi kurang bermanfaat</span><span class="q-top">Asistensi Mengajar</span></div><div class="q q-tr"><span class="q-kat">Menarik dan bermanfaat</span><span class="q-top">Pembelajaran Terbimbing</span></div><div class="q q-bl"><span class="q-kat">Kurang menarik dan kurang bermanfaat</span><span class="q-top">Orientasi</span></div><div class="q q-br"><span class="q-kat">Kurang menarik tetapi bermanfaat</span><span class="q-top">Observasi</span></div></div>
-<div class="plot-x"><span>kurang bermanfaat</span><span>lebih bermanfaat</span></div>
-</figure>
-<ul class="alasan"><li><b>Pembelajaran Terbimbing</b><span class="tag tag-tr">Menarik dan bermanfaat</span><p>Kegiatan ini paling berkesan karena saya langsung mengajar di kelas dalam tiga siklus dengan bimbingan guru pamong dan dosen. Setiap siklus diakhiri refleksi, sehingga saya bisa melihat kekurangan saya dan memperbaikinya pada siklus berikutnya.</p></li><li><b>Observasi</b><span class="tag tag-br">Kurang menarik tetapi bermanfaat</span><p>Di awal, kegiatan observasi terasa kurang menarik karena saya lebih banyak mengamati daripada terlibat langsung. Namun, kegiatan ini sangat bermanfaat karena dari observasi saya mengenal karakteristik murid kelas VIII.6 dan menyusun profil murid serta profil kelas yang kemudian menjadi dasar dalam merancang pembelajaran.</p></li><li><b>Asistensi Mengajar</b><span class="tag tag-tl">Menarik tetapi kurang bermanfaat</span><p>Kegiatan ini menarik karena saya mulai membantu guru pamong di kelas dan berinteraksi langsung dengan murid. Namun, manfaat baru yang saya rasakan tidak sebesar kegiatan lainnya karena peran saya masih terbatas sebagai pendamping, sehingga belum banyak kesempatan untuk merancang dan memimpin pembelajaran sendiri.</p></li><li><b>Orientasi</b><span class="tag tag-bl">Kurang menarik dan kurang bermanfaat</span><p>Kegiatan orientasi lebih banyak berisi pengenalan lingkungan dan manajemen sekolah. Kegiatan ini tetap penting sebagai awal PPL, tetapi sebagian besar informasinya bersifat administratif dan belum berkaitan langsung dengan praktik mengajar, sehingga manfaat baru yang saya rasakan belum sebesar kegiatan lainnya.</p></li></ul>
-</div>
-<section class="blok">
-<h3>Refleksi sebagai calon guru</h3>
-<details open><summary><span class="c4">Connection</span>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</summary><div class="jawab"><p>Menurut saya, seluruh kegiatan pada mata kuliah PPL Terbimbing memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Observasi dan Pembelajaran Terbimbing, karena keduanya saling berkaitan dan paling berpengaruh terhadap cara saya mengajar.</p><p>Melalui kegiatan Observasi, saya belajar mengenali murid sebelum mengajar. Saya menganalisis kesiapan belajar, minat belajar, dan gaya belajar 32 murid kelas VIII.6, lalu menyusunnya menjadi profil murid dan profil kelas. Dari situ saya memahami bahwa guru perlu tahu siapa muridnya terlebih dahulu sebelum menentukan cara mengajar.</p><p>Melalui kegiatan Pembelajaran Terbimbing, saya menerapkan hasil observasi tersebut dalam praktik mengajar di kelas. Bimbingan dari guru pamong dan dosen serta refleksi di setiap siklus membuat saya sadar bahwa menjadi guru adalah proses belajar yang terus-menerus, bukan sesuatu yang langsung sempurna.</p></div></details><details><summary><span class="c4">Challenge</span>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</summary><div class="jawab"><p>Sebelum mengikuti PPL Terbimbing, saya cenderung menyiapkan pembelajaran berdasarkan materi saja tanpa melihat kondisi murid secara rinci. Saya menganggap satu cara mengajar cukup untuk semua murid di kelas.</p><p>Setelah melakukan observasi dan menyusun profil kelas, saya melihat bahwa murid di satu kelas sangat beragam. Di kelas VIII.6, sebagian besar murid memiliki kesiapan belajar sedang dan minat belajar tinggi, sedangkan gaya belajarnya terbagi menjadi visual, auditorial, dan kinestetik. Hal ini berbeda dari kebiasaan saya sebelumnya karena ternyata perencanaan pembelajaran harus disesuaikan dengan data tersebut. Selain itu, saya juga terbiasa melakukan refleksi setelah mengajar untuk memperbaiki pembelajaran berikutnya, sesuatu yang dulu jarang saya lakukan secara tertulis.</p></div></details><details><summary><span class="c4">Concept</span>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</summary><div class="jawab"><p>Konsep utama yang saya pelajari adalah pentingnya mengenali kebutuhan murid melalui observasi dan asesmen awal. Profil murid dan profil kelas membantu guru mengetahui kesiapan belajar, minat, dan gaya belajar murid, sehingga pembelajaran dapat dirancang dengan tepat, misalnya dengan menyediakan media visual, penjelasan lisan, dan kegiatan praktik.</p><p>Selain itu, saya mempelajari bahwa praktik mengajar perlu dilakukan dalam siklus: merencanakan, melaksanakan, mengamati, dan merefleksikan. Masukan dari guru pamong dan dosen menjadi bahan untuk memperbaiki siklus berikutnya. Kedua konsep ini saling melengkapi karena pengenalan murid menjadi dasar perencanaan, sedangkan siklus refleksi menjadi cara untuk terus memperbaiki praktik mengajar.</p></div></details><details><summary><span class="c4">Change</span>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</summary><div class="jawab"><p>Setelah mengikuti PPL Terbimbing, saya ingin selalu memulai pembelajaran dengan mengenali murid, yaitu melalui observasi dan asesmen awal, lalu menyusun profil kelas sebagai dasar perencanaan. Saya akan berusaha menyediakan variasi media dan kegiatan agar murid dengan gaya belajar visual, auditorial, maupun kinestetik sama-sama terbantu.</p><p>Saya juga ingin menjadikan refleksi sebagai kebiasaan setelah mengajar, terbuka terhadap masukan dari guru lain, dan tidak takut melakukan kesalahan karena setiap kekurangan dapat menjadi bahan perbaikan pada pembelajaran berikutnya.</p></div></details>
-</section>
-<section class="blok">
-<h3>Analisis artefak</h3>
-<div class="rekap">
-<p class="rekap-judul">Rekap profil kelas VIII.6 · 32 murid</p>
-<div class="rekap-grid">
-<div><p class="rekap-sub">Kesiapan belajar</p><div class="bar"><span class="bar-l">Tinggi</span><span class="bar-t"><span style="width:22%"></span></span><span class="bar-n">7</span></div><div class="bar"><span class="bar-l">Sedang</span><span class="bar-t"><span style="width:78%"></span></span><span class="bar-n">25</span></div><div class="bar"><span class="bar-l">Rendah</span><span class="bar-t"><span style="width:0%"></span></span><span class="bar-n">0</span></div></div>
-<div><p class="rekap-sub">Minat belajar</p><div class="bar"><span class="bar-l">Tinggi</span><span class="bar-t"><span style="width:69%"></span></span><span class="bar-n">22</span></div><div class="bar"><span class="bar-l">Sedang</span><span class="bar-t"><span style="width:31%"></span></span><span class="bar-n">10</span></div><div class="bar"><span class="bar-l">Rendah</span><span class="bar-t"><span style="width:0%"></span></span><span class="bar-n">0</span></div></div>
-<div><p class="rekap-sub">Gaya belajar</p><div class="bar"><span class="bar-l">Visual</span><span class="bar-t"><span style="width:47%"></span></span><span class="bar-n">15</span></div><div class="bar"><span class="bar-l">Auditorial</span><span class="bar-t"><span style="width:31%"></span></span><span class="bar-n">10</span></div><div class="bar"><span class="bar-l">Kinestetik</span><span class="bar-t"><span style="width:22%"></span></span><span class="bar-n">7</span></div></div>
-</div></div>
-<div class="an-grid"><div class="an"><h4>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h4><p>Artefak yang saya pilih adalah dokumen Analisis Profil Murid dan Profil Kelas VIII.6. Dokumen ini berisi data kesiapan belajar, minat belajar, dan gaya belajar setiap murid, serta pengelompokan murid berdasarkan ketiga aspek tersebut.</p></div><div class="an"><h4>Mengapa artefak tersebut yang saya pilih?</h4><p>Saya memilih artefak ini karena menjadi jembatan antara dua pengalaman belajar yang paling bermakna bagi saya. Dokumen ini merupakan hasil dari kegiatan observasi dan sekaligus menjadi dasar saya dalam merancang pembelajaran saat praktik mengajar terbimbing. Tanpa profil ini, saya akan mengajar tanpa benar-benar mengetahui kebutuhan murid.</p></div><div class="an"><h4>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h4><p>Bagian yang paling mendukung adalah tabel profil murid yang memuat data 32 murid kelas VIII.6. Dari tabel tersebut terlihat bahwa 25 murid memiliki kesiapan belajar sedang dan 7 murid tinggi, 22 murid memiliki minat belajar tinggi dan 10 murid sedang, serta gaya belajar murid terdiri atas 15 murid visual, 10 murid auditorial, dan 7 murid kinestetik.</p><p>Bagian pengelompokan murid berdasarkan kesiapan belajar, minat belajar, dan gaya belajar juga mendukung refleksi saya, karena dari pengelompokan ini saya dapat menentukan media, kegiatan, dan pembagian kelompok yang sesuai saat praktik mengajar. Bagian-bagian tersebut memperkuat pemahaman saya bahwa pembelajaran yang baik dimulai dari mengenali murid.</p></div></div>
-<div class="files"><a class="file" href="berkas/LK2_PPL_Terbimbing.pdf" target="_blank" rel="noopener"><span class="file-ext">PDF</span><span>LK 2 PPL Terbimbing</span></a></div>
-<p class="catatan">Dokumen profil kelas VIII.6 memuat nama murid, jadi yang ditampilkan di sini hanya rekap angkanya.</p>
-</section>
-</article>
-    </div>
-  </section>
-</main>
-
-<footer class="kaki">
-  <div class="wrap">
-    <span>Asih Nurbaiti Gimnastiar · NIM 12117251044</span>
-    <span>PPG Prajabatan Universitas Negeri Gorontalo · 2026</span>
   </div>
-</footer>
+</div>
+<button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="guru" data-n="4" aria-label="Halaman 4">
+<div class="board">
+  <div class="sheet notebook guru-sheet">
+    <svg class="clip" viewBox="0 0 60 70" aria-hidden="true"><path d="M8 30h44l-6 34H14z" fill="#1d1f24"/><path d="M8 30h44l-2 8H10z" fill="#3a3d45"/><path d="M18 30V10a12 12 0 0 1 24 0v20" fill="none" stroke="#9aa1ad" stroke-width="4"/><path d="M24 30V14a6 6 0 0 1 12 0v16" fill="none" stroke="#c9ced6" stroke-width="3"/></svg>
+    <h2 class="label navy">MODEL GURU YANG DITUJU</h2>
+    <div class="guru-grid">
+      <div class="sticky pink"><b>01</b><p>Mengenali murid lebih dulu sebelum menentukan cara mengajar.</p></div>
+      <div class="sticky sky"><b>02</b><p>Membuat kelas yang aman untuk mencoba, bertanya, dan salah.</p></div>
+      <div class="sticky yel"><b>03</b><p>Mengaitkan materi IPA dengan kejadian sehari-hari murid.</p></div>
+      <div class="sticky mint"><b>04</b><p>Terus merefleksikan cara mengajar dan belajar dari rekan guru.</p></div>
+    </div>
+    <div class="filosofi"><h3>Filosofi mengajar</h3><p>Saya percaya setiap murid bisa berkembang dengan caranya sendiri. Tugas saya adalah menuntun, seperti pesan Ki Hadjar Dewantara, dengan memberi pengalaman belajar yang bermakna, dukungan yang sesuai kebutuhan, dan respons yang menghargai usaha mereka.</p></div>
+  </div>
+</div>
+<button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="peta" data-n="5" aria-label="Halaman 5">
+<div class="board">
+  <div class="tape t3"></div>
+  <h2 class="label coral floating">REFLEKSI MATA KULIAH SEMESTER 1</h2>
+  <div class="tiles"><button type="button" class="tile sticky yel" data-go="fil"><span class="mono">MATA KULIAH 01</span><b>Filosofi Pendidikan dan Pendidikan Nilai</b><span class="tile-go">buka &raquo;</span></button><button type="button" class="tile sticky mint" data-go="ppd"><span class="mono">MATA KULIAH 02</span><b>Pemahaman tentang Peserta Didik dan Pembelajarannya</b><span class="tile-go">buka &raquo;</span></button><button type="button" class="tile sticky pink" data-go="pmad"><span class="mono">MATA KULIAH 03</span><b>Pembelajaran Mendalam dan Asesmen Dasar</b><span class="tile-go">buka &raquo;</span></button><button type="button" class="tile sticky sky" data-go="dif"><span class="mono">MATA KULIAH 04</span><b>Pembelajaran Berdiferensiasi</b><span class="tile-go">buka &raquo;</span></button><button type="button" class="tile sticky yel" data-go="gm"><span class="mono">MATA KULIAH 05</span><b>Pola Pikir Bertumbuh (Growth Mindset) dalam Pembelajaran</b><span class="tile-go">buka &raquo;</span></button><button type="button" class="tile sticky mint" data-go="pplt"><span class="mono">MATA KULIAH 06</span><b>Praktik Pengalaman Lapangan (PPL) Terbimbing</b><span class="tile-go">buka &raquo;</span></button></div>
+</div>
+<button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="fil" data-n="6" aria-label="Halaman 6">
+<div class="board">
+  <div class="sheet notebook mk-sheet">
+    <svg class="clip" viewBox="0 0 60 70" aria-hidden="true"><path d="M8 30h44l-6 34H14z" fill="#1d1f24"/><path d="M8 30h44l-2 8H10z" fill="#3a3d45"/><path d="M18 30V10a12 12 0 0 1 24 0v20" fill="none" stroke="#9aa1ad" stroke-width="4"/><path d="M24 30V14a6 6 0 0 1 12 0v16" fill="none" stroke="#c9ced6" stroke-width="3"/></svg>
+    <p class="kicker"><span class="mono">MATA KULIAH 01 / 06</span></p>
+    <h2 class="label navy">FILOSOFI PENDIDIKAN DAN PENDIDIKAN NILAI</h2>
+    <div class="mk-grid">
+      <figure class="quad" aria-label="Peta topik: ketertarikan dan manfaat">
+        <span class="ax ax-y">makin menarik &uarr;</span>
+        <div class="quad-grid"><div class="qd qd-tl"><span class="mono">Menarik tetapi kurang bermanfaat</span><b>Pendidikan Nilai dalam Kerangka Pendidikan Nasional</b></div><div class="qd qd-tr"><span class="mono">Menarik dan bermanfaat</span><b>Landasan Filosofi Pendidikan Nasional</b></div><div class="qd qd-bl"><span class="mono">Kurang menarik dan kurang bermanfaat</span><b>Pola Pikir Bertumbuh (Growth Mindset)</b></div><div class="qd qd-br"><span class="mono">Kurang menarik tetapi bermanfaat</span><b>Kode Etik Guru</b></div></div>
+        <span class="ax ax-x">makin bermanfaat &rarr;</span>
+      </figure>
+      <div class="panel"><h3 class="hand">alasan pengelompokan</h3><ul class="alasan"><li><b>Landasan Filosofi Pendidikan Nasional</b><p>Materi ini paling berkesan karena disajikan melalui studi kasus, seperti kasus Ali yang mogok sekolah. Dari materi ini saya memahami filosofi pendidikan Ki Hadjar Dewantara, pentingnya pendidikan yang berpihak kepada murid, serta peran guru dalam menuntun murid sesuai kodrat alam dan kodrat zamannya.</p></li><li><b>Kode Etik Guru</b><p>Meskipun saya telah mempelajari kode etik guru sebelumnya, materi ini tetap sangat bermanfaat karena disertai berbagai studi kasus yang menunjukkan pentingnya profesionalisme, tanggung jawab, dan penghormatan terhadap hak-hak murid dalam menjalankan profesi guru.</p></li><li><b>Pendidikan Nilai dalam Kerangka Pendidikan Nasional</b><p>Materi ini menarik karena membahas peran guru dalam menanamkan nilai-nilai kepada murid. Namun, manfaat baru yang saya rasakan tidak sebesar materi lainnya karena sebagian konsep telah saya pelajari pada mata pelajaran maupun perkuliahan sebelumnya.</p></li><li><b>Pola Pikir Bertumbuh (Growth Mindset)</b><p>Materi ini lebih banyak memperkuat pemahaman yang telah saya miliki karena konsep growth mindset juga saya pelajari pada mata kuliah growth mindset. Selain itu, pembahasan mengenai Sekolah Imbau masih belum dekat dengan pengalaman saya sehingga manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul></div>
+    </div>
+  </div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="fil-r1" data-n="7" aria-label="Halaman 7">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Filosofi Pendidikan dan Pendidikan Nilai &middot; REFLEKSI 1 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Connection</span><h3>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</h3><div class="txt"><p>Menurut saya, seluruh materi yang dipelajari pada mata kuliah Filosofi Pendidikan dan Pendidikan Nilai memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Setiap topik memberikan wawasan baru yang mendukung pembentukan kompetensi sebagai pendidik. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Landasan Filosofi Pendidikan Nasional dan Kode Etik Guru, karena kedua materi tersebut memberikan pemahaman baru yang paling berpengaruh terhadap cara pandang saya sebagai calon guru.</p><p>Melalui materi Landasan Filosofi Pendidikan Nasional, saya memahami pemikiran Ki Hadjar Dewantara bahwa pendidikan merupakan proses menuntun tumbuh kembang murid sesuai dengan kodrat alam dan kodrat zamannya. Guru tidak bertugas membentuk murid sesuai keinginannya, melainkan membimbing dan memfasilitasi agar setiap murid dapat berkembang sesuai potensi yang dimilikinya. Studi kasus mengenai Ahli yang mogok sekolah juga membuat saya memahami bahwa setiap permasalahan pendidikan perlu diselesaikan berdasarkan filosofi pendidikan yang berpihak kepada murid, bukan hanya berorientasi pada penyelesaian masalah secara cepat.</p><p>Selain itu, materi Kode Etik Guru memberikan pemahaman bahwa guru tidak hanya dituntut menguasai materi pembelajaran, tetapi juga harus menjunjung tinggi profesionalisme, integritas, tanggung jawab, dan menghormati hak serta martabat setiap murid. Berbagai studi kasus yang dibahas selama perkuliahan menyadarkan saya bahwa setiap tindakan guru memiliki konsekuensi etis sehingga harus selalu didasarkan pada kepentingan terbaik bagi murid.</p><p>Melalui kedua materi tersebut, saya semakin memahami bahwa menjadi guru bukan sekadar mengajar, tetapi juga menjadi pendidik yang mampu menuntun, memberi teladan, serta mengambil keputusan secara bijaksana berdasarkan filosofi pendidikan dan kode etik profesi.</p></div></article><article class="panel paper"><span class="c4">Challenge</span><h3>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</h3><div class="txt"><p>Sebelum mempelajari mata kuliah ini, saya cenderung berpikir bahwa tugas utama guru adalah menyampaikan materi pembelajaran dan memastikan murid mematuhi aturan yang berlaku. Setelah mempelajari Landasan Filosofi Pendidikan Nasional, saya memahami bahwa guru seharusnya menjadi penuntun yang membantu murid berkembang sesuai dengan kodrat alam dan kodrat zamannya. Guru perlu menciptakan pembelajaran yang memerdekakan murid, yaitu pembelajaran yang memberikan ruang bagi mereka untuk berpikir, berkembang, dan mengoptimalkan potensinya.</p><p>Selain itu, melalui materi Kode Etik Guru, saya memperoleh perspektif baru bahwa setiap tindakan guru harus mempertimbangkan aspek etika, profesionalisme, dan hak-hak murid. Sebelumnya saya belum menyadari bahwa tindakan yang dianggap sederhana, seperti memberikan hukuman tanpa mempertimbangkan kondisi murid atau bertindak berdasarkan emosi, dapat menjadi pelanggaran kode etik bahkan berpotensi menimbulkan konsekuensi hukum. Materi ini mengubah cara pandang saya dalam menyikapi berbagai situasi yang mungkin terjadi di lingkungan sekolah.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="fil-r2" data-n="8" aria-label="Halaman 8">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Filosofi Pendidikan dan Pendidikan Nilai &middot; REFLEKSI 2 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Concept</span><h3>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</h3><div class="txt"><p>Konsep utama yang saya pelajari adalah bahwa pendidikan menurut Ki Hadjar Dewantara merupakan proses menuntun murid agar mampu berkembang sesuai dengan kodrat alam dan kodrat zamannya. Saya juga memahami bahwa pembelajaran seharusnya memerdekakan murid, yaitu memberikan kesempatan kepada setiap murid untuk belajar sesuai dengan potensi, kebutuhan, dan karakteristiknya sehingga mereka dapat berkembang secara optimal.</p><p>Selain itu, saya mempelajari bahwa guru harus menjunjung tinggi Kode Etik Guru sebagai pedoman dalam menjalankan profesinya. Guru dituntut untuk bersikap profesional, bertanggung jawab, adil, menghormati hak-hak murid, mampu mengendalikan emosi, serta menjadi teladan dalam setiap tindakan. Kedua konsep tersebut saling melengkapi karena filosofi pendidikan menjadi landasan berpikir dalam mendidik, sedangkan kode etik menjadi pedoman dalam mewujudkan perilaku profesional sebagai seorang guru.</p></div></article><article class="panel paper"><span class="c4">Change</span><h3>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</h3><div class="txt"><p>Setelah mengikuti mata kuliah ini, saya akan berusaha untuk menjadi guru yang tidak hanya berfokus pada penyampaian materi pembelajaran, tetapi juga mampu menuntun murid agar berkembang sesuai dengan kodrat alam dan kodrat zamannya. Saya ingin menghadirkan pembelajaran yang memerdekakan murid dengan memberikan ruang bagi mereka untuk aktif belajar, berpikir kritis, dan mengembangkan potensi yang dimiliki.</p><p>Saya juga berkomitmen untuk selalu menjunjung tinggi kode etik profesi dalam setiap tindakan, membangun komunikasi yang menghargai martabat murid, dan  mengendalikan emosi ketika menghadapi berbagai permasalahan di kelas. Saya berharap dapat menjadi guru yang profesional, berintegritas, reflektif, dan mampu menjadi teladan sehingga tidak hanya mengajarkan ilmu pengetahuan, tetapi juga membentuk karakter murid.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="fil-a" data-n="9" aria-label="Halaman 9">
+<div class="board">
+  <h2 class="label coral floating">ANALISIS ARTEFAK</h2>
+  <p class="kicker light right"><span class="mono">Filosofi Pendidikan dan Pendidikan Nilai</span></p>
+  
+  <div class="three"><article class="panel paper sm"><span class="num">1</span><h3>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h3><div class="txt"><p>Artefak yang saya pilih adalah tugas Landasan Filosofi Pendidikan Nasional dan Laporan Hasil Diskusi Kelompok &quot;Kasus-kasus Pelanggaran Kode Etik Guru&quot;. Kedua artefak tersebut menunjukkan pemahaman saya tentang filosofi pendidikan sebagai landasan dalam mendidik murid serta pentingnya menerapkan kode etik guru dalam menghadapi permasalahan nyata di sekolah.</p></div></article><article class="panel paper sm"><span class="num">2</span><h3>Mengapa artefak tersebut yang saya pilih?</h3><div class="txt"><p>Saya memilih kedua artefak tersebut karena sesuai dengan pengalaman belajar yang paling bermakna bagi saya. Artefak Landasan Filosofi Pendidikan Nasional membantu saya memahami bahwa guru berperan menuntun murid sesuai dengan kodrat alam dan kodrat zamannya. Sementara itu, artefak Kode Etik Guru menunjukkan bagaimana konsep tersebut diterapkan dalam menganalisis kasus nyata sehingga saya semakin memahami pentingnya profesionalisme, etika, dan keputusan yang berpihak kepada murid.</p></div></article><article class="panel paper sm"><span class="num">3</span><h3>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h3><div class="txt"><p>Pada artefak Landasan Filosofi Pendidikan Nasional, bagian yang paling mendukung adalah pembahasan mengenai pemikiran Ki Hadjar Dewantara tentang pendidikan yang menuntun murid sesuai kodrat alam dan kodrat zamannya. Pada artefak Kode Etik Guru, bagian yang paling mendukung adalah analisis pelanggaran kode etik, alternatif penyelesaian, dan refleksi akhir. Kedua bagian tersebut memperkuat pemahaman saya bahwa guru tidak hanya menguasai materi pembelajaran, tetapi juga harus berpihak kepada murid serta menjunjung tinggi etika profesi dalam setiap tindakan.</p></div></article></div>
+  <div class="files"><a class="file" href="berkas/LK2_Filosofi_Pendidikan.pdf" target="_blank" rel="noopener"><span>PDF</span>LK 2 lengkap</a><span class="file ghost">Artefak tugas filosofi menyusul</span></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="ppd" data-n="10" aria-label="Halaman 10">
+<div class="board">
+  <div class="sheet notebook mk-sheet">
+    <svg class="clip" viewBox="0 0 60 70" aria-hidden="true"><path d="M8 30h44l-6 34H14z" fill="#1d1f24"/><path d="M8 30h44l-2 8H10z" fill="#3a3d45"/><path d="M18 30V10a12 12 0 0 1 24 0v20" fill="none" stroke="#9aa1ad" stroke-width="4"/><path d="M24 30V14a6 6 0 0 1 12 0v16" fill="none" stroke="#c9ced6" stroke-width="3"/></svg>
+    <p class="kicker"><span class="mono">MATA KULIAH 02 / 06</span></p>
+    <h2 class="label navy">PEMAHAMAN TENTANG PESERTA DIDIK DAN PEMBELAJARANNYA</h2>
+    <div class="mk-grid">
+      <figure class="quad" aria-label="Peta topik: ketertarikan dan manfaat">
+        <span class="ax ax-y">makin menarik &uarr;</span>
+        <div class="quad-grid"><div class="qd qd-tl"><span class="mono">Menarik tetapi kurang bermanfaat</span><b>Pembelajaran Berpusat pada Peserta Didik</b></div><div class="qd qd-tr"><span class="mono">Menarik dan bermanfaat</span><b>Perbedaan Karakteristik Peserta Didik</b></div><div class="qd qd-bl"><span class="mono">Kurang menarik dan kurang bermanfaat</span><b>Memahami Peserta Didik secara Holistik</b></div><div class="qd qd-br"><span class="mono">Kurang menarik tetapi bermanfaat</span><b>Profiling Peserta Didik</b></div></div>
+        <span class="ax ax-x">makin bermanfaat &rarr;</span>
+      </figure>
+      <div class="panel"><h3 class="hand">alasan pengelompokan</h3><ul class="alasan"><li><b>Perbedaan Karakteristik Peserta Didik</b><p>Materi ini paling berkesan karena saya langsung menyusun strategi pembelajaran untuk murid dengan karakteristik berbeda, seperti Rizky yang menyukai teknologi dan Zahra yang lebih mudah belajar melalui gambar. Dari sini saya belajar bahwa perbedaan murid bukan hambatan, tetapi kekuatan yang bisa dimanfaatkan.</p></li><li><b>Profiling Peserta Didik</b><p>Di awal, materi ini terasa kurang menarik karena banyak berisi cara mengumpulkan dan mengolah data murid. Namun, materi ini sangat bermanfaat karena profil murid menjadi dasar untuk menentukan peran, kegiatan, dan bentuk dukungan yang tepat bagi setiap murid.</p></li><li><b>Pembelajaran Berpusat pada Peserta Didik</b><p>Materi ini menarik karena dibahas melalui kasus kelas yang pasif. Namun, manfaat baru yang saya rasakan tidak sebesar materi lainnya karena konsep pembelajaran yang berpusat pada murid sudah cukup sering saya temui pada perkuliahan sebelumnya.</p></li><li><b>Memahami Peserta Didik secara Holistik</b><p>Materi ini lebih banyak membahas landasan teori perkembangan peserta didik. Konsep ini penting sebagai dasar, tetapi sebagian sudah saya pelajari sebelumnya dan kembali digunakan pada topik-topik berikutnya, sehingga manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul></div>
+    </div>
+  </div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="ppd-r1" data-n="11" aria-label="Halaman 11">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Pemahaman tentang Peserta Didik dan Pembelajarannya &middot; REFLEKSI 1 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Connection</span><h3>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</h3><div class="txt"><p>Menurut saya, seluruh materi pada mata kuliah Pemahaman tentang Peserta Didik dan Pembelajarannya memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Perbedaan Karakteristik Peserta Didik dan Profiling Peserta Didik.</p><p>Melalui topik Perbedaan Karakteristik Peserta Didik, saya memahami bahwa setiap murid memiliki cara belajar, minat, dan kecepatan yang berbeda. Guru perlu menyiapkan strategi yang memberi ruang bagi perbedaan tersebut, misalnya membagi peran dalam kelompok sesuai kekuatan murid dan memberikan pilihan cara menyajikan hasil belajar.</p><p>Melalui topik Profiling Peserta Didik, saya belajar bahwa strategi yang tepat hanya bisa disusun jika guru benar-benar mengenal muridnya. Profil murid membantu guru mengetahui siapa yang membutuhkan dukungan tambahan, siapa yang siap diberi tantangan, dan cara belajar apa yang paling sesuai bagi masing-masing murid.</p></div></article><article class="panel paper"><span class="c4">Challenge</span><h3>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</h3><div class="txt"><p>Sebelum mempelajari mata kuliah ini, saya cenderung memberikan kegiatan dan tugas yang sama kepada semua murid, termasuk meminta semua murid presentasi di depan kelas. Saya belum terbiasa mengatur peran murid berdasarkan karakteristiknya.</p><p>Setelah mempelajari mata kuliah ini, saya memahami bahwa guru perlu menyesuaikan kegiatan dengan karakteristik murid. Murid yang cepat dapat diberi analisis yang lebih menantang, sementara murid yang kesulitan difokuskan pada konsep dasar. Murid juga boleh menyajikan hasil belajar dengan cara yang berbeda, seperti poster, presentasi, video, atau penjelasan lisan kelompok. Hal yang paling berbeda bagi saya adalah guru tidak perlu memaksa semua murid tampil di depan kelas.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="ppd-r2" data-n="12" aria-label="Halaman 12">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Pemahaman tentang Peserta Didik dan Pembelajarannya &middot; REFLEKSI 2 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Concept</span><h3>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</h3><div class="txt"><p>Konsep utama yang saya pelajari adalah bahwa peserta didik memiliki karakteristik yang beragam, baik dari gaya belajar, minat, kemampuan, maupun kepribadian. Perbedaan ini perlu difasilitasi melalui strategi pembelajaran yang fleksibel, misalnya kelompok heterogen, pembagian peran, dan diferensiasi tugas.</p><p>Selain itu, saya mempelajari bahwa profiling peserta didik merupakan langkah awal untuk memahami murid secara utuh. Data profil kemudian digunakan untuk merancang pembelajaran yang berpusat pada murid. Kedua konsep ini saling melengkapi karena profiling membantu guru mengenali perbedaan, sedangkan strategi pembelajaran menjadi cara memfasilitasi perbedaan tersebut.</p></div></article><article class="panel paper"><span class="c4">Change</span><h3>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</h3><div class="txt"><p>Setelah mengikuti mata kuliah ini, saya ingin mengenali karakteristik murid sejak awal melalui profiling, lalu memakai hasilnya untuk membentuk kelompok dan membagi peran. Saya akan memberikan tugas dengan tingkat kesulitan yang sesuai dan pilihan cara menyajikan hasil belajar.</p><p>Saya juga ingin lebih menghargai murid yang tidak percaya diri tampil di depan kelas dengan memberi alternatif cara menunjukkan pemahamannya. Dengan begitu, setiap murid dapat belajar sesuai kekuatannya dan tetap mencapai tujuan pembelajaran yang sama.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="ppd-a" data-n="13" aria-label="Halaman 13">
+<div class="board">
+  <h2 class="label coral floating">ANALISIS ARTEFAK</h2>
+  <p class="kicker light right"><span class="mono">Pemahaman tentang Peserta Didik dan Pembelajarannya</span></p>
+  
+  <div class="three"><article class="panel paper sm"><span class="num">1</span><h3>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h3><div class="txt"><p>Artefak yang saya pilih adalah tugas 2.E Strategi Pembelajaran untuk Memfasilitasi Perbedaan Karakteristik Setiap Murid. Tugas ini berisi rancangan pembelajaran sistem pencernaan dengan model Problem Based Learning yang disesuaikan dengan karakteristik murid.</p></div></article><article class="panel paper sm"><span class="num">2</span><h3>Mengapa artefak tersebut yang saya pilih?</h3><div class="txt"><p>Saya memilih artefak ini karena menunjukkan penerapan kedua pengalaman belajar yang paling bermakna bagi saya. Rancangan ini disusun berdasarkan karakteristik murid yang sudah dikenali, lalu diwujudkan dalam pembagian peran, diferensiasi kegiatan, dan pilihan produk belajar.</p></div></article><article class="panel paper sm"><span class="num">3</span><h3>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h3><div class="txt"><p>Bagian yang paling mendukung adalah tahap mengorganisasi murid, yaitu pembagian peran sesuai karakteristik: Rizky bertugas mengeksplorasi informasi dan teknologi, sedangkan Zahra bertugas membuat visualisasi berupa gambar atau diagram. Bagian penyelidikan juga mendukung, karena memuat diferensiasi bagi murid yang cepat untuk menganalisis gangguan pencernaan dan bagi murid yang kesulitan untuk fokus pada urutan dan fungsi organ.</p><p>Bagian penyajian hasil juga mendukung refleksi saya, yaitu pilihan poster, presentasi, video, atau penjelasan lisan, serta pernyataan bahwa guru tidak memaksa semua murid tampil di depan kelas. Bagian-bagian tersebut memperkuat pemahaman saya bahwa perbedaan karakteristik murid perlu dikenali dan difasilitasi dalam pembelajaran.</p></div></article></div>
+  <div class="files"><a class="file" href="berkas/LK2_Pemahaman_Peserta_Didik.pdf" target="_blank" rel="noopener"><span>PDF</span>LK 2 lengkap</a><a class="file" href="berkas/Artefak_2E_Strategi_Perbedaan_Karakteristik.pdf" target="_blank" rel="noopener"><span>PDF</span>2.E Strategi untuk Perbedaan Karakteristik Murid</a></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="pmad" data-n="14" aria-label="Halaman 14">
+<div class="board">
+  <div class="sheet notebook mk-sheet">
+    <svg class="clip" viewBox="0 0 60 70" aria-hidden="true"><path d="M8 30h44l-6 34H14z" fill="#1d1f24"/><path d="M8 30h44l-2 8H10z" fill="#3a3d45"/><path d="M18 30V10a12 12 0 0 1 24 0v20" fill="none" stroke="#9aa1ad" stroke-width="4"/><path d="M24 30V14a6 6 0 0 1 12 0v16" fill="none" stroke="#c9ced6" stroke-width="3"/></svg>
+    <p class="kicker"><span class="mono">MATA KULIAH 03 / 06</span></p>
+    <h2 class="label navy">PEMBELAJARAN MENDALAM DAN ASESMEN DASAR</h2>
+    <div class="mk-grid">
+      <figure class="quad" aria-label="Peta topik: ketertarikan dan manfaat">
+        <span class="ax ax-y">makin menarik &uarr;</span>
+        <div class="quad-grid"><div class="qd qd-tl"><span class="mono">Menarik tetapi kurang bermanfaat</span><b>Evaluasi, Refleksi, dan Rencana Tindak Lanjut Pembelajaran Mendalam</b></div><div class="qd qd-tr"><span class="mono">Menarik dan bermanfaat</span><b>Pendekatan Pembelajaran Mendalam</b></div><div class="qd qd-bl"><span class="mono">Kurang menarik dan kurang bermanfaat</span><b>Implementasi Pembelajaran Mendalam</b></div><div class="qd qd-br"><span class="mono">Kurang menarik tetapi bermanfaat</span><b>Perencanaan Pembelajaran Mendalam</b></div></div>
+        <span class="ax ax-x">makin bermanfaat &rarr;</span>
+      </figure>
+      <div class="panel"><h3 class="hand">alasan pengelompokan</h3><ul class="alasan"><li><b>Pendekatan Pembelajaran Mendalam</b><p>Materi ini paling berkesan karena dibuka dengan kasus kelas yang terlihat aktif tetapi ternyata belum mendalam. Dari kasus pembelajaran siklus air, saya menyadari bahwa murid yang bisa menyebutkan urutan materi belum tentu memahami maknanya dalam kehidupan sehari-hari.</p></li><li><b>Perencanaan Pembelajaran Mendalam</b><p>Di awal, materi ini terasa kurang menarik karena banyak berisi komponen perencanaan yang harus dipenuhi. Namun, materi ini sangat bermanfaat karena mengajarkan saya merancang pembelajaran yang memuat prinsip berkesadaran, bermakna, dan menggembirakan sejak tahap perencanaan, lalu mempraktikkannya melalui microteaching.</p></li><li><b>Evaluasi, Refleksi, dan Rencana Tindak Lanjut Pembelajaran Mendalam</b><p>Materi ini menarik karena memperkenalkan inkuiri kolaboratif sebagai ruang guru belajar bersama. Namun, manfaat langsung yang saya rasakan tidak sebesar materi lainnya karena pada saat itu saya belum banyak memiliki pengalaman mengajar yang bisa didiskusikan dalam siklus inkuiri kolaboratif.</p></li><li><b>Implementasi Pembelajaran Mendalam</b><p>Materi ini lebih banyak memperkuat pemahaman yang sudah saya peroleh dari topik sebelumnya, karena prinsip dan langkah pembelajaran mendalam kembali dibahas dalam bentuk analisis implementasi. Karena itu, manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul></div>
+    </div>
+  </div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="pmad-r1" data-n="15" aria-label="Halaman 15">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Pembelajaran Mendalam dan Asesmen Dasar &middot; REFLEKSI 1 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Connection</span><h3>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</h3><div class="txt"><p>Menurut saya, seluruh materi pada mata kuliah Pembelajaran Mendalam dan Asesmen Dasar memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Pendekatan Pembelajaran Mendalam dan Perencanaan Pembelajaran Mendalam.</p><p>Melalui topik Pendekatan Pembelajaran Mendalam, saya memahami perbedaan pembelajaran dangkal dan mendalam. Pada kasus siklus air, murid mampu menyebutkan urutan penguapan, kondensasi, dan hujan, tetapi bingung saat diminta menjelaskan mengapa pakaian bisa kering atau mengapa ada titik air di kaca. Hal ini menyadarkan saya bahwa tugas guru bukan membuat murid hafal, tetapi membuat murid paham dan mampu mengaitkan konsep dengan kehidupan nyata.</p><p>Melalui topik Perencanaan Pembelajaran Mendalam, saya belajar bahwa pembelajaran yang mendalam harus dirancang dengan sengaja. Guru perlu merencanakan pertanyaan pemantik yang kontekstual, kegiatan yang melibatkan murid secara aktif, dan kesempatan bagi murid untuk merefleksikan cara berpikirnya.</p></div></article><article class="panel paper"><span class="c4">Challenge</span><h3>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</h3><div class="txt"><p>Sebelum mempelajari mata kuliah ini, saya menganggap kelas yang ramai menjawab, guru yang bersemangat, dan murid yang hafal materi sudah menandakan pembelajaran berhasil. Saya juga sering memulai pembelajaran dengan menjelaskan materi lalu meminta murid mengulangnya.</p><p>Setelah mempelajari mata kuliah ini, saya memahami bahwa pembelajaran bisa terlihat aktif tetapi belum mendalam. Prinsip menggembirakan saja tidak cukup jika prinsip berkesadaran dan bermakna belum tercapai. Pembelajaran sebaiknya dimulai dari fenomena yang dekat dengan murid, lalu murid diajak mengamati, mencoba, dan menyimpulkan sendiri, bukan langsung diberi definisi untuk dihafal.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="pmad-r2" data-n="16" aria-label="Halaman 16">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Pembelajaran Mendalam dan Asesmen Dasar &middot; REFLEKSI 2 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Concept</span><h3>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</h3><div class="txt"><p>Konsep utama yang saya pelajari adalah tiga prinsip pembelajaran mendalam, yaitu berkesadaran, bermakna, dan menggembirakan. Berkesadaran berarti murid menyadari proses berpikirnya, bermakna berarti materi dikaitkan dengan pengalaman nyata murid, dan menggembirakan berarti suasana belajar membuat murid terlibat dengan senang.</p><p>Selain itu, saya mempelajari bahwa perencanaan pembelajaran mendalam perlu memadukan ketiga prinsip tersebut dengan pengalaman belajar memahami, mengaplikasi, dan merefleksi. Kegiatan seperti percobaan sederhana, demonstrasi, dan pertanyaan bertahap membantu murid membangun pemahaman sendiri. Kedua konsep ini saling melengkapi karena prinsip menjadi arah, sedangkan perencanaan menjadi cara mewujudkannya di kelas.</p></div></article><article class="panel paper"><span class="c4">Change</span><h3>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</h3><div class="txt"><p>Setelah mengikuti mata kuliah ini, saya ingin memulai pembelajaran dengan pertanyaan pemantik yang dekat dengan pengalaman murid, misalnya mengapa jemuran bisa kering atau mengapa ada embun di pagi hari. Saya juga ingin memperbanyak kegiatan pengamatan dan percobaan sederhana agar murid memahami proses, bukan hanya hafal istilah.</p><p>Saya akan mengecek pemahaman murid dengan pertanyaan yang menuntut penerapan konsep pada situasi nyata, bukan hanya pertanyaan hafalan. Selain itu, saya ingin membiasakan murid merefleksikan apa yang sudah dan belum mereka pahami di akhir pembelajaran.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="pmad-a" data-n="17" aria-label="Halaman 17">
+<div class="board">
+  <h2 class="label coral floating">ANALISIS ARTEFAK</h2>
+  <p class="kicker light right"><span class="mono">Pembelajaran Mendalam dan Asesmen Dasar</span></p>
+  
+  <div class="three"><article class="panel paper sm"><span class="num">1</span><h3>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h3><div class="txt"><p>Artefak yang saya pilih adalah tugas analisis Kasus 1 tentang pembelajaran siklus air. Tugas ini berisi analisis apakah pembelajaran tergolong dangkal atau mendalam, analisis kesenjangan pemahaman murid, refleksi prinsip pembelajaran mendalam, keterkaitan dengan konteks nyata, dan desain ulang pembelajaran.</p></div></article><article class="panel paper sm"><span class="num">2</span><h3>Mengapa artefak tersebut yang saya pilih?</h3><div class="txt"><p>Saya memilih artefak ini karena memuat kedua pengalaman belajar yang paling bermakna bagi saya. Bagian analisis kasus menunjukkan pemahaman saya tentang perbedaan pembelajaran dangkal dan mendalam, sedangkan bagian desain ulang pembelajaran menunjukkan bagaimana saya merancang kegiatan yang lebih mendalam.</p></div></article><article class="panel paper sm"><span class="num">3</span><h3>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h3><div class="txt"><p>Bagian yang paling mendukung adalah jawaban tentang pemahaman awal dan refleksi prinsip. Di bagian tersebut saya menyimpulkan bahwa pembelajaran masih dangkal karena menekankan hafalan, serta prinsip berkesadaran dan bermakna belum tercapai walaupun prinsip menggembirakan cukup terlihat.</p><p>Bagian keterkaitan konteks dan desain ulang pembelajaran juga mendukung refleksi saya, yaitu pertanyaan pemantik tentang pakaian yang kering dan embun pagi, percobaan membasahi dua kain di tempat panas dan teduh, serta demonstrasi gelas berisi es batu untuk menunjukkan pengembunan. Bagian-bagian tersebut memperkuat pemahaman saya bahwa pembelajaran mendalam terjadi ketika murid mengamati, mencoba, menalar, dan menyimpulkan sendiri.</p></div></article></div>
+  <div class="files"><a class="file" href="berkas/LK2_Pembelajaran_Mendalam_Asesmen_Dasar.pdf" target="_blank" rel="noopener"><span>PDF</span>LK 2 lengkap</a><a class="file" href="berkas/Artefak_Kasus_1_Pembelajaran_Mendalam.pdf" target="_blank" rel="noopener"><span>PDF</span>Analisis Kasus 1: Siklus Air</a></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="dif" data-n="18" aria-label="Halaman 18">
+<div class="board">
+  <div class="sheet notebook mk-sheet">
+    <svg class="clip" viewBox="0 0 60 70" aria-hidden="true"><path d="M8 30h44l-6 34H14z" fill="#1d1f24"/><path d="M8 30h44l-2 8H10z" fill="#3a3d45"/><path d="M18 30V10a12 12 0 0 1 24 0v20" fill="none" stroke="#9aa1ad" stroke-width="4"/><path d="M24 30V14a6 6 0 0 1 12 0v16" fill="none" stroke="#c9ced6" stroke-width="3"/></svg>
+    <p class="kicker"><span class="mono">MATA KULIAH 04 / 06</span></p>
+    <h2 class="label navy">PEMBELAJARAN BERDIFERENSIASI</h2>
+    <div class="mk-grid">
+      <figure class="quad" aria-label="Peta topik: ketertarikan dan manfaat">
+        <span class="ax ax-y">makin menarik &uarr;</span>
+        <div class="quad-grid"><div class="qd qd-tl"><span class="mono">Menarik tetapi kurang bermanfaat</span><b>Aspek-Aspek Pembelajaran Berdiferensiasi</b></div><div class="qd qd-tr"><span class="mono">Menarik dan bermanfaat</span><b>Merancang, Mengimplementasikan, dan Mengevaluasi Pembelajaran Berdiferensiasi</b></div><div class="qd qd-bl"><span class="mono">Kurang menarik dan kurang bermanfaat</span><b>Strategi Penerapan Pembelajaran Berdiferensiasi</b></div><div class="qd qd-br"><span class="mono">Kurang menarik tetapi bermanfaat</span><b>Apa dan Mengapa Pembelajaran Berdiferensiasi</b></div></div>
+        <span class="ax ax-x">makin bermanfaat &rarr;</span>
+      </figure>
+      <div class="panel"><h3 class="hand">alasan pengelompokan</h3><ul class="alasan"><li><b>Merancang, Mengimplementasikan, dan Mengevaluasi Pembelajaran Berdiferensiasi</b><p>Materi ini paling berkesan karena saya langsung praktik menyusun rancangan pembelajaran bersama kelompok, yaitu modul ajar Cahaya untuk kelas VIII yang memadukan prinsip Understanding by Design dengan pembelajaran berdiferensiasi, lalu menyimulasikannya. Dari kegiatan ini saya belajar bahwa diferensiasi harus direncanakan sejak awal, bukan ditambahkan di akhir.</p></li><li><b>Apa dan Mengapa Pembelajaran Berdiferensiasi</b><p>Di awal, materi ini terasa banyak teori karena membahas pengertian dan alasan pembelajaran perlu berdiferensiasi. Namun, materi ini sangat bermanfaat karena mengajarkan cara memetakan kebutuhan murid melalui asesmen dan mengolahnya menjadi profil murid dan profil kelas. Kemampuan ini saya pakai lagi saat menyusun identifikasi murid pada modul ajar.</p></li><li><b>Aspek-Aspek Pembelajaran Berdiferensiasi</b><p>Materi ini menarik karena dibahas melalui kasus kelas nyata dan pendekatan design thinking. Namun, manfaat baru yang saya rasakan tidak sebesar materi lainnya karena konsep diferensiasi konten, proses, produk, dan lingkungan belajar sebagian sudah saya kenal dari mata kuliah sebelumnya.</p></li><li><b>Strategi Penerapan Pembelajaran Berdiferensiasi</b><p>Materi ini lebih banyak memperkuat pemahaman yang sudah saya peroleh dari topik aspek-aspek diferensiasi, karena strategi yang dibahas banyak beririsan dengan topik tersebut. Selain itu, beberapa contoh kasus belum terlalu dekat dengan kondisi kelas yang saya hadapi, sehingga manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul></div>
+    </div>
+  </div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="dif-r1" data-n="19" aria-label="Halaman 19">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Pembelajaran Berdiferensiasi &middot; REFLEKSI 1 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Connection</span><h3>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</h3><div class="txt"><p>Menurut saya, seluruh materi pada mata kuliah Pembelajaran Berdiferensiasi memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Apa dan Mengapa Pembelajaran Berdiferensiasi serta Merancang, Mengimplementasikan, dan Mengevaluasi Pembelajaran Berdiferensiasi, karena keduanya paling berpengaruh terhadap cara saya merencanakan pembelajaran.</p><p>Melalui topik Apa dan Mengapa Pembelajaran Berdiferensiasi, saya memahami bahwa setiap murid datang dengan kesiapan belajar, minat, dan profil belajar yang berbeda. Sebagai guru, saya perlu mengenali perbedaan itu terlebih dahulu melalui asesmen, lalu memetakannya menjadi profil murid dan profil kelas sebagai dasar menyusun pembelajaran.</p><p>Melalui topik Merancang, Mengimplementasikan, dan Mengevaluasi Pembelajaran Berdiferensiasi, saya belajar mengubah hasil pemetaan tersebut menjadi rancangan nyata. Bersama kelompok, saya menyusun modul ajar Cahaya untuk kelas VIII yang memuat diferensiasi konten, proses, dan lingkungan belajar, lalu menyimulasikannya. Dari pengalaman ini saya memahami bahwa peran guru bukan menyamaratakan cara belajar, tetapi memfasilitasi agar setiap murid dapat mencapai tujuan pembelajaran yang sama dengan cara yang sesuai dengan kebutuhannya.</p></div></article><article class="panel paper"><span class="c4">Challenge</span><h3>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</h3><div class="txt"><p>Sebelum mempelajari mata kuliah ini, saya cenderung menyiapkan satu cara mengajar untuk semua murid. Materi, kegiatan, dan tugas yang saya berikan sama, sehingga murid yang cepat paham sering menunggu, sedangkan murid yang belum siap tertinggal. Saya juga jarang memakai hasil asesmen awal untuk merencanakan pembelajaran.</p><p>Setelah mempelajari mata kuliah ini, saya menyadari bahwa pembelajaran berdiferensiasi tidak berarti membuat rencana yang berbeda untuk setiap murid. Guru cukup menyediakan beberapa pilihan, misalnya materi dalam bentuk video, gambar, dan simulasi, kegiatan yang bertahap, serta bimbingan sebaya. Hal lain yang berbeda dari kebiasaan saya adalah merancang pembelajaran dimulai dari tujuan akhir dan bukti penilaian, baru kemudian kegiatannya, seperti pada prinsip Understanding by Design.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="dif-r2" data-n="20" aria-label="Halaman 20">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Pembelajaran Berdiferensiasi &middot; REFLEKSI 2 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Concept</span><h3>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</h3><div class="txt"><p>Konsep utama yang saya pelajari adalah bahwa pembelajaran berdiferensiasi merupakan upaya guru menyesuaikan pembelajaran dengan kebutuhan murid berdasarkan kesiapan belajar, minat, dan profil belajarnya. Kebutuhan ini dikenali melalui asesmen awal, lalu diolah menjadi profil murid dan profil kelas.</p><p>Selain itu, saya mempelajari bahwa diferensiasi dapat dilakukan pada aspek konten, proses, produk, dan lingkungan belajar, dan harus dirancang dengan jelas sejak tahap perencanaan. Rancangan tersebut kemudian diterapkan, diamati, dan dievaluasi melalui asesmen formatif agar guru dapat menyesuaikan pembelajaran berikutnya. Kedua konsep ini saling melengkapi karena pemetaan kebutuhan menjadi dasar, sedangkan perancangan menjadi cara mewujudkannya di kelas.</p></div></article><article class="panel paper"><span class="c4">Change</span><h3>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</h3><div class="txt"><p>Setelah mengikuti mata kuliah ini, saya akan selalu melakukan asesmen awal sebelum memulai materi baru dan memakai hasilnya untuk menyusun pembelajaran, bukan sekadar sebagai formalitas. Saya ingin menyediakan pilihan materi dan kegiatan yang beragam agar murid dengan gaya belajar visual, auditorial, maupun kinestetik sama-sama terbantu.</p><p>Saya juga ingin terbiasa merancang pembelajaran dimulai dari tujuan dan bukti penilaian, memberikan latihan bertahap bagi murid yang belum siap, serta tantangan tambahan bagi murid yang sudah siap. Setelah pembelajaran berjalan, saya akan mengevaluasi apakah diferensiasi yang saya berikan benar-benar membantu murid, lalu memperbaikinya pada pertemuan berikutnya.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="dif-a" data-n="21" aria-label="Halaman 21">
+<div class="board">
+  <h2 class="label coral floating">ANALISIS ARTEFAK</h2>
+  <p class="kicker light right"><span class="mono">Pembelajaran Berdiferensiasi</span></p>
+  
+  <div class="three"><article class="panel paper sm"><span class="num">1</span><h3>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h3><div class="txt"><p>Artefak yang saya pilih adalah tugas 4.C Diskusi Pemecahan Kasus: Menyusun Rancangan Pembelajaran, berupa modul ajar IPA Cahaya untuk kelas VIII yang menggunakan prinsip Understanding by Design dan pembelajaran berdiferensiasi. Modul ini saya susun bersama rekan kelompok, yaitu Dhea Priti Aristifani Junus dan Ummi Khoiriyah.</p></div></article><article class="panel paper sm"><span class="num">2</span><h3>Mengapa artefak tersebut yang saya pilih?</h3><div class="txt"><p>Saya memilih artefak ini karena paling lengkap menggambarkan pengalaman belajar saya pada mata kuliah ini. Modul ajar tersebut dimulai dari identifikasi murid, seperti pengetahuan awal, minat, dan kebutuhan belajarnya, yang merupakan penerapan topik pemetaan kebutuhan murid. Setelah itu, modul memuat rancangan diferensiasi dan langkah pembelajaran yang merupakan penerapan topik merancang, mengimplementasikan, dan mengevaluasi pembelajaran berdiferensiasi.</p></div></article><article class="panel paper sm"><span class="num">3</span><h3>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h3><div class="txt"><p>Bagian yang paling mendukung adalah identifikasi murid pada bagian awal modul, yang menunjukkan bahwa rancangan disusun berdasarkan kondisi murid. Bagian berikutnya adalah Tahap 2 Bukti Penilaian, yang memuat diferensiasi konten melalui video, gambar, animasi, dan simulasi Virtual Laboratorium, diferensiasi proses melalui eksplorasi, diskusi kelompok, dan latihan bertahap, serta diferensiasi lingkungan belajar melalui diskusi kelompok, bimbingan sebaya, dan diskusi lintas kelompok.</p><p>Bagian remedial dan pengayaan juga mendukung refleksi saya, karena menunjukkan penanganan yang berbeda bagi murid yang belum paham, seperti bimbingan terstruktur dan latihan bertahap, serta bagi murid yang sudah paham, seperti kegiatan tantangan. Bagian-bagian tersebut memperkuat pemahaman saya bahwa diferensiasi harus direncanakan sejak awal dan didasarkan pada kebutuhan murid.</p></div></article></div>
+  <div class="files"><a class="file" href="berkas/LK2_Pembelajaran_Berdiferensiasi.pdf" target="_blank" rel="noopener"><span>PDF</span>LK 2 lengkap</a><a class="file" href="berkas/Artefak_4C_Modul_Ajar_Cahaya.pdf" target="_blank" rel="noopener"><span>PDF</span>4.C Modul Ajar Cahaya Kelas VIII</a></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="gm" data-n="22" aria-label="Halaman 22">
+<div class="board">
+  <div class="sheet notebook mk-sheet">
+    <svg class="clip" viewBox="0 0 60 70" aria-hidden="true"><path d="M8 30h44l-6 34H14z" fill="#1d1f24"/><path d="M8 30h44l-2 8H10z" fill="#3a3d45"/><path d="M18 30V10a12 12 0 0 1 24 0v20" fill="none" stroke="#9aa1ad" stroke-width="4"/><path d="M24 30V14a6 6 0 0 1 12 0v16" fill="none" stroke="#c9ced6" stroke-width="3"/></svg>
+    <p class="kicker"><span class="mono">MATA KULIAH 05 / 06</span></p>
+    <h2 class="label navy">POLA PIKIR BERTUMBUH (GROWTH MINDSET) DALAM PEMBELAJARAN</h2>
+    <div class="mk-grid">
+      <figure class="quad" aria-label="Peta topik: ketertarikan dan manfaat">
+        <span class="ax ax-y">makin menarik &uarr;</span>
+        <div class="quad-grid"><div class="qd qd-tl"><span class="mono">Menarik tetapi kurang bermanfaat</span><b>Cara Kerja Otak pada Pola Pikir Bertumbuh</b></div><div class="qd qd-tr"><span class="mono">Menarik dan bermanfaat</span><b>Pola Pikir Bertumbuh dalam Konteks Pembelajaran</b></div><div class="qd qd-bl"><span class="mono">Kurang menarik dan kurang bermanfaat</span><b>Menumbuhkan dan Mengembangkan Pola Pikir Bertumbuh</b></div><div class="qd qd-br"><span class="mono">Kurang menarik tetapi bermanfaat</span><b>Membentuk Cara Pandang Baru: Pentingnya Memahami Pola Pikir Bertumbuh dalam Dunia Pendidikan</b></div></div>
+        <span class="ax ax-x">makin bermanfaat &rarr;</span>
+      </figure>
+      <div class="panel"><h3 class="hand">alasan pengelompokan</h3><ul class="alasan"><li><b>Pola Pikir Bertumbuh dalam Konteks Pembelajaran</b><p>Materi ini paling berkesan karena langsung berkaitan dengan apa yang saya ucapkan dan lakukan di kelas. Melalui kasus Bu Rina dan latihan mengubah respons guru, saya menyadari bahwa kalimat sederhana dari guru bisa menumbuhkan atau justru mematikan semangat belajar murid.</p></li><li><b>Membentuk Cara Pandang Baru: Pentingnya Memahami Pola Pikir Bertumbuh dalam Dunia Pendidikan</b><p>Di awal, materi ini terasa cukup teoretis karena membahas perbedaan growth mindset dan fixed mindset. Namun, materi ini sangat bermanfaat, terutama saat menganalisis data PISA. Dari data tersebut saya melihat bahwa pola pikir murid berkaitan dengan capaian belajarnya, sehingga growth mindset bukan sekadar motivasi, tetapi kebutuhan nyata pendidikan di Indonesia.</p></li><li><b>Cara Kerja Otak pada Pola Pikir Bertumbuh</b><p>Materi ini menarik karena membahas neuroplastisitas, yaitu kemampuan otak untuk terus berkembang melalui latihan. Namun, manfaat praktis yang saya rasakan tidak sebesar materi lainnya karena pembahasannya lebih banyak pada penjelasan ilmiah, sedangkan penerapannya di kelas lebih banyak dibahas pada topik lain.</p></li><li><b>Menumbuhkan dan Mengembangkan Pola Pikir Bertumbuh</b><p>Materi ini lebih banyak memperkuat pemahaman yang sudah saya peroleh dari topik sebelumnya, karena konsep esensial tentang pola pikir bertumbuh dan perkembangan otak sudah dibahas di awal. Kasus “Sudah dari sananya, Bu” juga mirip dengan kasus lain yang pernah dibahas, sehingga manfaat baru yang saya rasakan belum sebesar topik lainnya.</p></li></ul></div>
+    </div>
+  </div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="gm-r1" data-n="23" aria-label="Halaman 23">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Pola Pikir Bertumbuh (Growth Mindset) dalam Pembelajaran &middot; REFLEKSI 1 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Connection</span><h3>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</h3><div class="txt"><p>Menurut saya, seluruh materi pada mata kuliah Pola Pikir Bertumbuh dalam Pembelajaran memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Membentuk Cara Pandang Baru: Pentingnya Memahami Pola Pikir Bertumbuh dalam Dunia Pendidikan serta Pola Pikir Bertumbuh dalam Konteks Pembelajaran.</p><p>Melalui topik Membentuk Cara Pandang Baru, saya memahami bahwa pola pikir murid sangat memengaruhi cara mereka belajar. Saat menganalisis data PISA, saya melihat bahwa negara dengan persentase murid ber-growth mindset tinggi, seperti Finlandia dan Kanada, juga memiliki skor membaca, matematika, dan sains yang tinggi. Sebaliknya, Indonesia dengan persentase 39% memiliki skor yang masih rendah. Hal ini menyadarkan saya bahwa guru punya peran besar dalam membentuk pola pikir murid.</p><p>Melalui topik Pola Pikir Bertumbuh dalam Konteks Pembelajaran, saya belajar bahwa growth mindset tidak cukup hanya dipahami, tetapi harus terlihat dari cara guru merespons murid setiap hari. Respons guru yang menekankan proses, usaha, dan strategi akan membantu murid melihat kesulitan sebagai bagian dari belajar, bukan tanda bahwa mereka tidak mampu.</p></div></article><article class="panel paper"><span class="c4">Challenge</span><h3>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</h3><div class="txt"><p>Sebelum mempelajari mata kuliah ini, saya cenderung memberikan pujian pada hasil, misalnya “Kamu pintar” saat murid mendapat nilai bagus. Ketika murid gagal, saya lebih sering langsung memberi tahu jawaban yang benar tanpa mengajak mereka melihat letak kesalahannya. Saya juga belum menyadari bahwa budaya mengejar nilai tuntas, misalnya merasa cukup dengan nilai 78 karena tidak remedial, termasuk bentuk pola pikir tetap.</p><p>Setelah mempelajari mata kuliah ini, saya memahami bahwa pujian sebaiknya diberikan pada usaha dan strategi, bukan pada kecerdasan. Kesalahan perlu diperlakukan sebagai bahan belajar, bukan sesuatu yang memalukan. Saya juga belajar memakai kata “belum” (the power of yet), misalnya “Kamu belum bisa sekarang”, yang memberi pesan bahwa kemampuan masih bisa berkembang.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="gm-r2" data-n="24" aria-label="Halaman 24">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Pola Pikir Bertumbuh (Growth Mindset) dalam Pembelajaran &middot; REFLEKSI 2 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Concept</span><h3>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</h3><div class="txt"><p>Konsep utama yang saya pelajari adalah perbedaan growth mindset dan fixed mindset. Murid dengan growth mindset percaya bahwa kemampuan dapat berkembang melalui usaha, latihan, dan strategi yang tepat, sedangkan murid dengan fixed mindset menganggap kemampuan sudah tetap sejak lahir, sehingga mudah menyerah dan menghindari tantangan.</p><p>Selain itu, saya mempelajari bahwa guru dapat menumbuhkan growth mindset melalui respons dan umpan balik sehari-hari, seperti menghargai proses, memecah tugas sulit menjadi langkah kecil, memberi tantangan yang sesuai bagi murid yang sudah menguasai materi, dan meyakinkan murid bahwa bertanya dan melakukan kesalahan adalah bagian dari belajar. Kedua konsep ini saling melengkapi karena pemahaman tentang pola pikir menjadi dasar, sedangkan respons guru menjadi cara menerapkannya di kelas.</p></div></article><article class="panel paper"><span class="c4">Change</span><h3>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</h3><div class="txt"><p>Setelah mengikuti mata kuliah ini, saya ingin lebih sadar dengan kalimat yang saya ucapkan kepada murid. Saya akan membiasakan memuji usaha dan strategi, memakai kata “belum” saat murid merasa tidak bisa, serta mengajak murid melihat kesalahan sebagai petunjuk bagian yang perlu diperbaiki.</p><p>Saya juga ingin menciptakan suasana kelas yang aman untuk mencoba, bertanya, dan salah. Kepada orang tua, saya ingin menyampaikan bahwa perkembangan belajar anak lebih penting daripada sekadar nilai. Dengan cara ini, saya berharap murid tidak lagi belajar hanya untuk mengejar nilai tuntas, tetapi benar-benar memahami materi.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="gm-a" data-n="25" aria-label="Halaman 25">
+<div class="board">
+  <h2 class="label coral floating">ANALISIS ARTEFAK</h2>
+  <p class="kicker light right"><span class="mono">Pola Pikir Bertumbuh (Growth Mindset) dalam Pembelajaran</span></p>
+  
+  <div class="three"><article class="panel paper sm"><span class="num">1</span><h3>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h3><div class="txt"><p>Artefak yang saya pilih adalah LK 1.3 “Di Balik Angka dan Pola Pikir” dan LK 4.2 “Mengubah Responmu untuk Kelas Bertumbuh”. Kedua artefak tersebut menunjukkan pemahaman saya tentang pentingnya growth mindset dalam pendidikan dan cara menerapkannya melalui respons guru di kelas.</p></div></article><article class="panel paper sm"><span class="num">2</span><h3>Mengapa artefak tersebut yang saya pilih?</h3><div class="txt"><p>Saya memilih kedua artefak tersebut karena sesuai dengan dua pengalaman belajar yang paling bermakna bagi saya. LK 1.3 membantu saya memahami alasan growth mindset penting melalui analisis data PISA. LK 4.2 menunjukkan bagaimana pemahaman tersebut saya terapkan dalam bentuk respons guru terhadap situasi yang sering terjadi di kelas.</p></div></article><article class="panel paper sm"><span class="num">3</span><h3>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h3><div class="txt"><p>Pada LK 1.3, bagian yang paling mendukung adalah analisis pola hubungan antara persentase growth mindset dan skor PISA, serta jawaban saya tentang penyebab rendahnya skor Indonesia, yaitu budaya belajar yang berorientasi pada nilai, termasuk contoh murid yang merasa cukup dengan nilai 78 karena tidak remedial. Bagian peran guru, termasuk pendekatan the power of yet, juga mendukung refleksi saya.</p><p>Pada LK 4.2, bagian yang paling mendukung adalah respons yang saya tulis untuk sepuluh situasi kelas, misalnya “Kamu mungkin belum bisa sekarang, tapi dengan latihan dan strategi yang tepat kemampuanmu bisa berkembang” untuk murid yang merasa tidak bisa, dan “Kesalahan membantu kita mengetahui bagian yang perlu diperbaiki” untuk murid yang sering salah. Respons-respons tersebut menunjukkan perubahan cara saya menanggapi murid, dari berfokus pada hasil menjadi berfokus pada proses, usaha, dan strategi.</p></div></article></div>
+  <div class="files"><a class="file" href="berkas/LK2_Pola_Pikir_Bertumbuh.pdf" target="_blank" rel="noopener"><span>PDF</span>LK 2 lengkap</a><a class="file" href="berkas/Artefak_LK_1.3_Di_Balik_Angka.pdf" target="_blank" rel="noopener"><span>PDF</span>LK 1.3 Di Balik Angka dan Pola Pikir</a><a class="file" href="berkas/Artefak_LK_4.2_Mengubah_Responmu.pdf" target="_blank" rel="noopener"><span>PDF</span>LK 4.2 Mengubah Responmu</a></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="pplt" data-n="26" aria-label="Halaman 26">
+<div class="board">
+  <div class="sheet notebook mk-sheet">
+    <svg class="clip" viewBox="0 0 60 70" aria-hidden="true"><path d="M8 30h44l-6 34H14z" fill="#1d1f24"/><path d="M8 30h44l-2 8H10z" fill="#3a3d45"/><path d="M18 30V10a12 12 0 0 1 24 0v20" fill="none" stroke="#9aa1ad" stroke-width="4"/><path d="M24 30V14a6 6 0 0 1 12 0v16" fill="none" stroke="#c9ced6" stroke-width="3"/></svg>
+    <p class="kicker"><span class="mono">MATA KULIAH 06 / 06</span></p>
+    <h2 class="label navy">PRAKTIK PENGALAMAN LAPANGAN (PPL) TERBIMBING</h2>
+    <div class="mk-grid">
+      <figure class="quad" aria-label="Peta topik: ketertarikan dan manfaat">
+        <span class="ax ax-y">makin menarik &uarr;</span>
+        <div class="quad-grid"><div class="qd qd-tl"><span class="mono">Menarik tetapi kurang bermanfaat</span><b>Asistensi Mengajar</b></div><div class="qd qd-tr"><span class="mono">Menarik dan bermanfaat</span><b>Pembelajaran Terbimbing</b></div><div class="qd qd-bl"><span class="mono">Kurang menarik dan kurang bermanfaat</span><b>Orientasi</b></div><div class="qd qd-br"><span class="mono">Kurang menarik tetapi bermanfaat</span><b>Observasi</b></div></div>
+        <span class="ax ax-x">makin bermanfaat &rarr;</span>
+      </figure>
+      <div class="panel"><h3 class="hand">alasan pengelompokan</h3><ul class="alasan"><li><b>Pembelajaran Terbimbing</b><p>Kegiatan ini paling berkesan karena saya langsung mengajar di kelas dalam tiga siklus dengan bimbingan guru pamong dan dosen. Setiap siklus diakhiri refleksi, sehingga saya bisa melihat kekurangan saya dan memperbaikinya pada siklus berikutnya.</p></li><li><b>Observasi</b><p>Di awal, kegiatan observasi terasa kurang menarik karena saya lebih banyak mengamati daripada terlibat langsung. Namun, kegiatan ini sangat bermanfaat karena dari observasi saya mengenal karakteristik murid kelas VIII.6 dan menyusun profil murid serta profil kelas yang kemudian menjadi dasar dalam merancang pembelajaran.</p></li><li><b>Asistensi Mengajar</b><p>Kegiatan ini menarik karena saya mulai membantu guru pamong di kelas dan berinteraksi langsung dengan murid. Namun, manfaat baru yang saya rasakan tidak sebesar kegiatan lainnya karena peran saya masih terbatas sebagai pendamping, sehingga belum banyak kesempatan untuk merancang dan memimpin pembelajaran sendiri.</p></li><li><b>Orientasi</b><p>Kegiatan orientasi lebih banyak berisi pengenalan lingkungan dan manajemen sekolah. Kegiatan ini tetap penting sebagai awal PPL, tetapi sebagian besar informasinya bersifat administratif dan belum berkaitan langsung dengan praktik mengajar, sehingga manfaat baru yang saya rasakan belum sebesar kegiatan lainnya.</p></li></ul></div>
+    </div>
+  </div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="pplt-r1" data-n="27" aria-label="Halaman 27">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Praktik Pengalaman Lapangan (PPL) Terbimbing &middot; REFLEKSI 1 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Connection</span><h3>Apa keterkaitan materi perkuliahan dengan peran saya sebagai calon guru?</h3><div class="txt"><p>Menurut saya, seluruh kegiatan pada mata kuliah PPL Terbimbing memberikan pengalaman belajar yang menarik dan bermanfaat bagi saya sebagai calon guru. Namun, dalam refleksi ini saya memilih dua pengalaman belajar yang paling bermakna, yaitu Observasi dan Pembelajaran Terbimbing, karena keduanya saling berkaitan dan paling berpengaruh terhadap cara saya mengajar.</p><p>Melalui kegiatan Observasi, saya belajar mengenali murid sebelum mengajar. Saya menganalisis kesiapan belajar, minat belajar, dan gaya belajar 32 murid kelas VIII.6, lalu menyusunnya menjadi profil murid dan profil kelas. Dari situ saya memahami bahwa guru perlu tahu siapa muridnya terlebih dahulu sebelum menentukan cara mengajar.</p><p>Melalui kegiatan Pembelajaran Terbimbing, saya menerapkan hasil observasi tersebut dalam praktik mengajar di kelas. Bimbingan dari guru pamong dan dosen serta refleksi di setiap siklus membuat saya sadar bahwa menjadi guru adalah proses belajar yang terus-menerus, bukan sesuatu yang langsung sempurna.</p></div></article><article class="panel paper"><span class="c4">Challenge</span><h3>Apa saja materi perkuliahan yang berbeda dari praktik yang saya lakukan selama ini?</h3><div class="txt"><p>Sebelum mengikuti PPL Terbimbing, saya cenderung menyiapkan pembelajaran berdasarkan materi saja tanpa melihat kondisi murid secara rinci. Saya menganggap satu cara mengajar cukup untuk semua murid di kelas.</p><p>Setelah melakukan observasi dan menyusun profil kelas, saya melihat bahwa murid di satu kelas sangat beragam. Di kelas VIII.6, sebagian besar murid memiliki kesiapan belajar sedang dan minat belajar tinggi, sedangkan gaya belajarnya terbagi menjadi visual, auditorial, dan kinestetik. Hal ini berbeda dari kebiasaan saya sebelumnya karena ternyata perencanaan pembelajaran harus disesuaikan dengan data tersebut. Selain itu, saya juga terbiasa melakukan refleksi setelah mengajar untuk memperbaiki pembelajaran berikutnya, sesuatu yang dulu jarang saya lakukan secara tertulis.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="pplt-r2" data-n="28" aria-label="Halaman 28">
+<div class="board">
+  <div class="tape t1"></div>
+  <p class="kicker light"><span class="mono">Praktik Pengalaman Lapangan (PPL) Terbimbing &middot; REFLEKSI 2 / 2</span></p>
+  <div class="two"><article class="panel paper"><span class="c4">Concept</span><h3>Apa saja konsep utama dan penting yang telah saya pelajari sebagai calon guru?</h3><div class="txt"><p>Konsep utama yang saya pelajari adalah pentingnya mengenali kebutuhan murid melalui observasi dan asesmen awal. Profil murid dan profil kelas membantu guru mengetahui kesiapan belajar, minat, dan gaya belajar murid, sehingga pembelajaran dapat dirancang dengan tepat, misalnya dengan menyediakan media visual, penjelasan lisan, dan kegiatan praktik.</p><p>Selain itu, saya mempelajari bahwa praktik mengajar perlu dilakukan dalam siklus: merencanakan, melaksanakan, mengamati, dan merefleksikan. Masukan dari guru pamong dan dosen menjadi bahan untuk memperbaiki siklus berikutnya. Kedua konsep ini saling melengkapi karena pengenalan murid menjadi dasar perencanaan, sedangkan siklus refleksi menjadi cara untuk terus memperbaiki praktik mengajar.</p></div></article><article class="panel paper"><span class="c4">Change</span><h3>Apa saja perubahan yang ingin saya lakukan setelah mendapatkan materi perkuliahan ini?</h3><div class="txt"><p>Setelah mengikuti PPL Terbimbing, saya ingin selalu memulai pembelajaran dengan mengenali murid, yaitu melalui observasi dan asesmen awal, lalu menyusun profil kelas sebagai dasar perencanaan. Saya akan berusaha menyediakan variasi media dan kegiatan agar murid dengan gaya belajar visual, auditorial, maupun kinestetik sama-sama terbantu.</p><p>Saya juga ingin menjadikan refleksi sebagai kebiasaan setelah mengajar, terbuka terhadap masukan dari guru lain, dan tidak takut melakukan kesalahan karena setiap kekurangan dapat menjadi bahan perbaikan pada pembelajaran berikutnya.</p></div></article></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="pplt-a" data-n="29" aria-label="Halaman 29">
+<div class="board">
+  <h2 class="label coral floating">ANALISIS ARTEFAK</h2>
+  <p class="kicker light right"><span class="mono">Praktik Pengalaman Lapangan (PPL) Terbimbing</span></p>
+  <div class="rekap"><div><h4>Kesiapan belajar</h4><div class="bar"><span>Tinggi</span><i><em style="width:22%"></em></i><b>7</b></div><div class="bar"><span>Sedang</span><i><em style="width:78%"></em></i><b>25</b></div><div class="bar"><span>Rendah</span><i><em style="width:0%"></em></i><b>0</b></div></div><div><h4>Minat belajar</h4><div class="bar"><span>Tinggi</span><i><em style="width:69%"></em></i><b>22</b></div><div class="bar"><span>Sedang</span><i><em style="width:31%"></em></i><b>10</b></div><div class="bar"><span>Rendah</span><i><em style="width:0%"></em></i><b>0</b></div></div><div><h4>Gaya belajar</h4><div class="bar"><span>Visual</span><i><em style="width:47%"></em></i><b>15</b></div><div class="bar"><span>Auditorial</span><i><em style="width:31%"></em></i><b>10</b></div><div class="bar"><span>Kinestetik</span><i><em style="width:22%"></em></i><b>7</b></div></div></div>
+  <div class="three"><article class="panel paper sm"><span class="num">1</span><h3>Mana saja artefak pembelajaran yang dapat saya jadikan bukti dukung hasil refleksi pengalaman belajar ini?</h3><div class="txt"><p>Artefak yang saya pilih adalah dokumen Analisis Profil Murid dan Profil Kelas VIII.6. Dokumen ini berisi data kesiapan belajar, minat belajar, dan gaya belajar setiap murid, serta pengelompokan murid berdasarkan ketiga aspek tersebut.</p></div></article><article class="panel paper sm"><span class="num">2</span><h3>Mengapa artefak tersebut yang saya pilih?</h3><div class="txt"><p>Saya memilih artefak ini karena menjadi jembatan antara dua pengalaman belajar yang paling bermakna bagi saya. Dokumen ini merupakan hasil dari kegiatan observasi dan sekaligus menjadi dasar saya dalam merancang pembelajaran saat praktik mengajar terbimbing. Tanpa profil ini, saya akan mengajar tanpa benar-benar mengetahui kebutuhan murid.</p></div></article><article class="panel paper sm"><span class="num">3</span><h3>Bagian mana dari artefak ini yang mendukung hasil refleksi saya?</h3><div class="txt"><p>Bagian yang paling mendukung adalah tabel profil murid yang memuat data 32 murid kelas VIII.6. Dari tabel tersebut terlihat bahwa 25 murid memiliki kesiapan belajar sedang dan 7 murid tinggi, 22 murid memiliki minat belajar tinggi dan 10 murid sedang, serta gaya belajar murid terdiri atas 15 murid visual, 10 murid auditorial, dan 7 murid kinestetik.</p><p>Bagian pengelompokan murid berdasarkan kesiapan belajar, minat belajar, dan gaya belajar juga mendukung refleksi saya, karena dari pengelompokan ini saya dapat menentukan media, kegiatan, dan pembagian kelompok yang sesuai saat praktik mengajar. Bagian-bagian tersebut memperkuat pemahaman saya bahwa pembelajaran yang baik dimulai dari mengenali murid.</p></div></article></div>
+  <div class="files"><a class="file" href="berkas/LK2_PPL_Terbimbing.pdf" target="_blank" rel="noopener"><span>PDF</span>LK 2 lengkap</a></div>
+</div>
+<button class="pill pill-back" data-go="peta" type="button"><span aria-hidden="true">&laquo;</span> MATA KULIAH</button><button class="pill pill-next" data-next type="button">NEXT <span aria-hidden="true">&raquo;</span></button>
+</section>
+<section class="slide" id="penutup" data-n="30" aria-label="Halaman 30">
+<div class="board">
+  <div class="tape t2"></div>
+  <div class="sheet cover-sheet end-sheet">
+    <p class="ribbon">Penutup</p>
+    <h2 class="mega small">TERIMA KASIH</h2>
+    <p class="cover-sub end-text">Portofolio ini merangkum enam refleksi pengalaman belajar saya selama semester 1 Program PPG. Setiap lembar menjadi catatan perjalanan saya untuk menjadi guru IPA yang lebih baik.</p>
+    <button class="pill pill-home" data-go="daftar-isi" type="button"><span aria-hidden="true">&laquo;</span> KEMBALI KE DAFTAR ISI</button>
+  </div>
+  <div class="atom"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="4"><ellipse cx="50" cy="50" rx="44" ry="16"/><ellipse cx="50" cy="50" rx="44" ry="16" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="44" ry="16" transform="rotate(120 50 50)"/></g><circle cx="50" cy="50" r="7" fill="currentColor"/></svg></div>
+</div>
+</section>
+
+  </main>
+  <nav class="nav" aria-label="Halaman">
+    <button type="button" id="prev" aria-label="Halaman sebelumnya">&lsaquo;</button>
+    <span class="count" id="count">1 / 30</span>
+    <button type="button" id="next" aria-label="Halaman berikutnya">&rsaquo;</button>
+    <input type="range" id="seek" min="1" max="30" value="1" aria-label="Pilih halaman">
+  </nav>
+</div>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage');
+  var slides=[].slice.call(stage.querySelectorAll('.slide'));
+  var total=slides.length, cur=0;
+  var count=document.getElementById('count'), seek=document.getElementById('seek');
+  stage.classList.add('deck');
+  function show(i,push){
+    if(i<0||i>=total) return;
+    slides[cur].classList.remove('on');
+    cur=i; slides[cur].classList.add('on');
+    count.textContent=(cur+1)+' / '+total; seek.value=cur+1;
+    if(push!==false && location.hash!=='#'+slides[cur].id){ location.hash=slides[cur].id; }
+    if(window.innerWidth<=760) stage.scrollIntoView({block:'start'});
+  }
+  function idx(id){ for(var k=0;k<total;k++){ if(slides[k].id===id) return k; } return -1; }
+  document.getElementById('prev').onclick=function(){show(cur-1)};
+  document.getElementById('next').onclick=function(){show(cur+1)};
+  seek.oninput=function(){show(+seek.value-1)};
+  stage.addEventListener('click',function(ev){
+    var b=ev.target.closest('[data-next],[data-go]'); if(!b) return;
+    if(b.hasAttribute('data-next')) show(cur+1);
+    else { var k=idx(b.getAttribute('data-go')); if(k>=0) show(k); }
+  });
+  document.addEventListener('keydown',function(ev){
+    if(ev.target.tagName==='INPUT') return;
+    if(ev.key==='ArrowRight'||ev.key==='PageDown') show(cur+1);
+    if(ev.key==='ArrowLeft'||ev.key==='PageUp') show(cur-1);
+    if(ev.key==='Home') show(0);
+  });
+  var sx=null, sy=null;
+  stage.addEventListener('touchstart',function(ev){var t=ev.touches[0]; sx=t.clientX; sy=t.clientY;},{passive:true});
+  stage.addEventListener('touchend',function(ev){
+    if(sx===null) return; var t=ev.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy; sx=null;
+    if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.5) show(dx<0?cur+1:cur-1);
+  });
+  window.addEventListener('hashchange',function(){var k=idx(location.hash.slice(1)); if(k>=0&&k!==cur) show(k,false);});
+  var start=idx(location.hash.slice(1));
+  slides[0].classList.add('on');
+  if(start>0) show(start,false);
+})();
+</script>
 </body>
 </html>
