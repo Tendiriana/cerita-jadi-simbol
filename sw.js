@@ -21,7 +21,6 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request, u = new URL(req.url);
   if (req.method !== 'GET' || u.origin !== location.origin) return;
-  if (u.pathname.includes('/kage/')) return; // halaman Kage terpisah, jangan ditimpa ke cache index.html
   const nav = req.mode === 'navigate';
   // Halaman dan soal selalu diambil segar: alamat diberi penanda waktu supaya salinan di CDN GitHub
   // (bisa sampai 10 menit) dilewati. Berkas lain tetap memakai cache HTTP biasa.
