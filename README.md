@@ -211,10 +211,11 @@ Pemasangan server: Worker `taktik-api` dengan binding KV bernama `DB`, binding W
 Di halaman utama, siswa memilih tingkat:
 
 - **Mudah**: sebagian kotak sudah terisi.
-- **Menengah**: kotak kosong, satuan tampil sebagai petunjuk.
+- **Menengah**: kotak kosong, tanpa petunjuk satuan (satuan hanya tampil di tingkat Mudah).
 - **Sulit**: tidak ada kotak berlabel. Siswa menyentuh setiap angka di cerita lalu memilih simbolnya sendiri dari deretan simbol (simbol yang benar ditambah simbol lain dari materi yang sama), atau ✕ kalau tidak dipakai, dan memilih simbol yang ditanya. Jumlah angka yang dipakai tidak diberi tahu. Tanpa konversi satuan, penjelasan materi, dan kartu rumus; siswa juga menulis sendiri hitungannya.
   - Soal punya **cerita versi Sulit** (`ceritaSulit` di `soal.json`): cerita yang sama, angka dan pertanyaan sama, tetapi tanpa nama besaran ("tertulis 40 Ω", bukan "hambatan 40 Ω"), jadi siswa mengenali besaran dari satuannya. Kalau soal belum punya versi Sulit, cerita biasa yang dipakai. Soal di server yang belum punya versi Sulit otomatis memakai versi Sulit bawaan, selama ceritanya belum diubah guru.
   - Guru bisa menulis versi Sulit di **Ubah cerita** (atau dibantu tombol **Buat versi Sulit dengan AI**) dan di Formulir soal. Saat **Tambah soal**, setelah cerita lolos pemeriksaan, langkah Simpan menawarkan **Buat juga versi Sulit?**: tulis sendiri, salin cerita utama lalu ubah, atau minta AI. Guru cukup menulis angka biasa; kalau angka acak dipakai, aplikasi memasang lagi tanda angkanya. Pemeriksa menolak versi Sulit yang kehilangan angka, pengecoh, atau pertanyaan, dan memberi peringatan kalau masih ada nama besaran.
+  - Versi Sulit bisa **dimatikan per kelas** dengan tombol on/off di **Soal saya** (pilih kelasnya). Saat mati, siswa di tingkat Sulit memakai cerita biasa; versi Sulit yang sudah ditulis tetap tersimpan.
   - **Soal khusus tingkat Sulit** (`hanyaSulit`): pilihan di Tambah soal dan Ubah cerita. Soal ini hanya muncul untuk siswa di tingkat Sulit.
 
 ## Tampilan siswa
