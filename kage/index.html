@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kage — Where stillness reveals the unseen</title>
+<!--
+  Padanan HTML statis dari:
+    <div className="shader-frame">
+      <KageLandingPage headingFont="onest" bodyFont="onest" headingWeight="400" bodyWeight="300"
+        primaryColor="#e0231c" headingSize={46} bodySize={17} headingLetterSpacing={-0.012} />
+    </div>
+  Diambil dari @designcodeio/threeui@1.2.0 (MIT): LandingPageFrame + KAGE_TYPOGRAPHY + applyPageCustomization.
+  Halaman aslinya (landing-pages/kage.html) dan asetnya disalin byte-per-byte, tidak diubah.
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: #080808; }
+  .shader-frame { position: fixed; inset: 0; }
+  /* dari threeui style.css */
+  .threeui-background { position: relative; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: hidden; isolation: isolate; background: #030304; }
+</style>
+</head>
+<body>
+<div class="shader-frame">
+  <div class="threeui-background landing-page-frame" data-state="loading"
+       style="position:relative;overflow:hidden;background:#080808;pointer-events:auto">
+    <iframe title="Kage — Where stillness reveals the unseen" src="landing-pages/kage.html"
+            sandbox="allow-downloads allow-forms allow-modals allow-popups allow-same-origin allow-scripts"
+            loading="eager"
+            style="position:absolute;inset:0;display:block;width:100%;height:100%;border:0;background:#080808"></iframe>
+  </div>
+</div>
+<script>
+(function () {
+  // Props yang dikonfigurasi (semuanya sama dengan default resep Kage).
+  var props = { headingFont: 'onest', bodyFont: 'onest', headingWeight: '400', bodyWeight: '300',
+    primaryColor: '#e0231c', headingSize: 46, bodySize: 17, headingLetterSpacing: -0.012 };
+
+  // KAGE_TYPOGRAPHY (pageRecipes). primaryColor = warna bawaan, jadi retone() = identitas
+  // dan tidak ada Google Font yang dimuat (Onest sudah ada di fonts.css).
+  var ONEST = "'Onest', system-ui, -apple-system, 'Helvetica Neue', sans-serif";
+  var clamp = function (v, lo, def, hi) { return isFinite(v) ? Math.min(hi, Math.max(lo, v)) : def; };
+  var r3 = function (n) { return Number(n.toFixed(3)); };
+  var px = function (n) { return r3(n) + 'px'; };
+  var e = {
+    heading: ONEST, body: ONEST,
+    headingWeight: ['400', '500', '600', '700'].indexOf(props.headingWeight) >= 0 ? props.headingWeight : '400',
+    bodyWeight: ['300', '400', '500', '600'].indexOf(props.bodyWeight) >= 0 ? props.bodyWeight : '300',
+    primary: props.primaryColor,
+    headingSize: clamp(props.headingSize, 30, 46, 72),
+    bodySize: clamp(props.bodySize, 13, 17, 24),
+    headingLetterSpacing: clamp(props.headingLetterSpacing, -0.06, -0.012, 0.12)
+  };
+  var css = '\n:root {\n  --vermilion: ' + e.primary + ';\n  --ember: #ff5a3c;\n}\n' +
+    'body { font-family: ' + e.body + '; }\n' +
+    'body, .body, .body-lg, .num { font-weight: ' + e.bodyWeight + '; }\n' +
+    'h1:not(.jp), h2:not(.jp), h3:not(.jp), .display:not(.jp) {\n  font-family: ' + e.heading + ';\n  font-weight: ' + e.headingWeight + ';\n}\n' +
+    '.display { letter-spacing: ' + e.headingLetterSpacing + 'em; }\n' +
+    '.h-hero { font-size: clamp(26px, 3.05vw, ' + px(e.headingSize) + '); }\n' +
+    '.h-sec { font-size: clamp(30px, 4vw, ' + px(e.headingSize * 60 / 46) + '); }\n' +
+    '.body-lg { font-size: clamp(14px, 1.02vw, ' + px(e.bodySize) + '); }\n' +
+    '.body { font-size: ' + px(Math.max(11, e.bodySize - 3)) + '; }\n';
+
+  // applyPageCustomization: sisipkan <style id="threeui-page-typography"> ke dokumen iframe.
+  var frame = document.querySelector('.landing-page-frame');
+  var iframe = frame.querySelector('iframe');
+  function apply() {
+    var d = iframe.contentDocument;
+    if (!d || !d.head) return;
+    var s = d.getElementById('threeui-page-typography') || d.createElement('style');
+    s.id = 'threeui-page-typography';
+    if (s.textContent !== css) s.textContent = css;
+    d.head.append(s);
+  }
+  iframe.addEventListener('load', function () { apply(); frame.setAttribute('data-state', 'ready'); });
+  apply();
+})();
+</script>
+</body>
+</html>
