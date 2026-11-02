@@ -238,6 +238,12 @@ Angka dan tanda ditulis lewat **tombol di layar** seperti kalkulator (tanpa meng
 
 Benar atau salah **tidak** diberi tahu di setiap langkah. Setelah siswa mengetuk **Periksa jawaban**, bagian **Penilaian** menunjukkan setiap langkah benar atau salah, salahnya di mana, pembahasan, dan kunci jawaban. Bintang dihitung dari banyaknya langkah yang salah. Soal dihitung selesai kalau hasil akhirnya benar. Saat ujian, penilaian tidak ditampilkan per soal; nilainya diumumkan guru.
 
+## Animasi soal Listrik
+
+Soal Listrik (Kelas 9) punya tombol **Lihat animasi** di bawah cerita, di semua tingkat. Animasi menggambarkan kejadian di cerita dengan angka dari cerita itu (termasuk angka acak), dan yang ditanya ditulis **?**. Tidak ada nama materi atau rumus, jadi langkah Kenali materi dan Pilih rumus tetap harus dipikirkan siswa. Saat ujian, animasi tidak muncul.
+
+Jenis animasi dipilih otomatis dari rumus yang benar, jadi soal Listrik buatan guru (templat maupun formulir) ikut beranimasi: rangkaian hukum Ohm dan daya, muatan yang mengalir, rangkaian seri, paralel, gaya Coulomb, perubahan jarak, medan listrik, beda potensial, hambatan kawat, dan energi listrik. Gambar dibuat dengan SVG di dalam `index.html`, jadi tetap jalan tanpa internet.
+
 ## Alat belajar untuk siswa
 
 Di halaman utama ada kotak **Alat belajar**:
