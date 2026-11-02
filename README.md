@@ -120,6 +120,10 @@ Rumusnya tidak ada di daftar? Pakai **formulir lengkap** (tautan di bawah daftar
 
 Untuk membuat soal yang perlu konversi satuan, pilih satuan lain di samping angka, misalnya **g** untuk massa, **menit** atau **jam** untuk waktu, **cm** untuk panjang, atau **mA** untuk arus. Aplikasi otomatis menambahkan langkah konversi (contoh: 200 g = 0,2 kg), tips di kotak besaran, dan pesan khusus kalau siswa lupa mengubah satuan.
 
+### Sembunyikan soal
+
+Di **Soal saya**, ketuk **Sembunyikan** supaya soal tidak muncul untuk siswa (latihan dan ujian acak) tanpa menghapusnya. Ketuk **Tampilkan** untuk memunculkannya lagi. Saat menghapus, ada pilihan **Sembunyikan saja**. Soal yang disembunyikan masih bisa dipilih manual di Ujian kelas (diberi tanda *disembunyikan*), misalnya untuk soal ujian yang tidak boleh dilatih dulu.
+
 ### Ujian kelas
 
 1. **Ujian kelas → Buat ujian baru.** Isi judul dan pilih kelas. Pilih caranya: **Acak dari materi** (pilih materi dan jumlah soal) atau **Pilih soal sendiri** (centang soal satu per satu, bisa **Pilih semua** per materi, dan **Coba** untuk melihat soalnya; paling banyak 40 soal). Lalu atur lama ujian.
