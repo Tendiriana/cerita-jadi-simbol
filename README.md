@@ -156,7 +156,7 @@ Untuk rumus yang ada di daftar aplikasi, AI hanya **memilih rumus, memilih angka
 
 Supaya hasil AI bagus, pasang **server AI dengan Claude** (lihat bagian *Server AI* di bawah). Tanpa server AI, aplikasi memakai AI bawaan server soal yang kualitasnya lebih rendah.
 
-**Kunci kelas dan materi:** di **Pengaturan kelas**, ketuk **Kunci kelas** untuk menutup satu kelas sekaligus. Ketuk nama kelas untuk melihat materinya, lalu ketuk materi untuk mengunci atau membukanya. Materi yang dikunci tetap tampil di beranda, tetapi saat diketuk muncul pesan "Soal ini belum bisa dibuka." Upload soal.json lewat Ekspor supaya berlaku di HP siswa.
+**Kunci kelas dan materi:** di **Pengaturan kelas**, ketuk **Kunci kelas** untuk menutup satu kelas sekaligus. Ketuk nama kelas untuk melihat materinya, lalu ketuk materi untuk mengunci atau membukanya. Materi yang dikunci tidak tampil di halaman siswa (saat ini Pewarisan sifat), jadi Kelas 9 menampilkan 3 materi. Upload soal.json lewat Ekspor supaya berlaku di HP siswa.
 
 **Tampil di kelas:** tab di mode guru untuk proyektor atau TV. Pilih materi, lalu **Mulai tampil**. Langkah dibuka satu per satu: baca cerita, pilah besaran, tebak materi (A–D), tebak rumus (A–D), hitung, jawaban. Ada tombol angka baru, pengatur waktu 30 detik, dan soal berikutnya. Dari laptop: → atau spasi lanjut, ← mundur, N angka baru, T waktu, F layar penuh, Esc keluar.
 
@@ -229,6 +229,8 @@ Di halaman utama, siswa memilih tingkat:
 2. **Kenali materi**: siswa menentukan apakah soal termasuk materi yang mana. Di tingkat Mudah dan Menengah, setiap pilihan disertai penjelasan singkat, dan kartu rumus materi yang dipilih bisa dibuka.
 3. **Pilih rumus**.
 4. **Hitung** memakai rumus pilihan siswa dan angka di kotaknya. Di tingkat Sulit, siswa menulis sendiri hitungannya (misalnya `220 ÷ 40`, dengan tombol × ÷ + − ( ) ² ^) lalu hasilnya.
+
+Angka dan tanda ditulis lewat **tombol di layar** seperti kalkulator (tanpa menghitung otomatis), jadi keyboard HP tidak muncul. Di tingkat Sulit, ketuk kotak **Hitungan** atau **Hasil** (atau tombol **Pindah ke …**) untuk memilih tempat menulis; tanda hitung hanya aktif di kotak Hitungan.
 
 Benar atau salah **tidak** diberi tahu di setiap langkah. Setelah siswa mengetuk **Periksa jawaban**, bagian **Penilaian** menunjukkan setiap langkah benar atau salah, salahnya di mana, pembahasan, dan kunci jawaban. Bintang dihitung dari banyaknya langkah yang salah. Soal dihitung selesai kalau hasil akhirnya benar. Saat ujian, penilaian tidak ditampilkan per soal; nilainya diumumkan guru.
 

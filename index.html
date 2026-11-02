@@ -478,6 +478,16 @@ textarea.in{min-height:84px;resize:vertical;line-height:1.45}
 .nl li.no b{color:var(--bad)}
 .nl-ex{margin-top:12px}
 .keys{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.kpad{margin:10px 0 4px;padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--sunk)}
+.kpk{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px;font-size:.9rem;color:var(--ink2)}
+.kg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.kg.k4{grid-template-columns:repeat(4,1fr)}.kg.k4 .kp:last-child{grid-column:span 4}
+.kp{font:inherit;font-family:var(--f-mono);font-weight:600;font-size:1.25rem;height:50px;border:1px solid var(--line2);border-radius:10px;background:var(--surface);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.kp.op{background:transparent;color:var(--acc)}
+.kp.del{color:var(--ink2)}
+.kp:active{transform:scale(.96)}
+.kp:disabled{opacity:.3;cursor:default;transform:none}
+.calc input.on{outline:2.5px solid var(--acc);outline-offset:1px}
 .keys .btn{min-width:44px;font-size:1.05rem}
 .calc .hit{flex:1;min-width:10em;font-family:var(--f-mono);font-weight:600;font-size:1.05rem;padding:9px 12px;border:1.5px solid var(--line2);border-radius:12px;background:var(--surface);color:var(--ink)}
 
@@ -1344,7 +1354,7 @@ function matCard(g,arr){
     +'<span class="mi">'+(ICON['m_'+g]||ICON.m_x)+'</span><b>'+esc(g)+'</b><small>'+d+' dari '+arr.length+' selesai</small>'
     +'<span class="bar-p"><span style="width:'+pct(d,arr.length)+'%"></span></span></button>';
 }
-var BARU={'2.12.1':['Logo TakTik IPA kini berwarna hijau.'],'2.12.0':['Guru bisa langsung membuat versi Sulit saat menambah soal: tulis sendiri, salin lalu ubah, atau minta AI menuliskannya.'],'2.11.0':['Di tingkat Sulit, cerita soal tidak lagi menyebut nama besarannya. Kenali besaran dari satuannya, misalnya Ω untuk hambatan.','Guru bisa menulis versi Sulit sendiri atau dibantu AI, dan membuat soal khusus tingkat Sulit.'],'2.10.0':['Tingkat Sulit lebih menantang: tidak ada lagi kotak berlabel. Beri simbol sendiri pada setiap angka, misalnya R untuk 40 Ω, atau tandai ✕ kalau tidak dipakai.','Benar atau salah tetap diberi tahu setelah soal selesai.'],'2.9.0':['Benar atau salah kini diberi tahu setelah soal selesai, lengkap dengan rincian setiap langkah dan kunci jawabannya.','Tingkat Sulit lebih menantang: tulis sendiri hitungannya, misalnya 220 ÷ 40, lalu hasilnya.'],'2.8.1':['Bacakan soal kini membaca angka, rupiah, jam, dan satuan dengan benar, misalnya Rp1.500 dibaca seribu lima ratus rupiah.','Aplikasi memilih suara bahasa Indonesia terbaik di HP. Cara memasang suara yang lebih alami ada di Cara pakai.'],'2.8.0':['Logo baru: lembar soal dengan simbol x =.','Semua emoji diganti gambar garis yang rapi, termasuk di menu guru dan Cara pakai.','Kalimat di aplikasi dibuat lebih seperti guru berbicara.'],'2.7.1':['Tampilan baru seperti lembar soal cetak: hitam putih, rapi, dengan satu warna merah.','Gambar soal kini berupa gambar garis sederhana.','Mau gaya lain? Pilih Buku tulis atau Papan tulis di Pengaturan → Tampilan → Gaya.'],'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
+var BARU={'2.13.0':['Menghitung kini memakai tombol angka dan tanda di layar, jadi keyboard HP tidak muncul lagi. Ketuk kotak Hitungan atau Hasil untuk memilih tempat menulis.','Materi yang belum dipelajari tidak tampil lagi di halaman depan.'],'2.12.1':['Logo TakTik IPA kini berwarna hijau.'],'2.12.0':['Guru bisa langsung membuat versi Sulit saat menambah soal: tulis sendiri, salin lalu ubah, atau minta AI menuliskannya.'],'2.11.0':['Di tingkat Sulit, cerita soal tidak lagi menyebut nama besarannya. Kenali besaran dari satuannya, misalnya Ω untuk hambatan.','Guru bisa menulis versi Sulit sendiri atau dibantu AI, dan membuat soal khusus tingkat Sulit.'],'2.10.0':['Tingkat Sulit lebih menantang: tidak ada lagi kotak berlabel. Beri simbol sendiri pada setiap angka, misalnya R untuk 40 Ω, atau tandai ✕ kalau tidak dipakai.','Benar atau salah tetap diberi tahu setelah soal selesai.'],'2.9.0':['Benar atau salah kini diberi tahu setelah soal selesai, lengkap dengan rincian setiap langkah dan kunci jawabannya.','Tingkat Sulit lebih menantang: tulis sendiri hitungannya, misalnya 220 ÷ 40, lalu hasilnya.'],'2.8.1':['Bacakan soal kini membaca angka, rupiah, jam, dan satuan dengan benar, misalnya Rp1.500 dibaca seribu lima ratus rupiah.','Aplikasi memilih suara bahasa Indonesia terbaik di HP. Cara memasang suara yang lebih alami ada di Cara pakai.'],'2.8.0':['Logo baru: lembar soal dengan simbol x =.','Semua emoji diganti gambar garis yang rapi, termasuk di menu guru dan Cara pakai.','Kalimat di aplikasi dibuat lebih seperti guru berbicara.'],'2.7.1':['Tampilan baru seperti lembar soal cetak: hitam putih, rapi, dengan satu warna merah.','Gambar soal kini berupa gambar garis sederhana.','Mau gaya lain? Pilih Buku tulis atau Papan tulis di Pengaturan → Tampilan → Gaya.'],'2.7.0':['Tampilan baru seperti buku tulis: kertas bergaris, tinta biru, dan tulisan tangan.','Gambar soal kini berupa gambar garis sederhana.','Saat ujian, tampilan berubah seperti lembar soal cetak supaya lebih fokus.'],'2.6.0':['Setiap soal kini punya gambar kecil sesuai ceritanya.','Saat ujian, jam hitung mundur selalu terlihat dan ada peringatan 5 menit dan 1 menit terakhir.','Soal ujian yang dilewati bisa dikerjakan lagi sebelum jawaban dikumpulkan.'],'2.5.0':['Pembaruan aplikasi kini langsung masuk saat aplikasi dibuka, tanpa menunggu lama.','Guru bisa memilih soal ujian satu per satu.'],'2.4.1':['Langkah yang sudah selesai diringkas, jadi halaman soal lebih rapi.','Dapatkan sampai 3 bintang di setiap soal.','Di menu Ujian ada Riwayat ujianku berisi nilai dan catatan dari guru.'],'2.3.1':['Menu Ujian kini berisi ujian dari guru: masukkan kode ujian, kerjakan, dan jawaban langsung terkumpul ke guru.','Menu ⋮ di kanan atas berisi cara memakai aplikasi.','Guru bisa membuat soal dengan satuan lain (misalnya gram atau menit) supaya siswa berlatih mengubah satuan.'],'2.2.0':['Mode guru lebih mudah: menu 4 tombol, tambah soal cukup pilih rumus, isi angka, dan tulis cerita. Soal langsung terkirim ke siswa.','Guru bisa mengubah cerita soal yang sudah ada dengan konteks sekolahnya sendiri.','AI kini memilih rumus dari daftar aplikasi, jadi rumus dan jawabannya selalu benar.'],'2.1.0':['Target harian: kerjakan 3 soal setiap hari dan kumpulkan hari beruntun.','Ujian bisa memilih satu materi saja.','Soal Kelas 7 dan Kelas 8 sudah tersedia. Pilih kelasnya di bagian Kelas.']};
 function baruHtml(){
   if(!BARU[APP_VERSI]||store.get('cjs.versiLihat')===APP_VERSI)return '';
   return '<section class="card baru"><div class="sh"><h2>Baru di versi '+APP_VERSI+'</h2></div><ul class="guide">'+BARU[APP_VERSI].map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
@@ -1368,7 +1378,7 @@ function homeHtml(){
   var all=kelasAll();
   if(all.length){
     var groups=[],map={};
-    all.forEach(function(s){if(!map[s.topik]){map[s.topik]=[];groups.push(s.topik);}map[s.topik].push(s);});
+    all.forEach(function(s){if(isLocked(s.topik))return;if(!map[s.topik]){map[s.topik]=[];groups.push(s.topik);}map[s.topik].push(s);});
     h+=(kodeErr?'<div class="fb info" role="status">'+esc(kodeErr)+'</div>':'')+'<h2 class="sec">Pilih materi</h2>'+(toast?'<div class="fb info toast" role="status">'+esc(toast)+'</div>':'')
       +'<div class="mats">'+groups.map(function(g){return matCard(g,map[g]);}).join('')+'</div>';
   }
@@ -1474,17 +1484,27 @@ function playHtml(){
     b3='<p class="mut">Hitung memakai rumus yang kamu pilih dan angka di kotak.'+(tingkat==='sulit'?' Tulis dulu hitungannya, lalu hasilnya.':'')+'</p>'
       +'<p class="eq">Rumus: '+esc(f?f.f:'')+'</p><p class="eq">Diketahui: '+dik+'</p>';
     if(tingkat==='sulit'){
-      b3+='<p class="lbl">Hitungan</p><div class="calc"><span class="eq">'+lhs+' =</span><input id="hit" class="hit" type="text" autocomplete="off" aria-label="Hitungan" placeholder="contoh 220 ÷ 40" value="'+esc(st.hit)+'"'+dis+'></div>'
-        +(st.solved?'':'<div class="keys" role="group" aria-label="Tanda hitung">'+['×','÷','+','−','(',')','²','^',','].map(function(k){return '<button class="btn ghost sm" data-act="key" data-v="'+esc(k)+'" aria-label="tulis '+esc(k)+'">'+esc(k)+'</button>';}).join('')+'<button class="btn ghost sm" data-act="key" data-v="del" aria-label="hapus satu">⌫</button></div>')
+      b3+='<p class="lbl">Hitungan</p><div class="calc"><span class="eq">'+lhs+' =</span><input id="hit" class="hit'+(padKe(st)==='hit'&&!st.solved?' on':'')+'" type="text" inputmode="none" autocomplete="off" aria-label="Hitungan" placeholder="contoh 220 ÷ 40" value="'+esc(st.hit)+'"'+dis+'></div>'
         +'<p class="lbl">Hasil</p>';
     }
-    b3+='<div class="calc"><span class="eq">'+lhs+' =</span><span class="answ"><input id="ans" type="text" inputmode="decimal" autocomplete="off" aria-label="Hasil" value="'+esc(st.input)+'"'+dis+'><span class="eq">'+esc(c.unit)+'</span></span></div>'
-      +fbHtml(st.calcMsg);
+    b3+='<div class="calc"><span class="eq">'+lhs+' =</span><span class="answ"><input id="ans" class="'+(padKe(st)==='ans'&&!st.solved?'on':'')+'" type="text" inputmode="none" autocomplete="off" aria-label="Hasil" value="'+esc(st.input)+'"'+dis+'><span class="eq">'+esc(c.unit)+'</span></span></div>'
+      +(st.solved?'':padHtml(st))+fbHtml(st.calcMsg);
   }
   h+='<section class="card'+(lock3?' locked':'')+'" id="s3"><div class="sh"><span class="num">4</span><h2>Hitung</h2><span class="stt">'+(st.solved?'selesai':(lock3?'terkunci':'sekarang'))+'</span></div>'
     +(lock3?'<p class="mut">Terbuka setelah rumus dipilih.</p>':b3)+'</section>';
   if(st.solved)h+=penilaianHtml(p,st);
   return h;
+}
+/* papan tombol hitung: angka dan tanda saja, tanpa keyboard HP dan tanpa menghitung otomatis */
+function padKe(st){return tingkat==='sulit'&&st.fokus!=='ans'?'hit':'ans';}
+function padHtml(st){
+  var ke=padKe(st),pen=tingkat==='sulit',K=pen?[['7'],['8'],['9'],['(','op'],[')','op'],['4'],['5'],['6'],['×','op'],['÷','op'],['1'],['2'],['3'],['+','op'],['−','op'],['0'],[','],['²','op'],['^','op'],['del','del']]
+    :[['7'],['8'],['9'],['del','del'],['4'],['5'],['6'],['−','op'],['1'],['2'],['3'],[','],['0']];
+  var b=function(k){var op=k[1]==='op',mati=op&&ke==='ans'&&k[0]!=='−',lb=k[0]==='del'?'⌫':k[0];
+    return '<button class="kp'+(op?' op':'')+(k[1]==='del'?' del':'')+'" data-act="key" data-v="'+esc(k[0])+'" aria-label="'+(k[0]==='del'?'hapus satu':'tulis '+esc(lb))+'"'+(mati?' disabled':'')+'>'+esc(lb)+'</button>';};
+  return '<div class="kpad" role="group" aria-label="Tombol hitung">'+(pen?'<p class="kpk">Menulis di: <b>'+(ke==='hit'?'Hitungan':'Hasil')+'</b>'
+    +'<button class="btn ghost sm" data-act="pad-ke" data-v="'+(ke==='hit'?'ans':'hit')+'">Pindah ke '+(ke==='hit'?'Hasil':'Hitungan')+'</button></p>':'')
+    +'<div class="kg'+(pen?'':' k4')+'">'+K.map(b).join('')+'</div></div>';
 }
 /* rincian benar atau salah setiap langkah, muncul setelah jawaban diperiksa */
 function penilaianHtml(p,st){
@@ -2581,7 +2601,7 @@ function importHtml(){
 var setBuka=null;
 function setHtml(){
   var kirimTeks=bisaKirim()?'Perubahan langsung terkirim ke siswa.':sendHint();
-  var h='<section class="card"><div class="sh"><h2>Kunci kelas dan materi</h2></div><p class="mut">Kelas atau materi yang dikunci tidak bisa dibuka siswa. Ketuk nama kelas untuk melihat materinya. '+esc(kirimTeks)+'</p><div class="klist">';
+  var h='<section class="card"><div class="sh"><h2>Kunci kelas dan materi</h2></div><p class="mut">Kelas yang dikunci tidak bisa dibuka siswa. Materi yang dikunci tidak tampil di halaman siswa. Ketuk nama kelas untuk melihat materinya. '+esc(kirimTeks)+'</p><div class="klist">';
   ['7','8','9'].forEach(function(k){
     var soal=data.filter(function(s){return s.kelas===k;}),tops=[],KL=kelasTerkunci(k),buka=setBuka===k;
     soal.forEach(function(s){if(s.topik&&tops.indexOf(s.topik)<0)tops.push(s.topik);});
@@ -2593,7 +2613,7 @@ function setHtml(){
       h+='<div class="kb">'+(KL?'<p class="mut" style="margin:0 0 8px">Seluruh Kelas '+k+' sedang dikunci, jadi semua materinya tidak bisa dibuka siswa.</p>':'');
       if(!tops.length)h+='<p class="mut" style="margin:0">Belum ada soal di kelas ini.</p>';
       h+='<div class="list">'+tops.map(function(t){var L=isLocked(t),n=soal.filter(function(s){return s.topik===t;}).length;
-        return '<button class="item" data-act="a-kunci" data-v="'+esc(t)+'" data-fk="kunci-'+esc(t)+'" aria-pressed="'+L+'"><span class="ti">'+(L?ICON.lock:ICON.unlock)+'</span><span class="it"><b>'+esc(t)+'</b><small>'+n+' soal · '+(L?'Terkunci. Ketuk untuk membuka.':'Terbuka. Ketuk untuk mengunci.')+'</small></span></button>';}).join('')+'</div></div>';
+        return '<button class="item" data-act="a-kunci" data-v="'+esc(t)+'" data-fk="kunci-'+esc(t)+'" aria-pressed="'+L+'"><span class="ti">'+(L?ICON.lock:ICON.unlock)+'</span><span class="it"><b>'+esc(t)+'</b><small>'+n+' soal · '+(L?'Terkunci, tidak tampil di halaman siswa. Ketuk untuk membuka.':'Terbuka. Ketuk untuk mengunci.')+'</small></span></button>';}).join('')+'</div></div>';
     }
     h+='</div>';
   });
@@ -3902,7 +3922,11 @@ document.addEventListener('click',function(e){
     else if(!st0.topicOk){if(st0.mat){st0.topicOk=true;scrollTo='s2';}}
     else if(!st0.formulaOk){if(st0.rumus!=null){st0.formulaOk=true;scrollTo='s3';fk=null;}}
     if(fk==='ab-langkah')fk=null;}
-  else if(a==='key'&&RS[cur]&&!RS[cur].solved){var hs=RS[cur].hit||'';RS[cur].hit=v==='del'?hs.slice(0,-1):hs+(/[×÷+−]/.test(v)?' '+v+' ':v);RS[cur].hit=RS[cur].hit.replace(/\s{2,}/g,' ');fk=null;}
+  else if(a==='key'&&RS[cur]&&!RS[cur].solved){var S=RS[cur];
+    if(padKe(S)==='hit'){var hs=S.hit||'';S.hit=(v==='del'?hs.replace(/\s+$/,'').slice(0,-1).replace(/\s+$/,''):hs+(/[×÷+−]/.test(v)?' '+v+' ':v)).replace(/\s{2,}/g,' ').replace(/^\s+/,'');}
+    else{var x=S.input||'';if(v==='del')S.input=x.slice(0,-1);else if(v==='−'){if(!x)S.input='-';}else if(v===','){if(x.indexOf(',')<0)S.input=(x===''||x==='-'?x+'0':x)+',';}else if(/^\d$/.test(v))S.input=x+v;}
+    fk=null;}
+  else if(a==='pad-ke'&&RS[cur]){RS[cur].fokus=v;fk=null;}
   else if(a==='again'){delete done[cur];saveDone();startPlay(cur,SRC[cur]);fk=null;window.scrollTo(0,0);}
   else if(a==='next'){var n=nextUnsolvedId();if(n){startPlay(n,data.find(function(s){return s.id===n;}));fk=null;window.scrollTo(0,0);}else view='home';}
   else if(a==='a-open'){view='admin';adminTab='home';loginErr=false;confirmKey=null;
@@ -4017,6 +4041,9 @@ document.addEventListener('change',function(e){
     fr.readAsText(t.files[0]);
   }
 });
+document.addEventListener('focusin',function(e){
+  var t=e.target;if((t.id==='hit'||t.id==='ans')&&RS[cur]&&!RS[cur].solved&&tingkat==='sulit'&&padKe(RS[cur])!==t.id){RS[cur].fokus=t.id;render();var f=$('#'+t.id);if(f)f.focus();}
+});
 document.addEventListener('keydown',function(e){
   if(e.key!=='Enter')return;
   if(e.target.id==='ans'){e.preventDefault();onCheck();fk='check';render();}
@@ -4027,7 +4054,7 @@ document.addEventListener('keydown',function(e){
 
 /* ---------- Versi aplikasi, pembaruan otomatis, dan pemasangan di HP ---------- */
 /* Naikkan APP_VERSI dan VERSI di sw.js bersamaan setiap kali aplikasi diperbarui. */
-var APP_VERSI='2.12.1',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
+var APP_VERSI='2.13.0',booted=false,swReg=null,updReady=false,updMsg=null,installEvt=null,installDone=false,instHide=store.get('cjs.pasang')==='tutup';
 var inApk=!!window.TaktikApp,APK_URL='https://github.com/Tendiriana/cerita-jadi-simbol/releases/download/taktik/TakTik-IPA.apk';
 function isStandalone(){if(inApk)return true;try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
 function isIOS(){var u=navigator.userAgent||'';return /iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&'ontouchend' in document);}
